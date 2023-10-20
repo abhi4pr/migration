@@ -44,7 +44,7 @@ const SimOverview = () => {
   const userID = decodedToken.id;
 
   function getData() {
-    axios.get("http://192.168.29.167:8080/api/get_all_sims").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
       const simAllData = res.data.data;
       if (selectedStatus !== "") {
         const AvailableData = simAllData.filter(
@@ -71,19 +71,19 @@ const SimOverview = () => {
   }, [selectedStatus]);
 
   useEffect(() => {
-    axios.get("http://192.168.29.167:8080/api/get_all_departments").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_departments").then((res) => {
       setDepartmentData(res.data);
     });
 
-    axios.get("http://192.168.29.167:8080/api/get_all_designations").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_designations").then((res) => {
       setDesignationData(res.data.data);
     });
 
-    axios.get("http://192.168.29.167:8080/api/get_all_allocations").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_allocations").then((res) => {
       setSimAllocationData(res.data.data);
     });
 
-    axios.get("http://192.168.29.167:8080/api/get_all_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       setUserData(res.data.data);
     });
   }, []);
@@ -118,7 +118,7 @@ const SimOverview = () => {
   }, [search]);
 
   function handleParticularSimData(simId) {
-    axios.get(`http://192.168.29.167:8080/api/get_single_sim/${simId}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/get_single_sim/${simId}`).then((res) => {
       setModalData(res.data.data);
     });
   }
@@ -149,7 +149,7 @@ const SimOverview = () => {
     if (selectedUserTransfer != "") {
       const currDate = new Date().toISOString();
       const dateString = currDate.replace("T", " ").replace("Z", "");
-      axios.put("http://192.168.29.167:8080/api/update_allocationsim", {
+      axios.put("http://34.93.135.33:8080/api/update_allocationsim", {
         sim_id: simAllocationTransferData[0].sim_id,
         id: simAllocationTransferData[0].allo_id,
         user_id: simAllocationTransferData[0].user_id,
@@ -161,7 +161,7 @@ const SimOverview = () => {
         submitted_at: dateString,
       });
 
-      axios.post("http://192.168.29.167:8080/api/add_sim_allocation", {
+      axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         sim_id: Number(simAllocationTransferData[0].sim_id),
         dept_id: Number(modalSelectedUserData[0].dept_id),
@@ -175,7 +175,7 @@ const SimOverview = () => {
 
   function handleSimAllocation() {
     if (selectedUserTransfer !== "") {
-      axios.post("http://192.168.29.167:8080/api/add_sim_allocation", {
+      axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         
         sim_id: Number(modalData.sim_id),
@@ -183,7 +183,7 @@ const SimOverview = () => {
         created_by: userID,
       });
 
-      axios.put("http://192.168.29.167:8080/api/update_sim", {
+      axios.put("http://34.93.135.33:8080/api/update_sim", {
         id: modalData.sim_id,
         mobilenumber: modalData.mobileNumber,
         sim_no: modalData.sim_no,

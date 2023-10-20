@@ -12,7 +12,7 @@ const AccessTypeOverview = () => {
   const [filterData, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://192.168.29.167:8080/api/get_all_iptypes").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_iptypes").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

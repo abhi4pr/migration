@@ -33,7 +33,7 @@ const ProductOverview = () => {
   }, []);
 
   function getData() {
-    axios.get("http://192.168.29.167:8080/api/get_all_products").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_products").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

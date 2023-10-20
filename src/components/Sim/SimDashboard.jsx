@@ -18,7 +18,7 @@ const SimDashboard = () => {
   const userID = decodedToken.id;
 
   function getData() {
-    axios.get("http://192.168.29.167:8080/api/get_all_sims").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
       setSimData(res.data.data);
       
       const availableObjects = res.data.data.filter((item) => item.status === 'Available');
@@ -28,7 +28,7 @@ const SimDashboard = () => {
       setAllocatedCount(allocatedObjects)
     });
 
-    axios.get('http://192.168.29.167:8080/api/get_all_departments').then((res)=>{
+    axios.get('http://34.93.135.33:8080/api/get_all_departments').then((res)=>{
       setDepartmentData(res.data)
     });
   }

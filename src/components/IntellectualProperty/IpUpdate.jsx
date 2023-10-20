@@ -74,11 +74,11 @@ const IpUpdate = () => {
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("http://192.168.29.167:8080/api/get_all_platforms")
+      .get("http://34.93.135.33:8080/api/get_all_platforms")
       .then((res) => setPlatFormData(res.data))
     
     axios
-      .get("http://192.168.29.167:8080/api/get_all_iptypes")
+      .get("http://34.93.135.33:8080/api/get_all_iptypes")
       .then((res) => setIpTypeData(res.data))
   }, []);
 

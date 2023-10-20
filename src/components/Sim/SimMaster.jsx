@@ -33,11 +33,11 @@ const SimMaster = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get("http://192.168.29.167:8080/api/get_all_departments").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_departments").then((res) => {
       getDepartmentData(res.data);
     });
 
-    axios.get("http://192.168.29.167:8080/api/get_all_designations").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_designations").then((res) => {
       setDesignationData(res.data.data);
     });
   }, []);
@@ -45,7 +45,7 @@ const SimMaster = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValidcontact == true) {
-      axios.post("http://192.168.29.167:8080/api/add_sim", {
+      axios.post("http://34.93.135.33:8080/api/add_sim", {
         mobileNumber: mobileNumber,
         sim_no: simNumber,
         provider: provider,
