@@ -23,7 +23,7 @@ const PlatformUpdate = () => {
     setError("");
 
     axios
-      .put(`http://34.93.135.33:8080/api/update_platform`, {
+      .put(`http://44.211.225.140:8000/platformupdate/`, {
         id: Number(id),
         name: platformName,
         remark: remark,
@@ -43,7 +43,7 @@ const PlatformUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_platform_by_id/${id}`).then((res) => {
+    axios.get(`http://44.211.225.140:8000/dataofplatform/${id}`).then((res) => {
       const fetchedData = res.data[0];
       const {
         name,
@@ -51,6 +51,7 @@ const PlatformUpdate = () => {
       } = fetchedData;
       setPlatformName(name);
       setRemark(remark);
+      setSimData(fetchedData);
     });
   }, [id]);
 

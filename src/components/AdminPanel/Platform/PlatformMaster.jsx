@@ -21,7 +21,7 @@ const PlatformMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://34.93.135.33:8080/api/add_platform", {
+      .post("http://44.211.225.140:8000/platform", {
         name: platformName,
         remark: remark,
         created_by: userID

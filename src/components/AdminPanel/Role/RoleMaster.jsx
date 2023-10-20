@@ -17,9 +17,9 @@ const RoleMaster = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post("http://44.211.225.140:8000/role", {
+    await axios.post("http://34.93.135.33:8080/api/add_role", {
       created_by: loginUserId,
       role_name: roleName,
       remark: remark,

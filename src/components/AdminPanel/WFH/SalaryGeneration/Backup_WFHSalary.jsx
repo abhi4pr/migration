@@ -8,11 +8,11 @@ import FormContainer from "../../FormContainer";
 import { useGlobalContext } from "../../../../Context/Context";
 import Select from "react-select";
 import jwtDecode from "jwt-decode";
-import image1 from "../SalaryGeneration/images/image1.png";
-import image2 from "../SalaryGeneration/images/image2.png";
-import image3 from "../SalaryGeneration/images/i3.png";
-import image4 from "../SalaryGeneration/images/i4.png";
-import image5 from "../SalaryGeneration/images/image5.png";
+import image1 from "./images/image1.png";
+import image2 from "./images/image2.png";
+import image3 from "./images/i3.png";
+import image4 from "./images/i4.png";
+import image5 from "./images/image5.png";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import {
@@ -25,11 +25,11 @@ import {
 import { Text, StyleSheet } from "@react-pdf/renderer";
 
 import { Button } from "@mui/material";
-import MyTemplate1 from "../SalaryGeneration/Template";
-import MyTemplate2 from "../SalaryGeneration/Template2";
-import MyTemplate3 from "../SalaryGeneration/Template3";
-import MyTemplate4 from "../SalaryGeneration/Template4";
-import MyTemplate5 from "../SalaryGeneration/Template5";
+import MyTemplate1 from "./Template";
+import MyTemplate2 from "./Template2";
+import MyTemplate3 from "./Template3";
+import MyTemplate4 from "./Template4";
+import MyTemplate5 from "./Template5";
 // import DateFormattingComponent from "../../../DateFormater/DateFormared";
 
 const images = [
@@ -40,7 +40,7 @@ const images = [
   { temp_id: 5, image: image5 },
 ];
 
-const WFHSingleUser = () => {
+const Backup_WFHSalary = () => {
   const { toastAlert } = useGlobalContext();
   const [filterData, setFilterData] = useState([]);
   const [error, setError] = useState(null);
@@ -89,7 +89,7 @@ const WFHSingleUser = () => {
         const res = await axios.get("http://44.211.225.140:8000/allwfhusers");
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
-        if (filteredUser.length > 0) {
+        if (filteredUser?.length > 0) {
           const firstUser = filteredUser[0];
           setUserName(firstUser);
         } else {
@@ -124,21 +124,6 @@ const WFHSingleUser = () => {
     }
   }, [department]);
 
-  function handleInvoiceTemplate(e) {
-    e.preventDefault();
-    // axios
-    //   .post("http://44.211.225.140:8000/generatepdf", {
-    //     emp_id: selectedEmployee,
-    //     temp_id: selectedTemplate,
-    //   })
-    //   .then((res) => {
-    //     const processedData = res.data;
-    //     const newWindow = window.open("", "_blank");
-    //     newWindow.document.write(processedData);
-    //   });
-    // return generatePdf();
-  }
-
   const getUserSalary = (selectedUserId) => {
     const userSalaryConst = userData.filter(
       (item) => item.user_id == selectedUserId
@@ -148,13 +133,15 @@ const WFHSingleUser = () => {
   };
 
   const handleSubmit = () => {
+    const payload = {
+      dept_id: department,
+      month: month,
+      year: year,
+    };
     axios
-      .post("http://44.211.225.140:8000/allsalary", {
-        user_id: userID,
-      })
+      .post("http://44.211.225.140:8000/salaryfromattendence", payload)
       .then((res) => {
         setFilterData(res.data.data);
-        console.log(res.data.data, "yha single user ka data");
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
@@ -173,20 +160,15 @@ const WFHSingleUser = () => {
         "Content-Type": "multipart/form-data",
       },
     });
-    // (() => handleSubmit(e), console.log("ggggggggg"));
   }
 
-  // useEffect(() => {
-  //   const result = salaryData.filter((d) => {
-  //     return (
-  //       d.user_name.match(search) ||
-  //       d.dept_name.match(search)
-  //     );
-  //   });
-  //   setFilterData(result);
-  // }, [search]);
+  useEffect(() => {
+    const result = filterData.filter((d) => {
+      return d.user_name?.toLowerCase().includes(search.toLocaleLowerCase());
+    });
+    setFilterData(result);
+  }, [search]);
 
-  // If Attendence Zero
   useEffect(() => {
     if (department || month || year !== "") {
       handleSubmit();
@@ -542,7 +524,6 @@ const WFHSingleUser = () => {
                 onClick={() => handleInvoice(row)}
               >
                 <CloudDownloadIcon />
-                {/* Download */}
               </button>
             </PDFDownloadLink>
           )}
@@ -628,6 +609,74 @@ const WFHSingleUser = () => {
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* <FormContainer submitButton={false} handleSubmit={handleSubmit}> */}
+      <div className="from-group d-flex">
+        <div className="form-group col-3">
+          <label className="form-label">
+            Department Name <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={departmentdata.map((option) => ({
+              value: option.dept_id,
+              label: `${option.dept_name}`,
+            }))}
+            value={{
+              value: department,
+              label:
+                departmentdata.find((user) => user.dept_id === department)
+                  ?.dept_name || "",
+            }}
+            onChange={(e) => {
+              setDepartment(e.value);
+            }}
+            required
+          />
+        </div>
+        <div className="form-group col-3">
+          <label className="form-label">Year</label>
+          <Select
+            options={yearValue?.map((option) => ({
+              value: option,
+              label: `${option}`,
+            }))}
+            onChange={(e) => {
+              setYear(e.value);
+            }}
+            required
+          />
+        </div>
+
+        <div className="form-group col-3">
+          <label className="form-label">
+            Month <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={monthValue.map((option) => ({
+              value: option,
+              label: `${option}`,
+            }))}
+            onChange={(e) => {
+              setMonth(e.value);
+            }}
+            required
+          />
+        </div>
+        {/* </FormContainer> */}
+        <div className="form-group col-3">
+          {filterData?.length == 0 && department && month && year && (
+            <button
+              onClick={handleAttendence}
+              className="btn btn-warning"
+              style={{ "margin-top": "25px" }}
+            >
+              No Absents, Create Salary
+            </button>
+          )}
         </div>
       </div>
 
@@ -817,7 +866,15 @@ const WFHSingleUser = () => {
               <div>Amount : {rowDataModal?.amount}</div>
               <div>Pay Date :{rowDataModal?.pay_date}</div>
               <div>Refrence No :{rowDataModal?.reference_no}</div>
-              <div>ScreenSort :{rowDataModal?.screenshot}</div>
+              <div>
+                ScreenSort :
+                <img
+                  src={`${"http://44.211.225.140:8000/user_images/"}${
+                    rowDataModal?.screenshot
+                  }`}
+                  alt="Snap"
+                />
+              </div>
             </div>
             <div className="modal-footer">
               <button
@@ -834,4 +891,4 @@ const WFHSingleUser = () => {
     </>
   );
 };
-export default WFHSingleUser;
+export default Backup_WFHSalary;

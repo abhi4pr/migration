@@ -21,24 +21,15 @@ import {
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 
-export const OverviewLatestProducts = (props) => {
-  const { products, sx } = props;
-  // let newrow=[
 
-  // ]
-  const columns = [
-    { field: "id", headerName: "ID", width: "20" },
-    { field: "cust_name", headerName: "Customer Name", width: "150" },
-    {
-      field: "salaes_bookig_data",
-      headerName: "Sales Booking Date",
-      width: "150",
-    },
-  ];
-  const topFiveProducts = products
-    ?.filter((e) => e.execution_status == 0)
-    .slice(0, 5);
-  console.log(products);
+export const OverviewLatestProducts = (props) => {
+  const { products , sx } = props;
+  let newrow=[
+    
+  ]
+const columns =[{field:'id',headerName:"ID" ,width:"20"},{field:'cust_name' ,headerName:"Customer Name",width:"150"},{field:'salaes_bookig_data',headerName:"Sales Booking Date",width:"150"}]
+const topFiveProducts = products?.filter(e=>e.execution_status==0).slice(0, 5);
+console.log(products)
   return (
     <Card sx={sx}>
       <CardHeader title="Latest Pending" />
@@ -48,15 +39,11 @@ export const OverviewLatestProducts = (props) => {
         getRowId={(row) => row.id}
       />
       <Divider />
-      <CardActions sx={{ justifyContent: "flex-end" }}>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Link to="/admin/exeinventory">
           <Button
             color="inherit"
-            endIcon={
-              <SvgIcon fontSize="small">
-                <ArrowRightIcon />
-              </SvgIcon>
-            }
+            endIcon={<SvgIcon fontSize="small"><ArrowRightIcon /></SvgIcon>}
             size="small"
             variant="text"
           >

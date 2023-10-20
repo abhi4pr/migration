@@ -7,7 +7,7 @@ import jwtDecode from "jwt-decode";
 import Select from "react-select";
 import DataTable from "react-data-table-component";
 
-const Attendence = () => {
+const Backup_Attendence = () => {
   const { toastAlert } = useGlobalContext();
   const [department, setDepartment] = useState("");
   const [userName, setUserName] = useState("");
@@ -341,4 +341,4 @@ const Attendence = () => {
   );
 };
 
-export default Attendence;
+export default Backup_Attendence;

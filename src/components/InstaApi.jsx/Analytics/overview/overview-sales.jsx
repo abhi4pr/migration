@@ -54,7 +54,7 @@ const useChartOptions = () => {
     },
     plotOptions: {
       bar: {
-        columnWidth: "20px",
+        columnWidth: "40px",
       },
     },
     stroke: {

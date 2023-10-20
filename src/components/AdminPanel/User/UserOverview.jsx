@@ -84,12 +84,12 @@ const UserOverview = () => {
     setUserName(username);
     setUserContact(user_contact_no);
     axios
-      .get("http://44.211.225.140:8000/allreason")
+      .get("http://34.93.135.33:8080/api/get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
 
   function handleSeparationDataPost() {
-    axios.post("http://44.211.225.140:8000/separationpost", {
+    axios.post("http://34.93.135.33:8080/api/add_separation", {
       user_id: separationUserID,
       status: separationStatus,
       created_by: userID,
@@ -150,16 +150,20 @@ const UserOverview = () => {
   }
 
   const departmentAPI = () => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      setDepartmentData(res.data);
-      getData();
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        setDepartmentData(res.data);
+        getData();
+      });
   };
 
   const designationAPI = () => {
-    axios.get("http://44.211.225.140:8000/alldesi").then((res) => {
-      setDesiOrgData(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .then((res) => {
+        setDesiOrgData(res.data.data);
+      });
   };
 
   useEffect(() => {
@@ -806,7 +810,7 @@ const UserOverview = () => {
                 {separationReasonGet.map((option) => (
                   <option value={option.id} key={option.id}>
                     {" "}
-                    {option.reason_name}
+                    {option.reason}
                   </option>
                 ))}
               </FieldContainer>

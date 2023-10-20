@@ -15,7 +15,7 @@ const Reason = () => {
   function handleSubmit(e) {
     e.preventDefault();
     axios
-      .post("http://44.211.225.140:8000/reasonpost", {
+      .post("http://34.93.135.33:8080/api/add_reason", {
         created_by: loginUserID,
         reason: reason,
         remark: remark,

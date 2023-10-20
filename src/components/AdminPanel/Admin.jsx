@@ -120,9 +120,6 @@ import InterpretorContext from "../InstaApi.jsx/Interpretor/InterpretorContext";
 import AccountsOverviewWFH from "./AccountsDepartment/AccountsOverviewWFH";
 import WFHSingleUser from "./WFH/WFHSingleUser/WFHSingleUser";
 import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
-import AnalyticsContextAPIs, {
-  AnalyticsContext,
-} from "../InstaApi.jsx/Analytics/AnalyticsContextAPIs";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -630,11 +627,9 @@ const Admin = () => {
                   <Route
                     path="/instaapi/analytic"
                     element={
-                      <InterpretorContext>
-                        <AnalyticsContextAPIs>
-                          <AnalyticsDashboard />
-                        </AnalyticsContextAPIs>
-                      </InterpretorContext>
+                      <InstaApiContext>
+                        <AnalyticsDashboard />
+                      </InstaApiContext>
                     }
                   />
                   <Route

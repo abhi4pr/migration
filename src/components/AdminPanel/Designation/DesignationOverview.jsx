@@ -39,10 +39,12 @@ const DesignationOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/alldesi").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .then((res) => {
+        setData(res.data.data);
+        setFilterData(res.data.data);
+      });
   }
 
   useEffect(() => {
@@ -120,7 +122,7 @@ const DesignationOverview = () => {
             contextData[10] &&
             contextData[10].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="desidelete"
+                endpoint="delete_designation"
                 id={row.desi_id}
                 getData={getData}
               />

@@ -23,7 +23,7 @@ const AccessTypeUpdate = () => {
     setError("");
 
     axios
-      .put(`http://34.93.135.33:8080/api/update_iptype`, {
+      .put(`http://44.211.225.140:8000/Iptypeupdate/`, {
         id: Number(id),
         name: accessTypeName,
         remark: remark,
@@ -43,14 +43,15 @@ const AccessTypeUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_iptype_byid/${id}`).then((res) => {
-      const fetchedData = res.data[0];
+    axios.get(`http://44.211.225.140:8000/Iptypedata/${id}`).then((res) => {
+      const fetchedData = res.data;
       const {
         name,
         remark
       } = fetchedData;
       setAccessTypeName(name);
       setRemark(remark);
+      setSimData(fetchedData);
     });
   }, [id]);
 

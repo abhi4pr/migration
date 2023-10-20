@@ -21,7 +21,8 @@ const UserHierarchy = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept")
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
@@ -31,9 +32,10 @@ const UserHierarchy = () => {
     if (selectedDepartment === "") {
       setData(allUserData);
     } else {
-      axios.post("http://44.211.225.140:8000/l1l2l3usersbydept", {
-        dept_id: selectedDepartment
-      })
+      axios
+        .post("http://44.211.225.140:8000/l1l2l3usersbydept", {
+          dept_id: selectedDepartment,
+        })
         .then((res) => {
           setData(res.data.data);
         });
@@ -59,7 +61,9 @@ const UserHierarchy = () => {
           <ul>
             {childUsers.map((childUser) => (
               <li key={childUser.user_id}>
-                <div className="tf-tree example">{renderUserTree(childUser)}</div>
+                <div className="tf-tree example">
+                  {renderUserTree(childUser)}
+                </div>
               </li>
             ))}
           </ul>
@@ -91,9 +95,7 @@ const UserHierarchy = () => {
       <div className="tf-tree example">
         <ul>
           {topLevelUsers.map((topLevelUser) => (
-            <li key={topLevelUser.user_id}>
-              {renderUserTree(topLevelUser)}
-            </li>
+            <li key={topLevelUser.user_id}>{renderUserTree(topLevelUser)}</li>
           ))}
         </ul>
       </div>

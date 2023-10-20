@@ -20,11 +20,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import {useGlobalContext} from '../../../Context/Context'
-
 export default function CampaignCommitment() {
-  const {toastAlert,toastError} = useGlobalContext()
-
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +38,6 @@ export default function CampaignCommitment() {
     cmtName: "",
     // cmtValue: "",
   });
-
 
 
 
@@ -68,7 +63,7 @@ export default function CampaignCommitment() {
   const handleChange = (event) => {
     const { name, value } = event.target;
    
-    if (name === "" && (!value)) {
+    if (name === "cmtName" && (!value)) {
       setErrorMessage("Please enter a valid name");
       return
     } else {
@@ -87,16 +82,14 @@ export default function CampaignCommitment() {
     return;
   }
     axios
-      .post("http://34.93.135.33:8080/api/add_commitment", postData)
+      .post("http://34.93.135.33:8080/api/commitment", postData)
       .then((response) => {
         setIsModalOpen(false);
         getData()
         console.log("Data saved:", response.data);
-        toastAlert("Add Successfully")
       })
       .catch((error) => {
         console.error("Error saving data:", error);
-        toastError(" Add properly")
       });
     setIsModalOpen(false);
     getData()
@@ -136,15 +129,13 @@ export default function CampaignCommitment() {
   const handlePutData = () => { 
     if (editData.cmtName !== '') {
       axios
-        .put(`http://34.93.135.33:8080/api/update_commitment`, {
+        .put(`http://34.93.135.33:8080/api/commitment`, {
           cmtId: editData.cmtId,
           cmtName: editData.cmtName,
         })
         .then((res) => {
           console.log(res.data);
           setIsPutOpen(true);
-          toastAlert("Update Successfully")
-
           getData();
         })
         .catch((error) => {
@@ -174,7 +165,7 @@ export default function CampaignCommitment() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/delete_commitment/${itemToDeleteId}`)
+        .delete(`http://34.93.135.33:8080/api/commitment/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");

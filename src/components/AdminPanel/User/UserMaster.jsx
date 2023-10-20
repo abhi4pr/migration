@@ -182,19 +182,21 @@ const UserMaster = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://44.211.225.140:8000/subdept/${department}`)
+        .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allroles").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
 
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      getDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data);
+      });
 
     axios.get("http://44.211.225.140:8000/notallocsitting").then((res) => {
       getRefrenceData(res.data.data);
@@ -206,9 +208,11 @@ const UserMaster = () => {
       setAllUsersSittings(userSitting);
     });
 
-    axios.get("http://44.211.225.140:8000/alldesi").then((res) => {
-      setDesignationData(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .then((res) => {
+        setDesignationData(res.data.data);
+      });
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -282,15 +286,11 @@ const UserMaster = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post(
-            "http://44.211.225.140:8000/userspostnew",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
 
           for (const elements of documents) {
             console.log(elements);
@@ -807,20 +807,20 @@ const UserMaster = () => {
         <Select
           className=""
           options={refrenceData.map((option) => ({
-            value: `${option?.Sitting_id}`,
-            label: `${option?.Sitting_ref_no} | ${option?.Sitting_area}`,
+            value: `${option?.sitting_id}`,
+            label: `${option?.sitting_ref_no} | ${option?.sitting_area}`,
           }))}
           value={{
             value: `${sitting ? sitting : ""}`,
-            label: `${roomId?.Sitting_ref_no ? roomId?.Sitting_ref_no : ""} ${
+            label: `${roomId?.sitting_ref_no ? roomId?.sitting_ref_no : ""} ${
               roomId ? "|" : ""
-            } ${roomId?.Sitting_area ? roomId?.Sitting_area : ""}`,
+            } ${roomId?.sitting_area ? roomId?.sitting_area : ""}`,
           }}
           onChange={(e) => {
             const selectedSittingId = e.value;
             setSitting(selectedSittingId);
             const selectedOption = refrenceData.find(
-              (option) => option.Sitting_id === Number(selectedSittingId)
+              (option) => option.sitting_id === Number(selectedSittingId)
             );
             // console.log(selectedSittingId, "selectedSittingId")
             // console.log(selectedOption.room_id, "selectedOption")

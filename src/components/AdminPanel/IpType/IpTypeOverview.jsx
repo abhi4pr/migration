@@ -12,7 +12,7 @@ const AccessTypeOverview = () => {
   const [filterData, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_iptypes").then((res) => {
+    axios.get("http://44.211.225.140:8000/alldataofIptype").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });
@@ -48,7 +48,7 @@ const AccessTypeOverview = () => {
       name: "Action",
       cell: (row) => (
         <>
-          <Link to={`/admin/iptype-update/${row.id}`}>
+          <Link to={`/admin/accesstype-update/${row.id}`}>
             <button
               title="Edit"
               className="btn btn-outline-primary btn-sm user-button"
@@ -58,7 +58,7 @@ const AccessTypeOverview = () => {
           </Link>
 
           <DeleteButton
-            endpoint="delete_iptype"
+            endpoint="Iptypedelete"
             id={row.id}
             getData={getData}
           />

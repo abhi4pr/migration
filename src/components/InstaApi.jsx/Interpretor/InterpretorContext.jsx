@@ -12,7 +12,6 @@ function InterpretorContext({ children }) {
   const [pagedetail, setPagedetail] = useState([]);
   const [pagecategory, setPageCategory] = useState([]);
   const [brandSubCategory, setBrandSubCategory] = useState([]);
-  const [majorCategory, setMajorCategory] = useState([]);
   const [brandsobj, setBrandsobj] = useState([]);
   const [agency, setAgency] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -57,20 +56,13 @@ function InterpretorContext({ children }) {
       });
   }, [reloadbrands]);
   useEffect(() => {
-    // const axiosConfig = {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json", // Adjust the content type as needed
-    //   },
-    // };
-
     axios.get("http://34.93.135.33:8080/api/brandSubCategory").then((res) => {
       setBrandSubCategory(res.data.data);
       // console.log(res.data.data, "projectxSubCategory");
     });
-    axios.get("http://34.93.135.33:8080/api/get_all_agencys").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/agency").then((res) => {
       setAgency(res.data.data);
-      console.log(res.data.data);
+      // console.log(res.data.data);
     });
   }, []);
   useEffect(() => {
@@ -78,12 +70,6 @@ function InterpretorContext({ children }) {
       setAllCampaign(res.data.data);
     });
   }, [reloadcampaign]);
-  useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/brandMajorCategory").then((res) => {
-      setMajorCategory(res.data.data);
-      // console.log(res.data.data);
-    });
-  }, []);
 
   // const set = new Set();
   // let bradcat = [],
@@ -114,7 +100,6 @@ function InterpretorContext({ children }) {
           reloadcampaign,
           reloadbrands,
           setReloadbrands,
-          majorCategory,
         }}
       >
         {children}

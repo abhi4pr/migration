@@ -20,14 +20,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useGlobalContext } from '../../../Context/Context'
-
-
-
 
 export default function CategoryMaster() {
-  const { toastAlert, toastError } = useGlobalContext()
-  const [reload, setReload] = useState(false);
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,13 +29,13 @@ export default function CategoryMaster() {
   const [searchInput, setSearchInput] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
   const [isPutOpen, setIsPutOpen] = useState(false);
-  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [itemToDeleteId, setItemToDeleteId] = useState(null);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+  useState(false);
+const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [postData, setPostData] = useState({
     category_name: "",
+    // brand_id: "",
   });
-const url = "http://34.93.135.33:8080/api/projectxCategory"
 
   function EditToolbar() {
     const handleClick = () => {
@@ -64,12 +58,6 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    if (name === "" && (!value)) {
-      setErrorMessage("Please enter a valid name");
-      return
-    } else {
-      setErrorMessage("");
-    }
     setPostData({
       ...postData,
       [name]: value,
@@ -78,36 +66,31 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
 
   const handleSave = (e) => {
     e.preventDefault()
-    if (!postData.category_name) {
-      setErrorMessage("* Enter Category");
-      return;
-    }
     axios
-      .post(url, postData)
+      .post("http://34.93.135.33:8080/api/projectxCategory", postData)
       .then((response) => {
         setIsModalOpen(false);
-        setReload(!reload)
-        toastAlert("Successfully")
+        getData()
         console.log("Data saved:", response.data);
       })
       .catch((error) => {
         console.error("Error saving data:", error);
-        toastError("Add properly")
       });
-    setIsModalOpen(false);
-    setPostData("")
+     setIsModalOpen(false);
+     setPostData("")
   };
 
   // get api ========>
   const getData = () => {
-    axios.get(url).then((res) => {
+    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+      console.log(res.data.data);
       const sortedData = res.data.data.sort((a, b) => b.category_id - a.category_id)
       setRows(sortedData)
     });
   };
   useEffect(() => {
     getData();
-  }, [reload]);
+  }, []);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -117,25 +100,36 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
   // put api =============>
   const handlePutData = () => {
     axios
-      .put(url, {
-        id: editData.category_id,
-        category_name: editData.category_name,
-      })
-      .then((res) => {
-        console.log(res.data);
-        toastAlert("Update successfully")
-        setIsPutOpen(true);
-      }).then(() => {
-        setIsPutOpen(false);
-        setReload(!reload)
-      })
-    console.log("put data");
+    .put(`http://34.93.135.33:8080/api/projectxCategory`, {
+      id: editData.category_id,
+      category_name: editData.category_name,
+      // brand_id: editData.brand_id,
+    })
+    .then((res) => {
+      console.log(res.data);
+      setIsPutOpen(true);
+    }).then(() => {
+      setIsPutOpen(false);
+      getData()
+    })
+  console.log("put data");
   }
-  const handleEditClick = (id, row) => () => {
+  const handleEditClick = (id,row) => () => {
     console.log(row)
     setEditData(row);
     setIsPutOpen(true);
   };
+  
+ // delete ======>
+  // const handleDeleteClick = (id) => () => {
+  //   axios.delete(`http://34.93.135.33:8080/api/projectxCategory/${id}`).then((res) => {
+  //     getData();
+  //     console.log("re data ", res.data);
+  //   });
+  // };
+
+
+
 
   const handleDeleteClick = (id) => () => {
     setItemToDeleteId(id);
@@ -145,15 +139,15 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`${url}/${itemToDeleteId}`)
+        .delete(`http://34.93.135.33:8080/api/projectxCategory/${itemToDeleteId}`)
         .then(() => {
+          getData();
           console.log("Data deleted successfully");
         })
         .catch((error) => {
           console.error("Error deleting data:", error);
         })
         .finally(() => {
-          setReload(!reload)
           setIsDeleteConfirmationOpen(false);
           setItemToDeleteId(null);
         });
@@ -203,7 +197,7 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id, row)}
+            onClick={handleEditClick(id,row)}
             color="inherit"
           />,
           // eslint-disable-next-line react/jsx-key
@@ -222,7 +216,12 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
       row.category_name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setFilteredRows(filtered);
-  }
+  };
+
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
   useEffect(() => {
     filterRows();
   }, [searchInput, rows]);
@@ -241,10 +240,21 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
         variant="outlined"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        style={{ marginBottom: "10px" }}
+        style={{ marginBottom: "10px"  }}
       />
 
-      <Box>
+      <Box
+        // sx={{
+        //   height: 500,
+        //   width: "100%",
+        //   "& .actions": {
+        //     color: "text.secondary",
+        //   },
+        //   "& .textPrimary": {
+        //     color: "text.primary",
+        //   },
+        // }}
+      >
         <DataGrid
           rows={filteredRows}
           columns={columns}
@@ -284,10 +294,16 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
                 value={postData.category_name}
                 onChange={handleChange}
               />
-              {errorMessage && (
-                <div style={{ color: "red", marginBottom: "10px" }}>{errorMessage}</div>
-              )}
 
+              {/* <TextField
+                id="outlined-password-input"
+                label="brand_id"
+                name="brand_id"
+                type="text"
+                value={postData.brand_id}
+                onChange={handleChange}
+              /> */}
+             
             </div>
           </Box>
         </DialogContent>
@@ -301,8 +317,8 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
         </DialogActions>
       </Dialog>
 
-      {/* perform put data */}
-      <Dialog open={isPutOpen} onClose={() => setIsPutOpen(false)}>
+       {/* perform put data */}
+       <Dialog open={isPutOpen} onClose={() => setIsPutOpen(false)}>
         <DialogTitle>Edit Record</DialogTitle>
         <DialogContent>
           <Box
@@ -341,7 +357,7 @@ const url = "http://34.93.135.33:8080/api/projectxCategory"
                   }))
                 }
               /> */}
-
+                   
             </div>
           </Box>
         </DialogContent>

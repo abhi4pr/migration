@@ -597,6 +597,12 @@ const SidebarLinks = () => {
                 contextData[25] &&
                 contextData[25].view_value === 1 && (
                   <>
+                    <Link
+                      className="collapse-item"
+                      to="/admin/instaapi/analytic"
+                    >
+                      Analytics
+                    </Link>
                     <Link className="collapse-item" to="/admin/instaapi">
                       Explore
                     </Link>
@@ -605,18 +611,20 @@ const SidebarLinks = () => {
               {contextData &&
                 contextData[29] &&
                 contextData[29].view_value === 1 && (
-                  <>
-                    <Link className="collapse-item" to="/admin/instaapi/track">
-                      Track Page
-                    </Link>
-                    <Link
-                      className="collapse-item"
-                      to="/admin/instaapi/analytic"
-                    >
-                      Analytics
-                    </Link>
-                  </>
+                  <Link className="collapse-item" to="/admin/instaapi/track">
+                    Track Page
+                  </Link>
                 )}
+              {/* {contextData &&
+                contextData[28] &&
+                contextData[28].view_value === 1 && (
+                  <Link
+                    className="collapse-item"
+                    to="/admin/instaapi/interpretor"
+                  >
+                    Interpretor
+                  </Link>
+                )} */}
             </div>
           </div>
         </li>

@@ -57,13 +57,17 @@ const AnnouncementPost = () => {
       });
   };
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      setDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        setDepartmentData(res.data);
+      });
 
-    axios.get("http://44.211.225.140:8000/alldesi").then((res) => {
-      setDesignationData(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .then((res) => {
+        setDesignationData(res.data.data);
+      });
   }, []);
   if (isFormSubmitted) {
     return <Navigate to="/admin/sitting-overview" />;

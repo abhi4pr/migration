@@ -22,7 +22,7 @@ const SittingOverview = () => {
     }
   }, [userID]);
   function getData() {
-    axios.get("http://44.211.225.140:8000/allsitting").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -51,19 +51,19 @@ const SittingOverview = () => {
     },
     {
       name: "Sitting Ref No.",
-      selector: (row) => row.Sitting_ref_no,
+      selector: (row) => row.sitting_ref_no,
       sortable: true,
     },
     {
       name: "Sitting Area",
-      selector: (row) => row.Sitting_area,
+      selector: (row) => row.sitting_area,
       sortable: true,
     },
     {
       name: "UserName",
       selector: (row) => {
         const user = userData.find(
-          (user) => user.sitting_id === row.Sitting_id
+          (user) => user.sitting_id === row.sitting_id
         );
         return <div>{user ? user.user_name : "N/A"}</div>;
       },
@@ -81,14 +81,14 @@ const SittingOverview = () => {
                   className="btn btn-outline-primary btn-sm user-button"
                   onClick={() =>
                     setToLocalStorage(
-                      row.Sitting_id,
-                      row.Sitting_ref_no,
-                      row.Sitting_area,
-                      row.Remarks,
-                      row.Creation_date,
-                      row.Created_by,
-                      row.Last_updated_by,
-                      row.Last_updated_date,
+                      row.sitting_id,
+                      row.sitting_ref_no,
+                      row.sitting_area,
+                      row.remarks,
+                      row.creation_date,
+                      row.created_by,
+                      row.last_updated_by,
+                      row.last_updated_date,
                       row.room_id
                     )
                   }
@@ -104,24 +104,24 @@ const SittingOverview = () => {
     },
   ];
   const setToLocalStorage = (
-    Sitting_id,
-    Sitting_ref_no,
-    Sitting_area,
-    Remarks,
-    Creation_date,
-    Created_by,
+    sitting_id,
+    sitting_ref_no,
+    sitting_area,
+    remarks,
+    creation_date,
+    created_by,
     room_id,
-    Last_updated_by,
-    Last_updated_date
+    last_updated_by,
+    last_updated_date
   ) => {
-    localStorage.setItem("Sitting_id", Sitting_id);
-    localStorage.setItem("Sitting_ref_no", Sitting_ref_no);
-    localStorage.setItem("Sitting_area", Sitting_area);
-    localStorage.setItem("Remarks", Remarks);
-    localStorage.setItem("Creation_date", Creation_date);
-    localStorage.setItem("Created_by", Created_by);
-    localStorage.setItem("Last_updated_by", Last_updated_by);
-    localStorage.setItem("Last_updated_date", Last_updated_date);
+    localStorage.setItem("sitting_id", sitting_id);
+    localStorage.setItem("sitting_ref_no", sitting_ref_no);
+    localStorage.setItem("sitting_area", sitting_area);
+    localStorage.setItem("remarks", remarks);
+    localStorage.setItem("creation_date", creation_date);
+    localStorage.setItem("created_by", created_by);
+    localStorage.setItem("last_updated_by", last_updated_by);
+    localStorage.setItem("last_updated_date", last_updated_date);
     localStorage.setItem("room_id", room_id);
   };
   return (

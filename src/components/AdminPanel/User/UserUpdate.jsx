@@ -177,14 +177,14 @@ const UserUpdate = () => {
 
   useEffect(() => {
     const selectedOption = defaultSeatData.find(
-      (option) => option?.Sitting_id === Number(sitting)
+      (option) => option?.sitting_id === Number(sitting)
     );
     setRoomId(selectedOption);
   }, [sitting, refrenceData, roomId]);
 
   useEffect(() => {
     axios
-      .get(`http://44.211.225.140:8000/subdept/${department}`)
+      .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
       .then((res) => setSubDepartmentData(res.data));
   }, [department]);
 
@@ -198,7 +198,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://44.211.225.140:8000/allroles")
+      .get("http://34.93.135.33:8080/api/get_all_roles")
       .then((res) => {
         getRoleData(res.data.data);
       })
@@ -206,15 +206,17 @@ const UserUpdate = () => {
         console.log(error);
       });
 
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      getDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data);
+      });
 
     axios.get("http://44.211.225.140:8000/notallocsitting").then((res) => {
       setRefrenceData(res.data.data);
     });
 
-    axios.get("http://44.211.225.140:8000/allsitting").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
 
@@ -222,9 +224,11 @@ const UserUpdate = () => {
       getUsersData(res.data.data);
     });
 
-    axios.get("http://44.211.225.140:8000/alldesi").then((res) => {
-      setDesignationData(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .then((res) => {
+        setDesignationData(res.data.data);
+      });
   }, []);
 
   function getOtherDocument() {

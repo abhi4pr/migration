@@ -25,9 +25,9 @@ const ObjectOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allobj").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
+    axios.get("http://34.93.135.33:8080/api/get_all_objs").then((res) => {
+      setData(res.data.data);
+      setFilterData(res.data.data);
     });
   }
 
@@ -85,7 +85,7 @@ const ObjectOverview = () => {
             contextData[2] &&
             contextData[2].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="objdelete"
+                endpoint="obj_delete"
                 id={row.obj_id}
                 getData={getData}
               />

@@ -36,10 +36,12 @@ const DepartmentOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+      });
   }
   useEffect(() => {
     getData();
@@ -96,14 +98,14 @@ const DepartmentOverview = () => {
             contextData[3].update_value === 1 && (
               <Link to="/admin/department-update">
                 <button
-                  title="Edit" 
+                  title="Edit"
                   className="btn btn-outline-primary btn-sm user-button"
                   onClick={() =>
                     setToLocalStorage(
                       row.dept_id,
                       row.dept_name,
                       row.Remarks,
-                      row.creation_date,
+                      row.Creation_date,
                       row.created_by,
                       row.Last_updated_by,
                       row.Last_updated_date
@@ -118,7 +120,7 @@ const DepartmentOverview = () => {
             contextData[3] &&
             contextData[3].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="deptdelete"
+                endpoint="delete_department"
                 id={row.dept_id}
                 getData={getData}
               />
@@ -134,7 +136,7 @@ const DepartmentOverview = () => {
     dept_id,
     dept_name,
     Remarks,
-    creation_date,
+    Creation_date,
     created_by,
     Last_updated_by,
     Last_updated_date
@@ -142,7 +144,7 @@ const DepartmentOverview = () => {
     localStorage.setItem("dept_id", dept_id);
     localStorage.setItem("dept_name", dept_name);
     localStorage.setItem("Remarks", Remarks);
-    localStorage.setItem("Creation_date", creation_date);
+    localStorage.setItem("Creation_date", Creation_date);
     localStorage.setItem("created_by", created_by);
     localStorage.setItem("Last_updated_by", Last_updated_by);
     localStorage.setItem("Last_updated_date", Last_updated_date);

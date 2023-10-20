@@ -20,14 +20,14 @@ const PreOnboardUserDetailsProfile = () => {
         setOtherDocuments(res.data.data);
       });
   }
-  const subDep = async (dept_id) => {
-    await axios
-      .get(`http://44.211.225.140:8000/subdept/${dept_id}`)
-      .then((res) => {
-        console.log(res.data);
-        setSubDept(res.data);
-      });
-  };
+  // const subDep = async (dept_id) => {
+  //   await axios
+  //     .get(`http://44.211.225.140:8000/subdept/${dept_id}`)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setSubDept(res.data);
+  //     });
+  // };
 
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
 

@@ -51,7 +51,7 @@ export default function CreaterDashboard() {
     remark: "",
   });
 
-  console.log(content, "------------compData");
+  console.log(compData, "------------compData");
   const getBrand = () => {
     axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
       const data = res.data.data;
@@ -73,7 +73,6 @@ export default function CreaterDashboard() {
       );
       const accept = res.data.data.filter(
         (e) => e.status == "21" && e.stage == 3
-
       );
       const reject = res.data.data.filter(
         (e) => e.status == "22" && e.stage == 2
@@ -99,20 +98,12 @@ export default function CreaterDashboard() {
     setInputFields([...inputFields, { value: "" }]);
   };
 
-  const calculateTimeLeft = (creatorDt) => {
-    const currentTime = new Date();
-    const creatorTime = new Date(creatorDt);
-    const timeDiff =  currentTime - creatorTime;
-    const hoursLeft = Math.floor(timeDiff / (60 * 60 * 1000));
-    return hoursLeft;
-  };
-
   const handleInputChange = (index, event) => {
     const values = [...inputFields];
     values[index].file = event.target.files[0];
     setInputFields(values);
   };
-
+ 
   const handleRemoveFields = (index) => {
     const values = [...inputFields];
     values.splice(index, 1);
@@ -237,20 +228,34 @@ export default function CreaterDashboard() {
 
   // Submission ++++++++++++++++++
   const handleSubmissionData = (params) => {
-    const selectedRow = params.row;
-    const matchingContentType = content.find((e) => {
-      return selectedRow.content_type_id === e.content_type_id;
-    });
-    const contentTypeName = matchingContentType ? matchingContentType.content_type : "";
-    setSelectedContentType(contentTypeName);
-    setContentSectionId(selectedRow.content_section_id); 
-    setSubmissionData(selectedRow);
-    const timeLeft = calculateTimeLeft(selectedRow.creator_dt);
-    setExtendDeliveryDate(timeLeft);
+    console.log(params.row, "new data manoj");
+    setSelectedContentType(
+      content.filter((e) => e.content_value === params.row.content_type_id)[0]
+        ?.content_type
+    );
+    setContentSectionId(params.row.content_section_id); // Set contentSectionId in the state
+
+    setSubmissionData(params.row);
     setOpen3(true);
   };
-  
-
+  // const handleSubmission = (e) => {
+  //   e.preventDefault()
+  //   axios
+  //     .put("http://34.93.135.33:8080/api/contentSectionReg", {
+  //       content_section_id: contentSectionId,
+  //       creator_dt: startData.selectedDate,
+  //       stage: 3,
+  //       status: "22",
+  //     }).then((response) => {
+  //       if (response.data.success) {
+  //         handleClose();
+  //         setOpen3(false);
+  //         getData();
+  //       }
+  //     })
+  //   setActiveAccordionIndex(4)
+  //   setOpen3(false);
+  // };
   // ExtendDilvery ++++++++++++++++++
   const handleExtendDilvery = (params) => {
     setExtendDeliveryDate(params.row.creator_dt);
@@ -332,10 +337,9 @@ export default function CreaterDashboard() {
       headerName: "Content Type",
       width: 150,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
@@ -343,7 +347,7 @@ export default function CreaterDashboard() {
       headerName: "Remark",
       width: 150,
     },
-    { 
+    {
       field: "creator_dt",
       headerName: "Date & Time",
       width: 150,
@@ -352,7 +356,7 @@ export default function CreaterDashboard() {
     {
       field: "cmpAdminDemoLink",
       headerName: "Link",
-      width: 150,
+      width: 300,
       renderCell: (params) => {
         return (
           <a
@@ -376,18 +380,10 @@ export default function CreaterDashboard() {
             rel="noreferrer"
           >
             <SnippetFolderTwoTone color="primary"
-            />
+ />
           </a>
         );
       },
-    },
-    {
-      field: "timeLfit",
-      headerName: "Time Left (Hours)",
-      renderCell: (params) =>
-        `${Math.floor((new Date() - new Date(params.row.creator_dt)) / 3600000) +
-        "h"
-        }`,
     },
     {
       field: "actions",
@@ -450,21 +446,19 @@ export default function CreaterDashboard() {
     },
     {
       field: "content_type_id",
-      headerName: "Content Type",
-      width: 150,
+      headerName: "content Type",
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
-      field: "admin_remark",
+      field: "creator_remark",
       headerName: "Remark",
       width: 200,
     },
-
     {
       field: "brnad_dt",
       headerName: "Date & Time",
@@ -475,7 +469,6 @@ export default function CreaterDashboard() {
           .replace(/(\d+)\/(\d+)\/(\d+), (\d+:\d+).*/, "$1/$2/$3 $4");
       },
     },
-
 
     {
       field: "cmpAdminDemoLink",
@@ -503,8 +496,8 @@ export default function CreaterDashboard() {
             target="_blank"
             rel="noreferrer"
           >
-            <SnippetFolderTwoTone color="primary"
-            />
+            <SnippetFolderTwoTone  color="primary"
+ />
           </a>
         );
       },
@@ -569,13 +562,12 @@ export default function CreaterDashboard() {
     },
     {
       field: "content_type_id",
-      headerName: "Content Type",
-      width: 150,
+      headerName: "content Type",
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
@@ -646,12 +638,11 @@ export default function CreaterDashboard() {
     {
       field: "content_type_id",
       headerName: "Content Type",
-      width: 150,
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
@@ -881,7 +872,7 @@ export default function CreaterDashboard() {
             </Typography>
             <Typography variant="h6" sx={{ margin: "10px" }}>
               {" "}
-              time left: {extendDeliveryDate} h
+              time left:
             </Typography>
           </Paper>
 

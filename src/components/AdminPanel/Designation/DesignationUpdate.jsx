@@ -6,35 +6,39 @@ import { Navigate, useParams } from "react-router-dom";
 import { useGlobalContext } from "../../../Context/Context";
 
 const DesignationUpdate = () => {
+  const { desi_id } = useParams();
   const { toastAlert } = useGlobalContext();
   const [id, setID] = useState(0);
   const [designationName, setDesignationName] = useState("");
   const [departmentName, setDepartmentName] = useState("");
   const [remark, setRemark] = useState("");
   const [departmentdata, getDepartmentData] = useState([]);
-  const { desi_id } = useParams();
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      getDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data);
+      });
 
-    axios.get(`http://44.211.225.140:8000/desi/${desi_id}`).then((res) => {
-      const fetchedData = res.data.data;
-      const { desi_id, desi_name, dept_id, remark } = fetchedData;
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_designation/${desi_id}`)
+      .then((res) => {
+        const fetchedData = res.data.data;
+        const { desi_id, desi_name, dept_id, remark } = fetchedData;
 
-      setID(desi_id);
-      setDesignationName(desi_name);
-      setDepartmentName(dept_id);
-      setRemark(remark);
-    });
+        setID(desi_id);
+        setDesignationName(desi_name);
+        setDepartmentName(dept_id);
+        setRemark(remark);
+      });
   }, [desi_id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put("http://44.211.225.140:8000/desidataupdate", {
-      id: id,
+    axios.put("http://34.93.135.33:8080/api/update_designation", {
+      desi_id: id,
       desi_name: designationName,
       dept_id: departmentName,
       remark: remark,

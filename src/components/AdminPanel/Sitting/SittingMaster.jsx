@@ -22,7 +22,7 @@ const SittingMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://44.211.225.140:8000/sitting", {
+      .post("http://34.93.135.33:8080/api/add_sitting", {
         sitting_ref_no: sittingRefrenceNum,
         room_id: Number(roomId),
         sitting_area: sittingArea,

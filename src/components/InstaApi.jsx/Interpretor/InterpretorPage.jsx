@@ -93,10 +93,6 @@ const InterpretorPage = ({ post, status, setStatus, hashtags, mentions }) => {
     setCampaignName(null);
     setSubCategory(null);
     setAgencyName(null);
-    setHashtag([]);
-    setMention([]);
-    setValue("");
-    setInputValue("");
     setStatus(!status);
   };
 
@@ -125,7 +121,7 @@ const InterpretorPage = ({ post, status, setStatus, hashtags, mentions }) => {
       );
       console.log(allcampaign);
       const selectnewBrand = brandsobj.find(
-        (ele) => ele.instaBrandId === selectedBrand?.brand_id
+        (ele) => ele.instaBrandId === selectedBrand.brand_id
       );
       console.log(selectnewBrand);
       setCampaignName(selectedBrand);
@@ -326,7 +322,7 @@ const InterpretorPage = ({ post, status, setStatus, hashtags, mentions }) => {
                 id="outlined-read-only-input"
                 label={"IG User Name"}
                 variant="filled"
-                value={campaignbrand ? campaignbrand?.igUserName : undefined}
+                value={campaignbrand ? campaignbrand.igUserName : undefined}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -338,7 +334,7 @@ const InterpretorPage = ({ post, status, setStatus, hashtags, mentions }) => {
                 id="outlined-read-only-input"
                 label={"Website"}
                 variant="filled"
-                value={campaignbrand ? campaignbrand?.website : undefined}
+                value={campaignbrand ? campaignbrand.website : undefined}
                 InputProps={{
                   readOnly: true,
                 }}

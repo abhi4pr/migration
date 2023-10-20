@@ -72,9 +72,11 @@ const AdminPreOnboarding = () => {
   const [gender, setGender] = useState("");
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      getDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data);
+      });
 
     axios.get("http://44.211.225.140:8000/allusers").then((res) => {
       getUsersData(res.data.data);

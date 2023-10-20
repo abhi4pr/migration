@@ -11,52 +11,9 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { InstaInterpretorContext } from "../../Interpretor/InterpretorContext";
-import { useContext } from "react";
-import { useState } from "react";
-import { useMemo } from "react";
 
 export const OverviewTasksProgress = (props) => {
-  const { sx } = props;
-  const { brandsobj } = useContext(InstaInterpretorContext);
-  // const { allpost, isLoadinganalytics } = useContext(AnalyticsContext);
-  const [loading, setLoading] = useState(false);
-  const [postcountpercent, setPostcountpercent] = useState(0);
-  const [category, setCategory] = useState(null);
-  let maxcount = 0;
-  let maxBrandCategory = null;
-  // let postcountpercent = 0;
-  const map = new Map();
-
-  const brandmemo = useMemo(() => {
-    if (brandsobj.length === 0) {
-      return { maxcount, maxBrandCategory };
-    }
-
-    for (let i = 0; i < brandsobj.length; i++) {
-      if (map.has(brandsobj[i].brandCategoryName)) {
-        const tempcount = map.get(brandsobj[i].brandCategoryName);
-        map.set(
-          brandsobj[i].brandCategoryName,
-          tempcount.add(brandsobj[i].instaBrandId)
-        );
-
-        if (tempcount.size > maxcount) {
-          maxcount = tempcount.size;
-          maxBrandCategory = brandsobj[i].brandCategoryName;
-        }
-      } else {
-        map.set(brandsobj[i].brandCategoryName, new Set());
-      }
-    }
-    setPostcountpercent((maxcount / brandsobj.length) * 100);
-    setCategory(maxBrandCategory);
-    setLoading(true);
-    // console.log(brandsobj.length, maxcount, maxBrandCategory, postcountpercent);
-    return { maxcount, maxBrandCategory };
-  }, [brandsobj]);
-
-  // console.log(brandmemo);
+  const { value, sx } = props;
 
   return (
     <Card sx={sx}>
@@ -69,14 +26,9 @@ export const OverviewTasksProgress = (props) => {
         >
           <Stack spacing={1}>
             <Typography color="text.secondary" gutterBottom variant="overline">
-              Leading Category
+              Task Progress
             </Typography>
-            <Stack direction="row" spacing={5}>
-              <Typography variant="h4">
-                {postcountpercent.toFixed()}%
-              </Typography>
-              <Typography variant="h6">{category}</Typography>
-            </Stack>
+            <Typography variant="h4">{value}%</Typography>
           </Stack>
           <Avatar
             sx={{
@@ -91,7 +43,7 @@ export const OverviewTasksProgress = (props) => {
           </Avatar>
         </Stack>
         <Box sx={{ mt: 3 }}>
-          <LinearProgress value={postcountpercent} variant="determinate" />
+          <LinearProgress value={value} variant="determinate" />
         </Box>
       </CardContent>
     </Card>

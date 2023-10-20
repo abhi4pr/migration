@@ -25,9 +25,11 @@ const APIContext = ({ children }) => {
       setLoading(true);
     });
 
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      setDepartmentContext(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        setDepartmentContext(res.data);
+      });
   }, []);
   console.log("userData context hai ");
 

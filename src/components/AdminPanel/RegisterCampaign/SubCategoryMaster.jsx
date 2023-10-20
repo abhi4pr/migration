@@ -16,11 +16,9 @@ import DialogActions from "@mui/material/DialogActions";
 import { Autocomplete, DialogContentText, Paper, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {useGlobalContext} from '../../../Context/Context'
 
 
 export default function SubCategoryMaster() {
-  const {toastAlert,toastError} = useGlobalContext()
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,12 +72,9 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         console.log("Data saved:", response.data);
         setIsModalOpen(false);
         getData();
-        toastAlert("Add Successfully")
       })
       .catch((error) => {
         console.error("Error saving data:", error);
-        toastError("Add properly")
-
       });
     setIsModalOpen(false);
   };
@@ -117,8 +112,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
       .then((res) => {
         console.log(res.data);
         setIsPutOpen(true);
-        toastAlert("Update Successfully")
-
       })
       .then(() => {
         setIsPutOpen(false);
@@ -376,13 +369,13 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                 }}
                 // sx={{ width: 300 }}
                 renderInput={(params) => (
-                  <TextField {...params} label=" Category" />
+                  <TextField {...params} label="Movie" />
                 )}
               />
 
               <TextField
                 id="outlined-password-input"
-                label="Sub Category"
+                label="sub Category"
                 name="sub_category_name"
                 type="text"
                 value={editData.sub_category_name}

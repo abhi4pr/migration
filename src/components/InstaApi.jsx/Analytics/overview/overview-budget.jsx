@@ -1,10 +1,7 @@
 import PropTypes from "prop-types";
-import ArrowDownIcon from "@mui/icons-material/ArrowDownward";
-import ArrowUpIcon from "@mui/icons-material/ArrowUpward";
-// import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
-// import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
-// import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
-import UsersIcon from "@mui/icons-material/AccountCircle";
+// import ArrowDownIcon from "@heroicons/react/24/solid/ArrowDownIcon";
+// import ArrowUpIcon from "@heroicons/react/24/solid/ArrowUpIcon";
+// import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import {
   Avatar,
   Card,
@@ -14,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 
-export const OverviewTotalCustomers = (props) => {
+export const OverviewBudget = (props) => {
   const { difference, positive = false, sx, value } = props;
 
   return (
@@ -28,27 +25,25 @@ export const OverviewTotalCustomers = (props) => {
         >
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Customers
+              Budget
             </Typography>
             <Typography variant="h4">{value}</Typography>
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: "success.main",
-              height: 46,
-              width: 46,
+              backgroundColor: "error.main",
+              height: 56,
+              width: 56,
             }}
           >
-            <SvgIcon>
-              <UsersIcon />
-            </SvgIcon>
+            <SvgIcon>{/* <CurrencyDollarIcon /> */}</SvgIcon>
           </Avatar>
         </Stack>
         {difference && (
           <Stack alignItems="center" direction="row" spacing={2} sx={{ mt: 2 }}>
             <Stack alignItems="center" direction="row" spacing={0.5}>
               <SvgIcon color={positive ? "success" : "error"} fontSize="small">
-                {positive ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                {/* {positive ? <ArrowUpIcon /> : <ArrowDownIcon />} */}
               </SvgIcon>
               <Typography
                 color={positive ? "success.main" : "error.main"}
@@ -67,9 +62,9 @@ export const OverviewTotalCustomers = (props) => {
   );
 };
 
-OverviewTotalCustomers.propTypes = {
+OverviewBudget.prototypes = {
   difference: PropTypes.number,
   positive: PropTypes.bool,
-  value: PropTypes.string.isRequired,
   sx: PropTypes.object,
+  value: PropTypes.string.isRequired,
 };

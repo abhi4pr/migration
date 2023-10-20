@@ -21,26 +21,24 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useGlobalContext } from "../../../Context/Context";
 
 export default function BrandMaster() {
-  const { toastAlert, toastError } = useGlobalContext();
- const [reload, setReload] = useState(false)
   const [SubCategoryString, setSubCategoryString] = useState();
   const [subcategoryOptions, setSubCategoryOptions] = useState([]);
-  const [categoryOptions, setCategoryOptions] = useState([]);
-  const [rows, setRows] = useState([]);
   console.log(SubCategoryString, "SubCategoryString");
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  // const [majorOptions, setMajorOptions] = useState([]);
+  const [majorString, setMajorString] = useState([]);
+
+  const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPutOpen, setIsPutOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
   const [editData, setEditData] = useState([]);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
-  useState(false);
-const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [postData, setPostData] = useState({
     brand_name: "",
     category_id: "",
@@ -49,14 +47,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
     whatsapp: "",
     major_category: "",
   });
-  const [errors, setErrors] = useState({
-    brand_name: "",
-    category_id: "",
-    sub_category_id: "",
-    igusername: "",
-    whatsapp: "",
-    major_category: "",
-  });
+
   const majorcategoryoption = [
     { major_cat_id: 1, major_cat_name: "Brands" },
     { major_cat_id: 2, major_cat_name: "Normal" },
@@ -64,8 +55,16 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
     { major_cat_id: 4, major_cat_name: "NBFRS" },
     { major_cat_id: 5, major_cat_name: "Entertainment" },
   ];
+
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+    useState(false);
+  const [itemToDeleteId, setItemToDeleteId] = useState(null);
+
+  //-----------------------
   const handleClose = () => {
     setIsModalOpen(false);
+    // setCategoryString();
+    // setSubCategoryString();
   };
 
   function EditToolbar() {
@@ -85,14 +84,34 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
       </GridToolbarContainer>
     );
   }
+  // const [brad, setbrad] = useState();
   // post data =========>
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
+    // // Reset the error state
+    // setError("");
+
+    // const isBrandNameValid = /^[A-Za-z\s]+$/.test(value);
+    // const isBrandNameNotEmpty = value.trim() !== "";
+    // const isIgusernameValid = /^[A-Za-z0-9]+$/.test(value);
+    // const isWhatsappValid = /^[A-Za-z\s]+$/.test(value);
+
+    // if (name === "brand_name") {
+    //   if (!isBrandNameValid) {
+    //     setbrad("Brand name should only contain letters.");
+    //   } else if (!isBrandNameNotEmpty) {
+    //     setbrad("Brand name is required.");
+    //   }
+    // } else if (name === "igusername") {
+    //   if (!isIgusernameValid) {
+    //     setError("IG username should only contain letters and numbers.");
+    //   }
+    // } else if (name === "whatsapp") {
+    //   if (!isWhatsappValid) {
+    //     setError("WhatsApp should only contain numbers.");
+    //   }
+    // }
 
     setPostData({
       ...postData,
@@ -100,71 +119,36 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
     });
   };
 
-  const validateForm = () => {
-    const {
-      brand_name,
-      category_id,
-      sub_category_id,
-      igusername,
-      whatsapp,
-      major_category,
-    } = editData || {};
-    const newErrors = {
-      brand_name: "",
-      category_id: "",
-      sub_category_id: "",
-      igusername: "",
-      whatsapp: "",
-      major_category: "",
-    };
-
-    if (!brand_name || brand_name.length < 4) {
-      newErrors.brand_name = "Brand Name is required";
-    }
-    if (!major_category || major_category.trim() === "") {
-      newErrors.major_category = "major_category is required";
-    }
-
-    if (!category_id || !category_id.trim()) {
-      newErrors.category_id = "Category is required";
-    }
-
-    if (!sub_category_id || !sub_category_id.trim()) {
-      newErrors.sub_category_id = "Subcategory is required";
-    }
-
-    if (!igusername || igusername.trim() === "") {
-      newErrors.igusername = "igusername is required";
-    }
-
-    if (!whatsapp || whatsapp.trim() === "") {
-      newErrors.whatsapp = "whatsapp is required";
-    }
-
-    setErrors(newErrors);
-    return Object.values(newErrors).every((error) => error === "");
-  };
-
   const handleSave = (e) => {
     e.preventDefault();
-    validateForm();
-
-    if (Object.values(errors).every((error) => error === "")) {
-      axios
-        .post("http://34.93.135.33:8080/api/add_brand", postData)
-        .then((response) => {
-          console.log(response.data, "Data saved:");
-          setPostData("");
-          setReload(!reload)     
-           })
-        .catch((error) => {
-          console.error("Error saving data:", error);
-          toastError(" * Add Required Data");
-        });
-      setIsModalOpen(false);
-    } else {
-      console.log("Form validation failed. Handle errors here.");
+    for (const key in postData) {
+      if (postData[key] === "") {
+        setError(`* All fields required`);
+        return;
+      }
     }
+    setError("");
+
+    axios
+      .post("http://34.93.135.33:8080/api/add_brand", postData)
+      .then((response) => {
+        console.log(response.data, "Data saved:");
+        setIsModalOpen(false);
+        getData();
+        // setPostData({
+        //   brand_name: "",
+        //   category_id: "",
+        //   sub_category_id: "",
+        //   igusername: "",
+        //   whatsapp: "",
+        //   major_category: "",
+        // });
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+      });
+    setIsModalOpen(false);
+    setPostData("");
   };
 
   // get api ------
@@ -172,6 +156,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
     axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
       const newData = res.data.data;
       const sortedData = newData.sort((a, b) => b.brand_id - a.brand_id);
+
       setRows(sortedData);
     });
   };
@@ -195,13 +180,15 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
           return item.sub_category_id == postData.sub_category_id;
         })[0].sub_category_id;
         console.log(x, "filteredData meeee");
+        // setSubCategoryOptions(filteredData);
       });
   };
   console.log(rows);
   useEffect(() => {
     getData();
     categoryData();
-  }, [reload]);
+    // subCategoryData()
+  }, []);
 
   useEffect(() => {
     console.log("postData.category_id", postData.category_id);
@@ -226,7 +213,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   useEffect(() => {
     console.log("postData.category_id", postData.category_id);
     subCategoryDataOnEdit();
-  }, [postData.category_id, postData]);
+  }, [ postData.category_id, postData]);
   // put api ------
   const handlePutData = () => {
     axios
@@ -237,37 +224,48 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         sub_category_id: editData.sub_category_id,
         igusername: editData.igusername,
         whatsapp: editData.whatsapp,
+        // user_id: editData.user_id,
+        // updated_at: editData.updated_at,
       })
       .then((res) => {
         console.log(res.data);
         setIsPutOpen(true);
-        toastAlert("Update Successfully");
       })
       .then(() => {
         setIsPutOpen(false);
-        setReload(!reload)     
+        getData();
       });
     console.log("put data");
   };
 
-  useEffect(() => {
-    axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
-      .then((res) => {
-        console.log(res.data.data, "-------> subcat data");
-        const filteredData = res.data.data.filter((item) => {
-          return item.category_id == editData.category_id;
-        });
-        console.log(filteredData, "filteredData meeee");
-        setSubCategoryOptions(filteredData);
-        setLoading(false);
-      });
-  }, [editData.category_id]);
+useEffect(() => {
+  axios
+  .get("http://34.93.135.33:8080/api/projectxSubCategory")
+  .then((res) => {
+    console.log(res.data.data, "-------> subcat data");
+    const filteredData = res.data.data.filter((item) => {
+      return item.category_id == editData.category_id;
+    });
+    console.log(filteredData, "filteredData meeee");
+    setSubCategoryOptions(filteredData);
+    setLoading(false);
+  });
+
+  
+}, [editData.category_id]);
+
 
   const handleEditClick = (id, row) => () => {
     setLoading(true);
     setEditData(row);
+    console.log(row);
+    console.log(
+      subcategoryOptions.find(
+        (option) => option.sub_category_id == row.sub_category_id
+      )
+    );
     setIsPutOpen(true);
+
     setPostData(row);
   };
 
@@ -410,7 +408,18 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         onChange={(e) => setSearchInput(e.target.value)}
         style={{ marginBottom: "10px" }}
       />
-      <Box>
+      <Box
+        sx={{
+          height: 500,
+          width: "100%",
+          "& .actions": {
+            color: "text.secondary",
+          },
+          "& .textPrimary": {
+            color: "text.primary",
+          },
+        }}
+      >
         <DataGrid
           rows={filteredRows}
           columns={columns}
@@ -431,32 +440,36 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         <DialogTitle>Add Record</DialogTitle>
         <DialogContent>
           <Box
+            component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1 },
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
             }}
+            noValidate
+            autoComplete="off"
           >
             <div>
               <>
                 <TextField
                   id="outlined-password-input"
-                  label="  * Brand"
+                  label="Brand"
                   name="brand_name"
                   type="text"
                   value={postData.brand_name}
                   onChange={handleChange}
-                  sx={{ width: "100%" }}
                 />
-                <span style={{ color: "red" }}>{errors.brand_name}</span>
+                {error && <div style={{ color: "red" }}>{error}</div>}
               </>
               <>
                 <Autocomplete
                   id="combo-box-demo"
+                  // value={majorString}
                   options={majorcategoryoption.map((item) => ({
                     label: item.major_cat_name,
                     value: item.major_cat_id,
                   }))}
+                  style={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="  * Major Category" />
+                    <TextField {...params} label="Major Category" />
                   )}
                   onChange={(event, newValue) => {
                     console.log(newValue.value);
@@ -465,11 +478,17 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                         ...postData,
                         major_category: newValue.label,
                       });
-                    } 
+                      // setMajorString(newValue.label);
+                    } else {
+                      setPostData({
+                        ...postData,
+                        major_cat_id: "",
+                      });
+                    }
                   }}
                 />
 
-                <span style={{ color: "red" }}>{errors.major_category}</span>
+                {error && <div style={{ color: "red" }}>{error}</div>}
               </>
               <>
                 <Autocomplete
@@ -479,8 +498,9 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                     label: option.category_name,
                     value: option.category_id,
                   }))}
+                  sx={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="  * Category" />
+                    <TextField {...params} label="Category" />
                   )}
                   onChange={(event, newValue) => {
                     console.log(newValue.value);
@@ -491,7 +511,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                   }}
                 />
 
-                <span style={{ color: "red" }}>{errors.category_id}</span>
+                {error && <div style={{ color: "red" }}>{error}</div>}
               </>
               <>
                 <Autocomplete
@@ -501,8 +521,9 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                     label: item.sub_category_name,
                     value: item.sub_category_id,
                   }))}
+                  sx={{ width: 300 }}
                   renderInput={(params) => (
-                    <TextField {...params} label="  * Subcategory" />
+                    <TextField {...params} label="Subcategory" />
                   )}
                   onChange={(event, newValue) => {
                     console.log(newValue.value);
@@ -512,10 +533,15 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                         sub_category_id: newValue.value,
                       });
                       setSubCategoryString(newValue.label);
+                    } else {
+                      setPostData({
+                        ...postData,
+                        sub_category_id: "",
+                      });
                     }
                   }}
                 />
-                <span style={{ color: "red" }}>{errors.sub_category_id}</span>
+                {error && <div style={{ color: "red" }}>{error}</div>}
               </>
               <>
                 <TextField
@@ -525,9 +551,8 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                   type="text"
                   value={postData.igusername}
                   onChange={handleChange}
-                  sx={{width:"100%"}}
                 />
-                <span style={{ color: "red" }}>{errors.igusername}</span>
+                {error && <div style={{ color: "red" }}>{error}</div>}
               </>
               <>
                 <TextField
@@ -537,10 +562,8 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                   type="text"
                   value={postData.whatsapp}
                   onChange={handleChange}
-                  sx={{ width: "100%" }}
-
                 />
-                <span style={{ color: "red" }}>{errors.whatsapp}</span>
+                {error && <div style={{ color: "red" }}>{error}</div>}
               </>
             </div>
           </Box>
@@ -560,118 +583,118 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         <DialogTitle>Edit Record</DialogTitle>
         <DialogContent>
           <Box
+            component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1 },
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
             }}
+            noValidate
+            autoComplete="off"
           >
-            {!loading && (
-              <div>
-                <TextField
-                  id="outlined-password-input"
-                  label="Brand"
-                  name="brand_name"
-                  type="text"
-                  sx={{ width: "100%" }}
-                  value={editData.brand_name}
-                  onChange={(e) =>
-                    setEditData((prev) => ({
-                      ...prev,
-                      brand_name: e.target.value,
-                    }))
-                  }
-                />
+           {!loading&& <div>
+              <TextField
+                id="outlined-password-input"
+                label="Brand"
+                name="brand_name"
+                type="text"
+                value={editData.brand_name}
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    brand_name: e.target.value,
+                  }))
+                }
+              />
 
-                <Autocomplete
-                  disablePortal
-                  options={categoryOptions.map((item) => ({
-                    label: item.category_name,
-                    value: item.category_id,
-                  }))}
-                  value={
-                    categoryOptions.find(
-                      (option) => option.category_id == editData.category_id
-                    )?.category_name
-                  }
-                  renderInput={(params) => (
-                    <TextField {...params} label=" Category" />
-                  )}
-                  onChange={(event, newValue) => {
-                    setEditData((prev) => ({
-                      ...prev,
-                      category_id: newValue ? newValue.value : "",
-                    }));
-                  }}
-                />
-                <Autocomplete
-                  disablePortal
-                  options={subcategoryOptions?.map((item) => ({
-                    label: item.sub_category_name,
-                    value: item.sub_category_id,
-                  }))}
-                  value={
-                    subcategoryOptions?.find((option) => {
-                      return (
-                        option?.sub_category_id == editData?.sub_category_id
-                      );
-                    })?.sub_category_name
-                  }
-                  renderInput={(params) => (
-                    <TextField {...params} label="Sub Category" />
-                  )}
-                  onChange={(event, newValue) => {
-                    setEditData((prev) => ({
-                      ...prev,
-                      sub_category_id: newValue ? newValue.value : "",
-                    }));
-                  }}
-                />
-                <Autocomplete
-                  disablePortal
-                  options={majorcategoryoption}
-                  getOptionLabel={(option) => option.major_cat_name}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Major Category" />
-                  )}
-                  value={majorcategoryoption.find(
-                    (option) =>
-                      option.major_cat_name === editData.major_category
-                  )}
-                  onChange={(event, newValue) => {
-                    setEditData((prev) => ({
-                      ...prev,
-                      major_category: newValue && newValue.major_cat_name,
-                    }));
-                  }}
-                />
+              <Autocomplete
+                disablePortal
+                options={categoryOptions.map((item) => ({
+                  label: item.category_name,
+                  value: item.category_id,
+                }))}
+                sx={{ width: 300 }}
+                value={
+                  categoryOptions.find(
+                    (option) => option.category_id == editData.category_id
+                  )?.category_name
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label=" Category" />
+                )}
+                onChange={(event, newValue) => {
+                  setEditData((prev) => ({
+                    ...prev,
+                    category_id: newValue ? newValue.value : "",
+                  }));
+                }}
+              />
+              <Autocomplete
+                disablePortal
+                options={subcategoryOptions?.map((item) => ({
+                  label: item.sub_category_name,
+                  value: item.sub_category_id,
+                }))}
+                value={
+                  subcategoryOptions?.find((option) => {
+                    return option?.sub_category_id == editData?.sub_category_id;
+                  })?.sub_category_name
+                }
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Sub Category" />
+                )}
+                onChange={(event, newValue) => {
+                  setEditData((prev) => ({
+                    ...prev,
+                    sub_category_id: newValue ? newValue.value : "",
+                  }));
+                }}
+              />
+              <Autocomplete
+                disablePortal
+                options={majorcategoryoption}
+                getOptionLabel={(option) => option.major_cat_name}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Major Category" />
+                )}
+                value={majorcategoryoption.find(
+                  (option) => option.major_cat_name === editData.major_category
+                )}
+                onChange={(event, newValue) => {
+                  setEditData((prev) => ({
+                    ...prev,
+                    major_category: newValue && newValue.major_cat_name,
+                  }));
+                }}
+              />
 
-                <TextField
-                  id="outlined-password-input"
-                  label="Iguser Name"
-                  name="igusername"
-                  type="text"
-                  value={editData.igusername}
-                  onChange={(e) =>
-                    setEditData((prev) => ({
-                      ...prev,
-                      igusername: e.target.value,
-                    }))
-                  }
-                />
-                <TextField
-                  id="outlined-password-input"
-                  label="Whatsapp"
-                  name="whatsapp"
-                  type="text"
-                  value={editData.whatsapp}
-                  onChange={(e) =>
-                    setEditData((prev) => ({
-                      ...prev,
-                      whatsapp: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            )}
+              <TextField
+                id="outlined-password-input"
+                label="Iguser Name"
+                name="igusername"
+                type="text"
+                value={editData.igusername}
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    igusername: e.target.value,
+                  }))
+                }
+              />
+              <TextField
+                id="outlined-password-input"
+                label="Whatsapp"
+                name="whatsapp"
+                type="text"
+                value={editData.whatsapp}
+                onChange={(e) =>
+                  setEditData((prev) => ({
+                    ...prev,
+                    whatsapp: e.target.value,
+                  }))
+                }
+              />
+            </div>}
           </Box>
         </DialogContent>
         <DialogActions>

@@ -19,8 +19,8 @@ function RoleMastUpdate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://44.211.225.140:8000/roleupdate`, {
-      id: id,
+    axios.put(`http://34.93.135.33:8080/api/update_role`, {
+      role_id: id,
       role_name: role_name,
       remark: remark,
       created_by: createdby,

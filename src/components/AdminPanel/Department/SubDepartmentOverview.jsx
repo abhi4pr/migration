@@ -24,29 +24,28 @@ export default function SubDepartmentOverview() {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allsubdept").then((res) => {
-      setAllUserSubDepartment(res.data.data);
-    });
-  }, [userID]);
-
   function getData() {
-    axios.get("http://44.211.225.140:8000/allsubdept").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-      console.log(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_sub_departments")
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+      });
   }
   function getSubDepartmentData(dept_id) {
-    axios.get(`http://44.211.225.140:8000/subdept/${dept_id}`).then((res) => {
-      setSubDeparmentData(res.data);
-    });
+    axios
+      .get(`http://34.93.135.33:8080/api/get_subdept_from_dept"/${dept_id}`)
+      .then((res) => {
+        setSubDeparmentData(res.data);
+      });
   }
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      setDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        setDepartmentData(res.data);
+      });
     getData();
   }, []);
 
@@ -100,7 +99,7 @@ export default function SubDepartmentOverview() {
             contextData[3] &&
             contextData[3].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="subdeptdelete"
+                endpoint="delete_sub_department"
                 id={row.id}
                 getData={getData}
               />

@@ -15,14 +15,16 @@ const Designation = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      getDepartmentData(res.data).catch((error) => console.log(error));
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data).catch((error) => console.log(error));
+      });
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://44.211.225.140:8000/desi", {
+    axios.post("http://34.93.135.33:8080/api/add_designation", {
       desi_name: designationName,
       dept_id: departmentName,
       remark: remark,

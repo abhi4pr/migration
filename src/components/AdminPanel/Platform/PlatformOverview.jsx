@@ -12,7 +12,7 @@ const PlatformOverview = () => {
   const [filterData, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_platforms").then((res) => {
+    axios.get("http://44.211.225.140:8000/alldataofplatform").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });
@@ -58,7 +58,7 @@ const PlatformOverview = () => {
           </Link>
 
           <DeleteButton
-            endpoint="delete_platform"
+            endpoint="platformdelete"
             id={row.id}
             getData={getData}
           />

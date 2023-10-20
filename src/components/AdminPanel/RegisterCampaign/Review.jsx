@@ -130,13 +130,12 @@ export default function Review() {
     },
     {
       field: "content_type_id",
-      headerName: "Content Type",
-      width: 150,
+      headerName: "content Type",
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
@@ -209,25 +208,14 @@ export default function Review() {
         })[0]?.brand_name;
       },
     },
-    // {
-    //   field: "content_type_id",
-    //   headerName: "content Type",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return content.filter((e) => {
-    //       return e.content_value == params.row.content_type_id;
-    //     })[0]?.content_type;
-    //   },
-    // },
     {
       field: "content_type_id",
-      headerName: "Content Type",
-      width: 150,
+      headerName: "content Type",
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
@@ -300,25 +288,14 @@ export default function Review() {
         })[0]?.brand_name;
       },
     },
-    // {
-    //   field: "content_type_id",
-    //   headerName: "content Type",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return content.filter((e) => {
-    //       return e.content_value == params.row.content_type_id;
-    //     })[0]?.content_type;
-    //   },
-    // },
     {
       field: "content_type_id",
-      headerName: "Content Type",
-      width: 150,
+      headerName: "content Type",
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {
@@ -416,25 +393,14 @@ export default function Review() {
         })[0]?.brand_name;
       },
     },
-    // {
-    //   field: "content_type_id",
-    //   headerName: "content Type",
-    //   width: 200,
-    //   renderCell: (params) => {
-    //     return content.filter((e) => {
-    //       return e.content_value == params.row.content_type_id;
-    //     })[0]?.content_type;
-    //   },
-    // },
     {
       field: "content_type_id",
-      headerName: "Content Type",
-      width: 150,
+      headerName: "content Type",
+      width: 200,
       renderCell: (params) => {
-        const matchingContentType = content.find((e) => {
-          return params.row?.content_type_id === e?.content_type_id;
-        });
-        return matchingContentType?.content_type || "";
+        return content.filter((e) => {
+          return e.content_value == params.row.content_type_id;
+        })[0]?.content_type;
       },
     },
     {

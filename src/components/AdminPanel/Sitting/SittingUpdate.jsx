@@ -26,8 +26,8 @@ const SittingUpdate = () => {
     setError("");
 
     axios
-      .put(`http://44.211.225.140:8000/sittingupdate`, {
-        id: id,
+      .put(`http://34.93.135.33:8080/api/update_sitting`, {
+        sitting_id: id,
         sitting_ref_no: sittingRefrenceNum,
         sitting_area: sittingArea,
         room_id: Number(roomId),
@@ -61,11 +61,11 @@ const SittingUpdate = () => {
   }, []);
 
   useEffect(() => {
-    setId(localStorage.getItem("Sitting_id"));
-    setSittingRefNum(localStorage.getItem("Sitting_ref_no"));
+    setId(localStorage.getItem("sitting_id"));
+    setSittingRefNum(localStorage.getItem("sitting_ref_no"));
     setRoomId(localStorage.getItem("room_id"));
-    setSittingArea(localStorage.getItem("Sitting_area"));
-    setRemark(localStorage.getItem("Remarks"));
+    setSittingArea(localStorage.getItem("sitting_area"));
+    setRemark(localStorage.getItem("remarks"));
   }, []);
 
   if (isFormSubmitted) {
@@ -94,13 +94,13 @@ const SittingUpdate = () => {
             const selectedRoomNo = roomData.find(
               (option) => option.room_id === Number(selectedRoomOption)
             );
-            setSittingArea(selectedRoomNo ? selectedRoomNo.Sitting_ref_no : "");
+            setSittingArea(selectedRoomNo ? selectedRoomNo.sitting_ref_no : "");
           }}
         >
           <option value="">choose...</option>
           {roomData.map((d) => (
             <option value={d.room_id} key={d.room_id}>
-              {d.Sitting_ref_no}
+              {d.sitting_ref_no}
             </option>
           ))}
         </FieldContainer>

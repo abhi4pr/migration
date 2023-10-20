@@ -69,15 +69,15 @@ const UserSingle = () => {
         setOtherDocuments(res.data.data);
       });
   }
-  const subDep = async (dept_id) => {
-    await axios
-      .get(`http://44.211.225.140:8000/subdept/${dept_id}`)
-      .then((res) => {
-        setSubDept(res.data);
-      });
-  };
+  // const subDep = async (dept_id) => {
+  //   await axios
+  //     .get(`http://44.211.225.140:8000/subdept/${dept_id}`)
+  //     .then((res) => {
+  //       setSubDept(res.data);
+  //     });
+  // };
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allsitting").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
     KRAAPI(id);
@@ -98,7 +98,7 @@ const UserSingle = () => {
 
   useEffect(() => {
     getData();
-    subDep(subDeptId);
+    // subDep(subDeptId);
     userOtherDocuments();
   }, [id]);
 
@@ -108,7 +108,7 @@ const UserSingle = () => {
 
   useEffect(() => {
     const selectedOption = defaultSeatData.find(
-      (option) => option?.Sitting_id === Number(user?.sitting_id)
+      (option) => option?.sitting_id === Number(user?.sitting_id)
     );
     setRoomId(selectedOption);
   }, [defaultSeatData, user?.sitting_id]);

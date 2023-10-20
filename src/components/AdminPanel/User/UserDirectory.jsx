@@ -11,7 +11,7 @@ const UserOverview = () => {
   const [search, setSearch] = useState("");
   const [datas, setDatas] = useState([]);
   const [filterdata, setFilterData] = useState([]);
-  const [backupData, setBackupData] = useState([])
+  const [backupData, setBackupData] = useState([]);
   const [contextData, setData] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [departmentData, setDepartmentData] = useState([]);
@@ -35,9 +35,11 @@ const UserOverview = () => {
       setBackupData(res.data.data);
     });
 
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      setDepartmentData(res.data)
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        setDepartmentData(res.data);
+      });
   }
   useEffect(() => {
     getData();
@@ -47,7 +49,9 @@ const UserOverview = () => {
     if (selectedDepartment === "") {
       setDatas(backupData);
     } else {
-      const filteredData = backupData.filter( (item) => item.dept_id == selectedDepartment );
+      const filteredData = backupData.filter(
+        (item) => item.dept_id == selectedDepartment
+      );
       setDatas(filteredData);
     }
   }, [selectedDepartment]);
@@ -61,34 +65,34 @@ const UserOverview = () => {
 
   return (
     <>
-      <div className="action_heading" style={{margin:"10px 0 30px 0"}}>
+      <div className="action_heading" style={{ margin: "10px 0 30px 0" }}>
         <div className="action_btns">
           <Link to="/admin/user-hierarchy">
             <button type="button" className="btn btn-outline-primary btn-sm">
               User Hierarchy
             </button>
-          </Link>         
+          </Link>
         </div>
       </div>
 
-        <div className="card mb-4">
-          <div className="card-body pb0 pb4">
-            <div className="row thm_form">
-              <FieldContainer
-                label="Department"
-                Tag="select"
-                fieldGrid={4}
-                value={selectedDepartment}
-                onChange={(e) => setSelectedDepartment(e.target.value)}
-              >
-                <option value="">Please select</option>
-                {departmentData.map((data) => (
-                  <option key={data.dept_id} value={data.dept_id}>
-                    {data.dept_name}
-                  </option>
-                ))}
-              </FieldContainer>
-              {/* <FieldContainer
+      <div className="card mb-4">
+        <div className="card-body pb0 pb4">
+          <div className="row thm_form">
+            <FieldContainer
+              label="Department"
+              Tag="select"
+              fieldGrid={4}
+              value={selectedDepartment}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
+            >
+              <option value="">Please select</option>
+              {departmentData.map((data) => (
+                <option key={data.dept_id} value={data.dept_id}>
+                  {data.dept_name}
+                </option>
+              ))}
+            </FieldContainer>
+            {/* <FieldContainer
                 label="Place"
                 Tag="select"
                 fieldGrid={4}
@@ -102,32 +106,30 @@ const UserOverview = () => {
                   </option>
                 ))}
               </FieldContainer> */}
-              <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                <div className="form-group">
-                  <label className="form-label">Search</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search by User Name"
-                  />
-                </div>
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group">
+                <label className="form-label">Search</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search by User Name"
+                />
               </div>
             </div>
           </div>
         </div>
-        <div className="summary_cards flex-row row">
-          {datas.length > 0 &&
-            datas
-              .filter((detail) =>
-                detail.user_name
-                  .toLowerCase()
-                  .includes(search.toLowerCase())
-              )
-              .map((detail) => {
-                return (
-                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+      </div>
+      <div className="summary_cards flex-row row">
+        {datas.length > 0 &&
+          datas
+            .filter((detail) =>
+              detail.user_name.toLowerCase().includes(search.toLowerCase())
+            )
+            .map((detail) => {
+              return (
+                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                   <div className="summary_card">
                     <div className="summary_cardtitle">
                       <h5>
@@ -147,12 +149,15 @@ const UserOverview = () => {
                     <div className="summary_cardbody">
                       <div className="summary_cardrow flex-column">
                         <div className="summary_box text-center ml-auto mr-auto">
-                            <img src={detail.image} width="80px" height="80px" style={{borderRadius:"50%"}} />
+                          <img
+                            src={detail.image}
+                            width="80px"
+                            height="80px"
+                            style={{ borderRadius: "50%" }}
+                          />
                         </div>
                         <div className="summary_box col">
-                          <h3>
-                            {detail.user_name}
-                          </h3>
+                          <h3>{detail.user_name}</h3>
                         </div>
                         <div className="summary_box col">
                           <h4>
@@ -178,14 +183,13 @@ const UserOverview = () => {
                             {detail.user_email_id}
                           </h4>
                         </div>
-
                       </div>
                     </div>
                   </div>
-                  </div>
+                </div>
               );
-          })}
-        </div>
+            })}
+      </div>
     </>
   );
 };

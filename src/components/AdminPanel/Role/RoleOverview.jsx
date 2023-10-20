@@ -26,10 +26,9 @@ const RoleOverView = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allroles").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
-      console.log(res.data.data);
     });
   }
 
@@ -90,7 +89,7 @@ const RoleOverView = () => {
             contextData[4] &&
             contextData[4].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="roledelete"
+                endpoint="delete_role"
                 id={row.role_id}
                 getData={getData}
               />
