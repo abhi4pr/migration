@@ -1,0 +1,223 @@
+import React from "react";
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  Grid,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid";
+import { set } from "date-fns";
+
+function ExecutionDetail() {
+  const { id } = useParams();
+  const [data, setData] = useState([]);
+  const [pageIds, setPageIds] = useState([]);
+  const [pageNames, setPageNames] = useState([]);
+  useEffect(() => {
+    // Fetch data when the component mounts
+    axios
+      .get(
+        `
+    http://44.211.225.140:8000/executionSummary`
+      )
+      .then((res) => {
+        // console.log(
+        //   res.data
+        //     .filter((ele) => ele.sale_booking_execution_id == id)[0]
+        //     .page_ids.split(",")
+        // );
+
+        // const data=res.data.filter((ele) => ele.sale_booking_execution_id == id)
+        setData(
+          ...res.data.filter((ele) => ele.sale_booking_execution_id == id)
+        );
+        setPageIds(() =>
+          res.data
+            .filter((ele) => ele.sale_booking_execution_id == id)[0]
+            .page_ids?.split(",")
+        );
+      });
+
+    // console.log(data.page_ids?.split(","));
+  }, []);
+
+  useEffect(() => {
+    const form = new FormData();
+    form.append("loggedin_user_id", 36);
+
+    axios
+      .post(
+        "https://sales.creativefuel.io/webservices/RestController.php?view=inventoryDataList",
+        form
+      )
+      .then((res) => {
+        // console.log(res.data.body);
+        // console.log(pageIds);
+        // console.log(
+        //   pageIds?.map((e) => res.data.body.filter((ele) => ele.p_id == e)[0])
+        // );
+        setPageNames(
+          pageIds.map((e) => res.data.body.filter((ele) => ele.p_id == e)[0])
+        );
+      });
+  }, [pageIds]);
+  const addSerialNumber = (rows) => {
+    return rows.map((row, index) => ({
+      ...row,
+      S_No: index + 1,
+    }));
+  };
+  const columns = [
+    {
+      field: "S_No",
+      headerName: "S No",
+      width: 90,
+    },
+    {
+      field: "page_name",
+      headerName: "Page Name",
+      width: 150,
+    },
+    {
+      field: "page_link",
+      headerName: "Page Url",
+      width: 150,
+      renderCell: (params) => (
+        <a href={params.row.page_link} rel="noreferrer" target="_blank">
+          {" "}
+          {params.row.page_link}
+        </a>
+      ),
+    },
+    {
+      field: "page_status",
+      headerName: "Page Status",
+      width: 150,
+    },
+    {
+      field: "platform",
+      headerName: "Platform",
+    },
+    {
+      field: "created_at",
+      headerName: "Created At",
+      width: 150,
+      renderCell: (params) => {
+        return new Date( params.row.created_at?.split(" ")[0]).toLocaleDateString();;
+      },
+    },
+  ];
+
+  return (
+    <>
+      <Paper
+        // justifyContent="space-between"
+        sx={{ flexWrap: "wrap", flexDirection: "row", p: 2 }}
+      >
+        <Typography>Sales booking invoice detail</Typography>
+        <Stack direction="row" sx={{ mt: 2 }} justifyContent="space-evenly">
+          <Stack direction="row" spacing={4}>
+            <Button
+              size="small"
+              variant="outlined"
+              //   startIcon={<ContentCopyOutlinedIcon />}
+            >
+              Customer Name : {data.cust_name}
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              //   startIcon={<CopyAllOutlinedIcon />}
+            >
+              Sale Booking Date : {data.sale_booking_date}
+            </Button>
+            {/* <Button
+              size="small"
+              variant="outlined"
+              //   startIcon={<ContentPasteIcon />}
+            >
+              Campaign Amount :{data.campaign_amount}
+            </Button> */}
+          </Stack>
+        </Stack>
+      </Paper>
+      <Paper
+        justifyContent="space-between"
+        sx={{ flexWrap: "wrap", flexDirection: "row", p: 2, mt: 4 }}
+      >
+        <Typography sx={{ mb: 4 }}>Invoice Detail</Typography>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={6}>
+            <Typography> Services:{data.service_name}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography> Iteration :</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>
+              Start Date : {new Date(data.start_date_).toLocaleDateString()}{" "}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>
+            Executive Name :{ data.sales_executive_name}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>
+              {" "}
+              End Date :{new Date(data.end_date).toLocaleDateString()}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography> Excel Upload</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography> Goal</Typography>
+          </Grid>
+          {/* <Grid item xs={6}>
+            <Typography> Per Hour Amount</Typography>
+          </Grid> */}
+          {/* <Grid item xs={6}>
+            <Typography> Campaign Amount : {data.campaign_amount}</Typography>
+          </Grid> */}
+          {/* <Grid item xs={6}>
+            <Typography> Execution Done by:{data.execution_done_by}</Typography>
+          </Grid> */}
+          <Grid item xs={6}>
+            <Typography> Description:{data.summary}</Typography>
+          </Grid>
+          {/* <Grid item xs={6}>
+            <Typography> Services</Typography>
+          </Grid> */}
+          <Grid item xs={6}>
+            <Typography> Hash tag</Typography>
+          </Grid>
+        </Grid>
+        {/* </Stack> */}
+      </Paper>
+      { pageNames.length>0&& 
+      <Paper
+        justifyContent="space-between"
+        sx={{ flexWrap: "wrap", flexDirection: "row", p: 2, mt: 4 }}
+      >
+        <DataGrid
+          rows={addSerialNumber(pageNames)}
+          columns={columns}
+          pageSize={5}
+          getRowId={(row) => row.p_id}
+        />
+              </Paper>}
+    </>
+  );
+}
+
+export default ExecutionDetail;

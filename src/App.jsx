@@ -1,0 +1,95 @@
+import "./App.css";
+import "./assets/css/style.css";
+import "./assets/css/responsive.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./Login/Login";
+import Protected from "./Login/Protected";
+import Home from "./components/Home";
+import Admin from "./components/AdminPanel/Admin";
+import Profile from "./components/Pantry/UserPanel/Profile/Profile";
+import User from "./components/Pantry/UserPanel/User";
+import Delivery from "./components/Pantry/DeliveryPanel/Delivery";
+import SimOverview from "./components/Sim/SimOverview";
+import SimMaster from "./components/Sim/SimMaster";
+import SimUpdate from "./components/Sim/SimUpdate";
+import SimAllocationOverview from "./components/Sim/SimAllocationOverview";
+
+import SimSummary from "./components/Sim/SimSummary";
+import IpMaster from "./components/IntellectualProperty/IpMaster";
+import IpOverview from "./components/IntellectualProperty/IpOverview";
+import IpUpdate from "./components/IntellectualProperty/IpUpdate";
+import IpCountUpdate from "./components/IntellectualProperty/IpCountUpdate";
+import BrandMaster from "./components/Brand/BrandMaster";
+import BrandOverview from "./components/Brand/BrandOverview";
+import BrandUpdate from "./components/Brand/BrandUpdate";
+import IpHistory from "./components/IntellectualProperty/IpHistory";
+import OrderHistory from "./components/Pantry/UserPanel/OrderHistory";
+import BrandView from "./components/Brand/BrandView";
+import SimDashboard from "./components/Sim/SimDashboard";
+import PreOnboardingUserMaster from "./components/PreOnboarding/PreOnboardingUserMaster";
+import IpGraph from "./components/IntellectualProperty/IpGraph";
+// import Notification from "./Notification";
+import PendingOrderSingleUser from "./components/Pantry/UserPanel/PendingOrderSingleUser";
+import { APIContext } from "./components/AdminPanel/APIContext/APIContext";
+
+function App() {
+  return (
+    <>
+      {/* <Notification /> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Protected />}>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/pre-onboard-user-from"
+              element={<PreOnboardingUserMaster />}
+            />
+
+            <Route path="/pantry-user" element={<User />} />
+            <Route path="/pantry-delivery" element={<Delivery />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/order-history" element={<OrderHistory />} />
+            <Route
+              path="/pending-order-single-user"
+              element={<PendingOrderSingleUser />}
+            />
+          </Route>
+          <Route
+            path="/admin/*"
+            element={
+              <APIContext>
+                <Admin />
+              </APIContext>
+            }
+          />
+
+          <Route path="/sim-overview" element={<SimOverview />} />
+          <Route path="/sim-master" element={<SimMaster />} />
+          <Route path="/sim-update/:id" element={<SimUpdate />} />
+          <Route path="/sim-dashboard" element={<SimDashboard />} />
+          <Route
+            path="/sim-allocation-overview"
+            element={<SimAllocationOverview />}
+          />
+
+          <Route path="/sim-summary/:id" element={<SimSummary />} />
+          <Route path="/ip-overview" element={<IpOverview />} />
+          <Route path="/ip-master" element={<IpMaster />} />
+          <Route path="/ip-update/:id" element={<IpUpdate />} />
+
+          <Route path="/ip-history/:id" element={<IpHistory />} />
+          <Route path="/ip-countupdate/:id" element={<IpCountUpdate />} />
+          <Route path="/ip-graph/:id" element={<IpGraph />} />
+
+          <Route path="/brand-master" element={<BrandMaster />} />
+          <Route path="/brand-overview" element={<BrandOverview />} />
+          <Route path="/brand-update/:id" element={<BrandUpdate />} />
+          <Route path="/brand-view/:id" element={<BrandView />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+}
+
+export default App;

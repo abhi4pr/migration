@@ -1,0 +1,359 @@
+import React, { useEffect, useState } from "react";
+import FormContainer from "../FormContainer";
+import DataTable from "react-data-table-component";
+import axios from "axios";
+import { Text, StyleSheet, PDFDownloadLink } from "@react-pdf/renderer";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import MyTemplate1 from "../WFH/SalaryGeneration/Template";
+import MyTemplate2 from "../WFH/SalaryGeneration/Template2";
+import MyTemplate3 from "../WFH/SalaryGeneration/Template3";
+import MyTemplate4 from "../WFH/SalaryGeneration/Template4";
+import MyTemplate5 from "../WFH/SalaryGeneration/Template5";
+import { set } from "date-fns";
+import CheckableTag from "antd/es/tag/CheckableTag";
+
+const AccountsOverviewWFH = () => {
+  const [search, setSearch] = useState("");
+  const [data, setData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
+  const [id, setId] = useState(0);
+  const [amount, setAmount] = useState("");
+  const [date, setDate] = useState("");
+  const [screenshot, setScreenshot] = useState([]);
+  const [refrenceNumber, setRefrenceNumber] = useState(null);
+  const [rowData, setDataRow] = useState(null);
+  const [selectedTemplate, setSelectedTempate] = useState(null);
+  const [salaryStatusToggle, setSalaryStatusToggle] = useState(0);
+
+  const [isloading, setIsLoading] = useState(false);
+  useEffect(() => {
+    axios.get(`http://44.211.225.140:8000/finance`).then((res) => {
+      const response = res.data;
+      setData(response);
+      setFilterData(
+        response.filter((item) => item.status_ == salaryStatusToggle)
+      );
+    });
+  }, []);
+
+  useEffect(() => {
+    setFilterData(data.filter((item) => item.status_ == salaryStatusToggle));
+  }, [salaryStatusToggle]);
+
+  useEffect(() => {
+    const result1 = data.filter((d) => {
+      return d.user_name?.toLowerCase().includes(search.toLowerCase());
+    });
+    setFilterData(result1);
+  }, [search]);
+
+  const handlePay = (row) => {
+    setId(row.id);
+    setAmount("");
+    setDate("");
+  };
+
+  function handlePayOut() {
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("amount", amount);
+    formData.append("status_", 1);
+    formData.append("screenshot", screenshot);
+    formData.append("reference_no", refrenceNumber);
+    formData.append("pay_date", date);
+
+    axios.put(`http://44.211.225.140:8000/finance`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
+
+  const handleInvoice = (data) => {
+    setDataRow(data);
+    setSelectedTempate(data?.invoice_template_no);
+  };
+
+  const templateMap = {
+    1: <MyTemplate1 rowData={rowData} />,
+    2: <MyTemplate2 rowData={rowData} />,
+    3: <MyTemplate3 rowData={rowData} />,
+    4: <MyTemplate4 rowData={rowData} />,
+    5: <MyTemplate5 rowData={rowData} />,
+  };
+
+  const selectedTemplatevalue = templateMap[selectedTemplate];
+
+  const columns = [
+    {
+      name: "S.No",
+      cell: (row, index) => <div>{index + 1}</div>,
+      width: "5%",
+      sortable: true,
+    },
+    {
+      name: "Name",
+      selector: (row) => row.user_name,
+      sortable: true,
+    },
+    {
+      name: "Department",
+      selector: (row) => row.dept_name,
+      sortable: true,
+    },
+    {
+      name: "Month",
+      selector: (row) => row.month,
+      sortable: true,
+    },
+    {
+      name: "Year",
+      selector: (row) => row.year,
+      sortable: true,
+    },
+    {
+      name: "Net Salary",
+      selector: (row) => row.net_salary,
+      sortable: true,
+    },
+    {
+      name: "TDS Deduction",
+      selector: (row) => row.tds_deduction,
+      sortable: true,
+    },
+    {
+      name: "Salary",
+      selector: (row) => row.total_salary,
+      sortable: true,
+    },
+    {
+      name: "To Pay",
+      selector: (row) => row.toPay,
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <>
+          <button
+            className="btn btn-primary"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            onClick={() => handlePay(row)}
+          >
+            Pay
+          </button>
+          <PDFDownloadLink
+            document={templateMap[row?.invoice_template_no]}
+            fileName={
+              rowData?.user_name + " " + rowData?.month + " " + rowData?.year
+            }
+            style={{
+              color: "#4a4a4a",
+            }}
+          >
+            <button
+              className="btn btn-outline-primary btn-sm"
+              title="Download Invoice"
+              type="button"
+              onClick={() => handleInvoice(row)}
+            >
+              <CloudDownloadIcon />
+              {/* Download */}
+            </button>
+          </PDFDownloadLink>
+        </>
+      ),
+    },
+  ];
+  return (
+    <>
+      <div className="action_heading">
+        <div className="action_title">
+          <FormContainer
+            mainTitle="Finance"
+            link="/admin/user"
+            submitButton={false}
+          />
+        </div>
+      </div>
+      {isloading ? (
+        <div className="loader">
+          <div>
+            <ul>
+              <li>
+                <svg fill="currentColor" viewBox="0 0 90 120">
+                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg>
+              </li>
+              <li>
+                <svg fill="currentColor" viewBox="0 0 90 120">
+                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg>
+              </li>
+              <li>
+                <svg fill="currentColor" viewBox="0 0 90 120">
+                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg>
+              </li>
+              <li>
+                <svg fill="currentColor" viewBox="0 0 90 120">
+                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg>
+              </li>
+              <li>
+                <svg fill="currentColor" viewBox="0 0 90 120">
+                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg>
+              </li>
+              <li>
+                <svg fill="currentColor" viewBox="0 0 90 120">
+                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
+                </svg>
+              </li>
+            </ul>
+          </div>
+          <span>Loading</span>
+        </div>
+      ) : (
+        <div className="page_height">
+          <div className="card mb-4">
+            <div className="data_tbl table-responsive">
+              <DataTable
+                title="WFH salary "
+                columns={columns}
+                data={filterData}
+                fixedHeader
+                // pagination
+                fixedHeaderScrollHeight="64vh"
+                highlightOnHover
+                subHeader
+                subHeaderComponent={
+                  <>
+                    <div className="btn-group" role="group">
+                      <button
+                        type="button"
+                        className={`btn btn-${
+                          salaryStatusToggle == 0
+                            ? "primary"
+                            : "outline-primary"
+                        }`}
+                        onClick={() => setSalaryStatusToggle(0)}
+                      >
+                        Pending
+                      </button>
+                      <button
+                        type="button"
+                        className={`btn btn-${
+                          salaryStatusToggle == 1
+                            ? "primary"
+                            : "outline-primary"
+                        }`}
+                        onClick={() => setSalaryStatusToggle(1)}
+                      >
+                        Paid
+                      </button>
+                    </div>
+
+                    <input
+                      type="text"
+                      placeholder="Search here"
+                      className="w-50 form-control "
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </>
+                }
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Pay
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <div className="form-group">
+                  <label className="col-form-label">Amount</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="recipient-name"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                  <label className="col-form-label">Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="recipient-name"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                  />
+                  <label className="col-form-label">Snapshot</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="recipient-name"
+                    onChange={(e) => setScreenshot(e.target.files[0])}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="col-form-label">RefrenceNumber</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="recipient-name"
+                    value={refrenceNumber}
+                    onChange={(e) => setRefrenceNumber(e.target.value)}
+                  />
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-dismiss="modal"
+                onClick={handlePayOut}
+              >
+                Send message
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default AccountsOverviewWFH;
