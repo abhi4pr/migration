@@ -135,7 +135,7 @@ const UserOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://192.168.29.116:8080/api/get_all_users"
+        "http://34.93.135.33:8080/api/get_all_users"
       );
       // const data = response.data.data.filter(
       //   (item) => item.onboard_status !== 2

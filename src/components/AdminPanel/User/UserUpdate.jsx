@@ -213,7 +213,7 @@ const UserUpdate = () => {
       });
 
     axios
-      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
+      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
       .then((res) => {
         setRefrenceData(res.data.data);
       });
@@ -243,7 +243,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -396,7 +396,7 @@ const UserUpdate = () => {
     formData.append("highest_qualification_name", higestQualification);
     const formDataa = new FormData();
     if (isValidcontact == true && validEmail == true) {
-      await axios.put(`http://192.168.29.116:8080/api/update_user`, formData, {
+      await axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

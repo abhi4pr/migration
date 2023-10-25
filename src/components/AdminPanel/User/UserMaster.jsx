@@ -200,7 +200,7 @@ const UserMaster = () => {
       });
 
     axios
-      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
+      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
       .then((res) => {
         getRefrenceData(res.data.data);
       });
@@ -290,7 +290,7 @@ const UserMaster = () => {
           alert("this login ID already exists");
         } else {
           await axios.post(
-            "http://192.168.29.116:8080/api/add_user",
+            "http://34.93.135.33:8080/api/add_user",
             formData,
             {
               headers: {

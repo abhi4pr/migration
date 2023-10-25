@@ -32,7 +32,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
     axios.get("http://34.93.135.33:8080/api/get_all_products").then((res) => {
       setProducts(res.data);
     });
-    axios.get("http://192.168.29.116:8080/api/get_all_rooms").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_rooms").then((res) => {
       setOffice(res.data.data);
     });
   }, []);

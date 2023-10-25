@@ -80,7 +80,7 @@ const UserWiseResponsibility = () => {
     getData();
     getDatas();
     axios
-      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
+      .get("http://34.93.135.33:8080/api/get_all_jobresponsibilitys")
       .then((res) => {
         setAllResponsibility(res.data.data);
       });
