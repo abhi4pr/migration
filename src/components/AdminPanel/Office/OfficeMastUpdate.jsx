@@ -21,12 +21,12 @@ function OfficeMastUpdate() {
     //   remarks: remark,
     //   created_by: createdby,
     const formData = new FormData();
-    formData.append("id", id);
+    formData.append("room_id", id);
     formData.append("sitting_ref_no", sittingMast);
     formData.append("room_image", roomimage);
     formData.append("remarks", remark);
     formData.append("created_by", createdby);
-    axios.put(`http://44.211.225.140:8000/roomupdate`, formData, {
+    axios.put(`http://192.168.29.116:8080/api/update_room`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -42,8 +42,8 @@ function OfficeMastUpdate() {
 
   useEffect(() => {
     setId(localStorage.getItem("room_id"));
-    setSittingMast(localStorage.getItem("Sitting_ref_no"));
-    setRemark(localStorage.getItem("Remarks"));
+    setSittingMast(localStorage.getItem("sitting_ref_no"));
+    setRemark(localStorage.getItem("remarks"));
     setCreatedBy(localStorage.getItem("created_by_name"));
   }, []);
   if (isFormSubmitted) {
@@ -79,18 +79,6 @@ function OfficeMastUpdate() {
                   />
                 </div>
               </div>
-              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                <div className="form-group">
-                  <label className="form-label">Room Image </label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="validationCustom01"
-                    onChange={(e) => setRoomImage(e.target.files[0])}
-                  />
-                </div>
-              </div>
-
               <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                 <div className="form-group">
                   <label className="form-label">Room Image </label>

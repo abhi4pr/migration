@@ -51,8 +51,8 @@ const UserResponsbilityUpdate = () => {
     setError("");
     for (const element of todos) {
       axios
-        .put(`http://44.211.225.140:8000/userjobrespoupdate/`, {
-          id: id,
+        .put(`http://192.168.29.116:8080/api/update_jobresponsibility`, {
+          Job_res_id: id,
           user_id: userName,
           job_responsi: element.responsbility,
           description: element.description,

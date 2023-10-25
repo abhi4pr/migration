@@ -79,9 +79,11 @@ const UserWiseResponsibility = () => {
   useEffect(() => {
     getData();
     getDatas();
-    axios.get("http://44.211.225.140:8000/alluserjobrespo").then((res) => {
-      setAllResponsibility(res.data.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
+      .then((res) => {
+        setAllResponsibility(res.data.data);
+      });
   }, []);
 
   useEffect(() => {

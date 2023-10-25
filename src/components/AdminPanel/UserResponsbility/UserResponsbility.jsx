@@ -55,15 +55,17 @@ const UserResponsbility = () => {
   }, [userName, userData]);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allresponsidata").then((res) => {
-      setResponsibilityData(res.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_responsibilitys")
+      .then((res) => {
+        setResponsibilityData(res.data);
+      });
   }, [todos]);
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     for (const element of todos) {
-      axios.post("http://44.211.225.140:8000/userjobrespo", {
+      axios.post("http://192.168.29.116:8080/api/add_job_responsibility", {
         user_id: userName,
         job_responsi: element.responsibility,
         description: element.description,

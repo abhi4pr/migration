@@ -18,7 +18,7 @@ const ResponsibilityMast = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://44.211.225.140:8000/reponsi", {
+    axios.post("http://192.168.29.116:8080/api/add_responsibility", {
       respo_name: responsibility,
       description: description,
       created_by: userId,

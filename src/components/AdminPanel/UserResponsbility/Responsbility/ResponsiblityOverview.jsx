@@ -26,16 +26,20 @@ const ResponsiblityOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allresponsidata").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_responsibilitys")
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+      });
   }
   useEffect(() => {
     getData();
-    axios.get("http://44.211.225.140:8000/alluserjobrespo").then((res) => {
-      setAllResponsibility(res.data.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
+      .then((res) => {
+        setAllResponsibility(res.data.data);
+      });
   }, []);
 
   useEffect(() => {
@@ -95,7 +99,7 @@ const ResponsiblityOverview = () => {
             contextData[16] &&
             contextData[16].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="respondelete"
+                endpoint="delete_responsibility"
                 id={row.id}
                 getData={getData}
               />
