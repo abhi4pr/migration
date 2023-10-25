@@ -25,7 +25,7 @@ const OfficeMastOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allroom").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_rooms").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -40,7 +40,7 @@ const OfficeMastOverview = () => {
     },
     {
       name: "Sitting_Ref No",
-      selector: (row) => row.Sitting_ref_no,
+      selector: (row) => row.sitting_ref_no,
       width: "20%",
       sortable: true,
     },
@@ -58,7 +58,7 @@ const OfficeMastOverview = () => {
     },
     {
       name: "remark",
-      selector: (row) => row.Remarks,
+      selector: (row) => row.remarks,
     },
     {
       name: "Action",
@@ -75,8 +75,8 @@ const OfficeMastOverview = () => {
                   onClick={() =>
                     setToLocalStorage(
                       row.room_id,
-                      row.Sitting_ref_no,
-                      row.Remarks,
+                      row.sitting_ref_no,
+                      row.remarks,
                       row.created_by_name
                     )
                   }
@@ -89,7 +89,7 @@ const OfficeMastOverview = () => {
             contextData[6] &&
             contextData[6].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="roomdelete"
+                endpoint="delete_room"
                 id={row.room_id}
                 getData={getData}
               />
@@ -112,13 +112,13 @@ const OfficeMastOverview = () => {
 
   const setToLocalStorage = (
     room_id,
-    Sitting_ref_no,
-    Remarks,
+    sitting_ref_no,
+    remarks,
     created_by_name
   ) => {
     localStorage.setItem("room_id", room_id);
-    localStorage.setItem("Sitting_ref_no", Sitting_ref_no);
-    localStorage.setItem("Remarks", Remarks);
+    localStorage.setItem("sitting_ref_no", sitting_ref_no);
+    localStorage.setItem("remarks", remarks);
     localStorage.setItem("created_by_name", created_by_name);
   };
 

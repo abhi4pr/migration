@@ -25,10 +25,12 @@ const UserResposOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/alluserjobrespo").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
+      .then((res) => {
+        setData(res.data.data);
+        setFilterData(res.data.data);
+      });
   }
   useEffect(() => {
     getData();
@@ -110,7 +112,7 @@ const UserResposOverview = () => {
             contextData[1] &&
             contextData[1].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="userjobrespodelete"
+                endpoint="delete_jobresponsibility"
                 id={row.Job_res_id}
                 getData={getData}
               />

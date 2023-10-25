@@ -176,7 +176,7 @@ const UserUpdate = () => {
   // const [showTdsPercentage, setShowTdsPercentage] = useState(false);
 
   useEffect(() => {
-    const selectedOption = defaultSeatData.find(
+    const selectedOption = defaultSeatData?.find(
       (option) => option?.sitting_id === Number(sitting)
     );
     setRoomId(selectedOption);
@@ -212,9 +212,11 @@ const UserUpdate = () => {
         getDepartmentData(res.data);
       });
 
-    axios.get("http://44.211.225.140:8000/notallocsitting").then((res) => {
-      setRefrenceData(res.data.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
+      .then((res) => {
+        setRefrenceData(res.data.data);
+      });
 
     axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
@@ -241,7 +243,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://44.211.225.140:8000/usernew/${id}`)
+      .get(`http://192.168.29.116:8080/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -335,17 +337,15 @@ const UserUpdate = () => {
         setHigestQualification(highest_qualification_name);
         // set;
       })
-      .then(() => {
-        // console.log(uid, "yee get ke bd hai");
-      });
+      .then(() => {});
     getOtherDocument();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("user_status", userStatus);
-    formData.append("id", id);
+    formData.append("user_id", id);
     formData.append("user_name", username);
     formData.append("role_id", roles);
     formData.append("image", profile);
@@ -396,7 +396,7 @@ const UserUpdate = () => {
     formData.append("highest_qualification_name", higestQualification);
     const formDataa = new FormData();
     if (isValidcontact == true && validEmail == true) {
-      axios.put(`http://44.211.225.140:8000/userupdate`, formData, {
+      await axios.put(`http://192.168.29.116:8080/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -873,20 +873,20 @@ const UserUpdate = () => {
         <Select
           className=""
           options={refrenceData.map((option) => ({
-            value: `${option?.Sitting_id}`,
-            label: `${option?.Sitting_ref_no} | ${option?.Sitting_area}`,
+            value: `${option?.sitting_id}`,
+            label: `${option?.sitting_ref_no} | ${option?.sitting_area}`,
           }))}
           value={{
             value: `${sitting ? sitting : ""}`,
-            label: `${roomId?.Sitting_ref_no} ${roomId ? "|" : ""} ${
-              roomId?.Sitting_area
+            label: `${roomId?.sitting_ref_no} ${roomId ? "|" : ""} ${
+              roomId?.sitting_area
             }`,
           }}
           onChange={(e) => {
             const selectedSittingId = e.value;
             setSitting(selectedSittingId);
             const selectedOption = refrenceData.find(
-              (option) => option.Sitting_id === Number(selectedSittingId)
+              (option) => option.sitting_id === Number(selectedSittingId)
             );
             setRoomId(selectedOption);
           }}

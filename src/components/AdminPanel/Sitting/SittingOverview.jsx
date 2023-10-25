@@ -36,8 +36,8 @@ const SittingOverview = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       return (
-        d.Sitting_area.toLowerCase().match(search.toLowerCase()) ||
-        d.Sitting_ref_no.toLowerCase().match(search.toLowerCase())
+        d.sitting_area.toLowerCase().match(search.toLowerCase()) ||
+        d.sitting_ref_no.toLowerCase().match(search.toLowerCase())
       );
     });
     setFilterData(result);

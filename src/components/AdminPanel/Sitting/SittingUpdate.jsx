@@ -51,7 +51,7 @@ const SittingUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://44.211.225.140:8000/allroom")
+      .get("http://192.168.29.116:8080/api/get_all_rooms")
       .then((res) => {
         setRoomData(res.data.data);
       })
