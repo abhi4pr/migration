@@ -26,7 +26,7 @@ function OfficeMastUpdate() {
     formData.append("room_image", roomimage);
     formData.append("remarks", remark);
     formData.append("created_by", createdby);
-    axios.put(`http://34.93.135.33:8080/api/update_room`, formData, {
+    axios.put(`http://192.168.29.116:8080/api/update_room`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

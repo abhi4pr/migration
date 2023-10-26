@@ -9,7 +9,6 @@ import ModeCommentTwoToneIcon from "@mui/icons-material/ModeCommentTwoTone";
 import DownloadTwoToneIcon from "@mui/icons-material/DownloadTwoTone";
 import { SnippetFolderTwoTone } from "@mui/icons-material";
 
-
 export default function Assigned() {
   const [showData, setShowData] = useState([]);
   const [brandName, setBrandName] = useState([]);
@@ -185,15 +184,15 @@ export default function Assigned() {
 
   const commitColumns = [
     {
-        field: "S.NO",
-        headerName: "S.NO",
-        width: 90,
-        editable: false,
-        renderCell: (params) => {
-          const rowIndex = commitmentModalData.indexOf(params.row);
-          return <div>{rowIndex + 1}</div>;
-        },
+      field: "S.NO",
+      headerName: "S.NO",
+      width: 90,
+      editable: false,
+      renderCell: (params) => {
+        const rowIndex = commitmentModalData.indexOf(params.row);
+        return <div>{rowIndex + 1}</div>;
       },
+    },
     {
       field: "selectValue",
       headerName: "Commits",
@@ -213,7 +212,7 @@ export default function Assigned() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -224,7 +223,7 @@ export default function Assigned() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -233,19 +232,23 @@ export default function Assigned() {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((response) => {
-      const data = response.data.data;
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((response) => {
+        const data = response.data.data;
 
-      setCommits(data);
-    });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+        setCommits(data);
+      });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
   return (

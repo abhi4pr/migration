@@ -41,7 +41,7 @@ const BrandOverview = () => {
       .then((res) => setCategoryData(res.data));
 
     axios
-      .get("http://44.211.225.140:8000/allusers")
+      .get("http://192.168.29.116:8080/api/get_all_users")
       .then((res) => setEmployeeData(res.data.data));
   }
 
@@ -160,21 +160,21 @@ const BrandOverview = () => {
                   .map((detail) => {
                     return (
                       <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                      <div className="summary_card">
-                        <div className="summary_cardtitle">
-                          <h5>
-                            Brand - <span>{detail.brand_name}</span>
-                          </h5>
-                          <div className="summary_cardaction">
-                            <Link to={`/brand-update/${detail.logo_id}`}>
-                              <button
-                                className="btn btn-sm btn-outline-primary"
-                                title="Edit"
-                              >
-                                <i class="bi bi-pencil"></i>
-                              </button>
-                            </Link>
-                            {/* <Link to={`/brand-view/${detail.logo_id}`}>
+                        <div className="summary_card">
+                          <div className="summary_cardtitle">
+                            <h5>
+                              Brand - <span>{detail.brand_name}</span>
+                            </h5>
+                            <div className="summary_cardaction">
+                              <Link to={`/brand-update/${detail.logo_id}`}>
+                                <button
+                                  className="btn btn-sm btn-outline-primary"
+                                  title="Edit"
+                                >
+                                  <i class="bi bi-pencil"></i>
+                                </button>
+                              </Link>
+                              {/* <Link to={`/brand-view/${detail.logo_id}`}>
                               <button
                                 className="btn btn-sm btn-outline-primary"
                                 title="View"
@@ -182,55 +182,59 @@ const BrandOverview = () => {
                                 <i class="bi bi-eye"></i>
                               </button>
                             </Link> */}
-                            <button
-                              className="btn btn-sm btn-outline-danger"
-                              title="Delete"
-                              onClick={() => deleteBrand(detail.brand_name)}
-                            >
-                              <i class="bi bi-trash3"></i>
-                            </button>
-                          </div>
-                        </div>
-                        <div className="summary_cardbody">
-                        <Link to={`/brand-view/${detail.logo_id}`}>
-                          <div class="summary_cardrow flex-column">
-                            <div class="summary_box text-center ml-auto mr-auto">
-                                <img src={detail.logo_image} width="80px" height="80px"/>
-                            </div>
-                            <div class="summary_box col">
-                              <h4>
-                                <span>Type</span>
-                                {detail.image_type}
-                              </h4>
-                            </div>
-                            <div class="summary_box col">
-                              <h4>
-                                <span>Category</span>
-                                {detail.cat_name}
-                              </h4>
-                            </div>
-                            <div class="summary_box col">
-                              <h4>
-                                <span>Date</span>
-                                {detail.created_at.split("T")[0]}
-                              </h4>
-                            </div>
-                            <div class="summary_box col">
-                              <h4>
-                                <span>Image count</span>
-                                {getBrandCount(detail.brand_name)}
-                              </h4>
-                            </div>
-                            <div class="summary_box col">
-                              <h4>
-                                <span>Uploaded by</span>
-                                {detail.user_name}
-                              </h4>
+                              <button
+                                className="btn btn-sm btn-outline-danger"
+                                title="Delete"
+                                onClick={() => deleteBrand(detail.brand_name)}
+                              >
+                                <i class="bi bi-trash3"></i>
+                              </button>
                             </div>
                           </div>
-                          </Link>
+                          <div className="summary_cardbody">
+                            <Link to={`/brand-view/${detail.logo_id}`}>
+                              <div class="summary_cardrow flex-column">
+                                <div class="summary_box text-center ml-auto mr-auto">
+                                  <img
+                                    src={detail.logo_image}
+                                    width="80px"
+                                    height="80px"
+                                  />
+                                </div>
+                                <div class="summary_box col">
+                                  <h4>
+                                    <span>Type</span>
+                                    {detail.image_type}
+                                  </h4>
+                                </div>
+                                <div class="summary_box col">
+                                  <h4>
+                                    <span>Category</span>
+                                    {detail.cat_name}
+                                  </h4>
+                                </div>
+                                <div class="summary_box col">
+                                  <h4>
+                                    <span>Date</span>
+                                    {detail.created_at.split("T")[0]}
+                                  </h4>
+                                </div>
+                                <div class="summary_box col">
+                                  <h4>
+                                    <span>Image count</span>
+                                    {getBrandCount(detail.brand_name)}
+                                  </h4>
+                                </div>
+                                <div class="summary_box col">
+                                  <h4>
+                                    <span>Uploaded by</span>
+                                    {detail.user_name}
+                                  </h4>
+                                </div>
+                              </div>
+                            </Link>
+                          </div>
                         </div>
-                      </div>
                       </div>
                     );
                   })}

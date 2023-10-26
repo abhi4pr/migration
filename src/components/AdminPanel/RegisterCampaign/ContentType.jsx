@@ -57,8 +57,8 @@ export default function ContentType() {
   }
 
   const fff = () => {
-    axios.get("http://34.93.135.33:8080/api/content").then((res) => {
-      const newData = res.data.data
+    axios.get("http://192.168.29.116:8080/api/content").then((res) => {
+      const newData = res.data.data;
       console.log(newData);
       setRows(newData);
     });
@@ -87,7 +87,7 @@ export default function ContentType() {
 
   const handleDeleteClick = (id) => {
     axios
-      .delete(`http://34.93.135.33:8080/api/content/${id}`)
+      .delete(`http://192.168.29.116:8080/api/content/${id}`)
       .then(() => {
         console.log(id, "Deleted successfully");
         fff();
@@ -110,11 +110,11 @@ export default function ContentType() {
     if (addrows) {
       setAddRows(false);
       try {
-        axios.post("http://34.93.135.33:8080/api/content", {
+        axios.post("http://192.168.29.116:8080/api/content", {
           // content_type_id:updatedRow.content_type_id,
           content_type: updatedRow.content_type,
-          content_value:updatedRow.content_value,
-          remarks:updatedRow.remarks  
+          content_value: updatedRow.content_value,
+          remarks: updatedRow.remarks,
         });
       } catch (error) {
         console.log(error);
@@ -124,12 +124,11 @@ export default function ContentType() {
     } else {
       try {
         axios
-          .put("http://34.93.135.33:8080/api/content", {
+          .put("http://192.168.29.116:8080/api/content", {
             content_type_id: updatedRow.content_type_id,
             content_type: updatedRow.content_type,
-            content_value:updatedRow.content_value,
-            remarks:updatedRow.remarks
-
+            content_value: updatedRow.content_value,
+            remarks: updatedRow.remarks,
           })
           .then(() => {
             console.log(updatedRow.content_type_id);
@@ -171,7 +170,7 @@ export default function ContentType() {
       editable: true,
     },
 
-      {
+    {
       field: "remarks",
       headerName: "Remarks",
       width: 170,
@@ -226,9 +225,8 @@ export default function ContentType() {
   ];
 
   const filterRows = () => {
-    const filtered = rows.filter(
-      (row) =>
-        row.content_type.toLowerCase().includes(searchInput.toLowerCase()) 
+    const filtered = rows.filter((row) =>
+      row.content_type.toLowerCase().includes(searchInput.toLowerCase())
     );
     setFilteredRows(filtered);
   };
@@ -254,7 +252,7 @@ export default function ContentType() {
       />
       <Box
         sx={{
-          height: 500, 
+          height: 500,
           width: "100%",
           "& .actions": {
             color: "text.secondary",

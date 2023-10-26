@@ -9,28 +9,34 @@ const SimDashboard = () => {
   const { toastAlert } = useGlobalContext();
 
   const [simData, setSimData] = useState([]);
-  const [availableObjects, setAvailableCount] = useState([])
-  const [allocatedObjects, setAllocatedCount] = useState([])
-  const [departmentData, setDepartmentData] = useState([])
+  const [availableObjects, setAvailableCount] = useState([]);
+  const [allocatedObjects, setAllocatedCount] = useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const userID = decodedToken.id;
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_sims").then((res) => {
       setSimData(res.data.data);
-      
-      const availableObjects = res.data.data.filter((item) => item.status === 'Available');
+
+      const availableObjects = res.data.data.filter(
+        (item) => item.status === "Available"
+      );
       setAvailableCount(availableObjects);
-  
-      const allocatedObjects = res.data.data.filter((item) => item.status === 'Allocated');
-      setAllocatedCount(allocatedObjects)
+
+      const allocatedObjects = res.data.data.filter(
+        (item) => item.status === "Allocated"
+      );
+      setAllocatedCount(allocatedObjects);
     });
 
-    axios.get('http://34.93.135.33:8080/api/get_all_departments').then((res)=>{
-      setDepartmentData(res.data)
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .then((res) => {
+        setDepartmentData(res.data);
+      });
   }
   useEffect(() => {
     getData();
@@ -60,9 +66,7 @@ const SimDashboard = () => {
                     <h2>Sim</h2>
                   </div>
                   <div className="d_infocard_icon">
-                  <span>
-                    {simData.length}
-                  </span>
+                    <span>{simData.length}</span>
                   </div>
                 </div>
               </div>
@@ -76,9 +80,7 @@ const SimDashboard = () => {
                     <h2>Sim</h2>
                   </div>
                   <div className="d_infocard_icon">
-                  <span>
-                    {availableObjects.length}
-                  </span>
+                    <span>{availableObjects.length}</span>
                   </div>
                 </div>
               </div>
@@ -92,36 +94,37 @@ const SimDashboard = () => {
                     <h2>Sim</h2>
                   </div>
                   <div className="d_infocard_icon">
-                  <span>
-                    {allocatedObjects.length}
-                  </span>
+                    <span>{allocatedObjects.length}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="row">
-            {departmentData.map((item)=>(
-            <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-              <div className="d_infocard card shadow">
-                <div className="card-body">
-                  <div className="d_infocard_txt">
-                    <h3>{item.dept_name}</h3>
-                    <h2>Sim</h2>
-                  </div>
-                  <div className="d_infocard_icon">
-                  <span>
-                    {simData.filter((match)=>match.dept == item.dept_id).length}
-                  </span>
+            {departmentData.map((item) => (
+              <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+                <div className="d_infocard card shadow">
+                  <div className="card-body">
+                    <div className="d_infocard_txt">
+                      <h3>{item.dept_name}</h3>
+                      <h2>Sim</h2>
+                    </div>
+                    <div className="d_infocard_icon">
+                      <span>
+                        {
+                          simData.filter((match) => match.dept == item.dept_id)
+                            .length
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
             ))}
           </div>
         </div>
-      </div> 
-    </div>           
+      </div>
+    </div>
   );
 };
 export default SimDashboard;

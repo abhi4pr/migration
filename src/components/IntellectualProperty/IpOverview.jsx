@@ -27,10 +27,10 @@ const IpOverview = () => {
 
   const copySelectedRows = () => {
     const formattedData = selectedRows
-    .map((row) => {
-      return `Page Name: ${row.ip_name},\nFollowers: ${row.followers},\nLink: https://instagram.com/${row.ip_name}`;
-    })
-    .join("\n\n");
+      .map((row) => {
+        return `Page Name: ${row.ip_name},\nFollowers: ${row.followers},\nLink: https://instagram.com/${row.ip_name}`;
+      })
+      .join("\n\n");
 
     const textarea = document.createElement("textarea");
     textarea.value = formattedData;
@@ -42,10 +42,12 @@ const IpOverview = () => {
   };
 
   async function getData() {
-    await axios.get("http://34.93.135.33:8080/api/get_all_instapages").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-    });
+    await axios
+      .get("http://192.168.29.116:8080/api/get_all_instapages")
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+      });
   }
 
   useEffect(() => {
@@ -53,8 +55,8 @@ const IpOverview = () => {
   }, []);
 
   function getFilterData(id) {
-    const filteredData = data.filter((data1)=> data1.ip_type == id);
-    setFilterData(filteredData)
+    const filteredData = data.filter((data1) => data1.ip_type == id);
+    setFilterData(filteredData);
   }
 
   useEffect(() => {
@@ -101,7 +103,10 @@ const IpOverview = () => {
     },
     {
       name: "Last month",
-      selector: (row) => row.followers2+"@"+new Date(row.last_updated_at1).toLocaleDateString(),
+      selector: (row) =>
+        row.followers2 +
+        "@" +
+        new Date(row.last_updated_at1).toLocaleDateString(),
       sortable: true,
     },
     {
@@ -136,7 +141,7 @@ const IpOverview = () => {
               title="IP History"
               className="btn btn-outline-success btn-sml"
             >
-            {"H"}
+              {"H"}
             </button>
           </Link>
 
@@ -145,7 +150,7 @@ const IpOverview = () => {
               title="Count Update"
               className="btn btn-outline-primary btn-sml"
             >
-            {"U"}
+              {"U"}
             </button>
           </Link>
 
@@ -211,25 +216,70 @@ const IpOverview = () => {
         buttonAccess={buttonAccess}
       />
 
-      <ul className="nav nav-pills nav-fill navtop" style={{marginBottom:"20px"}}>
-          <li className="nav-item">
-              <a className="nav-link active" href="#menu1" data-toggle="tab" onClick={()=>getFilterData("7")}>Instagram</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu2" data-toggle="tab" onClick={()=>getFilterData("12")}>Facebook</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu3" data-toggle="tab" onClick={()=>getFilterData("10")}>Threads</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu4" data-toggle="tab" onClick={()=>getFilterData("9")}>X</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu5" data-toggle="tab" onClick={()=>getFilterData("8")}>Youtube</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu6" data-toggle="tab" onClick={()=>getFilterData("11")}>Telegram</a>
-          </li>
+      <ul
+        className="nav nav-pills nav-fill navtop"
+        style={{ marginBottom: "20px" }}
+      >
+        <li className="nav-item">
+          <a
+            className="nav-link active"
+            href="#menu1"
+            data-toggle="tab"
+            onClick={() => getFilterData("7")}
+          >
+            Instagram
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link"
+            href="#menu2"
+            data-toggle="tab"
+            onClick={() => getFilterData("12")}
+          >
+            Facebook
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link"
+            href="#menu3"
+            data-toggle="tab"
+            onClick={() => getFilterData("10")}
+          >
+            Threads
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link"
+            href="#menu4"
+            data-toggle="tab"
+            onClick={() => getFilterData("9")}
+          >
+            X
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link"
+            href="#menu5"
+            data-toggle="tab"
+            onClick={() => getFilterData("8")}
+          >
+            Youtube
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className="nav-link"
+            href="#menu6"
+            data-toggle="tab"
+            onClick={() => getFilterData("11")}
+          >
+            Telegram
+          </a>
+        </li>
       </ul>
 
       <div className="page_height">

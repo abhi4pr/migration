@@ -38,16 +38,18 @@ const BrandOverviewOld = () => {
     });
 
     axios
-    .get("http://44.211.225.140:8000/alllogocat")
-    .then((res) => setCategoryData(res.data))
-    
+      .get("http://44.211.225.140:8000/alllogocat")
+      .then((res) => setCategoryData(res.data));
+
     axios
-    .get("http://44.211.225.140:8000/allusers")
-    .then((res) => setEmployeeData(res.data.data));
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((res) => setEmployeeData(res.data.data));
   }
 
   const getBrandCount = (brandName, data) => {
-    const count = countData.filter((item) => item.brand_name === brandName).length;
+    const count = countData.filter(
+      (item) => item.brand_name === brandName
+    ).length;
     return count;
   };
 
@@ -105,9 +107,9 @@ const BrandOverviewOld = () => {
       name: "Count",
       selector: (row) => {
         const count = getBrandCount(row.brand_name, data);
-        return <div>{count}</div>
+        return <div>{count}</div>;
       },
-      sortable: true
+      sortable: true,
     },
     {
       name: "Action",

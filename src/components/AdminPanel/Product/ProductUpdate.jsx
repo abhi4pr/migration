@@ -49,7 +49,7 @@ const ProductUpdate = () => {
 
     // formData.append("Opening_stock_date", openingStockDate);
 
-    axios.put("http://34.93.135.33:8080/api/update_productupdate", formData, {
+    axios.put("http://192.168.29.116:8080/api/update_productupdate", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -91,26 +91,34 @@ const ProductUpdate = () => {
 
   const removeProp = async (propid) => {
     var data = await axios
-      .delete(`http://34.93.135.33:8080/api/delete_propdelete/${propid}`, null)
+      .delete(
+        `http://192.168.29.116:8080/api/delete_propdelete/${propid}`,
+        null
+      )
       .then((crash) => {
-        axios.get(`http://34.93.135.33:8080/api/get_single_productdata/${id}`).then((res) => {
-          setInputFields(res.data.Product_Prop);
-        });
+        axios
+          .get(`http://192.168.29.116:8080/api/get_single_productdata/${id}`)
+          .then((res) => {
+            setInputFields(res.data.Product_Prop);
+          });
       });
   };
 
   const addMore = (e) => {
-    setAddnewFields([...addnewFields, { type: "", name: "" ,category:""}]);
+    setAddnewFields([...addnewFields, { type: "", name: "", category: "" }]);
   };
 
   const handleInputChange = (index, value, property) => {
     const updatedValues = [...addnewFields];
     updatedValues[index][property] = value;
-    if (property === 'type') {
-      const firstIndexWithSameType = updatedValues.findIndex((field, i) => i !== index && field.type === value);
-      
+    if (property === "type") {
+      const firstIndexWithSameType = updatedValues.findIndex(
+        (field, i) => i !== index && field.type === value
+      );
+
       if (firstIndexWithSameType !== -1) {
-        updatedValues[index]['category'] = updatedValues[firstIndexWithSameType]['category'];
+        updatedValues[index]["category"] =
+          updatedValues[firstIndexWithSameType]["category"];
       }
     }
     setAddnewFields(updatedValues);
@@ -126,9 +134,11 @@ const ProductUpdate = () => {
 
   useEffect(() => {
     if (localStorage.getItem("product_id")) {
-      axios.get(`http://34.93.135.33:8080/api/get_single_productdata/${id}`).then((res) => {
-        setInputFields(res.data.Product_Prop);
-      });
+      axios
+        .get(`http://192.168.29.116:8080/api/get_single_productdata/${id}`)
+        .then((res) => {
+          setInputFields(res.data.Product_Prop);
+        });
     }
   }, [id]);
 
@@ -328,7 +338,7 @@ const ProductUpdate = () => {
 
         {inputFields && (
           <div>
-           { console.log(inputFields, "inputFields")}
+            {console.log(inputFields, "inputFields")}
             <h6>Props</h6>
             {inputFields.map((item, index) => {
               const isNullTypeAndName =

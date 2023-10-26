@@ -37,53 +37,59 @@ const SimUpdate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_designations").then((res) => {
-      setDesignationData(res.data.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_designations")
+      .then((res) => {
+        setDesignationData(res.data.data);
+      });
 
-    axios.get("http://34.93.135.33:8080/api/get_all_departments").then((res) => {
-      getDepartmentData(res.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data);
+      });
   }, []);
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_sim/${id}`).then((res) => {
-      const fetchedData = res.data.data;
-      //if (fetchedData.length > 0) {
+    axios
+      .get(`http://192.168.29.116:8080/api/get_single_sim/${id}`)
+      .then((res) => {
+        const fetchedData = res.data.data;
+        //if (fetchedData.length > 0) {
 
-      const {
-        mobileNumber,
-        s_type,
-        sim_no,
-        provider,
-        sim_id,
-        status,
-        type,
-        desi,
-        dept,
-        Remarks,
-        register,
-      } = fetchedData;
-      setMobileNumber(mobileNumber);
-      setSimNumber(sim_no);
-      setProvider(provider);
-      setSimType(s_type);
-      setStatus(status);
-      setDepartment(dept);
-      setDesignation(desi);
-      setSimId(sim_id);
-      setType(type);
-      setRemark(Remarks);
-      setRegister(register);
-      //}
-      setSimData(fetchedData);
-    });
+        const {
+          mobileNumber,
+          s_type,
+          sim_no,
+          provider,
+          sim_id,
+          status,
+          type,
+          desi,
+          dept,
+          Remarks,
+          register,
+        } = fetchedData;
+        setMobileNumber(mobileNumber);
+        setSimNumber(sim_no);
+        setProvider(provider);
+        setSimType(s_type);
+        setStatus(status);
+        setDepartment(dept);
+        setDesignation(desi);
+        setSimId(sim_id);
+        setType(type);
+        setRemark(Remarks);
+        setRegister(register);
+        //}
+        setSimData(fetchedData);
+      });
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValidcontact == true) {
-      axios.put("http://34.93.135.33:8080/api/update_sim", {
+      axios.put("http://192.168.29.116:8080/api/update_sim", {
         id: simId,
         mobilenumber: mobileNumber,
         sim_no: simNumber,
@@ -95,7 +101,7 @@ const SimUpdate = () => {
         type: type,
         remark: remark,
         createdBy: loginUserId,
-        register: register
+        register: register,
       });
       setMobileNumber("");
       setStatus("");
@@ -249,7 +255,7 @@ const SimUpdate = () => {
           Tag="select"
           value={register}
           onChange={(e) => setRegister(e.target.value)}
-        > 
+        >
           <option value="">Please Select</option>
           <option value="CreativeFuel">CreativeFuel</option>
           <option value="">Other</option>

@@ -18,7 +18,7 @@ import DownloadTwoToneIcon from "@mui/icons-material/DownloadTwoTone";
 import axios from "axios";
 import { SnippetFolderTwoTone } from "@mui/icons-material";
 
-export default function Rejected({ReloadMain}) {
+export default function Rejected({ ReloadMain }) {
   const [reload, setReload] = useState(false);
   const [showData, setShowData] = useState([]);
   const [brandName, setBrandName] = useState([]);
@@ -57,21 +57,22 @@ export default function Rejected({ReloadMain}) {
   const handleCloseReassignModal = () => setOpenReassignModal(false);
 
   const handleReassing = () => {
-    console.log(reAssignModalData.register_campaign_id)
-    axios.put("http://34.93.135.33:8080/api/contentSectionReg",{
-      content_section_id:reAssignModalData.content_section_id,
-      stage:1,
-      status:'1'
-    }).then((response)=>{
-      if(response.status==200){
-        // window.location.reload();
-        handleCloseReassignModal();
-        setReload(!reload)
-        ReloadMain(prev=>!prev)
-      }
-    })
-
-  }
+    console.log(reAssignModalData.register_campaign_id);
+    axios
+      .put("http://192.168.29.116:8080/api/contentSectionReg", {
+        content_section_id: reAssignModalData.content_section_id,
+        stage: 1,
+        status: "1",
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          // window.location.reload();
+          handleCloseReassignModal();
+          setReload(!reload);
+          ReloadMain((prev) => !prev);
+        }
+      });
+  };
 
   const columns = [
     {
@@ -132,9 +133,7 @@ export default function Rejected({ReloadMain}) {
       headerName: "Campaign Brief",
       width: 150,
     },
-    {
-
-    },
+    {},
     {
       field: "content_brief",
       headerName: "Content Remark",
@@ -159,7 +158,7 @@ export default function Rejected({ReloadMain}) {
         );
       },
     },
-     {
+    {
       field: "cmpAdminDemoLink",
       headerName: "Link",
       width: 300,
@@ -260,7 +259,7 @@ export default function Rejected({ReloadMain}) {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -271,7 +270,7 @@ export default function Rejected({ReloadMain}) {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -280,33 +279,37 @@ export default function Rejected({ReloadMain}) {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((response) => {
-      const data = response.data.data;
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((response) => {
+        const data = response.data.data;
 
-      setCommits(data);
-    });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+        setCommits(data);
+      });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
-useEffect(() => {
-  axios
-  .get("http://34.93.135.33:8080/api/contentSectionReg")
-  .then((response) => {
-    // console.log(response.data.data);
-    const data = response.data.data.filter(
-      (e) => e.status == "22" && e.stage == "2"
-    );
-    console.log(data);
-    setShowData(data);
-  });
-}, [reload])
+  useEffect(() => {
+    axios
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
+      .then((response) => {
+        // console.log(response.data.data);
+        const data = response.data.data.filter(
+          (e) => e.status == "22" && e.stage == "2"
+        );
+        console.log(data);
+        setShowData(data);
+      });
+  }, [reload]);
   return (
     <div>
       <>

@@ -13,7 +13,9 @@ const PreOnboardingOverview = () => {
 
   async function getData() {
     try {
-      const response = await axios.get("http://44.211.225.140:8000/allusers");
+      const response = await axios.get(
+        "http://192.168.29.116:8080/api/get_all_users"
+      );
       const data = response.data.data;
       const onboarddata = data.filter((d) => d.onboard_status === 2);
       setDatas(onboarddata);

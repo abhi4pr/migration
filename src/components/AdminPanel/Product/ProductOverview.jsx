@@ -33,7 +33,7 @@ const ProductOverview = () => {
   }, []);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_products").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_products").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });
@@ -82,7 +82,7 @@ const ProductOverview = () => {
             // width={40}
             src={row.Product_image_download_url}
             alt="Image"
-            style={{height:"90px",width:"90px"}}
+            style={{ height: "90px", width: "90px" }}
             onClick={() => handleImageClick(row.Product_image_download_url)}
           />
         );
@@ -103,8 +103,8 @@ const ProductOverview = () => {
                 <button
                   title="Edit"
                   className="btn btn-outline-primary btn-sm user-button"
-                  onClick={() =>{
-                    console.log(row,"row")
+                  onClick={() => {
+                    console.log(row, "row");
                     setToLocalStorage(
                       row.product_id,
                       row.Product_name,
@@ -119,12 +119,12 @@ const ProductOverview = () => {
                       row.props2,
                       row.props3,
                       row.Remarks,
-                      row.creation_date, 
+                      row.creation_date,
                       row.Created_by,
                       row.Last_updated_by,
                       row.Last_updated_date
-                    )}
-                  }
+                    );
+                  }}
                 >
                   <FaEdit />{" "}
                 </button>

@@ -37,7 +37,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_delivery_boy/${3}`)
+      .get(`http://192.168.29.116:8080/api/get_delivery_boy/${3}`)
       .then((res) => setAllDeliveryBoy(res.data.results));
     console.log(showALlDeliveryBoy);
   }, []);
@@ -354,7 +354,10 @@ const PendingOrder = () => {
             title="Pending Order"
             columns={columns}
             data={filterdata.sort((a, b) =>
-              a.Request_datetime.substring(11, 16) < b.Request_datetime.substring(11, 16) ? 1 : -1
+              a.Request_datetime.substring(11, 16) <
+              b.Request_datetime.substring(11, 16)
+                ? 1
+                : -1
             )}
             fixedHeader
             fixedHeaderScrollHeight="62vh"

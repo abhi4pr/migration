@@ -25,7 +25,7 @@ const ObjectOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_objs").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_objs").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

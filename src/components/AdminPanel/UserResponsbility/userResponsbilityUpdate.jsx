@@ -20,7 +20,7 @@ const UserResponsbilityUpdate = () => {
   const [designation, setDesignation] = useState("");
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allusers").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       getUserData(res.data.data);
     });
   }, []);
@@ -51,7 +51,7 @@ const UserResponsbilityUpdate = () => {
     setError("");
     for (const element of todos) {
       axios
-        .put(`http://34.93.135.33:8080/api/update_jobresponsibility`, {
+        .put(`http://192.168.29.116:8080/api/update_jobresponsibility`, {
           Job_res_id: id,
           user_id: userName,
           job_responsi: element.responsbility,

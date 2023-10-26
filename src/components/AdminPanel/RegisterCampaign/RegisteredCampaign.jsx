@@ -87,7 +87,7 @@ export default function RegisteredCampaign() {
 
   const handleDeleteRowConfirm = () => {
     axios
-      .delete(`http://34.93.135.33:8080/api/register_campaign/${deleteRowId}`)
+      .delete(`http://192.168.29.116:8080/api/register_campaign/${deleteRowId}`)
       .then((res) => {
         console.log(res);
         setReload(!reload);
@@ -234,7 +234,7 @@ export default function RegisteredCampaign() {
   //       console.log("come to for loop");
   //       try {
   //         const response = await axios
-  //           .post("http://34.93.135.33:8080/api/contentSectionReg", {
+  //           .post("http://192.168.29.116:8080/api/contentSectionReg", {
   //             // ...data,
   //             content_type_id: field.selectValue,
   //             register_campaign_id: campaignId,
@@ -249,7 +249,7 @@ export default function RegisteredCampaign() {
   //           })
   //           .then((response) => {
   //             axios
-  //               .put("http://34.93.135.33:8080/api/register_campaign", {
+  //               .put("http://192.168.29.116:8080/api/register_campaign", {
   //                 register_campaign_id: campaignId,
   //                 status: 1,
   //               })
@@ -303,14 +303,18 @@ export default function RegisteredCampaign() {
 
         try {
           const response = await axios
-            .post("http://34.93.135.33:8080/api/contentSectionReg", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data", // Important for file uploads
-              },
-            })
+            .post(
+              "http://192.168.29.116:8080/api/contentSectionReg",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data", // Important for file uploads
+                },
+              }
+            )
             .then((response) => {
               axios
-                .put("http://34.93.135.33:8080/api/register_campaign", {
+                .put("http://192.168.29.116:8080/api/register_campaign", {
                   register_campaign_id: campaignId,
                   status: 1,
                 })
@@ -363,7 +367,7 @@ export default function RegisteredCampaign() {
   };
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/register_campaign")
+      .get("http://192.168.29.116:8080/api/register_campaign")
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -371,12 +375,12 @@ export default function RegisteredCampaign() {
         // return { ...element, count: i + 1 };
         // });
         const table1Data = response.data.data
-        .filter((element) => element.status === 0)
-        .map((element, index) => {
-          return { ...element, count: index + 1 };
-        })
-        .sort((a, b) => b.register_campaign_id - a.register_campaign_id);
-      
+          .filter((element) => element.status === 0)
+          .map((element, index) => {
+            return { ...element, count: index + 1 };
+          })
+          .sort((a, b) => b.register_campaign_id - a.register_campaign_id);
+
         console.log(table1Data);
         setTable1Data(table1Data);
         setTable2Data(
@@ -392,7 +396,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -401,18 +405,20 @@ export default function RegisteredCampaign() {
       .catch((err) => {
         console.log(err);
       });
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((response) => {
-      const data = response.data.data;
-      console.log(data, "<--------");
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((response) => {
+        const data = response.data.data;
+        console.log(data, "<--------");
 
-      setCommits(data);
-    });
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+        setCommits(data);
+      });
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/exe_campaign")
+      .get("http://192.168.29.116:8080/api/exe_campaign")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<----data");
@@ -424,7 +430,7 @@ export default function RegisteredCampaign() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/register_campaign")
+      .get("http://192.168.29.116:8080/api/register_campaign")
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -432,11 +438,11 @@ export default function RegisteredCampaign() {
         // return { ...element, count: i + 1 };
         // });
         const table1Data = response.data.data
-        .filter((element) => element.status === 0)
-        .map((element, index) => {
-          return { ...element, count: index + 1 };
-        })
-        .sort((a, b) => b.register_campaign_id - a.register_campaign_id);
+          .filter((element) => element.status === 0)
+          .map((element, index) => {
+            return { ...element, count: index + 1 };
+          })
+          .sort((a, b) => b.register_campaign_id - a.register_campaign_id);
         console.log(table1Data);
         setTable1Data(table1Data);
         setTable2Data(
@@ -444,7 +450,8 @@ export default function RegisteredCampaign() {
             .filter((e) => e.status == 1)
             .map((element, i) => {
               return { ...element, count: i + 1 };
-            }).sort((a, b) => b.register_campaign_id - a.register_campaign_id)
+            })
+            .sort((a, b) => b.register_campaign_id - a.register_campaign_id)
         );
       })
       .catch((err) => {
@@ -452,7 +459,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -506,9 +513,15 @@ export default function RegisteredCampaign() {
       width: 200,
       renderCell: (params) => {
         const inputDate = params.row.brnad_dt;
-        const formattedDate = new Date(inputDate).toLocaleString("en-GB", { timeZone: "UTC", day: "numeric", month: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
+        const formattedDate = new Date(inputDate).toLocaleString("en-GB", {
+          timeZone: "UTC",
+          day: "numeric",
+          month: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        });
         return formattedDate;
-        
       },
     },
     {
@@ -636,7 +649,6 @@ export default function RegisteredCampaign() {
         );
       },
     },
-    
   ];
   const videoType = [
     "2D Animation",
@@ -672,8 +684,6 @@ export default function RegisteredCampaign() {
     "Product Review",
     "Product Comparison",
   ];
- 
-
 
   const style = {
     position: "absolute",
@@ -872,11 +882,10 @@ export default function RegisteredCampaign() {
           >
             Content Section
           </Typography>
-         
+
           <Typography id="modal-modal-description" sx={{ mt: 2, mb: 3 }}>
             <Paper sx={{ padding: "10px" }}>
               <div className="d-flex justify-content-between">
-              
                 <TextField
                   sx={{ width: "100%" }}
                   label="Estimate Static & Video"

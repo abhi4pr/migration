@@ -37,7 +37,7 @@ export default function Accepted() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -47,7 +47,7 @@ export default function Accepted() {
         setShowData(data);
       });
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -55,19 +55,23 @@ export default function Accepted() {
       .catch((err) => {
         console.log(err);
       });
-      axios.get("http://34.93.135.33:8080/api/content").then((response) => {
-        setContentTypeList(response.data.data);
-      });
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((response) => {
-      const data = response.data.data;
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
+      setContentTypeList(response.data.data);
+    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((response) => {
+        const data = response.data.data;
 
-      setCommits(data);
-    });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+        setCommits(data);
+      });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
   const columns = [
@@ -129,7 +133,7 @@ export default function Accepted() {
         const matchingContentType = contentTypeList.find((e) => {
           return params.row?.content_type_id == e?.content_type_id;
         });
-        console.log(contentTypeList,'matchingContentType')
+        console.log(contentTypeList, "matchingContentType");
         return matchingContentType?.content_type || "";
       },
     },
@@ -185,7 +189,7 @@ export default function Accepted() {
       headerName: "File",
       renderCell: (params) => {
         return (
-          <Button  variant="text">
+          <Button variant="text">
             <a href={params.row.downloadCmpAdminDemoFile}>
               <SnippetFolderTwoTone />
             </a>

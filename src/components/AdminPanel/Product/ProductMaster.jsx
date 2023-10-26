@@ -6,7 +6,7 @@ import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 
 const ProductMaster = () => {
-  // const [categoryNames, setCategoryNames] = useState({}); 
+  // const [categoryNames, setCategoryNames] = useState({});
   const { toastAlert } = useGlobalContext();
   const [productName, setProductName] = useState("");
   const [productType, setProductType] = useState("");
@@ -20,7 +20,7 @@ const ProductMaster = () => {
   // const [props1, setProps1] = useState("");
   // const [props2, setProps2] = useState("");
   // const [props3, setProps3] = useState("");
-  const [inputFields, setInputFields] = useState([]); 
+  const [inputFields, setInputFields] = useState([]);
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
@@ -43,8 +43,8 @@ const ProductMaster = () => {
     // formData.append("props1", props1);
     // formData.append("props2", props2);
     // formData.append("props3", props3);
-    
-    await axios.post("http://34.93.135.33:8080/api/add_product", formData, {
+
+    await axios.post("http://192.168.29.116:8080/api/add_product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -56,17 +56,21 @@ const ProductMaster = () => {
         prop_name: inputField.name,
         prop_category: inputField.category,
       };
-  
+
       try {
-        await axios.post(`http://34.93.135.33:8080/api/add_proppost`, payload, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-  
-        console.log('Request successfully sent for', inputField);
+        await axios.post(
+          `http://192.168.29.116:8080/api/add_proppost`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("Request successfully sent for", inputField);
       } catch (error) {
-        console.error('Error sending request for', inputField, error);
+        console.error("Error sending request for", inputField, error);
       }
     }
 
@@ -84,18 +88,21 @@ const ProductMaster = () => {
   };
 
   const addMore = (e) => {
-    setInputFields([...inputFields, { type: "", name: "", category: ""  }]);
-  }
+    setInputFields([...inputFields, { type: "", name: "", category: "" }]);
+  };
 
   const handleInputChange = (index, value, property) => {
     const updatedValues = [...inputFields];
     updatedValues[index][property] = value;
-    
-    if (property === 'type') {
-      const firstIndexWithSameType = updatedValues.findIndex((field, i) => i !== index && field.type === value);
-  
+
+    if (property === "type") {
+      const firstIndexWithSameType = updatedValues.findIndex(
+        (field, i) => i !== index && field.type === value
+      );
+
       if (firstIndexWithSameType !== -1) {
-        updatedValues[index]['category'] = updatedValues[firstIndexWithSameType]['category'];
+        updatedValues[index]["category"] =
+          updatedValues[firstIndexWithSameType]["category"];
       }
     }
     setInputFields(updatedValues);
@@ -228,44 +235,53 @@ const ProductMaster = () => {
         {inputFields.map((inputField, index) => (
           <div key={inputField.key} className="row">
             <div className="col-md-4">
-            <FieldContainer
-              label="Props Types"
-              name="value1"
-              Tag="select"
-              required={true}
-              value={inputField.type}
-              onChange={(e) => handleInputChange(index, e.target.value,'type')}
-            >
-              <option value="">Choose....</option>
-              <option value="1">Props Type 1</option>
-              <option value="2">Props Type 2</option>
-              <option value="3">Props Type 3</option>
-              <option value="4">Props Type 4</option>
-              <option value="5">Props Type 5</option>
-            </FieldContainer>
+              <FieldContainer
+                label="Props Types"
+                name="value1"
+                Tag="select"
+                required={true}
+                value={inputField.type}
+                onChange={(e) =>
+                  handleInputChange(index, e.target.value, "type")
+                }
+              >
+                <option value="">Choose....</option>
+                <option value="1">Props Type 1</option>
+                <option value="2">Props Type 2</option>
+                <option value="3">Props Type 3</option>
+                <option value="4">Props Type 4</option>
+                <option value="5">Props Type 5</option>
+              </FieldContainer>
             </div>
             <div className="col-md-4">
-            <FieldContainer
-              label="Category *"
-              name="value3"
-              // value={inputField.type in categoryNames ? categoryNames[inputField.type] : inputField.category}
-              value={inputField.category}
-              onChange={(e) => handleInputChange(index, e.target.value,'category')}
-            />
+              <FieldContainer
+                label="Category *"
+                name="value3"
+                // value={inputField.type in categoryNames ? categoryNames[inputField.type] : inputField.category}
+                value={inputField.category}
+                onChange={(e) =>
+                  handleInputChange(index, e.target.value, "category")
+                }
+              />
             </div>
             <div className="col-md-4">
-            <FieldContainer
-              label="Prop Name *"
-              name="value2"
-              value={inputField.name}
-              onChange={(e) => handleInputChange(index, e.target.value,'name')}
-            />
+              <FieldContainer
+                label="Prop Name *"
+                name="value2"
+                value={inputField.name}
+                onChange={(e) =>
+                  handleInputChange(index, e.target.value, "name")
+                }
+              />
             </div>
           </div>
         ))}
 
-        <button type="button" className="btn btn-primary mb-2 ml-3" 
-          style={{width:"10%",height:"10%"}} onClick={addMore}
+        <button
+          type="button"
+          className="btn btn-primary mb-2 ml-3"
+          style={{ width: "10%", height: "10%" }}
+          onClick={addMore}
         >
           Add Props
         </button>

@@ -19,7 +19,7 @@ const RoleMaster = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://34.93.135.33:8080/api/add_role", {
+    await axios.post("http://192.168.29.116:8080/api/add_role", {
       created_by: loginUserId,
       role_name: roleName,
       remark: remark,

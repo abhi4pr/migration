@@ -39,9 +39,11 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
   // Order ID
   async function getData() {
     try {
-      await axios.get("http://34.93.135.33:8080/api/get_LastOrderId").then((res) => {
-        setOrderID(res.data.Order_req_id);
-      });
+      await axios
+        .get("http://192.168.29.116:8080/api/get_LastOrderId")
+        .then((res) => {
+          setOrderID(res.data.Order_req_id);
+        });
       // setOrderID(res.data.data[res.data.data.length - 1].Order_req_id);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -75,11 +77,10 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/get_delivery_boy", {
+      .post("http://192.168.29.116:8080/api/get_delivery_boy", {
         room_id: loginUserRoomId,
       })
       .then((res) => setReqDelApiData(res.data.results));
-      
   }, []);
   const handlePlaceOrder = async () => {
     // e.preventDefault();
@@ -93,7 +94,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
       const finalsitting_id =
         selectedSitting == "" ? Number(SittingId) : Number(selectedSitting);
       await axios
-        .post("http://34.93.135.33:8080/api/add_orderreq", {
+        .post("http://192.168.29.116:8080/api/add_orderreq", {
           product_id: element.product_id,
           order_quantity: count[element.product_id],
           special_request: specialRequest,

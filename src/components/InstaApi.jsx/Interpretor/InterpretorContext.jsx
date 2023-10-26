@@ -20,14 +20,14 @@ function InterpretorContext({ children }) {
 
   useEffect(() => {
     const firstApiRequest = axios.post(
-      "http://34.93.135.33:8080/api/getprojectx",
+      "http://192.168.29.116:8080/api/getprojectx",
       {
         page_name: creatorName,
       }
     );
 
     const secondApiRequest = axios.get(
-      "http://34.93.135.33:8080/api/insta_brand"
+      "http://192.168.29.116:8080/api/insta_brand"
     );
 
     Promise.all([firstApiRequest, secondApiRequest])
@@ -44,7 +44,7 @@ function InterpretorContext({ children }) {
         // console.log(secondApiResponse.data.data, "brands");
         setLoading(true);
         return axios.get(
-          `http://34.93.135.33:8080/api/projectxpagecategory/${firstApiResponse.data.data.page_category_id}`
+          `http://192.168.29.116:8080/api/projectxpagecategory/${firstApiResponse.data.data.page_category_id}`
         );
       })
       .then((thirdApiResponse) => {
@@ -56,17 +56,17 @@ function InterpretorContext({ children }) {
       });
   }, [reloadbrands]);
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/brandSubCategory").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/brandSubCategory").then((res) => {
       setBrandSubCategory(res.data.data);
       // console.log(res.data.data, "projectxSubCategory");
     });
-    axios.get("http://34.93.135.33:8080/api/agency").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/agency").then((res) => {
       setAgency(res.data.data);
       // console.log(res.data.data);
     });
   }, []);
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/campaign").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/campaign").then((res) => {
       setAllCampaign(res.data.data);
     });
   }, [reloadcampaign]);

@@ -34,7 +34,7 @@ const ConfirmationButton = ({
         if (post.posttype_decision != 0) {
           tab = post.posttype_decision;
         }
-        axios.put("http://34.93.135.33:8080/api/instaupdate", {
+        axios.put("http://192.168.29.116:8080/api/instaupdate", {
           _id: post._id,
           posttype_decision: tab,
           selector_decision: btn,
@@ -45,14 +45,14 @@ const ConfirmationButton = ({
         if (post.posttype_decision > 2) {
           tab = post.posttype_decision;
         }
-        axios.put("http://34.93.135.33:8080/api/instaupdate", {
+        axios.put("http://192.168.29.116:8080/api/instaupdate", {
           _id: post._id,
           posttype_decision: tab,
           interpretor_decision: btn,
           interpretor_name: userID,
         });
       } else if (step == 2) {
-        axios.put("http://34.93.135.33:8080/api/instaupdate", {
+        axios.put("http://192.168.29.116:8080/api/instaupdate", {
           _id: post._id,
           posttype_decision: 3,
           auditor_decision: btn,
