@@ -26,7 +26,7 @@ function ExecutionDetail() {
     axios
       .get(
         `
-    http://44.211.225.140:8000/executionSummary`
+        http://34.93.135.33:8080/api/get_exe_sum`
       )
       .then((res) => {
         // console.log(
@@ -64,6 +64,7 @@ function ExecutionDetail() {
         // console.log(
         //   pageIds?.map((e) => res.data.body.filter((ele) => ele.p_id == e)[0])
         // );
+        console.log(res.data.body);
         setPageNames(
           pageIds.map((e) => res.data.body.filter((ele) => ele.p_id == e)[0])
         );
@@ -111,7 +112,9 @@ function ExecutionDetail() {
       headerName: "Created At",
       width: 150,
       renderCell: (params) => {
-        return new Date( params.row.created_at?.split(" ")[0]).toLocaleDateString();;
+        return new Date(
+          params.row.created_at?.split(" ")[0]
+        ).toLocaleDateString();
       },
     },
   ];
@@ -137,7 +140,12 @@ function ExecutionDetail() {
               variant="outlined"
               //   startIcon={<CopyAllOutlinedIcon />}
             >
-              Sale Booking Date : {data.sale_booking_date}
+              Sale Booking Date :
+              {new Date(data.sale_booking_date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+              })}
             </Button>
             {/* <Button
               size="small"
@@ -153,7 +161,7 @@ function ExecutionDetail() {
         justifyContent="space-between"
         sx={{ flexWrap: "wrap", flexDirection: "row", p: 2, mt: 4 }}
       >
-        <Typography sx={{ mb: 4 }}>Invoice Detail</Typography>
+        <Typography sx={{ mb: 4 }}>Record Service Detail</Typography>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={6}>
             <Typography> Services:{data.service_name}</Typography>
@@ -163,20 +171,28 @@ function ExecutionDetail() {
           </Grid>
           <Grid item xs={6}>
             <Typography>
-              Start Date : {new Date(data.start_date_).toLocaleDateString()}{" "}
+              Start Date:{" "}
+              {new Date(data.start_date_).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+              })}
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography>
-            Executive Name :{ data.sales_executive_name}
-            </Typography>
+            <Typography>Executive Name :{data.sales_executive_name}</Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography>
-              {" "}
-              End Date :{new Date(data.end_date).toLocaleDateString()}
+              End Date:{" "}
+              {new Date(data.end_date).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+              })}
             </Typography>
           </Grid>
+
           <Grid item xs={6}>
             <Typography> Excel Upload</Typography>
           </Grid>
@@ -201,21 +217,33 @@ function ExecutionDetail() {
           <Grid item xs={6}>
             <Typography> Hash tag</Typography>
           </Grid>
+          {data?.execution_excel && (
+            <Grid item xs={6}>
+              <Typography>
+                Excel:
+                <Button href={data.excel} color="success">
+                  Download
+                </Button>
+              </Typography>
+            </Grid>
+          )}
         </Grid>
         {/* </Stack> */}
       </Paper>
-      { pageNames.length>0&& 
-      <Paper
-        justifyContent="space-between"
-        sx={{ flexWrap: "wrap", flexDirection: "row", p: 2, mt: 4 }}
-      >
-        <DataGrid
-          rows={addSerialNumber(pageNames)}
-          columns={columns}
-          pageSize={5}
-          getRowId={(row) => row.p_id}
-        />
-              </Paper>}
+      {pageNames.length > 0 && (
+        <Paper
+          justifyContent="space-between"
+          sx={{ flexWrap: "wrap", flexDirection: "row", p: 2, mt: 4 }}
+        >
+          {console.log(pageNames)}
+          <DataGrid
+            rows={addSerialNumber(pageNames)}
+            columns={columns}
+            pageSize={5}
+            getRowId={(row) => row.p_id}
+          />
+        </Paper>
+      )}
     </>
   );
 }

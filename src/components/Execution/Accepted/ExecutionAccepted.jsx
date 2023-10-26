@@ -67,7 +67,7 @@ export default function ExecutionAccepted() {
       console.log(formData);
       const response = axios
       .get(
-        "http://44.211.225.140:8000/executionSummary"
+        "http://34.93.135.33:8080/api/get_exe_sum"
       )
         .then((res) => {
 
@@ -80,7 +80,7 @@ export default function ExecutionAccepted() {
       // setLoading(false);
     }
     axios.post(
-      "http://44.211.225.140:8000/executionSummary",{loggedin_user_id:52}
+      "http://34.93.135.33:8080/api/exe_sum_post",{loggedin_user_id:52}
     )
   };
 
