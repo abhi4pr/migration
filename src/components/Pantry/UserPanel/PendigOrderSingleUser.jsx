@@ -18,7 +18,7 @@ const PendingOrderSingleUser = () => {
   const loginUserRoomId = decodedToken.room_id;
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/pendingorders/${userId}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/get_single_pendingorders/${userId}`).then((res) => {
       setOldUserProduct(res.data.data);
       setFilterData(res.data.data);
       console.log("pending order", res.data);
