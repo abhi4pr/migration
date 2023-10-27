@@ -10,6 +10,9 @@ import Confirmation from "./Confirmation";
 import jwtDecode from "jwt-decode";
 import { GridToolbar } from "@mui/x-data-grid";
 import ExecutionUpdate from "./ExecutionUpdate";
+import PaymentDetailDailog from "./PaymentDetailDailog";
+import PointOfSaleTwoToneIcon from "@mui/icons-material/PointOfSaleTwoTone";
+
 
 function ExecutionPending() {
   const [snackbar, setSnackbar] = useState(null);
@@ -25,40 +28,29 @@ function ExecutionPending() {
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
   const [searchQuery, setSearchQuery] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
+  const [openPaymentDetailDialog, setOpenPaymentDetaliDialog] = useState(false);
+  const [paymentDialogDetails, setPaymentDialogDetails] = useState([{}]);
+
+  const handleClickOpenPaymentDetailDialog = (data) => {
+    console.log(data);
+    setPaymentDialogDetails(data);
+    setOpenPaymentDetaliDialog(true);
+  };
+  const handleClosePaymentDetailDialog = () => {
+    setOpenPaymentDetaliDialog(false);
+  };
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
-  const handleDateFilterChange = (event) => {
-    setDateFilter(event.target.value);
-  };
-
-  // const filteredData = data.filter((row) => {
-  //   const nameMatches = row.cust_name.toLowerCase().includes(searchQuery.toLowerCase());
-  //   const dateMatches = !dateFilter || row.sale_booking_date === dateFilter;
-  //   return nameMatches && dateMatches;
-  // });
-
-  // const columns = [
-  //   // Your column configuration here
-  // ];
-
   const handleAccept = (row) => {
-    console.log(row);
     setRowData(row);
     setConfirmation(true);
     setExecutionStatus(2);
   };
-  const handleReject = (row) => {
-    console.log(row);
-    setRowData(row);
-    setConfirmation(true);
-    setExecutionStatus(3);
-  };
+
   const handleDone = (row) => {
-    console.log(row);
     setRowData(row);
     // setConfirmation(true);
     setExecutionStatus(1);
@@ -82,13 +74,11 @@ function ExecutionPending() {
             if (res.data[26].view_value == 1) {
               setContextData(true);
               setAlert(res.data);
-              console.log(contextData);
             }
-            console.log(res.data[26].view_value);
           });
       }
       const response = axios
-        .get("http://44.211.225.140:8000/executionSummary")
+        .get("http://34.93.135.33:8080/api/get_exe_sum")
         .then((res) => {
           setData(
             res.data.filter(
@@ -99,7 +89,7 @@ function ExecutionPending() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    axios.post("http://44.211.225.140:8000/executionSummary", {
+    axios.post("http://34.93.135.33:8080/api/exe_sum_post", {
       loggedin_user_id: 52,
     });
   };
@@ -132,6 +122,7 @@ function ExecutionPending() {
       headerName: "Client Name",
       width: 150,
     },
+
     {
       field: "sales_executive_name",
       headerName: "Sales Executive",
@@ -174,7 +165,9 @@ function ExecutionPending() {
       type: "number",
       width: 110,
       renderCell: (params) => {
-        return new Date(params?.row.sale_booking_date).toLocaleDateString();
+        return new Date(params?.row.sale_booking_date).toLocaleDateString(
+          "en-GB"
+        );
       },
     },
     {
@@ -183,7 +176,9 @@ function ExecutionPending() {
       width: 150,
       renderCell: (params) => {
         if (params.row.execution_status == "2") {
-          return new Date(params?.row.start_date_).toLocaleDateString();
+          return new Date(params?.row.sale_booking_date).toLocaleDateString(
+            "en-GB"
+          );
         }
       },
     },
@@ -192,7 +187,26 @@ function ExecutionPending() {
       headerName: "Amount",
       width: 120,
     },
-   
+    contextData && {
+      field: "execution_excel",
+      headerName: "Excel",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          params.row.execution_excel && (
+            <Button
+              size="small"
+              color="success"
+              variant="outlined"
+              fontSize="inherit"
+              href={params.row.execution_excel}
+            >
+              Download
+            </Button>
+          )
+        );
+      },
+    },
     {
       field: "page_ids",
       headerName: "Page Counts",
@@ -208,15 +222,15 @@ function ExecutionPending() {
       headerName: "Summary",
       width: 110,
     },
-    {
+    contextData && {
       field: "payment_type",
       headerName: "Payment Status",
       width: 150,
     },
-    {
-      field:"payment_status_show",
-      headerName:"Credit Status",
-      width:150,
+    contextData && {
+      field: "payment_status_show",
+      headerName: "Credit Status",
+      width: 150,
     },
     {
       field: "Time passed",
@@ -243,13 +257,21 @@ function ExecutionPending() {
       getActions: (params) => {
         const { id, row } = params; // Destructure the id and row from params
         const executionStatus = row.execution_status; // Get the execution_status
+
         if (executionStatus == "0") {
           // Show Accept and Reject buttons when execution_status is "0"
           return [
+            // <Button key={id}><PointOfSaleTwoToneIcon/></Button>,
+
+            <GridActionsCellItem
+              key={id}
+              icon={<PointOfSaleTwoToneIcon />}
+              onClick={() => handleClickOpenPaymentDetailDialog(params.row)}
+              color="inherit"
+            />,
             <Link key={id} to={`/admin/exeexecution/${id}`}>
               <GridActionsCellItem
                 icon={<ListAltOutlinedIcon />}
-                label="Delete"
                 onClick={handleViewClick(id)}
                 color="inherit"
               />
@@ -257,9 +279,6 @@ function ExecutionPending() {
             <GridActionsCellItem
               key={id}
               icon={
-                // <Button color="error" variant="outlined">
-                //   Reject
-                // </Button>
                 <ExecutionUpdate
                   setReload={setReload}
                   id={id}
@@ -267,14 +286,11 @@ function ExecutionPending() {
                   status={3}
                 />
               }
-              label="Delete"
-              // onClick={() => handleReject(row)}
               color="inherit"
             />,
             <GridActionsCellItem
               key={id}
               icon={<Button variant="outlined">Accept</Button>}
-              label="Delete"
               onClick={() => handleAccept(row)}
               color="inherit"
             />,
@@ -282,6 +298,12 @@ function ExecutionPending() {
         } else if (executionStatus == "2") {
           // Show "Done" button when execution_status is "2"
           return [
+            <GridActionsCellItem
+              key={id}
+              icon={<PointOfSaleTwoToneIcon />}
+              onClick={handleClickOpenPaymentDetailDialog}
+              color="inherit"
+            />,
             <Link key={id} to={`/admin/exeexecution/${id}`}>
               <GridActionsCellItem
                 icon={<ListAltOutlinedIcon />}
@@ -308,10 +330,15 @@ function ExecutionPending() {
         } else {
           // Default case, no special buttons
           return [
+            <GridActionsCellItem
+              key={id}
+              icon={<PointOfSaleTwoToneIcon />}
+              onClick={handleClickOpenPaymentDetailDialog}
+              color="inherit"
+            />,
             <Link key={id} to={`/admin/exeexecution/${id}`}>
               <GridActionsCellItem
                 icon={<ListAltOutlinedIcon />}
-                label="Delete"
                 onClick={handleViewClick(id)}
                 color="inherit"
               />
@@ -347,7 +374,6 @@ function ExecutionPending() {
             <h2>Execution Pending Summary</h2>
           </div>
         </div>
-        {console.log(contextData)}
         <div>
           <TextField
             label="Search by Client Name"
@@ -355,18 +381,6 @@ function ExecutionPending() {
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          {/* 
-      <TextField
-        label="Filter by Date"
-        type="date"
-        variant="outlined"
-        value={dateFilter}
-        onChange={handleDateFilterChange}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      /> */}
-
           <DataGrid
             rows={addSerialNumber(data)}
             columns={columns}
@@ -397,6 +411,12 @@ function ExecutionPending() {
           </DataGrid>
         </div>
       </ThemeProvider>
+      <PaymentDetailDailog
+        handleClickOpenPaymentDetailDialog={handleClickOpenPaymentDetailDialog}
+        handleClosePaymentDetailDialog={handleClosePaymentDetailDialog}
+        openPaymentDetailDialog={openPaymentDetailDialog}
+        paymentDialogDetails={paymentDialogDetails}
+      />
     </>
   );
 }
