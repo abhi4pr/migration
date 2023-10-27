@@ -35,7 +35,7 @@ export default function MultipleAssignDialog({
   const handleAssignMultiple = () => {
     for (let i in showMultipleAssignModalData) {
       axios
-        .put("http://34.93.135.33:8080/api/contentSectionReg", {
+        .put("http://192.168.29.116:8080/api/contentSectionReg", {
           content_section_id: showMultipleAssignModalData[i].content_section_id,
           assign_to: setAssignTo.current,
           creator_dt: selectedDate,
@@ -47,7 +47,7 @@ export default function MultipleAssignDialog({
           console.log(response);
           if (response.data.success) {
             handleCloseMultipleAssignModal();
-            setReload(prev=>!prev);
+            setReload((prev) => !prev);
             setAssignTo.current = " ";
             setSelectedDate(null);
             setRemarkValue("");

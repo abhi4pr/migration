@@ -5,10 +5,10 @@ import "./LoginResponsive.css";
 import { useNavigate } from "react-router-dom";
 import loginlogo from "../assets/img/logo/logo_white.svg";
 import jwtDecode from "jwt-decode";
-import {useGlobalContext} from '../Context/Context';
+import { useGlobalContext } from "../Context/Context";
 
 const Login = () => {
-  const {toastAlert} = useGlobalContext()
+  const { toastError } = useGlobalContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -16,7 +16,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(true);
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    //192.168.29.167:8080/api/login_user
+    //192.168.29.167:8080/api/login_user
+    http: axios
       .post("http://44.211.225.140:8000/login", {
         user_login_id: email,
         user_login_password: password,
@@ -28,13 +30,12 @@ const Login = () => {
           const token = res.data.token;
           const decodedToken = jwtDecode(token);
           const status = decodedToken.user_status;
-          if(status == 'Active'){
+          if (status == "Active") {
             navigate("/");
             sessionStorage.setItem("token", token);
-          }
-          else{
+          } else {
             navigate("/login");
-            toastAlert('You are an inactive user')
+            toastError("You are an inactive user");
           }
         }
       })

@@ -28,7 +28,8 @@ export default function CampaignCommitment() {
   const [searchInput, setSearchInput] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
   // const [errorMessage, setErrorMessage] = useState("");
-  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+    useState(false);
   const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -38,9 +39,6 @@ export default function CampaignCommitment() {
     cmtName: "",
     // cmtValue: "",
   });
-
-
-
 
   function EditToolbar() {
     const handleClick = () => {
@@ -62,10 +60,10 @@ export default function CampaignCommitment() {
   //post data =======>
   const handleChange = (event) => {
     const { name, value } = event.target;
-   
-    if (name === "cmtName" && (!value)) {
+
+    if (name === "cmtName" && !value) {
       setErrorMessage("Please enter a valid name");
-      return
+      return;
     } else {
       setErrorMessage("");
     }
@@ -76,44 +74,47 @@ export default function CampaignCommitment() {
   };
 
   const handleSave = (e) => {
-    e.preventDefault()
-  if (!postData.cmtName ) {
-    setErrorMessage("* fields are required.");
-    return;
-  }
+    e.preventDefault();
+    if (!postData.cmtName) {
+      setErrorMessage("* fields are required.");
+      return;
+    }
     axios
-      .post("http://34.93.135.33:8080/api/commitment", postData)
+      .post("http://192.168.29.116:8080/api/commitment", postData)
       .then((response) => {
         setIsModalOpen(false);
-        getData()
+        getData();
         console.log("Data saved:", response.data);
       })
       .catch((error) => {
         console.error("Error saving data:", error);
       });
     setIsModalOpen(false);
-    getData()
+    getData();
     // setErrorMessage(" ")
   };
 
   // get api ========>
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((res) => {
-      const data = res.data.data;
-      const uniqueCmtNames = new Set();
-      const uniqueRows = data.filter((row) => {
-        if (uniqueCmtNames.has(row.cmtName)) {
-          console.log("Brand name already exists. Duplicate values are not allowed.");
-          return false;
-        } else {
-          uniqueCmtNames.add(row.cmtName);
-          return true;
-        }
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((res) => {
+        const data = res.data.data;
+        const uniqueCmtNames = new Set();
+        const uniqueRows = data.filter((row) => {
+          if (uniqueCmtNames.has(row.cmtName)) {
+            console.log(
+              "Brand name already exists. Duplicate values are not allowed."
+            );
+            return false;
+          } else {
+            uniqueCmtNames.add(row.cmtName);
+            return true;
+          }
+        });
+        setRows(uniqueRows);
       });
-      setRows(uniqueRows);
-    });
   };
-
 
   useEffect(() => {
     getData();
@@ -125,11 +126,11 @@ export default function CampaignCommitment() {
     }
   };
   // put api =============>
-  
-  const handlePutData = () => { 
-    if (editData.cmtName !== '') {
+
+  const handlePutData = () => {
+    if (editData.cmtName !== "") {
       axios
-        .put(`http://34.93.135.33:8080/api/commitment`, {
+        .put(`http://192.168.29.116:8080/api/commitment`, {
           cmtId: editData.cmtId,
           cmtName: editData.cmtName,
         })
@@ -148,9 +149,7 @@ export default function CampaignCommitment() {
     } else {
       console.log("cmtName is empty");
     }
-  }
-  
-
+  };
 
   const handleEditClick = (id, row) => () => {
     setEditData(row);
@@ -165,7 +164,7 @@ export default function CampaignCommitment() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/commitment/${itemToDeleteId}`)
+        .delete(`http://192.168.29.116:8080/api/commitment/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");
@@ -258,7 +257,7 @@ export default function CampaignCommitment() {
       <Paper>
         <div className="form-heading">
           <div className="form_heading_title">
-            <h2> Commitment  </h2>
+            <h2> Commitment </h2>
           </div>
         </div>
       </Paper>
@@ -314,19 +313,21 @@ export default function CampaignCommitment() {
             autoComplete="off"
           >
             <div>
-            <>
-              <TextField
-                id="outlined-password-input"
-                label="Commitment"
-                name="cmtName"
-                type="text"
-                value={postData.cmtName}
-                onChange={handleChange}
-              />{errorMessage && (
-                <div style={{ color: "red", marginBottom: "10px" }}>{errorMessage}</div>
-              )}
+              <>
+                <TextField
+                  id="outlined-password-input"
+                  label="Commitment"
+                  name="cmtName"
+                  type="text"
+                  value={postData.cmtName}
+                  onChange={handleChange}
+                />
+                {errorMessage && (
+                  <div style={{ color: "red", marginBottom: "10px" }}>
+                    {errorMessage}
+                  </div>
+                )}
               </>
-
             </div>
           </Box>
         </DialogContent>
@@ -365,7 +366,7 @@ export default function CampaignCommitment() {
                     cmtName: e.target.value,
                   }))
                 }
-                required={true }
+                required={true}
               />
             </div>
           </Box>
@@ -379,7 +380,6 @@ export default function CampaignCommitment() {
           </Button>
         </DialogActions>
       </Dialog>
-
 
       <Dialog
         open={isDeleteConfirmationOpen}

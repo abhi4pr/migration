@@ -22,14 +22,14 @@ export default function SubDepartmentMaster() {
 
   // const [departmentdata, getDepartmentData] = useState([]);
   // useEffect(() => {
-  //   axios.get("http://34.93.135.33:8080/api/get_all_departments").then((res) => {
+  //   axios.get("http://192.168.29.116:8080/api/get_all_departments").then((res) => {
   //     getDepartmentData(res.data).catch((error) => console.log(error));
   //   });
   // }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://34.93.135.33:8080/api/add_sub_department", {
+    await axios.post("http://192.168.29.116:8080/api/add_sub_department", {
       sub_dept_name: subDepartmentName,
       dept_id: departmentName,
       remark: remark,

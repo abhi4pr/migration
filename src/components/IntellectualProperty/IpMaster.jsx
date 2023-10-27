@@ -18,18 +18,18 @@ const IpMaster = () => {
   const [allocatedTo, setAllocatedTo] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [singleUser, setSingleUser] = useState({});
-  const [platformData, setPlatFormData] = useState([])
+  const [platformData, setPlatFormData] = useState([]);
   const [ipTypeData, setIpTypeData] = useState([]);
   const [email, setEmail] = useState("");
-  const [emailPass, setEmailPass] = useState("")
-  const [contactNo, setContactNo] = useState("")
-  const [recoveryEmail, setRecoveryEmail] = useState("")
-  const [recoveryContact, setRecoveryContact] = useState("")
-  const [postCount, setPostCount] = useState("")
-  const [followers, setFollowers] = useState("")
+  const [emailPass, setEmailPass] = useState("");
+  const [contactNo, setContactNo] = useState("");
+  const [recoveryEmail, setRecoveryEmail] = useState("");
+  const [recoveryContact, setRecoveryContact] = useState("");
+  const [postCount, setPostCount] = useState("");
+  const [followers, setFollowers] = useState("");
   const [daysReach, setDaysReach] = useState("");
   const [activeTab, setActiveTab] = useState("stage1");
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const token = sessionStorage.getItem("token");
@@ -38,72 +38,72 @@ const IpMaster = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("http://192.168.29.116:8080/api/get_all_users")
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_platforms")
-      .then((res) => setPlatFormData(res.data))
+      .get("http://192.168.29.116:8080/api/get_all_platforms")
+      .then((res) => setPlatFormData(res.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_iptypes")
-      .then((res) => setIpTypeData(res.data))
+      .get("http://192.168.29.116:8080/api/get_all_iptypes")
+      .then((res) => setIpTypeData(res.data));
   }, []);
 
   const handleSelectChange = (e) => {
     axios
       .get(`http://44.211.225.140:8000/user/${e.target.value}`)
       .then((res) => setSingleUser(res.data));
-  }
+  };
 
   const handleTabChange = (tab) => {
-    setActiveTab(tab)
-  }
+    setActiveTab(tab);
+  };
 
   const getFollowers = async () => {
     setLoading(true);
-    let intervalId; 
-  
+    let intervalId;
+
     try {
-      const apiUrl = 'http://44.211.225.140:8000/instagram';
+      const apiUrl = "http://44.211.225.140:8000/instagram";
       const response = await axios.post(apiUrl, { IPName: IPName });
       const dataRequestId = response.data.data_request_id;
-  
+
       intervalId = setInterval(async () => {
         try {
           const secondApiUrl = `http://44.211.225.140:8000/instagram2/${dataRequestId}`;
           const secondApiResponse = await axios.get(secondApiUrl);
-          const followers = secondApiResponse.data.response_entries[0].followers;
+          const followers =
+            secondApiResponse.data.response_entries[0].followers;
           const posts = secondApiResponse.data.response_entries[0].posts;
-  
+
           if (followers && posts) {
-            clearInterval(intervalId); 
+            clearInterval(intervalId);
             setLoading(false);
             setFollowers(followers);
             setPostCount(posts);
           }
         } catch (error) {
-          console.error('Second API call error:', error);
+          console.error("Second API call error:", error);
         }
-      }, 2000); 
-  
+      }, 2000);
     } catch (error) {
-      console.error('First API call error:', error);
+      console.error("First API call error:", error);
     }
   };
-  
-  const handleSubmit = async(e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const currDate = new Date().toISOString();
     const dateString = currDate.replace("T", " ").replace("Z", "");
 
     if (!IPType || !platform || !IPName || !email || !postCount) {
-      setError('Please fill all required fields');
+      setError("Please fill all required fields");
       return;
     }
 
-    await axios.post("http://34.93.135.33:8080/api/add_instapage", {
+    await axios.post("http://192.168.29.116:8080/api/add_instapage", {
       ip_type: Number(IPType),
       platform: Number(platform),
       ip_name: IPName,
@@ -123,7 +123,7 @@ const IpMaster = () => {
       followers: Number(followers),
       days_reach: Number(daysReach),
       last_updated_by: userID,
-      last_updated_at: dateString
+      last_updated_at: dateString,
     });
 
     toastAlert("Form Submitted success");
@@ -134,7 +134,6 @@ const IpMaster = () => {
     return <Navigate to="/ip-overview" />;
   }
   return (
-
     <>
       <UserNav />
       <div className="section section_padding sec_bg h100vh">
@@ -142,33 +141,45 @@ const IpMaster = () => {
           <div className="card mb-4">
             <div className="card-header">
               <div className="tabbtn_header_two">
-                <button onClick={() => handleTabChange("stage1")}
-                style={{
-                  backgroundColor: activeTab === "stage1" ? "blue" : "gray",
-                  color: "white",
-                }}
-                > Credential Stage
+                <button
+                  onClick={() => handleTabChange("stage1")}
+                  style={{
+                    backgroundColor: activeTab === "stage1" ? "blue" : "gray",
+                    color: "white",
+                  }}
+                >
+                  {" "}
+                  Credential Stage
                 </button>
-                <button onClick={() => handleTabChange("stage2")}
-                style={{
-                  backgroundColor: activeTab === "stage2" ? "blue" : "gray",
-                  color: "white",
-                }}
-                > Recovery Stage
+                <button
+                  onClick={() => handleTabChange("stage2")}
+                  style={{
+                    backgroundColor: activeTab === "stage2" ? "blue" : "gray",
+                    color: "white",
+                  }}
+                >
+                  {" "}
+                  Recovery Stage
                 </button>
-                <button onClick={() => handleTabChange("stage3")}
-                style={{
-                  backgroundColor: activeTab === "stage3" ? "blue" : "gray",
-                  color: "white",
-                }}
-                > Access Level Stage
+                <button
+                  onClick={() => handleTabChange("stage3")}
+                  style={{
+                    backgroundColor: activeTab === "stage3" ? "blue" : "gray",
+                    color: "white",
+                  }}
+                >
+                  {" "}
+                  Access Level Stage
                 </button>
-                <button onClick={() => handleTabChange("stage4")}
-                style={{
-                  backgroundColor: activeTab === "stage4" ? "blue" : "gray",
-                  color: "white",
-                }}
-                > Page Health Stage
+                <button
+                  onClick={() => handleTabChange("stage4")}
+                  style={{
+                    backgroundColor: activeTab === "stage4" ? "blue" : "gray",
+                    color: "white",
+                  }}
+                >
+                  {" "}
+                  Page Health Stage
                 </button>
               </div>
             </div>
@@ -339,20 +350,28 @@ const IpMaster = () => {
                       required={false}
                       onChange={(e) => setDaysReach(e.target.value)}
                     />
-                    <div style={{display:"contents"}}>
-                    <button type='button'
-                      onClick={getFollowers} 
-                      style={{height:"40px", margin:"20px 0 0 10px"}}
-                      className="col-xl-3 col-lg-3 col-md-3 col-sm-12 btn btn-success">
-                      Get Followers
-                    </button>
+                    <div style={{ display: "contents" }}>
+                      <button
+                        type="button"
+                        onClick={getFollowers}
+                        style={{ height: "40px", margin: "20px 0 0 10px" }}
+                        className="col-xl-3 col-lg-3 col-md-3 col-sm-12 btn btn-success"
+                      >
+                        Get Followers
+                      </button>
 
-                    {loading && <p style={{margin:"20px 0 0 10px"}}>Fetching data</p>}
+                      {loading && (
+                        <p style={{ margin: "20px 0 0 10px" }}>Fetching data</p>
+                      )}
                     </div>
-                    
+
                     <p>{error}</p>
 
-                    <input type="submit" value="Submit" className="btn btn btn-primary" />
+                    <input
+                      type="submit"
+                      value="Submit"
+                      className="btn btn btn-primary"
+                    />
                   </>
                 )}
               </form>

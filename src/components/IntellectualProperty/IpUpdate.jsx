@@ -29,14 +29,14 @@ const IpUpdate = () => {
   const [l1Name, setl1Name] = useState("");
   const [l2Name, setl2Name] = useState("");
   const [l3Name, setl3Name] = useState("");
-  const [platformData, setPlatFormData] = useState([])
-  const [ipTypeData, setIpTypeData] = useState([])
-  const [postCount, setPostCount] = useState("")
-  const [followers, setFollowers] = useState("")
+  const [platformData, setPlatFormData] = useState([]);
+  const [ipTypeData, setIpTypeData] = useState([]);
+  const [postCount, setPostCount] = useState("");
+  const [followers, setFollowers] = useState("");
   const [daysReach, setDaysReach] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [createdBy, setCreatedBy] = useState('');
-  const [createdAt, setCreatedAt] = useState('')
+  const [createdBy, setCreatedBy] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -70,40 +70,44 @@ const IpUpdate = () => {
     });
 
     axios
-      .get("http://44.211.225.140:8000/allusers")
+      .get("http://192.168.29.116:8080/api/get_all_users")
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_platforms")
-      .then((res) => setPlatFormData(res.data))
-    
+      .get("http://192.168.29.116:8080/api/get_all_platforms")
+      .then((res) => setPlatFormData(res.data));
+
     axios
-      .get("http://34.93.135.33:8080/api/get_all_iptypes")
-      .then((res) => setIpTypeData(res.data))
+      .get("http://192.168.29.116:8080/api/get_all_iptypes")
+      .then((res) => setIpTypeData(res.data));
   }, []);
 
   const handleSelectChange = (e) => {
     axios
       .get(`http://44.211.225.140:8000/user/${e.target.value}`)
-      .then((res) => 
-        {
-          setl1(res.data.Report_L1);
-          setl2(res.data.Report_L2);
-          setl3(res.data.Report_L3);
-          setl1Name(res.data.report_L1_name);
-          setl2Name(res.data.report_L2_name);
-          setl3Name(res.data.report_L3_name);
-        }
-      );  
-  }
+      .then((res) => {
+        setl1(res.data.Report_L1);
+        setl2(res.data.Report_L2);
+        setl3(res.data.Report_L3);
+        setl1Name(res.data.report_L1_name);
+        setl2Name(res.data.report_L2_name);
+        setl3Name(res.data.report_L3_name);
+      });
+  };
 
   const handleSubmit = (e) => {
     const currDate = new Date().toISOString();
     const dateString = currDate.replace("T", " ").replace("Z", "");
 
     const dateObject = new Date(createdAt);
-    const formattedDate = `${dateObject.toISOString().slice(0, 19).replace('T', ' ')}.${dateObject.getUTCMilliseconds().toString().padStart(3, '0')}`;
-    
+    const formattedDate = `${dateObject
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ")}.${dateObject
+      .getUTCMilliseconds()
+      .toString()
+      .padStart(3, "0")}`;
+
     e.preventDefault();
     axios.put("http://44.211.225.140:8000/ipregiupdate", {
       id: Number(id),
@@ -127,7 +131,7 @@ const IpUpdate = () => {
       last_updated_at: dateString,
       post_count: Number(postCount),
       followers: Number(followers),
-      days_reach: Number(daysReach)
+      days_reach: Number(daysReach),
     });
 
     toastAlert("Form Submitted success");
@@ -153,7 +157,7 @@ const IpUpdate = () => {
           onChange={(e) => setIpType(e.target.value)}
         >
           <option value="">Please select</option>
-          {ipTypeData.map((data)=>(
+          {ipTypeData.map((data) => (
             <option key={data.id} value={data.id}>
               {data.name}
             </option>
@@ -166,7 +170,7 @@ const IpUpdate = () => {
           value={platform}
           onChange={(e) => setPlatform(e.target.value)}
         >
-          {platformData.map((data)=>(
+          {platformData.map((data) => (
             <option key={data.id} value={data.id}>
               {data.name}
             </option>
@@ -188,30 +192,30 @@ const IpUpdate = () => {
           value={backupCode}
           onChange={(e) => setBackupCode(e.target.value)}
         />
-        <FieldContainer 
+        <FieldContainer
           label="Contact Number"
           value={contactNo}
-          onChange={(e)=> setContactNo(e.target.value)}
+          onChange={(e) => setContactNo(e.target.value)}
         />
-        <FieldContainer 
+        <FieldContainer
           label="Email"
           value={email}
-          onChange={(e)=> setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <FieldContainer 
+        <FieldContainer
           label="Password"
           value={emailPass}
-          onChange={(e)=> setEmailPass(e.target.value)}
+          onChange={(e) => setEmailPass(e.target.value)}
         />
-        <FieldContainer 
+        <FieldContainer
           label="Recovery Email"
           value={recoveryEmail}
-          onChange={(e)=> setRecoveryEmail(e.target.value)}
+          onChange={(e) => setRecoveryEmail(e.target.value)}
         />
-        <FieldContainer 
+        <FieldContainer
           label="Recovery Contact"
           value={recoveryContact}
-          onChange={(e)=> setRecoveryContact(e.target.value)}
+          onChange={(e) => setRecoveryContact(e.target.value)}
         />
         <FieldContainer
           label="Allocated TO"

@@ -130,7 +130,7 @@ export default function BrandMaster() {
     setError("");
 
     axios
-      .post("http://34.93.135.33:8080/api/add_brand", postData)
+      .post("http://192.168.29.116:8080/api/add_brand", postData)
       .then((response) => {
         console.log(response.data, "Data saved:");
         setIsModalOpen(false);
@@ -153,7 +153,7 @@ export default function BrandMaster() {
 
   // get api ------
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_brands").then((res) => {
       const newData = res.data.data;
       const sortedData = newData.sort((a, b) => b.brand_id - a.brand_id);
 
@@ -162,7 +162,7 @@ export default function BrandMaster() {
   };
 
   const categoryData = () => {
-    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/projectxCategory").then((res) => {
       console.log(res.data.data, "-------> cat data");
       setCategoryOptions(res.data.data);
     });
@@ -170,7 +170,7 @@ export default function BrandMaster() {
   const subCategoryData = () => {
     console.log("calling the subcategory data");
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -198,7 +198,7 @@ export default function BrandMaster() {
   const subCategoryDataOnEdit = () => {
     console.log("calling the subcategory data on Edit");
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -213,11 +213,11 @@ export default function BrandMaster() {
   useEffect(() => {
     console.log("postData.category_id", postData.category_id);
     subCategoryDataOnEdit();
-  }, [ postData.category_id, postData]);
+  }, [postData.category_id, postData]);
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`http://34.93.135.33:8080/api/edit_brand`, {
+      .put(`http://192.168.29.116:8080/api/edit_brand`, {
         brand_id: editData.brand_id,
         brand_name: editData.brand_name,
         category_id: editData.category_id,
@@ -238,22 +238,19 @@ export default function BrandMaster() {
     console.log("put data");
   };
 
-useEffect(() => {
-  axios
-  .get("http://34.93.135.33:8080/api/projectxSubCategory")
-  .then((res) => {
-    console.log(res.data.data, "-------> subcat data");
-    const filteredData = res.data.data.filter((item) => {
-      return item.category_id == editData.category_id;
-    });
-    console.log(filteredData, "filteredData meeee");
-    setSubCategoryOptions(filteredData);
-    setLoading(false);
-  });
-
-  
-}, [editData.category_id]);
-
+  useEffect(() => {
+    axios
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
+      .then((res) => {
+        console.log(res.data.data, "-------> subcat data");
+        const filteredData = res.data.data.filter((item) => {
+          return item.category_id == editData.category_id;
+        });
+        console.log(filteredData, "filteredData meeee");
+        setSubCategoryOptions(filteredData);
+        setLoading(false);
+      });
+  }, [editData.category_id]);
 
   const handleEditClick = (id, row) => () => {
     setLoading(true);
@@ -283,7 +280,7 @@ useEffect(() => {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/delete_brand/${itemToDeleteId}`)
+        .delete(`http://192.168.29.116:8080/api/delete_brand/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");
@@ -590,111 +587,116 @@ useEffect(() => {
             noValidate
             autoComplete="off"
           >
-           {!loading&& <div>
-              <TextField
-                id="outlined-password-input"
-                label="Brand"
-                name="brand_name"
-                type="text"
-                value={editData.brand_name}
-                onChange={(e) =>
-                  setEditData((prev) => ({
-                    ...prev,
-                    brand_name: e.target.value,
-                  }))
-                }
-              />
+            {!loading && (
+              <div>
+                <TextField
+                  id="outlined-password-input"
+                  label="Brand"
+                  name="brand_name"
+                  type="text"
+                  value={editData.brand_name}
+                  onChange={(e) =>
+                    setEditData((prev) => ({
+                      ...prev,
+                      brand_name: e.target.value,
+                    }))
+                  }
+                />
 
-              <Autocomplete
-                disablePortal
-                options={categoryOptions.map((item) => ({
-                  label: item.category_name,
-                  value: item.category_id,
-                }))}
-                sx={{ width: 300 }}
-                value={
-                  categoryOptions.find(
-                    (option) => option.category_id == editData.category_id
-                  )?.category_name
-                }
-                renderInput={(params) => (
-                  <TextField {...params} label=" Category" />
-                )}
-                onChange={(event, newValue) => {
-                  setEditData((prev) => ({
-                    ...prev,
-                    category_id: newValue ? newValue.value : "",
-                  }));
-                }}
-              />
-              <Autocomplete
-                disablePortal
-                options={subcategoryOptions?.map((item) => ({
-                  label: item.sub_category_name,
-                  value: item.sub_category_id,
-                }))}
-                value={
-                  subcategoryOptions?.find((option) => {
-                    return option?.sub_category_id == editData?.sub_category_id;
-                  })?.sub_category_name
-                }
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Sub Category" />
-                )}
-                onChange={(event, newValue) => {
-                  setEditData((prev) => ({
-                    ...prev,
-                    sub_category_id: newValue ? newValue.value : "",
-                  }));
-                }}
-              />
-              <Autocomplete
-                disablePortal
-                options={majorcategoryoption}
-                getOptionLabel={(option) => option.major_cat_name}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Major Category" />
-                )}
-                value={majorcategoryoption.find(
-                  (option) => option.major_cat_name === editData.major_category
-                )}
-                onChange={(event, newValue) => {
-                  setEditData((prev) => ({
-                    ...prev,
-                    major_category: newValue && newValue.major_cat_name,
-                  }));
-                }}
-              />
+                <Autocomplete
+                  disablePortal
+                  options={categoryOptions.map((item) => ({
+                    label: item.category_name,
+                    value: item.category_id,
+                  }))}
+                  sx={{ width: 300 }}
+                  value={
+                    categoryOptions.find(
+                      (option) => option.category_id == editData.category_id
+                    )?.category_name
+                  }
+                  renderInput={(params) => (
+                    <TextField {...params} label=" Category" />
+                  )}
+                  onChange={(event, newValue) => {
+                    setEditData((prev) => ({
+                      ...prev,
+                      category_id: newValue ? newValue.value : "",
+                    }));
+                  }}
+                />
+                <Autocomplete
+                  disablePortal
+                  options={subcategoryOptions?.map((item) => ({
+                    label: item.sub_category_name,
+                    value: item.sub_category_id,
+                  }))}
+                  value={
+                    subcategoryOptions?.find((option) => {
+                      return (
+                        option?.sub_category_id == editData?.sub_category_id
+                      );
+                    })?.sub_category_name
+                  }
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Sub Category" />
+                  )}
+                  onChange={(event, newValue) => {
+                    setEditData((prev) => ({
+                      ...prev,
+                      sub_category_id: newValue ? newValue.value : "",
+                    }));
+                  }}
+                />
+                <Autocomplete
+                  disablePortal
+                  options={majorcategoryoption}
+                  getOptionLabel={(option) => option.major_cat_name}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Major Category" />
+                  )}
+                  value={majorcategoryoption.find(
+                    (option) =>
+                      option.major_cat_name === editData.major_category
+                  )}
+                  onChange={(event, newValue) => {
+                    setEditData((prev) => ({
+                      ...prev,
+                      major_category: newValue && newValue.major_cat_name,
+                    }));
+                  }}
+                />
 
-              <TextField
-                id="outlined-password-input"
-                label="Iguser Name"
-                name="igusername"
-                type="text"
-                value={editData.igusername}
-                onChange={(e) =>
-                  setEditData((prev) => ({
-                    ...prev,
-                    igusername: e.target.value,
-                  }))
-                }
-              />
-              <TextField
-                id="outlined-password-input"
-                label="Whatsapp"
-                name="whatsapp"
-                type="text"
-                value={editData.whatsapp}
-                onChange={(e) =>
-                  setEditData((prev) => ({
-                    ...prev,
-                    whatsapp: e.target.value,
-                  }))
-                }
-              />
-            </div>}
+                <TextField
+                  id="outlined-password-input"
+                  label="Iguser Name"
+                  name="igusername"
+                  type="text"
+                  value={editData.igusername}
+                  onChange={(e) =>
+                    setEditData((prev) => ({
+                      ...prev,
+                      igusername: e.target.value,
+                    }))
+                  }
+                />
+                <TextField
+                  id="outlined-password-input"
+                  label="Whatsapp"
+                  name="whatsapp"
+                  type="text"
+                  value={editData.whatsapp}
+                  onChange={(e) =>
+                    setEditData((prev) => ({
+                      ...prev,
+                      whatsapp: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            )}
           </Box>
         </DialogContent>
         <DialogActions>

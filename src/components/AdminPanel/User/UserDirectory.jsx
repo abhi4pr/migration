@@ -30,13 +30,13 @@ const UserOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allusers").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       setDatas(res.data.data);
       setBackupData(res.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

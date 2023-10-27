@@ -13,10 +13,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { Autocomplete, DialogContentText, Paper, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  DialogContentText,
+  Paper,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 
 export default function SubCategoryMaster() {
   const [rows, setRows] = useState([]);
@@ -33,8 +37,8 @@ export default function SubCategoryMaster() {
     category_id: "",
   });
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
-  useState(false);
-const [itemToDeleteId, setItemToDeleteId] = useState(null);
+    useState(false);
+  const [itemToDeleteId, setItemToDeleteId] = useState(null);
 
   function EditToolbar() {
     const handleClick = () => {
@@ -66,7 +70,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/projectxSubCategory", postData)
+      .post("http://192.168.29.116:8080/api/projectxSubCategory", postData)
       .then((response) => {
         postData.sub_category_name = "";
         console.log("Data saved:", response.data);
@@ -84,7 +88,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   // get api ------
   const getData = () => {
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data);
         const sortedData = res.data.data.sort(
@@ -94,7 +98,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
       });
   };
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/projectxCategory").then((res) => {
       console.log(res.data.data);
       setCategory(res.data.data);
     });
@@ -104,7 +108,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`http://34.93.135.33:8080/api/projectxSubCategory`, {
+      .put(`http://192.168.29.116:8080/api/projectxSubCategory`, {
         sub_category_id: editData.sub_category_id,
         sub_category_name: editData.sub_category_name,
         category_id: editData.category_id,
@@ -132,9 +136,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
     }
   };
 
-
-
-
   const handleDeleteClick = (id) => () => {
     setItemToDeleteId(id);
     setIsDeleteConfirmationOpen(true);
@@ -143,7 +144,9 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/projectxSubCategory/${itemToDeleteId}`)
+        .delete(
+          `http://192.168.29.116:8080/api/projectxSubCategory/${itemToDeleteId}`
+        )
         .then(() => {
           getData();
           console.log("Data deleted successfully");
@@ -398,7 +401,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
           </Button>
         </DialogActions>
       </Dialog>
-
 
       <Dialog
         open={isDeleteConfirmationOpen}

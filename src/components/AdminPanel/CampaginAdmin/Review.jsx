@@ -55,7 +55,7 @@ export default function Review() {
   //   console.log("clicked to reject");
   //   console.log(params.row);
   //   axios
-  //     .put("http://34.93.135.33:8080/api/contentSectionReg", {
+  //     .put("http://192.168.29.116:8080/api/contentSectionReg", {
   //       content_section_id: params.row.content_section_id,
   //       status: "24",
   //       stage: "3",
@@ -88,12 +88,12 @@ export default function Review() {
     const stage =
       actionType == "complect" ? "4" : actionType == "reject" ? "3" : "3";
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("http://192.168.29.116:8080/api/contentSectionReg", {
         content_section_id: actionModalData.content_section_id,
         status: status,
         stage: stage,
         creator_remark: actionRemark,
-        ...(actionType === "complect" && { endDate: new Date() })
+        ...(actionType === "complect" && { endDate: new Date() }),
       })
       .then((response) => {
         if (response.data.success == true) {
@@ -104,7 +104,7 @@ export default function Review() {
   };
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -115,7 +115,7 @@ export default function Review() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -124,24 +124,28 @@ export default function Review() {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((response) => {
-      const data = response.data.data;
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((response) => {
+        const data = response.data.data;
 
-      setCommits(data);
-    });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+        setCommits(data);
+      });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         const data = response.data.data.filter(
           (e) => e.status == "22" && e.stage == "3"

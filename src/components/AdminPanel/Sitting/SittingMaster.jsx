@@ -22,7 +22,7 @@ const SittingMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://34.93.135.33:8080/api/add_sitting", {
+      .post("http://192.168.29.116:8080/api/add_sitting", {
         sitting_ref_no: sittingRefrenceNum,
         room_id: Number(roomId),
         sitting_area: sittingArea,
@@ -44,7 +44,7 @@ const SittingMaster = () => {
   };
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_rooms")
+      .get("http://192.168.29.116:8080/api/get_all_rooms")
       .then((res) => {
         getRoomData(res.data.data);
       })
@@ -78,13 +78,13 @@ const SittingMaster = () => {
             const selectedRoomNo = roomData.find(
               (option) => option.room_id === Number(selectedRoomOption)
             );
-            setSittingArea(selectedRoomNo ? selectedRoomNo.Sitting_ref_no : "");
+            setSittingArea(selectedRoomNo ? selectedRoomNo.sitting_ref_no : "");
           }}
         >
           <option value="">choose...</option>
           {roomData.map((d) => (
             <option value={d.room_id} key={d.room_id}>
-              {d.Sitting_ref_no}
+              {d.sitting_ref_no}
             </option>
           ))}
         </FieldContainer>

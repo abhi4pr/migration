@@ -39,7 +39,7 @@ export default function Complected() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -50,7 +50,7 @@ export default function Complected() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -59,19 +59,23 @@ export default function Complected() {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
-    axios.get("http://34.93.135.33:8080/api/get_all_commitments").then((response) => {
-      const data = response.data.data;
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
+      .then((response) => {
+        const data = response.data.data;
 
-      setCommits(data);
-    });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+        setCommits(data);
+      });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
   const columns = [
@@ -133,10 +137,15 @@ export default function Complected() {
       headerName: "Time Taken (Hours)",
       width: 150,
       renderCell: (params) => {
-        return params.row.endDate && Math.floor((new Date(params.row.creator_dt) - new Date(params.row.endDate)) / 3600000) + "h";
-      }
-    }
-    ,
+        return (
+          params.row.endDate &&
+          Math.floor(
+            (new Date(params.row.creator_dt) - new Date(params.row.endDate)) /
+              3600000
+          ) + "h"
+        );
+      },
+    },
     {
       field: "campaign_brief",
       headerName: "Campaign Brief",

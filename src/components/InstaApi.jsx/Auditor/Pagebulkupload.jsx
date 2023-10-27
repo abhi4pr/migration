@@ -79,7 +79,7 @@ export default function Pagebulkupload({ setUpload }) {
       // Make the POST request
       try {
         axios.post(
-          "http://34.93.135.33:8080/api/track_creator_posty",
+          "http://192.168.29.116:8080/api/track_creator_posty",
           {
             connector: "instagram",
             handle: bulklead[i].pagename,
@@ -114,7 +114,7 @@ export default function Pagebulkupload({ setUpload }) {
       // Make the POST request
       try {
         axios.put(
-          `http://34.93.135.33:8080/api/track_creator_puty/${bulklead[i].pagename}`,
+          `http://192.168.29.116:8080/api/track_creator_puty/${bulklead[i].pagename}`,
           {
             cron_expression: "0 2-20 * * *",
             tracking_expiry_at: "2023-12-12 12:12:12.12",

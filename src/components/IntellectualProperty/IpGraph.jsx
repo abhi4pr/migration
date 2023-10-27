@@ -11,7 +11,20 @@ import Chart from "chart.js/auto";
 import Select from "react-select";
 
 const setFollowersDataY = {
-  labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+  labels: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
   datasets: [
     {
       label: "# of Followers",
@@ -26,22 +39,22 @@ const setFollowersDataY = {
       backgroundColor: "rgb(23, 3, 252)",
       borderColor: "rgb(255, 165, 0)",
       borderWidth: 1,
-    }
+    },
   ],
 };
 
 const setStatsDataGraph = {
-  labels: ["followers","non-followers"],
+  labels: ["followers", "non-followers"],
   datasets: [
     {
       label: "#",
       data: [33, 66],
-      backgroundColor: ["red","blue"],
-      borderColor: ["red","blue"],
-      borderWidth: 1
-    }
-  ]
-}
+      backgroundColor: ["red", "blue"],
+      borderColor: ["red", "blue"],
+      borderWidth: 1,
+    },
+  ],
+};
 
 const IpGraph = () => {
   const { id } = useParams();
@@ -69,10 +82,10 @@ const IpGraph = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [ipAllocateUser, setIpAllocateUser] = useState("");
   const [ipAllocatePage, setIpAllocatePage] = useState([]);
-  const [userData, setUserData] = useState([])
-  const [statsData, setStatsData] = useState([])
-  const [statsMonth, setStatsMonth] = useState("")
-  const [statsYear, setStatsYear] = useState("")
+  const [userData, setUserData] = useState([]);
+  const [statsData, setStatsData] = useState([]);
+  const [statsMonth, setStatsMonth] = useState("");
+  const [statsYear, setStatsYear] = useState("");
 
   const followersChartY = async () => {
     setActiveButton("Year");
@@ -97,7 +110,20 @@ const IpGraph = () => {
     if (activeButton == "Year") {
       setFollowersDataY.datasets[0].borderColor = "red";
       setFollowersDataY.datasets[1].borderColor = "blue";
-      setFollowersDataY.labels = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      setFollowersDataY.labels = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
       setFollowersDataY.datasets[0].data = graph;
       setFollowersDataY.datasets[1].data = graph2;
     }
@@ -110,11 +136,15 @@ const IpGraph = () => {
       setFollowersDataY.datasets[1].data = graph2;
     }
 
-    if(activeButton == "Custom") {
+    if (activeButton == "Custom") {
       setFollowersDataY.datasets[0].borderColor = "red";
       setFollowersDataY.datasets[1].borderColor = "blue";
-      setFollowersDataY.labels = Object.keys(graph).sort((a, b) => a.localeCompare(b))
-      setFollowersDataY.datasets[0].data = Object.values(graph).sort((a,b) => a-b);
+      setFollowersDataY.labels = Object.keys(graph).sort((a, b) =>
+        a.localeCompare(b)
+      );
+      setFollowersDataY.datasets[0].data = Object.values(graph).sort(
+        (a, b) => a - b
+      );
       setFollowersDataY.datasets[1].data = graph2;
     }
 
@@ -152,9 +182,9 @@ const IpGraph = () => {
 
     axios
       .post(`http://44.211.225.140:8000/dataforgraph`, {
-        start_date: `${year}-${firstMonth}-${"01"}`, 
+        start_date: `${year}-${firstMonth}-${"01"}`,
         end_date: `${year}-${secondMonth}-${"30"}`,
-        ip_id: id
+        ip_id: id,
       })
       .then((res) => {
         const changedRes = res.data.followers;
@@ -168,9 +198,9 @@ const IpGraph = () => {
     followersChartY();
   }, []);
 
-  const saveStats = async(e) => {
+  const saveStats = async (e) => {
     e.preventDefault();
-    axios.post(`http://44.211.225.140:8000/ip_stats_post`,{
+    axios.post(`http://44.211.225.140:8000/ip_stats_post`, {
       ip_id: id,
       story_view: storyView,
       month_reach: monthReach,
@@ -184,77 +214,52 @@ const IpGraph = () => {
       non_followerss: nonFollowers,
       likes: likes,
       shares: share,
-      saves: save
-    })
+      saves: save,
+    });
     toastAlert("Form Submitted success");
     setIsFormSubmitted(true);
-  }
+  };
 
-  const saveIpPageResponsiblity = async(e) => {
+  const saveIpPageResponsiblity = async (e) => {
     e.preventDefault();
-    axios.put(`http://44.211.225.140:8000/ipregiupdatenew`,{
+    axios.put(`http://44.211.225.140:8000/ipregiupdatenew`, {
       id: id,
       user_id: ipAllocateUser,
-      user_response: ipAllocatePage?.map((option) => option.value).join()
-    })
+      user_response: ipAllocatePage?.map((option) => option.value).join(),
+    });
     followersChartY();
-  }
+  };
 
   useEffect(() => {
     axios
-      .get("http://44.211.225.140:8000/allusers")
+      .get("http://192.168.29.116:8080/api/get_all_users")
       .then((res) => setUserData(res.data.data));
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const date = new Date();
-    const currentMonth = date.toLocaleString('default',{month:'long'});
+    const currentMonth = date.toLocaleString("default", { month: "long" });
     const currentYear = date.getFullYear().toString();
 
     const payload = {
       ip_id: id,
       month: currentMonth,
-      year: currentYear
-    };
-  
-    axios.post("http://44.211.225.140:8000/show_stats",payload)
-    .then((res)=> {
-        setStatsData(res.data.data)
-
-        $("#donutChart").remove();
-        $(".uuuuu").append('<canvas id="donutChart"><canvas>');
-
-        setStatsDataGraph.datasets[0].backgroundColor = ["red","blue"];
-        setStatsDataGraph.datasets[0].borderColor = ["red","blue"];
-        setStatsDataGraph.labels = ["followers","non-followers"];
-        setStatsDataGraph.datasets[0].data = [res.data.data[0]?.followerss, res.data.data[0]?.non_followerss];
-
-        var ctx = document.getElementById("donutChart");
-        var myChart = new Chart(ctx, {
-          type: "doughnut",
-          data: setStatsDataGraph,
-        });
-    });
-  },[])
-
-  const showStatsConst = () => {
-    const payload = {
-      ip_id: id,
-      month: statsMonth,
-      year: statsYear
+      year: currentYear,
     };
 
-    axios.post("http://44.211.225.140:8000/show_stats",payload)
-    .then((res)=> {
-      setStatsData(res.data.data)
+    axios.post("http://44.211.225.140:8000/show_stats", payload).then((res) => {
+      setStatsData(res.data.data);
 
       $("#donutChart").remove();
       $(".uuuuu").append('<canvas id="donutChart"><canvas>');
 
-      setStatsDataGraph.datasets[0].backgroundColor = ["red","blue"];
-      setStatsDataGraph.datasets[0].borderColor = ["red","blue"];
-      setStatsDataGraph.labels = ["followers","non-followers"];
-      setStatsDataGraph.datasets[0].data = [res.data.data[0]?.followerss, res.data.data[0]?.non_followerss];
+      setStatsDataGraph.datasets[0].backgroundColor = ["red", "blue"];
+      setStatsDataGraph.datasets[0].borderColor = ["red", "blue"];
+      setStatsDataGraph.labels = ["followers", "non-followers"];
+      setStatsDataGraph.datasets[0].data = [
+        res.data.data[0]?.followerss,
+        res.data.data[0]?.non_followerss,
+      ];
 
       var ctx = document.getElementById("donutChart");
       var myChart = new Chart(ctx, {
@@ -262,7 +267,36 @@ const IpGraph = () => {
         data: setStatsDataGraph,
       });
     });
-  }
+  }, []);
+
+  const showStatsConst = () => {
+    const payload = {
+      ip_id: id,
+      month: statsMonth,
+      year: statsYear,
+    };
+
+    axios.post("http://44.211.225.140:8000/show_stats", payload).then((res) => {
+      setStatsData(res.data.data);
+
+      $("#donutChart").remove();
+      $(".uuuuu").append('<canvas id="donutChart"><canvas>');
+
+      setStatsDataGraph.datasets[0].backgroundColor = ["red", "blue"];
+      setStatsDataGraph.datasets[0].borderColor = ["red", "blue"];
+      setStatsDataGraph.labels = ["followers", "non-followers"];
+      setStatsDataGraph.datasets[0].data = [
+        res.data.data[0]?.followerss,
+        res.data.data[0]?.non_followerss,
+      ];
+
+      var ctx = document.getElementById("donutChart");
+      var myChart = new Chart(ctx, {
+        type: "doughnut",
+        data: setStatsDataGraph,
+      });
+    });
+  };
 
   const response_page = [
     { value: "Page Manager", label: "Page Manager" },
@@ -272,7 +306,7 @@ const IpGraph = () => {
     { value: "Comment Reply", label: "Comment Reply" },
     { value: "Captions", label: "Captions" },
     { value: "Scheduling", label: "Scheduling" },
-    { value: "Dm's", label: "Dm's" }
+    { value: "Dm's", label: "Dm's" },
   ];
 
   if (isFormSubmitted) {
@@ -285,270 +319,302 @@ const IpGraph = () => {
 
       <div className="modal fade" id="myModal" role="dialog">
         <div className="modal-dialog">
-        
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Choose Duration</h4>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
             </div>
             <div className="modal-body">
               <div className="row">
-              <FieldContainer
-                label="Year"
-                Tag="select"
-                fieldGrid={4}
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-              >
-                <option value="">Please Select</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
-                <option value="2031">2031</option>
-                <option value="2032">2032</option>
-                <option value="2033">2033</option>
-              </FieldContainer>
-              <FieldContainer
-                label="From Month"
-                Tag="select"
-                fieldGrid={4}
-                value={firstMonth}
-                onChange={(e) => setFirstMonth(e.target.value)}
-              >
-                <option value="">Please Select</option>
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </FieldContainer>
-              <FieldContainer
-                label="To Month"
-                Tag="select"
-                fieldGrid={4}
-                value={secondMonth}
-                onChange={(e) => setSecondMonth(e.target.value)}
-              >
-                <option value="">Please Select</option>
-                <option value="01">January</option>
-                <option value="02">February</option>
-                <option value="03">March</option>
-                <option value="04">April</option>
-                <option value="05">May</option>
-                <option value="06">June</option>
-                <option value="07">July</option>
-                <option value="08">August</option>
-                <option value="09">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </FieldContainer>
+                <FieldContainer
+                  label="Year"
+                  Tag="select"
+                  fieldGrid={4}
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                >
+                  <option value="">Please Select</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                  <option value="2031">2031</option>
+                  <option value="2032">2032</option>
+                  <option value="2033">2033</option>
+                </FieldContainer>
+                <FieldContainer
+                  label="From Month"
+                  Tag="select"
+                  fieldGrid={4}
+                  value={firstMonth}
+                  onChange={(e) => setFirstMonth(e.target.value)}
+                >
+                  <option value="">Please Select</option>
+                  <option value="01">January</option>
+                  <option value="02">February</option>
+                  <option value="03">March</option>
+                  <option value="04">April</option>
+                  <option value="05">May</option>
+                  <option value="06">June</option>
+                  <option value="07">July</option>
+                  <option value="08">August</option>
+                  <option value="09">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </FieldContainer>
+                <FieldContainer
+                  label="To Month"
+                  Tag="select"
+                  fieldGrid={4}
+                  value={secondMonth}
+                  onChange={(e) => setSecondMonth(e.target.value)}
+                >
+                  <option value="">Please Select</option>
+                  <option value="01">January</option>
+                  <option value="02">February</option>
+                  <option value="03">March</option>
+                  <option value="04">April</option>
+                  <option value="05">May</option>
+                  <option value="06">June</option>
+                  <option value="07">July</option>
+                  <option value="08">August</option>
+                  <option value="09">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </FieldContainer>
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" onClick={followersChartC} className="btn btn-success" data-dismiss="modal">Show Graph</button>
+              <button
+                type="button"
+                onClick={followersChartC}
+                className="btn btn-success"
+                data-dismiss="modal"
+              >
+                Show Graph
+              </button>
             </div>
           </div>
-          
         </div>
       </div>
 
       <div className="section section_padding sec_bg h100vh">
         <div className="container">
-
-        <div className="row" style={{marginBottom:"15px"}}>
-          <div className="col-sm-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Page Name</h5>
-                <p className="card-text">{ipDetail.ip_name}</p>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title">Page Manager</h5>
-                <p className="card-text">content.</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-6">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Followers</h5>
-                <p className="card-text">{ipDetail.followers}</p>
-              </div>
-              <div className="card-body">
-                <h5 className="card-title">PlatForm Name</h5>
-                <p className="card-text">Content</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <ul className="nav nav-pills nav-fill navtop" style={{marginBottom:"20px"}}>
-          <li className="nav-item">
-              <a className="nav-link active" href="#menu1" data-toggle="tab">Dashboard</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu2" data-toggle="tab">Stats (Page Health)</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu3" data-toggle="tab">Access Level</a>
-          </li>
-          <li className="nav-item">
-              <a className="nav-link" href="#menu4" data-toggle="tab">Security & Recovery</a>
-          </li>
-          <li className="nav-item">
-            <Link to={`/ip-history/${id}`}>
-              <button
-                type="button"
-                className="btn btn-default"
-                style={{ color:"#0d6efd" }}
-              >
-                History
-              </button>
-            </Link>
-          </li>
-        </ul>
-
-        <div id="myModal1" className="modal fade" role="dialog">
-          <div className="modal-dialog" style={{marginLeft:"25%"}}>
-            <div className="modal-content" style={{width:"150%"}}>
-              <div className="modal-header">
-                <h4 className="modal-title">Stats for this page</h4>
-                <button type="button" className="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                <FieldContainer
-                  label="Story Views"
-                  type="number"
-                  value={storyView}
-                  fieldGrid={4}
-                  required={true}
-                  onChange={(e) => setStoryView(e.target.value)}
-                />
-                <FieldContainer
-                  label="Monthly Reach"
-                  type="number"
-                  required={true}
-                  fieldGrid={4}
-                  value={monthReach}
-                  onChange={(e) => setMonthlyReach(e.target.value)}
-                />
-                <FieldContainer
-                  label="Impressions"
-                  type="number"
-                  value={impression}
-                  fieldGrid={4}
-                  onChange={(e) => setImpression(e.target.value)}
-                />
-                <FieldContainer
-                  label="Profile Visits"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={profileVisit}
-                  onChange={(e) => setProfileVisit(e.target.value)}
-                />
-                <FieldContainer
-                  label="Gender"
-                  required={false}
-                  fieldGrid={4}
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                />
-                <FieldContainer
-                  label="External Link Tap"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={linkTap}
-                  onChange={(e) => setLinkTap(e.target.value)}
-                />
-                <FieldContainer
-                  label="Email Tap"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={emailTap}
-                  onChange={(e) => setEmailTap(e.target.value)}
-                />
-                <FieldContainer
-                  label="Content Shared"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={contentShare}
-                  onChange={(e) => setContentShare(e.target.value)}
-                />
-                <FieldContainer
-                  label="Followers"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={followerss}
-                  onChange={(e) => setFollowerss(e.target.value)}
-                />
-                <FieldContainer
-                  label="Non Followers"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={nonFollowers}
-                  onChange={(e) => setNonFollowers(e.target.value)}
-                />
-                <FieldContainer
-                  label="Likes"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={likes}
-                  onChange={(e) => setLikes(e.target.value)}
-                />
-                <FieldContainer
-                  label="Shares"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={share}
-                  onChange={(e) => setShare(e.target.value)}
-                />
-                <FieldContainer
-                  label="Saves"
-                  type="number"
-                  required={false}
-                  fieldGrid={4}
-                  value={save}
-                  onChange={(e) => setSave(e.target.value)}
-                />
+          <div className="row" style={{ marginBottom: "15px" }}>
+            <div className="col-sm-6">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Page Name</h5>
+                  <p className="card-text">{ipDetail.ip_name}</p>
+                </div>
+                <div className="card-body">
+                  <h5 className="card-title">Page Manager</h5>
+                  <p className="card-text">content.</p>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" className="btn btn-success" onClick={saveStats} data-dismiss="modal">Save</button>
+            </div>
+            <div className="col-sm-6">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Followers</h5>
+                  <p className="card-text">{ipDetail.followers}</p>
+                </div>
+                <div className="card-body">
+                  <h5 className="card-title">PlatForm Name</h5>
+                  <p className="card-text">Content</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <ul
+            className="nav nav-pills nav-fill navtop"
+            style={{ marginBottom: "20px" }}
+          >
+            <li className="nav-item">
+              <a className="nav-link active" href="#menu1" data-toggle="tab">
+                Dashboard
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#menu2" data-toggle="tab">
+                Stats (Page Health)
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#menu3" data-toggle="tab">
+                Access Level
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#menu4" data-toggle="tab">
+                Security & Recovery
+              </a>
+            </li>
+            <li className="nav-item">
+              <Link to={`/ip-history/${id}`}>
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  style={{ color: "#0d6efd" }}
+                >
+                  History
+                </button>
+              </Link>
+            </li>
+          </ul>
+
+          <div id="myModal1" className="modal fade" role="dialog">
+            <div className="modal-dialog" style={{ marginLeft: "25%" }}>
+              <div className="modal-content" style={{ width: "150%" }}>
+                <div className="modal-header">
+                  <h4 className="modal-title">Stats for this page</h4>
+                  <button type="button" className="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <div className="row">
+                    <FieldContainer
+                      label="Story Views"
+                      type="number"
+                      value={storyView}
+                      fieldGrid={4}
+                      required={true}
+                      onChange={(e) => setStoryView(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Monthly Reach"
+                      type="number"
+                      required={true}
+                      fieldGrid={4}
+                      value={monthReach}
+                      onChange={(e) => setMonthlyReach(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Impressions"
+                      type="number"
+                      value={impression}
+                      fieldGrid={4}
+                      onChange={(e) => setImpression(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Profile Visits"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={profileVisit}
+                      onChange={(e) => setProfileVisit(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Gender"
+                      required={false}
+                      fieldGrid={4}
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="External Link Tap"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={linkTap}
+                      onChange={(e) => setLinkTap(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Email Tap"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={emailTap}
+                      onChange={(e) => setEmailTap(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Content Shared"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={contentShare}
+                      onChange={(e) => setContentShare(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Followers"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={followerss}
+                      onChange={(e) => setFollowerss(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Non Followers"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={nonFollowers}
+                      onChange={(e) => setNonFollowers(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Likes"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={likes}
+                      onChange={(e) => setLikes(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Shares"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={share}
+                      onChange={(e) => setShare(e.target.value)}
+                    />
+                    <FieldContainer
+                      label="Saves"
+                      type="number"
+                      required={false}
+                      fieldGrid={4}
+                      value={save}
+                      onChange={(e) => setSave(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={saveStats}
+                    data-dismiss="modal"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="tab-content">
-            <div className="tab-pane active" role="tabpanel" id="menu1"> 
+            <div className="tab-pane active" role="tabpanel" id="menu1">
               <h4>How Many Unique People Allocated ?</h4>
-              <br/>
+              <br />
               <div className="row">
                 <FieldContainer
                   label="Year"
@@ -594,11 +660,17 @@ const IpGraph = () => {
                   <option value="November">November</option>
                   <option value="December">December</option>
                 </FieldContainer>
-                <div className="col-md-3" style={{marginTop:"2%"}}>
-                  <button type="button" className="btn btn-primary" onClick={showStatsConst}>Show Stats</button>
+                <div className="col-md-3" style={{ marginTop: "2%" }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={showStatsConst}
+                  >
+                    Show Stats
+                  </button>
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="row">
                 <div className="col-md-5">
                   <h5>Story View - {statsData[0]?.story_view}</h5>
@@ -615,70 +687,78 @@ const IpGraph = () => {
                   <h5>Non-Followers - {statsData[0]?.non_followerss}</h5>
                 </div>
 
-                <div className="uuuuu col-md-7" style={{height:"300px"}}>
+                <div className="uuuuu col-md-7" style={{ height: "300px" }}>
                   <canvas id="donutChart" width="400" height="300"></canvas>
                 </div>
               </div>
             </div>
-            
+
             <div className="tab-pane" role="tabpanel" id="menu2">
-            <div className="card mb-4">
-              <div className="card-body pb0 pb4">
-                <div className="row thm_form">
-                  <div className="col-md-6">
-                    <div className="btn-group">
+              <div className="card mb-4">
+                <div className="card-body pb0 pb4">
+                  <div className="row thm_form">
+                    <div className="col-md-6">
+                      <div className="btn-group">
+                        <button
+                          onClick={followersChartM}
+                          type="button"
+                          className="btn btn-outline-primary"
+                        >
+                          Current Month
+                        </button>
+                        <button
+                          onClick={followersChartY}
+                          type="button"
+                          className="btn btn-outline-primary"
+                        >
+                          Current Year
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-outline-primary"
+                          data-toggle="modal"
+                          data-target="#myModal"
+                        >
+                          Custom Date
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ float: "right", marginTop: "-30px" }}>
                     <button
-                      onClick={followersChartM}
                       type="button"
-                      className="btn btn-outline-primary"
+                      className="btn btn-primary"
+                      data-toggle="modal"
+                      data-target="#myModal1"
                     >
-                      Current Month
-                    </button>
-                    <button
-                      onClick={followersChartY}
-                      type="button"
-                      className="btn btn-outline-primary"
-                    >
-                      Current Year
-                    </button>
-                    <button 
-                      type="button"
-                      className="btn btn-outline-primary"
-                      data-toggle="modal" data-target="#myModal"
-                    >
-                      Custom Date
+                      Save Stats
                     </button>
                   </div>
-                  </div>
-                </div>
-                <div style={{float:"right",marginTop:"-30px"}}>
-                  <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#myModal1">Save Stats</button>
                 </div>
               </div>
-            </div>
 
-            <div className="row ttttt">
-              <canvas id="myChart" width="400" height="300"></canvas>
-            </div>
+              <div className="row ttttt">
+                <canvas id="myChart" width="400" height="300"></canvas>
+              </div>
             </div>
             <div className="tab-pane" role="tabpanel" id="menu3">
-                <div className="row">
-                  <form onSubmit={saveIpPageResponsiblity}>
+              <div className="row">
+                <form onSubmit={saveIpPageResponsiblity}>
                   <FieldContainer
-                      label="User"
-                      Tag="select"
-                      fieldGrid={3}
-                      value={ipAllocateUser}
-                      onChange={(e) => {
-                        setIpAllocateUser(e.target.value);
-                      }}
-                    >
-                      <option value=""> Please Select </option>
-                      {userData.map((data) => (
-                        <option key={data.user_id} value={data.user_id}>
-                          {data.user_name}
-                        </option>
-                      ))}
+                    label="User"
+                    Tag="select"
+                    fieldGrid={3}
+                    value={ipAllocateUser}
+                    onChange={(e) => {
+                      setIpAllocateUser(e.target.value);
+                    }}
+                  >
+                    <option value=""> Please Select </option>
+                    {userData.map((data) => (
+                      <option key={data.user_id} value={data.user_id}>
+                        {data.user_name}
+                      </option>
+                    ))}
                   </FieldContainer>
                   <div className="form-group col-3">
                     <label className="form-label">
@@ -691,29 +771,31 @@ const IpGraph = () => {
                       className="basic-multi-select"
                       classNamePrefix="select"
                       value={ipAllocatePage}
-                      onChange={
-                        setIpAllocatePage}
+                      onChange={setIpAllocatePage}
                     />
                   </div>
-                  <button type="submit" className="btn btn-success">Save</button>
-                  </form>
-                </div>
-                
-                <h5>User - {ipDetail.user_name}</h5>
-                <h5>User Responsiblities- {ipDetail.user_response}</h5>
-                <br/>
-                <h5>Allocated to primary - {ipDetail.allocated_to_primary_name}</h5>
-                <h5>Report L1 - {ipDetail.report_L1_user_name}</h5>
-                <h5>Report L2 - {ipDetail.report_L2_user_name}</h5>
-                <h5>Report L3 - {ipDetail.report_L3_user_name}</h5>
+                  <button type="submit" className="btn btn-success">
+                    Save
+                  </button>
+                </form>
+              </div>
+
+              <h5>User - {ipDetail.user_name}</h5>
+              <h5>User Responsiblities- {ipDetail.user_response}</h5>
+              <br />
+              <h5>
+                Allocated to primary - {ipDetail.allocated_to_primary_name}
+              </h5>
+              <h5>Report L1 - {ipDetail.report_L1_user_name}</h5>
+              <h5>Report L2 - {ipDetail.report_L2_user_name}</h5>
+              <h5>Report L3 - {ipDetail.report_L3_user_name}</h5>
             </div>
             <div className="tab-pane" role="tabpanel" id="menu4">
               <h4>Recoverty Email- {ipDetail.recovery_email}</h4>
               <h4>Recoverty Contact- {ipDetail.recovery_contact}</h4>
               <h4>Password- {ipDetail.password}</h4>
             </div>
-        </div>
-
+          </div>
         </div>
       </div>
     </>

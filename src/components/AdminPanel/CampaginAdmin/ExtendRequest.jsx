@@ -18,7 +18,7 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { set } from "date-fns";
 
-export default function ExtendRequest({ReloadMain}) {
+export default function ExtendRequest({ ReloadMain }) {
   const [showDateError, setShowDateError] = useState(false);
   const [reload, setReload] = useState(false);
   const [showData, setShowData] = useState([]);
@@ -65,14 +65,14 @@ export default function ExtendRequest({ReloadMain}) {
 
   const handleReassing = () => {
     if (selectedDate) {
-      setShowDateError(false)
+      setShowDateError(false);
       console.log(reAssignModalData.register_campaign_id);
       axios
-        .put("http://34.93.135.33:8080/api/contentSectionReg", {
+        .put("http://192.168.29.116:8080/api/contentSectionReg", {
           content_section_id: reAssignModalData.content_section_id,
           creator_dt: selectedDate,
           stage: 3,
-          status: '21'
+          status: "21",
         })
         .then((response) => {
           console.log(response);
@@ -88,17 +88,14 @@ export default function ExtendRequest({ReloadMain}) {
         });
     } else {
       console.error("selectedDate is null");
-      setShowDateError(true)
+      setShowDateError(true);
       // Handle the case where selectedDate is null, e.g., show an error message or take appropriate action
     }
   };
-  
-
-
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -109,7 +106,7 @@ export default function ExtendRequest({ReloadMain}) {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -118,7 +115,7 @@ export default function ExtendRequest({ReloadMain}) {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
     axios.get("http://44.211.225.140:8000/campaign").then((response) => {
@@ -126,11 +123,13 @@ export default function ExtendRequest({ReloadMain}) {
 
       setCommits(data);
     });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
   const columns = [
@@ -367,13 +366,15 @@ export default function ExtendRequest({ReloadMain}) {
             component="h2"
             sx={{ padding: "2px" }}
           >
-            Set Date & Time 
-            <div style={{height:"20px"}}>
-             {showDateError&& <p className="text-danger">selectedDate is null</p>}
+            Set Date & Time
+            <div style={{ height: "20px" }}>
+              {showDateError && (
+                <p className="text-danger">selectedDate is null</p>
+              )}
             </div>
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <FormControl className="d-flex"> 
+            <FormControl className="d-flex">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label="Date Time"
@@ -383,9 +384,7 @@ export default function ExtendRequest({ReloadMain}) {
               </LocalizationProvider>
             </FormControl>
 
-            <div
-              className="d-flex justify-content-between"
-            >
+            <div className="d-flex justify-content-between">
               <Button
                 sx={{ marginTop: "10px" }}
                 variant="contained"

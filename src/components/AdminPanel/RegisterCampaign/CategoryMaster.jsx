@@ -30,8 +30,8 @@ export default function CategoryMaster() {
   const [filteredRows, setFilteredRows] = useState([]);
   const [isPutOpen, setIsPutOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
-  useState(false);
-const [itemToDeleteId, setItemToDeleteId] = useState(null);
+    useState(false);
+  const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [postData, setPostData] = useState({
     category_name: "",
     // brand_id: "",
@@ -65,27 +65,29 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   };
 
   const handleSave = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/projectxCategory", postData)
+      .post("http://192.168.29.116:8080/api/projectxCategory", postData)
       .then((response) => {
         setIsModalOpen(false);
-        getData()
+        getData();
         console.log("Data saved:", response.data);
       })
       .catch((error) => {
         console.error("Error saving data:", error);
       });
-     setIsModalOpen(false);
-     setPostData("")
+    setIsModalOpen(false);
+    setPostData("");
   };
 
   // get api ========>
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/projectxCategory").then((res) => {
       console.log(res.data.data);
-      const sortedData = res.data.data.sort((a, b) => b.category_id - a.category_id)
-      setRows(sortedData)
+      const sortedData = res.data.data.sort(
+        (a, b) => b.category_id - a.category_id
+      );
+      setRows(sortedData);
     });
   };
   useEffect(() => {
@@ -100,36 +102,34 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   // put api =============>
   const handlePutData = () => {
     axios
-    .put(`http://34.93.135.33:8080/api/projectxCategory`, {
-      id: editData.category_id,
-      category_name: editData.category_name,
-      // brand_id: editData.brand_id,
-    })
-    .then((res) => {
-      console.log(res.data);
-      setIsPutOpen(true);
-    }).then(() => {
-      setIsPutOpen(false);
-      getData()
-    })
-  console.log("put data");
-  }
-  const handleEditClick = (id,row) => () => {
-    console.log(row)
+      .put(`http://192.168.29.116:8080/api/projectxCategory`, {
+        id: editData.category_id,
+        category_name: editData.category_name,
+        // brand_id: editData.brand_id,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setIsPutOpen(true);
+      })
+      .then(() => {
+        setIsPutOpen(false);
+        getData();
+      });
+    console.log("put data");
+  };
+  const handleEditClick = (id, row) => () => {
+    console.log(row);
     setEditData(row);
     setIsPutOpen(true);
   };
-  
- // delete ======>
+
+  // delete ======>
   // const handleDeleteClick = (id) => () => {
-  //   axios.delete(`http://34.93.135.33:8080/api/projectxCategory/${id}`).then((res) => {
+  //   axios.delete(`http://192.168.29.116:8080/api/projectxCategory/${id}`).then((res) => {
   //     getData();
   //     console.log("re data ", res.data);
   //   });
   // };
-
-
-
 
   const handleDeleteClick = (id) => () => {
     setItemToDeleteId(id);
@@ -139,7 +139,9 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/projectxCategory/${itemToDeleteId}`)
+        .delete(
+          `http://192.168.29.116:8080/api/projectxCategory/${itemToDeleteId}`
+        )
         .then(() => {
           getData();
           console.log("Data deleted successfully");
@@ -154,8 +156,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
     }
   };
 
-
-
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
@@ -164,7 +164,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
-  }
+  };
 
   const columns = [
     {
@@ -197,7 +197,7 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
-            onClick={handleEditClick(id,row)}
+            onClick={handleEditClick(id, row)}
             color="inherit"
           />,
           // eslint-disable-next-line react/jsx-key
@@ -240,20 +240,20 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         variant="outlined"
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
-        style={{ marginBottom: "10px"  }}
+        style={{ marginBottom: "10px" }}
       />
 
       <Box
-        // sx={{
-        //   height: 500,
-        //   width: "100%",
-        //   "& .actions": {
-        //     color: "text.secondary",
-        //   },
-        //   "& .textPrimary": {
-        //     color: "text.primary",
-        //   },
-        // }}
+      // sx={{
+      //   height: 500,
+      //   width: "100%",
+      //   "& .actions": {
+      //     color: "text.secondary",
+      //   },
+      //   "& .textPrimary": {
+      //     color: "text.primary",
+      //   },
+      // }}
       >
         <DataGrid
           rows={filteredRows}
@@ -303,7 +303,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                 value={postData.brand_id}
                 onChange={handleChange}
               /> */}
-             
             </div>
           </Box>
         </DialogContent>
@@ -317,8 +316,8 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
         </DialogActions>
       </Dialog>
 
-       {/* perform put data */}
-       <Dialog open={isPutOpen} onClose={() => setIsPutOpen(false)}>
+      {/* perform put data */}
+      <Dialog open={isPutOpen} onClose={() => setIsPutOpen(false)}>
         <DialogTitle>Edit Record</DialogTitle>
         <DialogContent>
           <Box
@@ -357,7 +356,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
                   }))
                 }
               /> */}
-                   
             </div>
           </Box>
         </DialogContent>
@@ -370,7 +368,6 @@ const [itemToDeleteId, setItemToDeleteId] = useState(null);
           </Button>
         </DialogActions>
       </Dialog>
-
 
       <Dialog
         open={isDeleteConfirmationOpen}

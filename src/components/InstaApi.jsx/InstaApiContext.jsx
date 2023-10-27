@@ -14,7 +14,9 @@ function InstaApiContext({ children }) {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    const firstApiRequest = axios.get("http://44.211.225.140:8000/allusers");
+    const firstApiRequest = axios.get(
+      "http://192.168.29.116:8080/api/get_all_users"
+    );
     const secondApiRequest = axios.get(
       `http://44.211.225.140:8000/userauth/${userID}`
     );
@@ -53,7 +55,7 @@ function InstaApiContext({ children }) {
           step = 2;
         }
         // After the first two requests are completed, make the third API request
-        return axios.post("http://34.93.135.33:8080/api/creator_name_count", {
+        return axios.post("http://192.168.29.116:8080/api/creator_name_count", {
           sortOrder: step,
         });
       })

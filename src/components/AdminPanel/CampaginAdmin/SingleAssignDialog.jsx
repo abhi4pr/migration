@@ -42,7 +42,7 @@ export default function SingleAssignDialog(props) {
 
   const handleAssign = () => {
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("http://192.168.29.116:8080/api/contentSectionReg", {
         content_section_id: modalNotEditable.content_section_id,
         assign_to: setAssignTo.current,
         creator_dt: selectedDate,
@@ -54,11 +54,11 @@ export default function SingleAssignDialog(props) {
         console.log(response);
         if (response.data.success) {
           handleClose();
-          setReload(prev=>!prev);
+          setReload((prev) => !prev);
           setAssignTo.current = "";
           setSelectedDate(null);
           setRemarkValue("");
-          setAssignTo.current="";
+          setAssignTo.current = "";
         }
       });
     setOpen(false);

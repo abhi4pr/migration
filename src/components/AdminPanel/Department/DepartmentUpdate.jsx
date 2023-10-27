@@ -23,7 +23,7 @@ const DepartmentUpdate = () => {
     setError("");
 
     axios
-      .put(`http://34.93.135.33:8080/api/update_department`, {
+      .put(`http://192.168.29.116:8080/api/update_department`, {
         dept_id: id,
         dept_name: departmentName,
         remark: remark,

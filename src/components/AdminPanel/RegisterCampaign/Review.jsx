@@ -6,12 +6,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button, TextareaAutosize } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-   
-  Modal,
-  
-  Typography,
-} from "@mui/material";
+import { Modal, Typography } from "@mui/material";
 import { SnippetFolderTwoTone } from "@mui/icons-material";
 
 function CustomTabPanel(props) {
@@ -57,41 +52,43 @@ export default function Review() {
   const [enhancement, setEnhancement] = useState([]);
 
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/contentSectionReg").then((res) => {
-      const data = res.data.data.filter(
-        (e) => e.status == "22" && e.stage == 3
-      );
-      const verified = res.data.data.filter(
-        (e) => e.status == "23" && e.stage == 4
-      );
-      const rejct = res.data.data.filter(
-        (e) => e.status == "24" && e.stage == 3
-      );
-      const enhance = res.data.data.filter(
-        (e) => e.status == "25" && e.stage == 3
-      );
-      setRows(data);
-      setVerifid(verified);
-      setReject(rejct);
-      setEnhancement(enhance);
+    axios
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
+      .then((res) => {
+        const data = res.data.data.filter(
+          (e) => e.status == "22" && e.stage == 3
+        );
+        const verified = res.data.data.filter(
+          (e) => e.status == "23" && e.stage == 4
+        );
+        const rejct = res.data.data.filter(
+          (e) => e.status == "24" && e.stage == 3
+        );
+        const enhance = res.data.data.filter(
+          (e) => e.status == "25" && e.stage == 3
+        );
+        setRows(data);
+        setVerifid(verified);
+        setReject(rejct);
+        setEnhancement(enhance);
 
-      console.log(data, "this is by contentSectionReg");
-    });
+        console.log(data, "this is by contentSectionReg");
+      });
   };
 
   const handleTextChange = (event) => {
-    setText(event.target.value); 
+    setText(event.target.value);
   };
-  
+
   function getContentType() {
-    axios.get("http://34.93.135.33:8080/api/content").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((res) => {
       const data = res.data.data;
       setContent(data);
       console.log(data, "this is by content");
     });
   }
   const getBrand = () => {
-    axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_brands").then((res) => {
       const data = res.data.data;
       setBrandName(data);
       console.log(data, "this is by saimyual");
@@ -169,7 +166,7 @@ export default function Review() {
             target="_blank"
             rel="noreferrer"
           >
-            <SnippetFolderTwoTone color="primary"/>
+            <SnippetFolderTwoTone color="primary" />
           </a>
         );
       },
@@ -184,7 +181,6 @@ export default function Review() {
           .replace(/(\d+)\/(\d+)\/(\d+), (\d+:\d+).*/, "$1/$2/$3 $4");
       },
     },
-
   ];
 
   const verifidColumns = [
@@ -260,7 +256,7 @@ export default function Review() {
             target="_blank"
             rel="noreferrer"
           >
-            <SnippetFolderTwoTone  color="primary"/>
+            <SnippetFolderTwoTone color="primary" />
           </a>
         );
       },
@@ -339,22 +335,22 @@ export default function Review() {
             target="_blank"
             rel="noreferrer"
           >
-            <SnippetFolderTwoTone color="primary"/>
+            <SnippetFolderTwoTone color="primary" />
           </a>
         );
       },
     },
   ];
-  const handleAccept = (params) =>{
+  const handleAccept = (params) => {
     console.log(params.row);
     setContentSectionId(params.row.content_section_id);
 
-    setOpen2(true)
-  }
-  const handleBackSubmit = (e) =>{
-    e.preventDefault()
+    setOpen2(true);
+  };
+  const handleBackSubmit = (e) => {
+    e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("http://192.168.29.116:8080/api/contentSectionReg", {
         content_section_id: contentSectionId,
         creator_remark: text,
         // stage: 3,
@@ -370,8 +366,8 @@ export default function Review() {
         }
       });
 
-    setOpen2(false)
-  }
+    setOpen2(false);
+  };
   const enhancementColumns = [
     {
       field: "S.NO",
@@ -444,7 +440,7 @@ export default function Review() {
             target="_blank"
             rel="noreferrer"
           >
-            <SnippetFolderTwoTone color="primary"/>
+            <SnippetFolderTwoTone color="primary" />
           </a>
         );
       },
@@ -456,15 +452,14 @@ export default function Review() {
       renderCell: (params) => {
         return (
           <Box display="flex" justifyContent="space-between">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleAccept(params)}
-                sx={{ fontSize: "20px", marginRight: "8px" }}
-              >
-               Submission
-              </Button>
-           
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleAccept(params)}
+              sx={{ fontSize: "20px", marginRight: "8px" }}
+            >
+              Submission
+            </Button>
           </Box>
         );
       },
@@ -485,55 +480,56 @@ export default function Review() {
 
   const handleClose = () => setOpen2(false);
 
-  return (<>
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Pending" {...a11yProps(0)} />
-          <Tab label="Verified" {...a11yProps(1)} />
-          <Tab label="Rejected" {...a11yProps(2)} />
-          <Tab label="Enhancement" {...a11yProps(3)} />
-        </Tabs>
+  return (
+    <>
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Pending" {...a11yProps(0)} />
+            <Tab label="Verified" {...a11yProps(1)} />
+            <Tab label="Rejected" {...a11yProps(2)} />
+            <Tab label="Enhancement" {...a11yProps(3)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <DataGrid
+            rows={rows}
+            columns={tab1Columns}
+            pageSize={5}
+            getRowId={(row) => row.content_section_id}
+          />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <DataGrid
+            rows={verifid}
+            columns={verifidColumns}
+            pageSize={5}
+            getRowId={(row) => row.content_section_id}
+          />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <DataGrid
+            rows={reject}
+            columns={rejectColumns}
+            pageSize={5}
+            getRowId={(row) => row.content_section_id}
+          />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
+          <DataGrid
+            rows={enhancement}
+            columns={enhancementColumns}
+            pageSize={5}
+            getRowId={(row) => row.content_section_id}
+          />
+        </CustomTabPanel>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        <DataGrid
-          rows={rows}
-          columns={tab1Columns}
-          pageSize={5}
-          getRowId={(row) => row.content_section_id}
-        />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <DataGrid
-          rows={verifid}
-          columns={verifidColumns}
-          pageSize={5}
-          getRowId={(row) => row.content_section_id}
-        />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <DataGrid
-          rows={reject}
-          columns={rejectColumns}
-          pageSize={5}
-          getRowId={(row) => row.content_section_id}
-        />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={3}>
-        <DataGrid
-          rows={enhancement}
-          columns={enhancementColumns}
-          pageSize={5}
-          getRowId={(row) => row.content_section_id}
-        />
-      </CustomTabPanel>
-    </Box>
 
-    <Modal
+      <Modal
         open={open2}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -546,7 +542,7 @@ export default function Review() {
             component="h2"
             sx={{ padding: "2px" }}
           >
-            submit to admin 
+            submit to admin
           </Typography>
           {/* <Typography>Date & time : {extendDeliveryDate}</Typography> */}
           <TextareaAutosize
@@ -570,7 +566,6 @@ export default function Review() {
           </Button>
         </Box>
       </Modal>
-      
     </>
   );
 }

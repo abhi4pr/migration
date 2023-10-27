@@ -27,7 +27,9 @@ function LeadApp({ children }) {
         const leadres = await axios.get(
           "http://44.211.225.140:8000/allleadmastdata"
         );
-        const userres = await axios.get("http://44.211.225.140:8000/allusers");
+        const userres = await axios.get(
+          "http://192.168.29.116:8080/api/get_all_users"
+        );
         ftrse = [];
         leadres.data.map((ele) => {
           if (ele.assign_to == 0) {

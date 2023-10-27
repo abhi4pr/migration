@@ -183,36 +183,38 @@ const UserMaster = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
+        .get(
+          `http://192.168.29.116:8080/api/get_subdept_from_dept/${department}`
+        )
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
+      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
       .then((res) => {
         getRefrenceData(res.data.data);
       });
 
-    axios.get("http://44.211.225.140:8000/allusers").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
       const userSitting = res.data.data.map((user) => user.sitting_id);
       setAllUsersSittings(userSitting);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .get("http://192.168.29.116:8080/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -290,7 +292,7 @@ const UserMaster = () => {
           alert("this login ID already exists");
         } else {
           await axios.post(
-            "http://34.93.135.33:8080/api/add_user",
+            "http://192.168.29.116:8080/api/add_user",
             formData,
             {
               headers: {
@@ -715,7 +717,7 @@ const UserMaster = () => {
           value={{
             value: roles,
             label:
-              roledata.find((role) => role.Role_id === roles)?.Role_name || "",
+              roledata.find((role) => role.role_id === roles)?.Role_name || "",
           }}
           onChange={(e) => {
             setRoles(e.value);

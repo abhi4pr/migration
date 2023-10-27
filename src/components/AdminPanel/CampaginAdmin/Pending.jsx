@@ -76,7 +76,7 @@ export default function Pending() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
       .then((response) => {
         // const data = response.data.data.filter(
         //   (e) => e.status == "1" && e.stage == "1"
@@ -105,7 +105,7 @@ export default function Pending() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
       })
@@ -113,53 +113,54 @@ export default function Pending() {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_commitments")
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
 
         setCommits(data);
       });
-    axios.get("http://44.211.225.140:8000/allusers").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      setAssignToList(data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        setAssignToList(data);
+      });
   }, []);
 
   useEffect(() => {
     axios
-    .get("http://34.93.135.33:8080/api/contentSectionReg")
-    .then((response) => {
-      setShowBundelData(false)
-      // const data = response.data.data.filter(
-      //   (e) => e.status == "1" && e.stage == "1"
-      // );
-      // const arr = [];
-      // console.log(data, "data");
-      // const brandIdList = new Set(data.map((e) => e.brand_id));
-      // arr.push(...brandIdList);
-      // setBrandIdList(arr);
-      // setShowTable1Data(data);
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
+      .then((response) => {
+        setShowBundelData(false);
+        // const data = response.data.data.filter(
+        //   (e) => e.status == "1" && e.stage == "1"
+        // );
+        // const arr = [];
+        // console.log(data, "data");
+        // const brandIdList = new Set(data.map((e) => e.brand_id));
+        // arr.push(...brandIdList);
+        // setBrandIdList(arr);
+        // setShowTable1Data(data);
 
-      const data = response.data.data.filter(
-        (e) => e.status == "1" && e.stage == "1"
-      );
-      const arr = [];
-      console.log(data, "data");
-      const brandIdList = new Set(response.data.data.map((e) => e.brand_id));
-      console.log(
-        response.data.data.map((e) => e.brand_id == brandIdList.brand_id)
-          .length,
-        "brandIdList"
-      );
-      arr.push(...brandIdList);
-      setBrandIdList(arr);
-      setShowTable1Data(response.data.data);
-    });
-
+        const data = response.data.data.filter(
+          (e) => e.status == "1" && e.stage == "1"
+        );
+        const arr = [];
+        console.log(data, "data");
+        const brandIdList = new Set(response.data.data.map((e) => e.brand_id));
+        console.log(
+          response.data.data.map((e) => e.brand_id == brandIdList.brand_id)
+            .length,
+          "brandIdList"
+        );
+        arr.push(...brandIdList);
+        setBrandIdList(arr);
+        setShowTable1Data(response.data.data);
+      });
   }, [reload]);
 
   const handleDateChange = (date) => {
@@ -314,13 +315,7 @@ export default function Pending() {
       headerName: "Content Remark",
       width: 150,
       renderCell: (params) => {
-        return (
-          params.row.content_brief && (
-            <p>
-              {params.row.content_brief}
-            </p>
-          )
-        );
+        return params.row.content_brief && <p>{params.row.content_brief}</p>;
       },
     },
     {
@@ -330,9 +325,9 @@ export default function Pending() {
       renderCell: (params) => {
         return (
           <div>
-          <Button onClick={() => handleOpen2(params)} variant="text">
-            <ModeCommentTwoToneIcon />
-          </Button>
+            <Button onClick={() => handleOpen2(params)} variant="text">
+              <ModeCommentTwoToneIcon />
+            </Button>
           </div>
         );
       },
