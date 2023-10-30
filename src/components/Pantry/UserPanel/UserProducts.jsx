@@ -29,7 +29,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   const [oldUserProduct, setOldUserProduct] = useState([]);
 
   useEffect(() => {
-    axios.get("http://192.168.29.116:8080/api/get_all_products").then((res) => {
+    axios.get("http://192.168.29.6:8080/api/get_all_products").then((res) => {
       setProducts(res.data);
     });
     axios.get("http://192.168.29.116:8080/api/get_all_rooms").then((res) => {
@@ -41,7 +41,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   useEffect(() => {
     axios
       .get(
-        `http://192.168.29.116:8080/api/get_single_orderreqshistory//${userId}`
+        `http://192.168.29.6:8080/api/get_single_orderreqshistory/${userId}`
       )
       .then((res) => {
         setOldUserProduct(res.data);

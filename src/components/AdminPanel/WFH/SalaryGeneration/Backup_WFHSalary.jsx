@@ -86,7 +86,7 @@ const Backup_WFHSalary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://44.211.225.140:8000/allwfhusers");
+        const res = await axios.get("http://192.168.29.6:8080/api/get_all_wfh_users");
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
         if (filteredUser?.length > 0) {
@@ -139,7 +139,7 @@ const Backup_WFHSalary = () => {
       year: year,
     };
     axios
-      .post("http://44.211.225.140:8000/salaryfromattendence", payload)
+      .post("http://192.168.29.6:8080/api/get_salary_by_id_month_year", payload)
       .then((res) => {
         setFilterData(res.data.data);
       })

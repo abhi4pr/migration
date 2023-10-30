@@ -49,7 +49,7 @@ const ProductUpdate = () => {
 
     // formData.append("Opening_stock_date", openingStockDate);
 
-    axios.put("http://192.168.29.116:8080/api/update_productupdate", formData, {
+    axios.put("http://192.168.29.6:8080/api/update_productupdate", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -64,7 +64,7 @@ const ProductUpdate = () => {
       };
 
       try {
-        axios.post(`http://44.211.225.140:8000/proppost`, payload, {
+        axios.post(`http:////192.168.29.6:8080/api/add_proppost`, payload, {
           headers: {
             "Content-Type": "application/json",
           },

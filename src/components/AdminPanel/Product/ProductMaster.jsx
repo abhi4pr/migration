@@ -44,7 +44,7 @@ const ProductMaster = () => {
     // formData.append("props2", props2);
     // formData.append("props3", props3);
 
-    await axios.post("http://192.168.29.116:8080/api/add_product", formData, {
+    await axios.post("http://192.168.29.6:8080/api/add_product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -59,7 +59,7 @@ const ProductMaster = () => {
 
       try {
         await axios.post(
-          `http://192.168.29.116:8080/api/add_proppost`,
+          `http://192.168.29.6:8080/api/add_proppost`,
           payload,
           {
             headers: {

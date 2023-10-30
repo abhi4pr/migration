@@ -43,7 +43,7 @@ const SalaryDashboard = () => {
   }, [department]);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allwfhusers").then((res) => {
+    axios.get("http://192.168.29.6:8080/api/get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status

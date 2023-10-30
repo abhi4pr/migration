@@ -10,7 +10,7 @@ const AllOrder = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allorderreqdata").then((res) => {
+    axios.get("http://192.168.29.6:8080/api/get_all_orderreqdata").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
       console.log(res.data.data);

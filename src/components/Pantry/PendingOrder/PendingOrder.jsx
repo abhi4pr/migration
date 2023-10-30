@@ -37,7 +37,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_delivery_boy/${3}`)
+      .get(`http://192.168.29.6:8080/api/get_single_delivery_boy_by_room/${3}`)
       .then((res) => setAllDeliveryBoy(res.data.results));
     console.log(showALlDeliveryBoy);
   }, []);
@@ -50,7 +50,7 @@ const PendingOrder = () => {
       return;
     } else {
       axios
-        .put("http://44.211.225.140:8000/orderrequest", {
+        .put("http://192.168.29.6:8080/api/update_orderrequest", {
           product_id: row.product_id,
           order_req_id: row.Order_req_id,
           order_quantity: row.Order_quantity,
@@ -79,7 +79,7 @@ const PendingOrder = () => {
 
   function handleGetOrderData() {
     axios
-      .get("http://44.211.225.140:8000/allorderreqdata")
+      .get("http://192.168.29.6:8080/api/get_all_orderreqdata")
       .then((res) => {
         const data = res.data.data
           .filter((res) => res.Status === "pending")
@@ -111,7 +111,7 @@ const PendingOrder = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/deliveryuser`).then((res) => {
+    axios.get(`http://192.168.29.6:8080/api/get_delivery_user`).then((res) => {
       setDeliveryBoyData(res.data);
     });
   }, []);
@@ -120,7 +120,7 @@ const PendingOrder = () => {
     // console.log("selectedRow", selectedRow);
     if (remarks.length > 2) {
       axios
-        .put("http://44.211.225.140:8000/orderrequest", {
+        .put("http://192.168.29.6:8080/api/update_orderrequest", {
           product_id: selectedRow.product_id,
           order_req_id: selectedRow.Order_req_id,
           order_quantity: selectedRow.Order_quantity,
@@ -150,7 +150,7 @@ const PendingOrder = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("http://44.211.225.140:8000/transreq", {
+      .post("http://192.168.29.6:8080/api/add_transreq", {
         from_id: orderRequestTransfer[1],
         to_id: transferTo,
         reason: reason,
