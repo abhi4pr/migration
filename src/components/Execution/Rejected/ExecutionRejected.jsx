@@ -1,13 +1,13 @@
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-import  { useEffect, useState } from 'react'
-import { createTheme } from 'react-data-table-component';
-import { Link } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components'
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import { useEffect, useState } from "react";
+import { createTheme } from "react-data-table-component";
+import { Link } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
 import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
-import { Button } from '@mui/material';
-import PaymentDetailDailog from '../PaymentDetailDailog';
+import { Button } from "@mui/material";
+import PaymentDetailDailog from "../PaymentDetailDailog";
 import PointOfSaleTwoToneIcon from "@mui/icons-material/PointOfSaleTwoTone";
 
 export default function ExecutionRejected() {
@@ -33,15 +33,17 @@ export default function ExecutionRejected() {
   const fetchData = async () => {
     try {
       if (userID && contextData == false) {
-        axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-          if (res.data[26].view_value == 1) {
-            setContextData(true);
-          }
-          console.log(res.data[26].view_value);
-        });
+        axios
+          .get(`http://44.211.225.140:8000/userauth/${userID}`)
+          .then((res) => {
+            if (res.data[26].view_value == 1) {
+              setContextData(true);
+            }
+            console.log(res.data[26].view_value);
+          });
       }
       const formData = new URLSearchParams();
-  
+
       console.log(formData);
       const response = axios
         .get(
@@ -49,19 +51,14 @@ export default function ExecutionRejected() {
           // formData
         )
         .then((res) => {
-         
           setData(res.data.filter((ele) => ele.execution_status == "3"));
-
         });
     } catch (error) {
       console.error("Error fetching data:", error);
-
     }
-    axios
-        .post(
-          "http://34.93.135.33:8080/api/exe_sum_post",{loggedin_user_id:52}
-
-        )
+    axios.post("http://34.93.135.33:8080/api/exe_sum_post", {
+      loggedin_user_id: 52,
+    });
   };
 
   const theme = createTheme({
@@ -69,14 +66,11 @@ export default function ExecutionRejected() {
       primary: {
         main: "rgb(13, 110, 253)",
       },
-
     },
   });
   useEffect(() => {
-
     fetchData();
   }, []);
-
 
   const columns = [
     {
@@ -103,15 +97,9 @@ export default function ExecutionRejected() {
       headerName: "Status",
       width: 150,
       renderCell: (params) => {
-
         if (params.row.execution_status == "3") {
           return (
-            <Button
-              size="small"
-              color="error"
-              variant="outlined"
-
-            >
+            <Button size="small" color="error" variant="outlined">
               Rejected
             </Button>
           );
@@ -124,11 +112,11 @@ export default function ExecutionRejected() {
       type: "number",
       width: 110,
       renderCell: (params) => {
-       return  new Date(params.row.sale_booking_date).toLocaleDateString('en-GB');
-      }
+        return new Date(params.row.sale_booking_date).toLocaleDateString(
+          "en-GB"
+        );
+      },
     },
-   
-  
 
     {
       field: "summary",
@@ -141,7 +129,6 @@ export default function ExecutionRejected() {
       headerName: "Remarks",
       type: "number",
       width: 110,
-     
     },
 
     {
@@ -151,24 +138,21 @@ export default function ExecutionRejected() {
       width: 300,
       cellClassName: "actions",
       getActions: (params) => {
-        const { id} = params; 
+        const { id } = params;
         return [
-          
           <GridActionsCellItem
-          key={id}
-          icon={<PointOfSaleTwoToneIcon />}
-          onClick={() => handleClickOpenPaymentDetailDialog(params.row)}
-          color="inherit"
-        />,
+            key={id}
+            icon={<PointOfSaleTwoToneIcon />}
+            onClick={() => handleClickOpenPaymentDetailDialog(params.row)}
+            color="inherit"
+          />,
           <Link key={id} to={`/admin/exeexecution/${id}`}>
             <GridActionsCellItem
               icon={<ListAltOutlinedIcon />}
               label="Delete"
-              
               color="inherit"
             />
           </Link>,
-        
         ];
       },
     },
@@ -176,28 +160,29 @@ export default function ExecutionRejected() {
 
   return (
     <div>
-     <div>
+      <div>
         <div className="form_heading_title">
           <h2 className="form-heading">Execution Rejected Summary</h2>
         </div>
       </div>
       <>
-         
-          <ThemeProvider theme={theme}>
-            <DataGrid
-              rows={data}
-              touchrippleref={false}
-              columns={columns}
-              getRowId={(row) => row.sale_booking_execution_id}
-            />
-          </ThemeProvider>
-          <PaymentDetailDailog
-        handleClickOpenPaymentDetailDialog={handleClickOpenPaymentDetailDialog}
-        handleClosePaymentDetailDialog={handleClosePaymentDetailDialog}
-        openPaymentDetailDialog={openPaymentDetailDialog}
-        paymentDialogDetails={paymentDialogDetails}
-      />
-        </>
+        <ThemeProvider theme={theme}>
+          <DataGrid
+            rows={data}
+            touchrippleref={false}
+            columns={columns}
+            getRowId={(row) => row.sale_booking_execution_id}
+          />
+        </ThemeProvider>
+        <PaymentDetailDailog
+          handleClickOpenPaymentDetailDialog={
+            handleClickOpenPaymentDetailDialog
+          }
+          handleClosePaymentDetailDialog={handleClosePaymentDetailDialog}
+          openPaymentDetailDialog={openPaymentDetailDialog}
+          paymentDialogDetails={paymentDialogDetails}
+        />
+      </>
     </div>
-  )
+  );
 }

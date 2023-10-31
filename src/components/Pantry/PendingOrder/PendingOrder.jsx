@@ -37,7 +37,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.29.6:8080/api/get_single_delivery_boy_by_room/${3}`)
+      .get(`http://34.93.135.33:8080/api/get_delivery_boy/${3}`)
       .then((res) => setAllDeliveryBoy(res.data.results));
     console.log(showALlDeliveryBoy);
   }, []);

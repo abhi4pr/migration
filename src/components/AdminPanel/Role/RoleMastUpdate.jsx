@@ -19,7 +19,7 @@ function RoleMastUpdate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://192.168.29.116:8080/api/update_role`, {
+    axios.put(`http://34.93.135.33:8080/api/update_role`, {
       role_id: id,
       role_name: role_name,
       remark: remark,

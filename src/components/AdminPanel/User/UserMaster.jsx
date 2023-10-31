@@ -46,7 +46,6 @@ const UserMaster = () => {
 
   const [jobType, setJobType] = useState("");
   const [roles, setRoles] = useState("");
-  console.log(roles, "role");
   const [reportL1, setReportL1] = useState("");
   const [reportL2, setReportL2] = useState("");
   const [reportL3, setReportL3] = useState("");
@@ -184,37 +183,37 @@ const UserMaster = () => {
     if (department) {
       axios
         .get(
-          `http://192.168.29.116:8080/api/get_subdept_from_dept/${department}`
+          `http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`
         )
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
 
   useEffect(() => {
-    axios.get("http://192.168.29.116:8080/api/get_all_roles").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
     axios
-      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
+      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
       .then((res) => {
         getRefrenceData(res.data.data);
       });
 
-    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
       const userSitting = res.data.data.map((user) => user.sitting_id);
       setAllUsersSittings(userSitting);
     });
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_designations")
+      .get("http://34.93.135.33:8080/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -281,7 +280,6 @@ const UserMaster = () => {
     formData.append("sub_dept_id", subDepartment);
     formData.append("highest_qualification_name", higestQualification);
     if (isValidcontact == true && validEmail == true) {
-      console.log(higestQualification, "higestQualification");
       try {
         const isLoginIdExists = usersData.some(
           (user) =>
@@ -292,7 +290,7 @@ const UserMaster = () => {
           alert("this login ID already exists");
         } else {
           await axios.post(
-            "http://192.168.29.116:8080/api/add_user",
+            "http://34.93.135.33:8080/api/add_user",
             formData,
             {
               headers: {
@@ -302,9 +300,6 @@ const UserMaster = () => {
           );
 
           for (const elements of documents) {
-            console.log(elements);
-            console.log(elements.file);
-            console.log(elements.name);
             // formData.append("user_id", loginId);
             // formDataa.append("remark", loginUserId);
             // formDataa.append("created_by",loginId );
@@ -630,7 +625,6 @@ const UserMaster = () => {
           }}
           onChange={(e) => {
             setSubDeparment(e.value);
-            console.log(e.value, "subdepartment");
           }}
           required
         />

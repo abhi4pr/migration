@@ -20,18 +20,17 @@ const APIContext = ({ children }) => {
       });
     }
 
-    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       setUserContextData(res.data.data);
       setLoading(true);
     });
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentContext(res.data);
       });
-  }, []);
-  console.log("userData context hai ");
+  }, [userID]);
 
   return (
     <ApiContextData.Provider

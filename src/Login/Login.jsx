@@ -16,9 +16,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(true);
   const handleSubmit = (e) => {
     e.preventDefault();
-    //192.168.29.167:8080/api/login_user
-    //192.168.29.167:8080/api/login_user
-    http: axios
+    // http://34.93.135.33:8080/api/login_user
+    axios
       .post("http://44.211.225.140:8000/login", {
         user_login_id: email,
         user_login_password: password,

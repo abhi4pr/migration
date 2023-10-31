@@ -73,7 +73,7 @@ export default function CampaignRegistration({
 
     try {
       axios
-        .post("http://192.168.29.116:8080/api/campaign", {
+        .post("http://34.93.135.33:8080/api/campaign", {
           brand_id: brandname.instaBrandId,
           user_id: userID,
           agency_id: agencyname.agency_id,
@@ -141,7 +141,7 @@ export default function CampaignRegistration({
     if (brandname != null) {
       console.log(numberofsuggestions, suggestionslength, suggestionsword);
       axios
-        .post("http://192.168.29.116:8080/chat", {
+        .post("http://34.93.135.33:8080/chat", {
           prompt: `Give me ${numberofsuggestions} ${suggestionslength} campaign name elements starting with brand name and contain word ${suggestionsword} for brand  ${brandname?.instaBrandName}.`,
         })
         .then((res) => {

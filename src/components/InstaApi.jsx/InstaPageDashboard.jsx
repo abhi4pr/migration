@@ -33,7 +33,7 @@ const InstaPageDashboard = () => {
   // console.log(posts);
   const handlepage = () => {
     axios
-      .post("http://192.168.29.116:8080/api/get_posts_from_name", {
+      .post("http://34.93.135.33:8080/api/get_posts_from_name", {
         creatorName: creatorName,
       })
       .then((res) => {
