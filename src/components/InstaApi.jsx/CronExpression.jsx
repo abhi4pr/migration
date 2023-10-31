@@ -44,7 +44,7 @@ function CronExpression() {
     // Make the POST request
     try {
       axios.post(
-        "http://192.168.29.116:8080/api/track_post_posty",
+        "http://34.93.135.33:8080/api/track_post_posty",
         {
           connector: "instagram",
           shortcode: shortcodes,

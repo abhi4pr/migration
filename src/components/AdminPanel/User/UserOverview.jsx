@@ -84,12 +84,12 @@ const UserOverview = () => {
     setUserName(username);
     setUserContact(user_contact_no);
     axios
-      .get("http://192.168.29.116:8080/api/get_all_reasons")
+      .get("http://34.93.135.33:8080/api/get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
 
   function handleSeparationDataPost() {
-    axios.post("http://192.168.29.116:8080/api/add_separation", {
+    axios.post("http://34.93.135.33:8080/api/add_separation", {
       user_id: separationUserID,
       status: separationStatus,
       created_by: userID,
@@ -114,7 +114,7 @@ const UserOverview = () => {
   // Admin Login from User
   const handleLogin = (user_id, user_login_id, user_login_password) => {
     axios
-      .post("http://192.168.29.116:8080/api/login_user", {
+      .post("http://34.93.135.33:8080/api/login_user", {
         user_id: user_id,
         user_login_id: user_login_id,
         user_login_password: user_login_password,
@@ -135,7 +135,7 @@ const UserOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://192.168.29.116:8080/api/get_all_users"
+        "http://34.93.135.33:8080/api/get_all_users"
       );
       // const data = response.data.data.filter(
       //   (item) => item.onboard_status !== 2
@@ -153,7 +153,7 @@ const UserOverview = () => {
 
   const departmentAPI = () => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
         getData();
@@ -162,7 +162,7 @@ const UserOverview = () => {
 
   const designationAPI = () => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_designations")
+      .get("http://34.93.135.33:8080/api/get_all_designations")
       .then((res) => {
         setDesiOrgData(res.data.data);
       });
@@ -408,7 +408,7 @@ const UserOverview = () => {
 
   const handleTransfer = (userId) => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_kra/${userId}`)
+      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
       .then((res) => {
         setTransferResponsibilityData(res.data);
       });
@@ -445,7 +445,7 @@ const UserOverview = () => {
         Job_res_id: element.Job_res_id,
       };
       axios
-        .post("http://192.168.29.116:8080/api/add_kra", requestData)
+        .post("http://34.93.135.33:8080/api/add_kra", requestData)
         .then((res) => {
           setRemark("");
           setTransferTo("");

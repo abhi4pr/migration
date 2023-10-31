@@ -27,7 +27,7 @@ const ResponsiblityOverview = () => {
 
   function getData() {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_responsibilitys")
+      .get("http://34.93.135.33:8080/api/get_all_responsibilitys")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -36,7 +36,7 @@ const ResponsiblityOverview = () => {
   useEffect(() => {
     getData();
     axios
-      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
+      .get("http://34.93.135.33:8080/api/get_all_jobresponsibilitys")
       .then((res) => {
         setAllResponsibility(res.data.data);
       });

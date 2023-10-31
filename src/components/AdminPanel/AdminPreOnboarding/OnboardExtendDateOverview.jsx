@@ -28,7 +28,7 @@ const OnboardExtendDateOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://192.168.29.116:8080/api/get_all_users"
+        "http://34.93.135.33:8080/api/get_all_users"
       );
       const data = response.data.data.filter(
         (item) => item.joining_date_extend_status == "Requested"

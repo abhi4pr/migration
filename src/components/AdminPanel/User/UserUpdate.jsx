@@ -184,7 +184,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_subdept_from_dept/${department}`)
+      .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
       .then((res) => setSubDepartmentData(res.data));
   }, [department]);
 
@@ -198,7 +198,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_roles")
+      .get("http://34.93.135.33:8080/api/get_all_roles")
       .then((res) => {
         getRoleData(res.data.data);
       })
@@ -207,27 +207,27 @@ const UserUpdate = () => {
       });
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
     axios
-      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
+      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
       .then((res) => {
         setRefrenceData(res.data.data);
       });
 
-    axios.get("http://192.168.29.116:8080/api/get_all_sittings").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
 
-    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
     });
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_designations")
+      .get("http://34.93.135.33:8080/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -235,7 +235,7 @@ const UserUpdate = () => {
 
   function getOtherDocument() {
     axios
-      .get(`http://192.168.29.116:8080/api/get_user_other_fields/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -243,7 +243,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         console.log(res.data, "yha data hai");
         const fetchedData = res.data;
@@ -398,7 +398,7 @@ const UserUpdate = () => {
     formData.append("highest_qualification_name", higestQualification);
     const formDataa = new FormData();
     if (isValidcontact == true && validEmail == true) {
-      await axios.put(`http://192.168.29.116:8080/api/update_user`, formData, {
+      await axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

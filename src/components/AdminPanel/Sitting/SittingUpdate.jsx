@@ -26,7 +26,7 @@ const SittingUpdate = () => {
     setError("");
 
     axios
-      .put(`http://192.168.29.116:8080/api/update_sitting`, {
+      .put(`http://34.93.135.33:8080/api/update_sitting`, {
         sitting_id: id,
         sitting_ref_no: sittingRefrenceNum,
         sitting_area: sittingArea,
@@ -51,7 +51,7 @@ const SittingUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_rooms")
+      .get("http://34.93.135.33:8080/api/get_all_rooms")
       .then((res) => {
         setRoomData(res.data.data);
       })
