@@ -25,8 +25,8 @@ const Profile = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`http://44.211.225.140:8000/getuserjobrespo`, {
-        user_id: loginUserId,
+      .post(`http://192.168.29.116:8080/api/get_user_job_responsibility`, {
+        user_id: Number(loginUserId),
       })
       .then((res) => {
         setResponsibility(res.data.data);
@@ -73,19 +73,28 @@ const Profile = () => {
                 <div className="col profile_img_col">
                   <div className="profile_img_box">
                     <div className="profile_img">
-                    {/* {console.log(userData.downloadableUrl, "user data on jsx")} */}
-                    {userData?.downloadableUrl == null ? (
-                      <img src={imageTest1} style={{height:"40px",borderRadius:"50%",width:"40px"}} />
-                    ) : (
-                      <img
-
-                        className="img-profile ,w-25"
-                        src={userData.downloadableUrl}
-                        alt="user"
-                        style={{height:"40px",borderRadius:"50%",width:"40px"}}
-                      />
-                      
-                    )}
+                      {/* {console.log(userData.downloadableUrl, "user data on jsx")} */}
+                      {userData?.downloadableUrl == null ? (
+                        <img
+                          src={imageTest1}
+                          style={{
+                            height: "40px",
+                            borderRadius: "50%",
+                            width: "40px",
+                          }}
+                        />
+                      ) : (
+                        <img
+                          className="img-profile ,w-25"
+                          src={userData.downloadableUrl}
+                          alt="user"
+                          style={{
+                            height: "40px",
+                            borderRadius: "50%",
+                            width: "40px",
+                          }}
+                        />
+                      )}
                     </div>
                     <div className="profile_name">
                       <h2>

@@ -24,10 +24,12 @@ const AttendanceOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allattendencemastdata").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-    });
+    axios
+      .get("http://44.211.225.140:8000/allattendencemastdata")
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+      });
   }
 
   useEffect(() => {

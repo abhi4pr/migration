@@ -4,7 +4,6 @@ import DataTable from "react-data-table-component";
 import { Navigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useGlobalContext } from "../../../Context/Context";
-
 const UserAuthDetail = () => {
   const { toastAlert } = useGlobalContext();
   const token = sessionStorage.getItem("token");
@@ -21,15 +20,17 @@ const UserAuthDetail = () => {
     getData();
   }, []);
   function getData() {
-    axios.get(`http://44.211.225.140:8000/userauth/${id}`).then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-      console.log(res.data);
-    });
+    axios
+      .get(`http://192.168.29.116:8080/api/get_single_user_auth_detail/${id}`)
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+        console.log(res.data);
+      });
   }
   useEffect(() => {
     const result = data.filter((d) => {
-      return d.obj_Name.toLowerCase().match(search.toLowerCase());
+      return d.obj_name.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -58,7 +59,7 @@ const UserAuthDetail = () => {
     {
       name: "Object Name",
       width: "17%",
-      selector: (row) => row.obj_Name,
+      selector: (row) => row.obj_name,
     },
     {
       name: "Insert",
@@ -105,8 +106,8 @@ const UserAuthDetail = () => {
   ];
   function postData() {
     for (const element of filterData) {
-      axios.put("http://44.211.225.140:8000/userauthdetailupdate", {
-        id: element.auth_id,
+      axios.put("http://192.168.29.116:8080/api/update_user_auth", {
+        auth_id: element.auth_id,
         Juser_id: Number(id),
         obj_id: element.obj_id,
         insert: element.insert_value,

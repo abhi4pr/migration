@@ -46,7 +46,6 @@ const UserMaster = () => {
 
   const [jobType, setJobType] = useState("");
   const [roles, setRoles] = useState("");
-  console.log(roles, "role");
   const [reportL1, setReportL1] = useState("");
   const [reportL2, setReportL2] = useState("");
   const [reportL3, setReportL3] = useState("");
@@ -281,7 +280,6 @@ const UserMaster = () => {
     formData.append("sub_dept_id", subDepartment);
     formData.append("highest_qualification_name", higestQualification);
     if (isValidcontact == true && validEmail == true) {
-      console.log(higestQualification, "higestQualification");
       try {
         const isLoginIdExists = usersData.some(
           (user) =>
@@ -302,9 +300,6 @@ const UserMaster = () => {
           );
 
           for (const elements of documents) {
-            console.log(elements);
-            console.log(elements.file);
-            console.log(elements.name);
             // formData.append("user_id", loginId);
             // formDataa.append("remark", loginUserId);
             // formDataa.append("created_by",loginId );
@@ -630,7 +625,6 @@ const UserMaster = () => {
           }}
           onChange={(e) => {
             setSubDeparment(e.value);
-            console.log(e.value, "subdepartment");
           }}
           required
         />

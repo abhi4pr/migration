@@ -51,14 +51,16 @@ export default function ExecutionAccepted() {
   const fetchData = async () => {
     try {
       if (userID && contextData == false) {
-        axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-          if (res.data[26].view_value == 1) {
-            setContextData(true);
-            setAlert(res.data);
-            console.log(contextData);
-          }
-          console.log(res.data[26].view_value);
-        });
+        axios
+          .get(`http://44.211.225.140:8000/userauth/${userID}`)
+          .then((res) => {
+            if (res.data[26].view_value == 1) {
+              setContextData(true);
+              setAlert(res.data);
+              console.log(contextData);
+            }
+            console.log(res.data[26].view_value);
+          });
       }
       const formData = new URLSearchParams();
       formData.append("loggedin_user_id", 36);
@@ -66,11 +68,8 @@ export default function ExecutionAccepted() {
       // formData.append("pendingorcomplete", "pending");
       console.log(formData);
       const response = axios
-      .get(
-        "http://34.93.135.33:8080/api/get_exe_sum"
-      )
+        .get("http://34.93.135.33:8080/api/get_exe_sum")
         .then((res) => {
-
           setData(res.data.filter((ele) => ele.execution_status == "2"));
           // console.log()
           // console.log(jsonData);
@@ -79,9 +78,9 @@ export default function ExecutionAccepted() {
       console.error("Error fetching data:", error);
       // setLoading(false);
     }
-    axios.post(
-      "http://34.93.135.33:8080/api/exe_sum_post",{loggedin_user_id:52}
-    )
+    axios.post("http://34.93.135.33:8080/api/exe_sum_post", {
+      loggedin_user_id: 52,
+    });
   };
 
   const theme = createTheme({
@@ -103,7 +102,6 @@ export default function ExecutionAccepted() {
       field: "S_No",
       headerName: "S No",
       width: 90,
-
     },
     {
       field: "cust_name",
@@ -136,16 +134,16 @@ export default function ExecutionAccepted() {
       type: "number",
       width: 110,
       renderCell: (params) => {
-        return   new Date(params?.row.sale_booking_date).toLocaleDateString();
-         }
+        return new Date(params?.row.sale_booking_date).toLocaleDateString();
+      },
     },
     {
       // filed: "start_date_",
       headerName: "Start Date",
       width: 150,
       renderCell: (params) => {
-     return   new Date(params?.row.start_date_).toLocaleDateString();
-      }
+        return new Date(params?.row.start_date_).toLocaleDateString();
+      },
     },
     // contextData && {
     //   field: "campaign_amount",
@@ -166,15 +164,11 @@ export default function ExecutionAccepted() {
       width: 110,
       renderCell: (params) => {
         if (params.row.execution_status == "2") {
-
           return (
             Math.floor(
-              Math.abs(
-                ( new Date(params.row.start_date_)-new Date() ) / 36e5
-              )
+              Math.abs((new Date(params.row.start_date_) - new Date()) / 36e5)
             ) + " hours"
-
-          )            
+          );
         }
       },
     },
@@ -256,7 +250,6 @@ export default function ExecutionAccepted() {
               confirmation={confirmation}
               setSnackbar={setSnackbar}
               setConfirmation={setConfirmation}
-
             />
           )}
           <ThemeProvider theme={theme}>

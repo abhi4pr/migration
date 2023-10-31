@@ -37,6 +37,7 @@ export default function SubDepartmentOverview() {
       .get(`http://192.168.29.116:8080/api/get_subdept_from_dept"/${dept_id}`)
       .then((res) => {
         setSubDeparmentData(res.data);
+        console.log(res.data, "hello sub");
       });
   }
 

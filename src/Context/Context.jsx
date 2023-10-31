@@ -14,13 +14,11 @@ const AppProvider = ({ children }) => {
     toast.success(text);
     setShowAlert(true);
     setAlertText(text);
-    
   };
   const toastError = (text) => {
     toast.error(text);
     setShowAlert(true);
     setAlertText(text);
-    
   };
 
   const storedToken = sessionStorage.getItem("token");
@@ -36,7 +34,7 @@ const AppProvider = ({ children }) => {
   }, [storedToken]);
 
   return (
-    <AppContext.Provider value={{ toastAlert, data, token,toastError }}>
+    <AppContext.Provider value={{ toastAlert, data, token, toastError }}>
       {children}
       {showAlert && (
         <>
