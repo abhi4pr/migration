@@ -7,6 +7,8 @@ import { useGlobalContext } from "../../../Context/Context";
 const UserResponsbilityUpdate = () => {
   const { toastAlert } = useGlobalContext();
   const [id, setId] = useState(0);
+  console.log(id, "good ");
+
   const [userName, setUserName] = useState("");
   const [responsbility, setResponsibility] = useState("");
   const [description, setDescription] = useState("");

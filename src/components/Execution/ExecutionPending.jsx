@@ -13,7 +13,6 @@ import ExecutionUpdate from "./ExecutionUpdate";
 import PaymentDetailDailog from "./PaymentDetailDailog";
 import PointOfSaleTwoToneIcon from "@mui/icons-material/PointOfSaleTwoTone";
 
-
 function ExecutionPending() {
   const [snackbar, setSnackbar] = useState(null);
   const [confirmation, setConfirmation] = useState(false);

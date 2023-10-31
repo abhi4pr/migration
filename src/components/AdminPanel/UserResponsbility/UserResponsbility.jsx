@@ -71,7 +71,6 @@ const UserResponsbility = () => {
         description: element.description,
         created_by: loginUser,
       });
-      console.log(userContact, "yha contact hai");
       whatsappApi.callWhatsAPI("User Responsibility", userContact, userName, [
         element.responsibility,
       ]);

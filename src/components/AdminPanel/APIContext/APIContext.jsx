@@ -30,8 +30,7 @@ const APIContext = ({ children }) => {
       .then((res) => {
         setDepartmentContext(res.data);
       });
-  }, []);
-  console.log("userData context hai ");
+  }, [userID]);
 
   return (
     <ApiContextData.Provider

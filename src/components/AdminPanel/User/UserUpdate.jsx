@@ -235,7 +235,7 @@ const UserUpdate = () => {
 
   function getOtherDocument() {
     axios
-      .get(`http://192.168.29.116:8080/api/get_all_usersotherfielddata/${id}`)
+      .get(`http://192.168.29.116:8080/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -362,6 +362,7 @@ const UserUpdate = () => {
     formData.append("job_type", jobType);
     formData.append("personal_number", personalContact);
     formData.append("Personal_email", personalEmail);
+    console.log(reportL1, "report here");
     formData.append("report_L1", Number(reportL1));
     formData.append("report_L2", Number(reportL2));
     formData.append("report_L3", Number(reportL3));

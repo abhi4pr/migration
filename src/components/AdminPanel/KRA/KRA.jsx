@@ -16,8 +16,8 @@ const KRA = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`http://44.211.225.140:8000/getuserjobrespo`, {
-        user_id: id,
+      .post(`http://192.168.29.116:8080/api/get_user_job_responsibility`, {
+        user_id: Number(id),
       })
       .then((res) => {
         setResponsibility(res.data.data);
