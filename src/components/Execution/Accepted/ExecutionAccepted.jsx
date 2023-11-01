@@ -52,7 +52,9 @@ export default function ExecutionAccepted() {
     try {
       if (userID && contextData == false) {
         axios
-          .get(`http://44.211.225.140:8000/userauth/${userID}`)
+          .get(
+            `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
+          )
           .then((res) => {
             if (res.data[26].view_value == 1) {
               setContextData(true);
@@ -68,7 +70,7 @@ export default function ExecutionAccepted() {
       // formData.append("pendingorcomplete", "pending");
       console.log(formData);
       const response = axios
-        .get("http://34.93.135.33:8080/api/get_exe_sum")
+        .get("http://192.168.29.116:8080/api/get_exe_sum")
         .then((res) => {
           setData(res.data.filter((ele) => ele.execution_status == "2"));
           // console.log()
@@ -78,7 +80,7 @@ export default function ExecutionAccepted() {
       console.error("Error fetching data:", error);
       // setLoading(false);
     }
-    axios.post("http://34.93.135.33:8080/api/exe_sum_post", {
+    axios.post("http://192.168.29.116:8080/api/exe_sum_post", {
       loggedin_user_id: 52,
     });
   };

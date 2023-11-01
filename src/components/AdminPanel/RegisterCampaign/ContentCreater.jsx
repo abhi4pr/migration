@@ -80,7 +80,7 @@ export default function CampaignCommitment() {
       return;
     }
     axios
-      .post("http://34.93.135.33:8080/api/commitment", postData)
+      .post("http://192.168.29.116:8080/api/commitment", postData)
       .then((response) => {
         setIsModalOpen(false);
         getData();
@@ -97,7 +97,7 @@ export default function CampaignCommitment() {
   // get api ========>
   const getData = () => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_commitments")
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
       .then((res) => {
         const data = res.data.data;
         const uniqueCmtNames = new Set();
@@ -130,7 +130,7 @@ export default function CampaignCommitment() {
   const handlePutData = () => {
     if (editData.cmtName !== "") {
       axios
-        .put(`http://34.93.135.33:8080/api/commitment`, {
+        .put(`http://192.168.29.116:8080/api/commitment`, {
           cmtId: editData.cmtId,
           cmtName: editData.cmtName,
         })
@@ -164,7 +164,7 @@ export default function CampaignCommitment() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/commitment/${itemToDeleteId}`)
+        .delete(`http://192.168.29.116:8080/api/commitment/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");

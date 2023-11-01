@@ -23,7 +23,7 @@ const SimAllocationOverview = () => {
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_allocations")
+      .get("http://192.168.29.116:8080/api/get_all_allocations")
       .then((res) => {
         const filteredData = res.data.data.filter(
           (check) => check.submitted_at == null || check.status == "Allocated"
@@ -45,7 +45,7 @@ const SimAllocationOverview = () => {
 
   const getSimData = (row) => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_sim/${row.sim_id}`)
+      .get(`http://192.168.29.116:8080/api/get_single_sim/${row.sim_id}`)
       .then((res) => {
         const particularSimData = res.data;
         setSimInfo(particularSimData);
@@ -53,7 +53,7 @@ const SimAllocationOverview = () => {
 
     axios
       .get(
-        `http://34.93.135.33:8080/api/get_allocation_by_alloid/${row.allo_id}`
+        `http://192.168.29.116:8080/api/get_allocation_by_alloid/${row.allo_id}`
       )
       .then((res) => {
         const fetchedData = res.data.data;
@@ -71,7 +71,7 @@ const SimAllocationOverview = () => {
     const currentReason = reason[row.sim_id];
     const currSubDate = subDate[row.sim_id];
     if (currSubDate && currentReason) {
-      axios.put("http://34.93.135.33:8080/api/update_allocationsim", {
+      axios.put("http://192.168.29.116:8080/api/update_allocationsim", {
         sim_id: row.sim_id,
         id: simData.allo_id,
         user_id: simData.user_id,
@@ -84,7 +84,7 @@ const SimAllocationOverview = () => {
       });
 
       axios
-        .put("http://34.93.135.33:8080/api/update_sim", {
+        .put("http://192.168.29.116:8080/api/update_sim", {
           id: row.sim_id,
           mobilenumber: row.mobileNo,
           sim_no: row.simNo,

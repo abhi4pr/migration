@@ -29,7 +29,7 @@ export default function BrandCategory() {
     (async () => {
       //   await sleep(1e3); // For demo purposes.
       const brdcatname = axios
-        .get("http://34.93.135.33:8080/api/brandCategory")
+        .get("http://192.168.29.116:8080/api/brandCategory")
         .then((res) => {
           console.log(res.data.data);
           setOptions(res.data.data);

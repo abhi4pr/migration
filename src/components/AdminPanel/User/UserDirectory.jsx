@@ -22,21 +22,25 @@ const UserOverview = () => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-        setData(res.data);
-        // setBackupData(res.data);
-      });
+      axios
+        .get(
+          `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setData(res.data);
+          // setBackupData(res.data);
+        });
     }
   }, [userID]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       setDatas(res.data.data);
       setBackupData(res.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

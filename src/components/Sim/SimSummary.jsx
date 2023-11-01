@@ -15,7 +15,7 @@ const SimSummary = () => {
 
   function getData() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_allocation_data_by_id/${id}`)
+      .get(`http://192.168.29.116:8080/api/get_allocation_data_by_id/${id}`)
       .then((res) => setShowInfo(res.data));
   }
   useEffect(() => {
@@ -28,7 +28,7 @@ const SimSummary = () => {
   function handleDelete(e, sum) {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/update_allocationsim", {
+      .put("http://192.168.29.116:8080/api/update_allocationsim", {
         sim_id: sum.sim_id,
         id: sum.allo_id,
         user_id: sum.user_id,

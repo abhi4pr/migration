@@ -58,7 +58,7 @@ const Confirmation = ({
         execution_status: 2,
       };
       axios
-        .put(`http://34.93.135.33:8080/api/edit_exe_sum`, payload)
+        .put(`http://192.168.29.116:8080/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);
@@ -74,7 +74,7 @@ const Confirmation = ({
         loggedin_user_id: userID,
         sale_booking_execution_id: data.sale_booking_execution_id,
         execution_date_time: new Date().toISOString().split("T")[0],
-        execution_time:"0.00",
+        execution_time: "0.00",
         execution_remark: "Accepted",
         execution_status: 2,
       };
@@ -85,7 +85,7 @@ const Confirmation = ({
         )
         .then((res) => {
           console.log(res);
-         
+
           setReload((preVal) => !preVal);
         })
         .catch((err) => {
@@ -110,7 +110,7 @@ const Confirmation = ({
         end_date: new Date(),
       };
       axios
-        .put(`http://34.93.135.33:8080/api/edit_exe_sum`, payload)
+        .put(`http://192.168.29.116:8080/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);
@@ -125,7 +125,7 @@ const Confirmation = ({
         loggedin_user_id: userID,
         sale_booking_execution_id: data.sale_booking_execution_id,
         execution_date_time: new Date().toISOString().split("T")[0],
-        execution_time:"0.00",
+        execution_time: "0.00",
         execution_remark: remark ? remark : "Rejected",
         execution_status: 4,
       };
@@ -136,7 +136,7 @@ const Confirmation = ({
         )
         .then((res) => {
           console.log(res);
-       
+
           setReload((preVal) => !preVal);
         })
         .catch((err) => {
@@ -169,7 +169,7 @@ const Confirmation = ({
         execution_time: hoursDifference.toFixed(2),
       };
       axios
-        .put(`http://34.93.135.33:8080/api/edit_exe_sum`, payload)
+        .put(`http://192.168.29.116:8080/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);
@@ -195,7 +195,7 @@ const Confirmation = ({
         )
         .then((res) => {
           console.log(res);
-        
+
           setReload((preVal) => !preVal);
         })
         .catch((err) => {

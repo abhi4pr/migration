@@ -58,13 +58,15 @@ const UserSingle = () => {
   //documents reason End
 
   const KRAAPI = (userId) => {
-    axios.get(`http://44.211.225.140:8000/jobrespon/${userId}`).then((res) => {
-      setKRIData(res.data);
-    });
+    axios
+      .get(`http://192.168.29.116:8080/api/get_single_kra/${userId}`)
+      .then((res) => {
+        setKRIData(res.data);
+      });
   };
   function userOtherDocuments() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_all_usersotherfielddata/${id}`)
+      .get(`http://192.168.29.116:8080/api/get_all_usersotherfielddata/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -77,7 +79,7 @@ const UserSingle = () => {
   //     });
   // };
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
     KRAAPI(id);
@@ -88,12 +90,14 @@ const UserSingle = () => {
   const [user, setUser] = useState([]);
   let fetchedData;
   const getData = () => {
-    axios.get(`http://44.211.225.140:8000/user/${id}`).then((res) => {
-      fetchedData = res.data.data;
-      const { dept_id } = fetchedData;
-      setUser(fetchedData);
-      setSubDeptId(dept_id);
-    });
+    axios
+      .get(`http://192.168.29.116:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        fetchedData = res.data.data;
+        const { dept_id } = fetchedData;
+        setUser(fetchedData);
+        setSubDeptId(dept_id);
+      });
   };
 
   useEffect(() => {

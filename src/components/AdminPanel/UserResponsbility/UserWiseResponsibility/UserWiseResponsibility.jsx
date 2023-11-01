@@ -29,16 +29,20 @@ const UserWiseResponsibility = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(
+          `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
   }, [userID]);
 
   async function getData() {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_users"
+        "http://192.168.29.116:8080/api/get_all_users"
       );
       const data = response.data.data;
 
@@ -49,9 +53,11 @@ const UserWiseResponsibility = () => {
   }
 
   const handleTransfer = (userId) => {
-    axios.get(`http://44.211.225.140:8000/jobrespon/${userId}`).then((res) => {
-      setTransferResponsibilityData(res.data);
-    });
+    axios
+      .get(`http://192.168.29.116:8080/api/get_single_kra/${userId}`)
+      .then((res) => {
+        setTransferResponsibilityData(res.data);
+      });
   };
   function handleAllCheckedData(event) {
     if (event.target.checked) {
@@ -82,7 +88,7 @@ const UserWiseResponsibility = () => {
     getData();
     getDatas();
     axios
-      .get("http://34.93.135.33:8080/api/get_all_jobresponsibilitys")
+      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
       .then((res) => {
         setAllResponsibility(res.data.data);
       });

@@ -15,18 +15,22 @@ const APIContext = ({ children }) => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-        setContextData(res.data);
-      });
+      axios
+        .get(
+          `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setContextData(res.data);
+        });
     }
 
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       setUserContextData(res.data.data);
       setLoading(true);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentContext(res.data);
       });

@@ -18,11 +18,13 @@ const PendingOrderSingleUser = () => {
   const loginUserRoomId = decodedToken.room_id;
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_pendingorders/${userId}`).then((res) => {
-      setOldUserProduct(res.data.data);
-      setFilterData(res.data.data);
-      console.log("pending order", res.data);
-    });
+    axios
+      .get(`http://192.168.29.116:8080/api/get_single_pendingorders/${userId}`)
+      .then((res) => {
+        setOldUserProduct(res.data.data);
+        setFilterData(res.data.data);
+        console.log("pending order", res.data);
+      });
   }, []);
 
   useEffect(() => {
