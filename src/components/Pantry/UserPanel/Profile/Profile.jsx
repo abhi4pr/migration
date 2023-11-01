@@ -17,10 +17,12 @@ const Profile = () => {
   const loginUserId = decodedToken.id;
 
   function handleGetData() {
-    axios.get(`http://44.211.225.140:8000/user/${loginUserId}`).then((res) => {
-      setUserData(res.data);
-      // console.log(res.data, "user data");
-    });
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${loginUserId}`)
+      .then((res) => {
+        setUserData(res.data);
+        // console.log(res.data, "user data");
+      });
   }
 
   function responsibilityAPI() {

@@ -18,7 +18,7 @@ function InstaApiContext({ children }) {
       "http://34.93.135.33:8080/api/get_all_users"
     );
     const secondApiRequest = axios.get(
-      `http://44.211.225.140:8000/userauth/${userID}`
+      `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
     );
 
     // Make the first two API requests concurrently

@@ -449,7 +449,7 @@ const UserUpdate = () => {
       // console.log(uid, "yha uid hai put ke bad");
       // console.log(panUpload, "pan hai yha");
       // axios
-      //   .post("http://44.211.225.140:8000/mail2", {
+      //   .post("http://34.93.135.33:8080/api/add_send_user_mail", {
       //     email: email,
       //     subject: "User Registration",
       //     text: "A new user has been registered.",

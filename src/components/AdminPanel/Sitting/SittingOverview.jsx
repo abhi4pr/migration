@@ -16,9 +16,13 @@ const SittingOverview = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
   }, [userID]);
   function getData() {

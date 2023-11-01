@@ -74,7 +74,7 @@ const Confirmation = ({
         loggedin_user_id: userID,
         sale_booking_execution_id: data.sale_booking_execution_id,
         execution_date_time: new Date().toISOString().split("T")[0],
-        execution_time:"0.00",
+        execution_time: "0.00",
         execution_remark: "Accepted",
         execution_status: 2,
       };
@@ -85,7 +85,7 @@ const Confirmation = ({
         )
         .then((res) => {
           console.log(res);
-         
+
           setReload((preVal) => !preVal);
         })
         .catch((err) => {
@@ -125,7 +125,7 @@ const Confirmation = ({
         loggedin_user_id: userID,
         sale_booking_execution_id: data.sale_booking_execution_id,
         execution_date_time: new Date().toISOString().split("T")[0],
-        execution_time:"0.00",
+        execution_time: "0.00",
         execution_remark: remark ? remark : "Rejected",
         execution_status: 4,
       };
@@ -136,7 +136,7 @@ const Confirmation = ({
         )
         .then((res) => {
           console.log(res);
-       
+
           setReload((preVal) => !preVal);
         })
         .catch((err) => {
@@ -195,7 +195,7 @@ const Confirmation = ({
         )
         .then((res) => {
           console.log(res);
-        
+
           setReload((preVal) => !preVal);
         })
         .catch((err) => {

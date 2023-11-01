@@ -93,7 +93,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
       }
       const finalsitting_id =
         selectedSitting == "" ? Number(SittingId) : Number(selectedSitting);
-        console.log(userId,"userId")
+      console.log(userId, "userId");
       await axios
         .post("http://34.93.135.33:8080/api/add_orderreq", {
           product_id: element.product_id,

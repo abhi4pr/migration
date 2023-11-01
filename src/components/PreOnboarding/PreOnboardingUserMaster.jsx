@@ -157,7 +157,7 @@ const PreOnboardingUserMaster = () => {
     }
   };
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/user/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/get_single_user/${id}`).then((res) => {
       const fetchedData = res.data.data;
 
       const {

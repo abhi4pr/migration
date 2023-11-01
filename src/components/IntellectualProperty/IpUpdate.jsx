@@ -84,7 +84,7 @@ const IpUpdate = () => {
 
   const handleSelectChange = (e) => {
     axios
-      .get(`http://44.211.225.140:8000/user/${e.target.value}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${e.target.value}`)
       .then((res) => {
         setl1(res.data.Report_L1);
         setl2(res.data.Report_L2);

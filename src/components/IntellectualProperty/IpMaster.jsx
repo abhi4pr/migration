@@ -52,7 +52,7 @@ const IpMaster = () => {
 
   const handleSelectChange = (e) => {
     axios
-      .get(`http://44.211.225.140:8000/user/${e.target.value}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${e.target.value}`)
       .then((res) => setSingleUser(res.data));
   };
 

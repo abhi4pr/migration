@@ -69,9 +69,11 @@ const UserOverview = () => {
     KRAAPI(userId);
   };
   const KRAAPI = (userId) => {
-    axios.get(`http://44.211.225.140:8000/jobrespon/${userId}`).then((res) => {
-      setKRIData(res.data);
-    });
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
+      .then((res) => {
+        setKRIData(res.data);
+      });
   };
 
   const handleCloseModal = () => {
@@ -105,9 +107,13 @@ const UserOverview = () => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-        setData(res.data);
-      });
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setData(res.data);
+        });
     }
   }, [userID]);
 
@@ -285,7 +291,7 @@ const UserOverview = () => {
         <>
           {contextData &&
             contextData[0] &&
-            contextData[3].update_value === 1 && (
+            contextData[0].update_value === 1 && (
               <Link to={`/admin/user-auth-detail/${row.user_id}`}>
                 <button className="btn btn-primary btn-sm">Auth</button>
               </Link>
@@ -300,7 +306,7 @@ const UserOverview = () => {
         <>
           {contextData &&
             contextData[0] &&
-            contextData[3].update_value === 1 && (
+            contextData[0].update_value === 1 && (
               // <Link to={`/admin/user-auth-detail/${row.user_id}`}>
               <button
                 onClick={() => handleKRA(row.user_id)}
@@ -453,7 +459,7 @@ const UserOverview = () => {
 
           const MailUser = transferToUser.find((d) => d.user_id == transferTo);
 
-          axios.post("http://44.211.225.140:8000/mail2", {
+          axios.post("http://34.93.135.33:8080/api/add_send_user_mail", {
             email: MailUser.user_email_id,
             subject: "User Registration",
             text: "You Have Assign New KRA",

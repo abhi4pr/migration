@@ -31,9 +31,13 @@ function Dashboard() {
   const userId = decodedToken.id;
   useEffect(() => {
     if (userId && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userId}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userId}`
+        )
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
     if (userId) {
       axios.get(`http://44.211.225.140:8000/usernew/${userId}`).then((res) => {
