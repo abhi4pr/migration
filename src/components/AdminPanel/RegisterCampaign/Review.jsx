@@ -52,26 +52,28 @@ export default function Review() {
   const [enhancement, setEnhancement] = useState([]);
 
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/contentSectionReg").then((res) => {
-      const data = res.data.data.filter(
-        (e) => e.status == "22" && e.stage == 3
-      );
-      const verified = res.data.data.filter(
-        (e) => e.status == "23" && e.stage == 4
-      );
-      const rejct = res.data.data.filter(
-        (e) => e.status == "24" && e.stage == 3
-      );
-      const enhance = res.data.data.filter(
-        (e) => e.status == "25" && e.stage == 3
-      );
-      setRows(data);
-      setVerifid(verified);
-      setReject(rejct);
-      setEnhancement(enhance);
+    axios
+      .get("http://192.168.29.116:8080/api/contentSectionReg")
+      .then((res) => {
+        const data = res.data.data.filter(
+          (e) => e.status == "22" && e.stage == 3
+        );
+        const verified = res.data.data.filter(
+          (e) => e.status == "23" && e.stage == 4
+        );
+        const rejct = res.data.data.filter(
+          (e) => e.status == "24" && e.stage == 3
+        );
+        const enhance = res.data.data.filter(
+          (e) => e.status == "25" && e.stage == 3
+        );
+        setRows(data);
+        setVerifid(verified);
+        setReject(rejct);
+        setEnhancement(enhance);
 
-      console.log(data, "this is by contentSectionReg");
-    });
+        console.log(data, "this is by contentSectionReg");
+      });
   };
 
   const handleTextChange = (event) => {
@@ -79,14 +81,14 @@ export default function Review() {
   };
 
   function getContentType() {
-    axios.get("http://34.93.135.33:8080/api/content").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((res) => {
       const data = res.data.data;
       setContent(data);
       console.log(data, "this is by content");
     });
   }
   const getBrand = () => {
-    axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_brands").then((res) => {
       const data = res.data.data;
       setBrandName(data);
       console.log(data, "this is by saimyual");
@@ -348,7 +350,7 @@ export default function Review() {
   const handleBackSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("http://192.168.29.116:8080/api/contentSectionReg", {
         content_section_id: contentSectionId,
         creator_remark: text,
         // stage: 3,

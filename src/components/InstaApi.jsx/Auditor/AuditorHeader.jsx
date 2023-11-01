@@ -73,7 +73,7 @@ function AuditorHeader({
         // Make the POST request
         try {
           axios.post(
-            "http://34.93.135.33:8080/api/track_creator_posty",
+            "http://192.168.29.116:8080/api/track_creator_posty",
             {
               connector: "instagram",
               handle: rows[i].page_name,

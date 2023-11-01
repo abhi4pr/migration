@@ -87,7 +87,7 @@ export default function RegisteredCampaign() {
 
   const handleDeleteRowConfirm = () => {
     axios
-      .delete(`http://34.93.135.33:8080/api/register_campaign/${deleteRowId}`)
+      .delete(`http://192.168.29.116:8080/api/register_campaign/${deleteRowId}`)
       .then((res) => {
         console.log(res);
         setReload(!reload);
@@ -234,7 +234,7 @@ export default function RegisteredCampaign() {
   //       console.log("come to for loop");
   //       try {
   //         const response = await axios
-  //           .post("http://34.93.135.33:8080/api/contentSectionReg", {
+  //           .post("http://192.168.29.116:8080/api/contentSectionReg", {
   //             // ...data,
   //             content_type_id: field.selectValue,
   //             register_campaign_id: campaignId,
@@ -249,7 +249,7 @@ export default function RegisteredCampaign() {
   //           })
   //           .then((response) => {
   //             axios
-  //               .put("http://34.93.135.33:8080/api/register_campaign", {
+  //               .put("http://192.168.29.116:8080/api/register_campaign", {
   //                 register_campaign_id: campaignId,
   //                 status: 1,
   //               })
@@ -303,14 +303,18 @@ export default function RegisteredCampaign() {
 
         try {
           const response = await axios
-            .post("http://34.93.135.33:8080/api/contentSectionReg", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data", // Important for file uploads
-              },
-            })
+            .post(
+              "http://192.168.29.116:8080/api/contentSectionReg",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data", // Important for file uploads
+                },
+              }
+            )
             .then((response) => {
               axios
-                .put("http://34.93.135.33:8080/api/register_campaign", {
+                .put("http://192.168.29.116:8080/api/register_campaign", {
                   register_campaign_id: campaignId,
                   status: 1,
                 })
@@ -363,7 +367,7 @@ export default function RegisteredCampaign() {
   };
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/register_campaign")
+      .get("http://192.168.29.116:8080/api/register_campaign")
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -392,7 +396,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -402,19 +406,19 @@ export default function RegisteredCampaign() {
         console.log(err);
       });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_commitments")
+      .get("http://192.168.29.116:8080/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<--------");
 
         setCommits(data);
       });
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("http://192.168.29.116:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/exe_campaign")
+      .get("http://192.168.29.116:8080/api/exe_campaign")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<----data");
@@ -426,7 +430,7 @@ export default function RegisteredCampaign() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/register_campaign")
+      .get("http://192.168.29.116:8080/api/register_campaign")
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -455,7 +459,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("http://192.168.29.116:8080/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);

@@ -26,7 +26,7 @@ export default function SubDepartmentOverview() {
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_sub_departments")
+      .get("http://192.168.29.116:8080/api/get_all_sub_departments")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -34,7 +34,7 @@ export default function SubDepartmentOverview() {
   }
   function getSubDepartmentData(dept_id) {
     axios
-      .get(`http://34.93.135.33:8080/api/get_subdept_from_dept"/${dept_id}`)
+      .get(`http://192.168.29.116:8080/api/get_subdept_from_dept"/${dept_id}`)
       .then((res) => {
         setSubDeparmentData(res.data);
         console.log(res.data, "hello sub");
@@ -43,7 +43,7 @@ export default function SubDepartmentOverview() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

@@ -28,20 +28,20 @@ const DepartmentOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
         });
     }
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       setAllUserDepartment(res.data.data);
     });
   }, [userID]);
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

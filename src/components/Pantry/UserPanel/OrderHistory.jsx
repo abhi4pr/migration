@@ -20,7 +20,9 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_orderreqshistory/${userId}`)
+      .get(
+        `http://192.168.29.116:8080/api/get_single_orderreqshistory/${userId}`
+      )
       .then((res) => {
         setOldUserProduct(res.data);
         setFilterData(res.data);
@@ -37,7 +39,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/get_delivery_boy", {
+      .post("http://192.168.29.116:8080/api/get_delivery_boy", {
         room_id: loginUserRoomId,
       })
       .then((res) => setReqDelApiData(res.data.results));
@@ -65,7 +67,7 @@ const OrderHistory = () => {
       }
       var productProp1 = propNames.toString();
     }
-    await axios.post("http://34.93.135.33:8080/api/add_orderreq", {
+    await axios.post("http://192.168.29.116:8080/api/add_orderreq", {
       product_id: row.product_id,
       order_quantity: row.Order_quantity,
       // special_request: specialRequest,
@@ -86,7 +88,7 @@ const OrderHistory = () => {
     setSelectedRow(row);
     axios
       .get(
-        `http://34.93.135.33:8080/api/get_single_productdata/${row.product_id}`
+        `http://192.168.29.116:8080/api/get_single_productdata/${row.product_id}`
       )
       .then((res) => {
         // console.log("new console", res.data);

@@ -130,7 +130,7 @@ export default function BrandMaster() {
     setError("");
 
     axios
-      .post("http://34.93.135.33:8080/api/add_brand", postData)
+      .post("http://192.168.29.116:8080/api/add_brand", postData)
       .then((response) => {
         console.log(response.data, "Data saved:");
         setIsModalOpen(false);
@@ -153,7 +153,7 @@ export default function BrandMaster() {
 
   // get api ------
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_brands").then((res) => {
       const newData = res.data.data;
       const sortedData = newData.sort((a, b) => b.brand_id - a.brand_id);
 
@@ -162,7 +162,7 @@ export default function BrandMaster() {
   };
 
   const categoryData = () => {
-    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/projectxCategory").then((res) => {
       console.log(res.data.data, "-------> cat data");
       setCategoryOptions(res.data.data);
     });
@@ -170,7 +170,7 @@ export default function BrandMaster() {
   const subCategoryData = () => {
     console.log("calling the subcategory data");
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -198,7 +198,7 @@ export default function BrandMaster() {
   const subCategoryDataOnEdit = () => {
     console.log("calling the subcategory data on Edit");
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -217,7 +217,7 @@ export default function BrandMaster() {
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`http://34.93.135.33:8080/api/edit_brand`, {
+      .put(`http://192.168.29.116:8080/api/edit_brand`, {
         brand_id: editData.brand_id,
         brand_name: editData.brand_name,
         category_id: editData.category_id,
@@ -240,7 +240,7 @@ export default function BrandMaster() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -280,7 +280,7 @@ export default function BrandMaster() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`http://34.93.135.33:8080/api/delete_brand/${itemToDeleteId}`)
+        .delete(`http://192.168.29.116:8080/api/delete_brand/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");

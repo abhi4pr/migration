@@ -17,7 +17,7 @@ const DepartmentMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://34.93.135.33:8080/api/add_department", {
+      .post("http://192.168.29.116:8080/api/add_department", {
         dept_name: departmentName,
         remark: remark,
       })

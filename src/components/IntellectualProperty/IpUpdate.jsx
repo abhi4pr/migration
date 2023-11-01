@@ -70,21 +70,21 @@ const IpUpdate = () => {
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("http://192.168.29.116:8080/api/get_all_users")
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_platforms")
+      .get("http://192.168.29.116:8080/api/get_all_platforms")
       .then((res) => setPlatFormData(res.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_iptypes")
+      .get("http://192.168.29.116:8080/api/get_all_iptypes")
       .then((res) => setIpTypeData(res.data));
   }, []);
 
   const handleSelectChange = (e) => {
     axios
-      .get(`http://44.211.225.140:8000/user/${e.target.value}`)
+      .get(`http://192.168.29.116:8080/api/get_single_user/${e.target.value}`)
       .then((res) => {
         setl1(res.data.Report_L1);
         setl2(res.data.Report_L2);
