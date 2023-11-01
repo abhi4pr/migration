@@ -21,7 +21,7 @@ const UserAuthDetail = () => {
   }, []);
   function getData() {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user_auth_detail/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user_auth_detail/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -106,7 +106,7 @@ const UserAuthDetail = () => {
   ];
   function postData() {
     for (const element of filterData) {
-      axios.put("http://192.168.29.116:8080/api/update_user_auth", {
+      axios.put("http://34.93.135.33:8080/api/update_user_auth", {
         auth_id: element.auth_id,
         Juser_id: Number(id),
         obj_id: element.obj_id,

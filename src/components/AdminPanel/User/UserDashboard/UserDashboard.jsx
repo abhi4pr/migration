@@ -9,11 +9,11 @@ const UserDashboard = () => {
   const [departmentData, setDepartmentData] = useState([]);
 
   useEffect(() => {
-    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       setUserData(res.data.data);
     });
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

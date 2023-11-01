@@ -38,21 +38,21 @@ const IpMaster = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_users")
+      .get("http://34.93.135.33:8080/api/get_all_users")
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_platforms")
+      .get("http://34.93.135.33:8080/api/get_all_platforms")
       .then((res) => setPlatFormData(res.data));
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_iptypes")
+      .get("http://34.93.135.33:8080/api/get_all_iptypes")
       .then((res) => setIpTypeData(res.data));
   }, []);
 
   const handleSelectChange = (e) => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user/${e.target.value}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${e.target.value}`)
       .then((res) => setSingleUser(res.data));
   };
 
@@ -103,7 +103,7 @@ const IpMaster = () => {
       return;
     }
 
-    await axios.post("http://192.168.29.116:8080/api/add_instapage", {
+    await axios.post("http://34.93.135.33:8080/api/add_instapage", {
       ip_type: Number(IPType),
       platform: Number(platform),
       ip_name: IPName,

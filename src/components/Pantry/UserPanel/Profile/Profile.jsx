@@ -18,7 +18,7 @@ const Profile = () => {
 
   function handleGetData() {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user/${loginUserId}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${loginUserId}`)
       .then((res) => {
         setUserData(res.data);
         // console.log(res.data, "user data");
@@ -27,7 +27,7 @@ const Profile = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`http://192.168.29.116:8080/api/get_user_job_responsibility`, {
+      .post(`http://34.93.135.33:8080/api/get_user_job_responsibility`, {
         user_id: Number(loginUserId),
       })
       .then((res) => {

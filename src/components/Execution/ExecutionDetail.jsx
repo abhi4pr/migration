@@ -26,7 +26,7 @@ function ExecutionDetail() {
     axios
       .get(
         `
-        http://192.168.29.116:8080/api/get_exe_sum`
+        http://34.93.135.33:8080/api/get_exe_sum`
       )
       .then((res) => {
         // console.log(

@@ -22,7 +22,7 @@ const SittingMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://192.168.29.116:8080/api/add_sitting", {
+      .post("http://34.93.135.33:8080/api/add_sitting", {
         sitting_ref_no: sittingRefrenceNum,
         room_id: Number(roomId),
         sitting_area: sittingArea,
@@ -44,7 +44,7 @@ const SittingMaster = () => {
   };
   useEffect(() => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_rooms")
+      .get("http://34.93.135.33:8080/api/get_all_rooms")
       .then((res) => {
         getRoomData(res.data.data);
       })

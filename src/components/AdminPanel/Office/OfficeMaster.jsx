@@ -21,7 +21,7 @@ const OfficeMast = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get("http://192.168.29.116:8080/api/get_all_rooms").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_rooms").then((res) => {
       setOfficeData(res.data.data);
     });
   }, []);
@@ -41,7 +41,7 @@ const OfficeMast = () => {
       if (isLoginIdExists) {
         alert("this Room No already exists");
       } else {
-        await axios.post("http://192.168.29.116:8080/api/add_room", formData, {
+        await axios.post("http://34.93.135.33:8080/api/add_room", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
