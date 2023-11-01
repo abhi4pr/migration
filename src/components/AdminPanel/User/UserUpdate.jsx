@@ -212,11 +212,9 @@ const UserUpdate = () => {
         getDepartmentData(res.data);
       });
 
-    axios
-      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
-      .then((res) => {
-        setRefrenceData(res.data.data);
-      });
+    axios.get("http://34.93.135.33:8080/api/not_alloc_sitting").then((res) => {
+      setRefrenceData(res.data.data);
+    });
 
     axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);

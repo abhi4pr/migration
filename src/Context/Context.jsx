@@ -27,9 +27,13 @@ const AppProvider = ({ children }) => {
       const decodedToken = jwtDecode(storedToken);
       const userID = decodedToken.id;
       setToken(decodedToken);
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
-        setData(res.data);
-      });
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setData(res.data);
+        });
     }
   }, [storedToken]);
 

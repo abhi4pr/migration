@@ -52,28 +52,26 @@ export default function Review() {
   const [enhancement, setEnhancement] = useState([]);
 
   const getData = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
-      .then((res) => {
-        const data = res.data.data.filter(
-          (e) => e.status == "22" && e.stage == 3
-        );
-        const verified = res.data.data.filter(
-          (e) => e.status == "23" && e.stage == 4
-        );
-        const rejct = res.data.data.filter(
-          (e) => e.status == "24" && e.stage == 3
-        );
-        const enhance = res.data.data.filter(
-          (e) => e.status == "25" && e.stage == 3
-        );
-        setRows(data);
-        setVerifid(verified);
-        setReject(rejct);
-        setEnhancement(enhance);
+    axios.get("http://34.93.135.33:8080/api/contentSectionReg").then((res) => {
+      const data = res.data.data.filter(
+        (e) => e.status == "22" && e.stage == 3
+      );
+      const verified = res.data.data.filter(
+        (e) => e.status == "23" && e.stage == 4
+      );
+      const rejct = res.data.data.filter(
+        (e) => e.status == "24" && e.stage == 3
+      );
+      const enhance = res.data.data.filter(
+        (e) => e.status == "25" && e.stage == 3
+      );
+      setRows(data);
+      setVerifid(verified);
+      setReject(rejct);
+      setEnhancement(enhance);
 
-        console.log(data, "this is by contentSectionReg");
-      });
+      console.log(data, "this is by contentSectionReg");
+    });
   };
 
   const handleTextChange = (event) => {

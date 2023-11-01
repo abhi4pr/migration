@@ -73,7 +73,13 @@ const OverviewIndex = () => {
       axios.get("http://34.93.135.33:8080/api/execution_graph").then((res) => {
         console.log(res.data, "this is response");
         setCounts(res.data);
-        console.log(res.data.filter((count) => count.interval_type==="Weekly" && count.execution_status===1)[0].count,"filter data")
+        console.log(
+          res.data.filter(
+            (count) =>
+              count.interval_type === "Weekly" && count.execution_status === 1
+          )[0].count,
+          "filter data"
+        );
       });
 
       setCounts(responseArray);
@@ -101,9 +107,32 @@ const OverviewIndex = () => {
             <Grid xs={12} sm={6} lg={3}>
               <OverviewBudget
                 difference={12}
-                complete={counts.filter((count) => count.interval_type === "Weekly" && count.execution_status === 1)[0]?.count !== undefined ? counts.filter((count) => count.interval_type === "Weekly" && count.execution_status === 1)[0].count : 0
-              }
-                pending={counts.filter((count) => count.interval_type==="Weekly" && count.execution_status===0)[0]?.count?counts.filter((count) => count.interval_type==="Weekly" && count.execution_status===0)[0].count:0}
+                complete={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Weekly" &&
+                      count.execution_status === 1
+                  )[0]?.count !== undefined
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Weekly" &&
+                          count.execution_status === 1
+                      )[0].count
+                    : 0
+                }
+                pending={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Weekly" &&
+                      count.execution_status === 0
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Weekly" &&
+                          count.execution_status === 0
+                      )[0].count
+                    : 0
+                }
                 sx={{ height: "100%" }}
                 value="Weekly Execution"
               />
@@ -111,8 +140,32 @@ const OverviewIndex = () => {
             <Grid xs={12} sm={6} lg={3}>
               <OverviewBudget
                 difference={12}
-                complete={counts.filter((count) => count.interval_type==="Monthly" && count.execution_status===1)[0]?.count?counts.filter((count) => count.interval_type==="Monthly" && count.execution_status===1)[0].count:0}
-                pending={counts.filter((count) => count.interval_type==="Monthly" && count.execution_status===0)[0]?.count?counts.filter((count) => count.interval_type==="Monthly" && count.execution_status===0)[0].count:0}
+                complete={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Monthly" &&
+                      count.execution_status === 1
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Monthly" &&
+                          count.execution_status === 1
+                      )[0].count
+                    : 0
+                }
+                pending={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Monthly" &&
+                      count.execution_status === 0
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Monthly" &&
+                          count.execution_status === 0
+                      )[0].count
+                    : 0
+                }
                 sx={{ height: "100%" }}
                 value="Monthly Execution"
               />
@@ -120,8 +173,32 @@ const OverviewIndex = () => {
             <Grid xs={12} sm={6} lg={3}>
               <OverviewBudget
                 difference={12}
-                complete={counts.filter((count) => count.interval_type==="Quarterly" && count.execution_status===1)[0]?.count?counts.filter((count) => count.interval_type==="Quarterly" && count.execution_status===1)[0].count:0}
-                pending={counts.filter((count) => count.interval_type==="Quarterly" && count.execution_status===0)[0]?.count?counts.filter((count) => count.interval_type==="Quarterly" && count.execution_status===0)[0].count:0}
+                complete={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Quarterly" &&
+                      count.execution_status === 1
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Quarterly" &&
+                          count.execution_status === 1
+                      )[0].count
+                    : 0
+                }
+                pending={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Quarterly" &&
+                      count.execution_status === 0
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Quarterly" &&
+                          count.execution_status === 0
+                      )[0].count
+                    : 0
+                }
                 sx={{ height: "100%" }}
                 value="Quaterly Execution"
               />
@@ -129,8 +206,32 @@ const OverviewIndex = () => {
             <Grid xs={12} sm={6} lg={3}>
               <OverviewBudget
                 difference={12}
-                complete={counts.filter((count) => count.interval_type==="Yearly" && count.execution_status===1)[0]?.count?counts.filter((count) => count.interval_type==="Yearly" && count.execution_status===1)[0].count:0}
-                pending={counts.filter((count) => count.interval_type==="Yearly" && count.execution_status===0)[0]?.count?counts.filter((count) => count.interval_type==="Yearly" && count.execution_status===0)[0].count:0}
+                complete={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Yearly" &&
+                      count.execution_status === 1
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Yearly" &&
+                          count.execution_status === 1
+                      )[0].count
+                    : 0
+                }
+                pending={
+                  counts.filter(
+                    (count) =>
+                      count.interval_type === "Yearly" &&
+                      count.execution_status === 0
+                  )[0]?.count
+                    ? counts.filter(
+                        (count) =>
+                          count.interval_type === "Yearly" &&
+                          count.execution_status === 0
+                      )[0].count
+                    : 0
+                }
                 sx={{ height: "100%" }}
                 value="Yearly Execution"
               />

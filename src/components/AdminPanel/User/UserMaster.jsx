@@ -182,9 +182,7 @@ const UserMaster = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(
-          `http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`
-        )
+        .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
@@ -200,11 +198,9 @@ const UserMaster = () => {
         getDepartmentData(res.data);
       });
 
-    axios
-      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
-      .then((res) => {
-        getRefrenceData(res.data.data);
-      });
+    axios.get("http://34.93.135.33:8080/api/not_alloc_sitting").then((res) => {
+      getRefrenceData(res.data.data);
+    });
 
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
@@ -289,15 +285,11 @@ const UserMaster = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post(
-            "http://34.93.135.33:8080/api/add_user",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
 
           for (const elements of documents) {
             // formData.append("user_id", loginId);

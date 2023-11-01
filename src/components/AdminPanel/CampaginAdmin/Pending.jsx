@@ -123,12 +123,10 @@ export default function Pending() {
 
         setCommits(data);
       });
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
-      .then((response) => {
-        const data = response.data.data.filter((e) => e.dept_id == 13);
-        setAssignToList(data);
-      });
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((response) => {
+      const data = response.data.data.filter((e) => e.dept_id == 13);
+      setAssignToList(data);
+    });
   }, []);
 
   useEffect(() => {

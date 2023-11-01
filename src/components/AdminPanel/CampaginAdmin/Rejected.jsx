@@ -289,13 +289,11 @@ export default function Rejected({ ReloadMain }) {
 
         setCommits(data);
       });
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
-      .then((response) => {
-        const data = response.data.data.filter((e) => e.dept_id == 13);
-        console.log(data);
-        setAssignToList(data);
-      });
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((response) => {
+      const data = response.data.data.filter((e) => e.dept_id == 13);
+      console.log(data);
+      setAssignToList(data);
+    });
   }, []);
 
   useEffect(() => {

@@ -20,9 +20,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .get(
-        `http://34.93.135.33:8080/api/get_single_orderreqshistory/${userId}`
-      )
+      .get(`http://34.93.135.33:8080/api/get_single_orderreqshistory/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data);
         setFilterData(res.data);

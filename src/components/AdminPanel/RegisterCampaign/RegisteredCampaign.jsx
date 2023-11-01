@@ -303,15 +303,11 @@ export default function RegisteredCampaign() {
 
         try {
           const response = await axios
-            .post(
-              "http://34.93.135.33:8080/api/contentSectionReg",
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data", // Important for file uploads
-                },
-              }
-            )
+            .post("http://34.93.135.33:8080/api/contentSectionReg", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data", // Important for file uploads
+              },
+            })
             .then((response) => {
               axios
                 .put("http://34.93.135.33:8080/api/register_campaign", {

@@ -91,10 +91,7 @@ const ProductUpdate = () => {
 
   const removeProp = async (propid) => {
     var data = await axios
-      .delete(
-        `http://34.93.135.33:8080/api/delete_propdelete/${propid}`,
-        null
-      )
+      .delete(`http://34.93.135.33:8080/api/delete_propdelete/${propid}`, null)
       .then((crash) => {
         axios
           .get(`http://34.93.135.33:8080/api/get_single_productdata/${id}`)
