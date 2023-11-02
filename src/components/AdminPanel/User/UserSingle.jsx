@@ -93,7 +93,7 @@ const UserSingle = () => {
     axios
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
-        fetchedData = res.data.data;
+        fetchedData = res.data;
         const { dept_id } = fetchedData;
         setUser(fetchedData);
         setSubDeptId(dept_id);
@@ -156,7 +156,7 @@ const UserSingle = () => {
       .then(() => getData())
       .then(() => {
         axios
-          .post("http://44.211.225.140:8000/mail2", {
+          .post("http://34.93.135.33:8080/api/add_send_user_mail", {
             email: fetchedData[0].user_email_id,
             subject: "User Onboard",
             text: "Your Some Document is not clear Plzz Upload Again",

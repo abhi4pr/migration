@@ -123,7 +123,7 @@ const UserWiseResponsibility = () => {
           console.log(MailUser, "mail user hai");
 
           axios
-            .post("http://44.211.225.140:8000/mail2", {
+            .post("http://34.93.135.33:8080/api/add_send_user_mail", {
               email: MailUser.user_email_id,
               subject: "User Registration",
               text: "You Have Assign New KRA",

@@ -45,6 +45,7 @@ const UserOverview = () => {
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
+  const roleToken = decodedToken.role_id;
 
   const oldToken = sessionStorage.getItem("token");
 
@@ -124,6 +125,7 @@ const UserOverview = () => {
         user_id: user_id,
         user_login_id: user_login_id,
         user_login_password: user_login_password,
+        role_id: roleToken,
       })
       .then((res) => {
         const token1 = res.data.token;
