@@ -157,121 +157,123 @@ const PreOnboardingUserMaster = () => {
     }
   };
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_user/${id}`).then((res) => {
-      const fetchedData = res.data.data;
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        const fetchedData = res.data;
 
-      const {
-        user_name,
-        user_email_id,
-        PersonalEmail,
-        user_contact_no,
-        PersonalNumber,
-        fatherName,
-        motherName,
-        Hobbies,
-        Gender,
-        BloodGroup,
-        Nationality,
-        SpokenLanguages,
-        user_login_id,
-        user_login_password,
-        joining_date,
-        DOB,
-        MartialStatus,
-        DateOfMarriage,
-        spouse_name,
-        tenth_marksheet_validate,
-        twelveth_marksheet_validate,
-        UG_Marksheet_validate,
-        uid_validate,
-        pan_validate,
-        passport_validate,
-        pre_expe_letter_validate,
-        pre_off_letter_validate,
-        pre_relieving_letter_validate,
-        bankPassBook_Cheque_validate,
-        permanent_address,
-        permanent_city,
-        permanent_state,
-        permanent_pin_code,
-        current_address,
-        current_city,
-        current_state,
-        current_pin_code,
-      } = fetchedData;
+        const {
+          user_name,
+          user_email_id,
+          PersonalEmail,
+          user_contact_no,
+          PersonalNumber,
+          fatherName,
+          motherName,
+          Hobbies,
+          Gender,
+          BloodGroup,
+          Nationality,
+          SpokenLanguages,
+          user_login_id,
+          user_login_password,
+          joining_date,
+          DOB,
+          MartialStatus,
+          DateOfMarriage,
+          spouse_name,
+          tenth_marksheet_validate,
+          twelveth_marksheet_validate,
+          UG_Marksheet_validate,
+          uid_validate,
+          pan_validate,
+          passport_validate,
+          pre_expe_letter_validate,
+          pre_off_letter_validate,
+          pre_relieving_letter_validate,
+          bankPassBook_Cheque_validate,
+          permanent_address,
+          permanent_city,
+          permanent_state,
+          permanent_pin_code,
+          current_address,
+          current_city,
+          current_state,
+          current_pin_code,
+        } = fetchedData;
 
-      console.log(DOB, "yha birthday date hai");
+        console.log(DOB, "yha birthday date hai");
 
-      setAllUserData(fetchedData);
-      setUserName(user_name);
-      setEmail(user_email_id);
-      setPersonalEmail(PersonalEmail);
-      //setContact(PersonalNumber);
-      //setPersonalContact(user_contact_no);
-      setContact(user_contact_no);
-      setPersonalContact(PersonalNumber);
-      setFatherName(fatherName);
-      setMotherName(motherName);
-      setHobbies(Hobbies);
-      setGender(Gender);
-      setBloodGroup(BloodGroup);
-      {
-        Nationality && setNationality(Nationality);
-      }
-      setSpeakingLanguage(SpokenLanguages);
-      setLoginId(user_login_id);
-      setPassword(user_login_password);
-      setJoiningDate(joining_date?.split("T")?.[0]);
-      setMaritialStatus(MartialStatus);
-      setDateOfBirth(DOB.split("T")?.[0]);
-      setDateOfMarraige(DateOfMarriage);
-      setSpouseName(spouse_name);
-      {
-        tenth_marksheet_validate !== "" &&
-          setXMarksheetValidation(tenth_marksheet_validate);
-      }
-      {
-        twelveth_marksheet_validate !== "" &&
-          setXIIMarksheetValidation(twelveth_marksheet_validate);
-      }
-      {
-        UG_Marksheet_validate !== "" &&
-          setUnderGraduationDocValidation(UG_Marksheet_validate);
-      }
-      {
-        uid_validate !== "" && setUIDValidation(uid_validate);
-      }
-      {
-        pan_validate !== "" && setPanUploadValidation(pan_validate);
-      }
-      {
-        passport_validate !== "" && setPassportValidation(passport_validate);
-      }
-      {
-        pre_expe_letter_validate !== "" &&
-          setExperienceDocValidation(pre_expe_letter_validate);
-      }
-      {
-        pre_off_letter_validate !== "" &&
-          setPreviousOfferLetterValidation(pre_off_letter_validate);
-      }
-      {
-        pre_relieving_letter_validate !== "" &&
-          setPreviousRelievingLetterValidation(pre_relieving_letter_validate);
-      }
-      {
-        bankPassBook_Cheque_validate !== "" &&
-          setPassbookChequeValidation(bankPassBook_Cheque_validate);
-      }
-      setPermanentAddress(permanent_address);
-      setPermanentCity(permanent_city);
-      setPermanentState(permanent_state);
-      setPermanentPincode(permanent_pin_code);
-      setCurrentAddress(current_address);
-      setcurrentCity(current_city);
-      setcurrentState(current_state);
-      setcurrentPincode(current_pin_code);
-    });
+        setAllUserData(fetchedData);
+        setUserName(user_name);
+        setEmail(user_email_id);
+        setPersonalEmail(PersonalEmail);
+        //setContact(PersonalNumber);
+        //setPersonalContact(user_contact_no);
+        setContact(user_contact_no);
+        setPersonalContact(PersonalNumber);
+        setFatherName(fatherName);
+        setMotherName(motherName);
+        setHobbies(Hobbies);
+        setGender(Gender);
+        setBloodGroup(BloodGroup);
+        {
+          Nationality && setNationality(Nationality);
+        }
+        setSpeakingLanguage(SpokenLanguages);
+        setLoginId(user_login_id);
+        setPassword(user_login_password);
+        setJoiningDate(joining_date?.split("T")?.[0]);
+        setMaritialStatus(MartialStatus);
+        setDateOfBirth(DOB.split("T")?.[0]);
+        setDateOfMarraige(DateOfMarriage);
+        setSpouseName(spouse_name);
+        {
+          tenth_marksheet_validate !== "" &&
+            setXMarksheetValidation(tenth_marksheet_validate);
+        }
+        {
+          twelveth_marksheet_validate !== "" &&
+            setXIIMarksheetValidation(twelveth_marksheet_validate);
+        }
+        {
+          UG_Marksheet_validate !== "" &&
+            setUnderGraduationDocValidation(UG_Marksheet_validate);
+        }
+        {
+          uid_validate !== "" && setUIDValidation(uid_validate);
+        }
+        {
+          pan_validate !== "" && setPanUploadValidation(pan_validate);
+        }
+        {
+          passport_validate !== "" && setPassportValidation(passport_validate);
+        }
+        {
+          pre_expe_letter_validate !== "" &&
+            setExperienceDocValidation(pre_expe_letter_validate);
+        }
+        {
+          pre_off_letter_validate !== "" &&
+            setPreviousOfferLetterValidation(pre_off_letter_validate);
+        }
+        {
+          pre_relieving_letter_validate !== "" &&
+            setPreviousRelievingLetterValidation(pre_relieving_letter_validate);
+        }
+        {
+          bankPassBook_Cheque_validate !== "" &&
+            setPassbookChequeValidation(bankPassBook_Cheque_validate);
+        }
+        setPermanentAddress(permanent_address);
+        setPermanentCity(permanent_city);
+        setPermanentState(permanent_state);
+        setPermanentPincode(permanent_pin_code);
+        setCurrentAddress(current_address);
+        setcurrentCity(current_city);
+        setcurrentState(current_state);
+        setcurrentPincode(current_pin_code);
+      });
   }, [id]);
 
   const handleSubmit = (e) => {
@@ -349,7 +351,7 @@ const PreOnboardingUserMaster = () => {
 
     // After update send mail
     axios
-      .post("http://44.211.225.140:8000/mail2", {
+      .post("http://34.93.135.33:8080/api/add_send_user_mail", {
         email: email,
         subject: "User Pre Onboarding",
         text: "Pre Onboarding Data Update Successfully",
