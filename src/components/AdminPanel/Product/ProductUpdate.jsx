@@ -49,7 +49,7 @@ const ProductUpdate = () => {
 
     // formData.append("Opening_stock_date", openingStockDate);
 
-    axios.put("http://192.168.29.116:8080/api/update_productupdate", formData, {
+    axios.put("http://34.93.135.33:8080/api/update_productupdate", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -92,12 +92,12 @@ const ProductUpdate = () => {
   const removeProp = async (propid) => {
     var data = await axios
       .delete(
-        `http://192.168.29.116:8080/api/delete_propdelete/${propid}`,
+        `http://34.93.135.33:8080/api/delete_propdelete/${propid}`,
         null
       )
       .then((crash) => {
         axios
-          .get(`http://192.168.29.116:8080/api/get_single_productdata/${id}`)
+          .get(`http://34.93.135.33:8080/api/get_single_productdata/${id}`)
           .then((res) => {
             setInputFields(res.data.Product_Prop);
           });
@@ -135,7 +135,7 @@ const ProductUpdate = () => {
   useEffect(() => {
     if (localStorage.getItem("product_id")) {
       axios
-        .get(`http://192.168.29.116:8080/api/get_single_productdata/${id}`)
+        .get(`http://34.93.135.33:8080/api/get_single_productdata/${id}`)
         .then((res) => {
           setInputFields(res.data.Product_Prop);
         });

@@ -17,13 +17,13 @@ export default function SubDepartmentUpdate() {
 
   function getData() {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
 
     axios
-      .get(`http://192.168.29.116:8080/api/get_subdept_from_id/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_subdept_from_id/${id}`)
       .then((res) => {
         console.log(res.data.dept_id, "yha deta hai");
         setDeptId(res.data.dept_id);
@@ -38,7 +38,7 @@ export default function SubDepartmentUpdate() {
   async function handleSubmit(e) {
     e.preventDefault();
     // sub_dept_name, dept_id, remark, last_updated_by {target by id}
-    await axios.put(`http://192.168.29.116:8080/api/update_sub_department`, {
+    await axios.put(`http://34.93.135.33:8080/api/update_sub_department`, {
       id: Number(id),
       sub_dept_name: subDepartmentName,
       dept_id: Number(deptId),

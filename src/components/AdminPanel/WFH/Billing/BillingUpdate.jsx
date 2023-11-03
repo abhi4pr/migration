@@ -14,11 +14,9 @@ const BillingUpdate = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
-      .then((res) => {
-        getDepartmentData(res.data);
-      });
+    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
+      getDepartmentData(res.data);
+    });
 
     axios.get(`http://44.211.225.140:8000/billingheader/${id}`).then((res) => {
       const fetchData = res.data;

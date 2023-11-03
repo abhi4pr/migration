@@ -59,14 +59,14 @@ const UserSingle = () => {
 
   const KRAAPI = (userId) => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_kra/${userId}`)
+      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
       .then((res) => {
         setKRIData(res.data);
       });
   };
   function userOtherDocuments() {
     axios
-      .get(`http://192.168.29.116:8080/api/get_user_other_fields/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -79,7 +79,7 @@ const UserSingle = () => {
   //     });
   // };
   useEffect(() => {
-    axios.get("http://192.168.29.116:8080/api/get_all_sittings").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
     KRAAPI(id);
@@ -91,7 +91,7 @@ const UserSingle = () => {
   let fetchedData;
   const getData = () => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         fetchedData = res.data;
         const { dept_id } = fetchedData;
@@ -139,7 +139,7 @@ const UserSingle = () => {
 
     axios({
       method: "put",
-      url: "http://192.168.29.116:8080/api/update_user",
+      url: "http://34.93.135.33:8080/api/update_user",
       data: formData,
     }).then(() => {
       if (emptyState) emptyState("");
@@ -156,7 +156,7 @@ const UserSingle = () => {
       .then(() => getData())
       .then(() => {
         axios
-          .post("http://192.168.29.116:8080/api/add_send_user_mail", {
+          .post("http://34.93.135.33:8080/api/add_send_user_mail", {
             email: fetchedData[0].user_email_id,
             subject: "User Onboard",
             text: "Your Some Document is not clear Plzz Upload Again",

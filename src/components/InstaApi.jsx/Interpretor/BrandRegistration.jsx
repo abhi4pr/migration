@@ -77,7 +77,7 @@ export default function BrandRegistration({
     }
     try {
       axios
-        .post("http://192.168.29.116:8080/api/insta_brand", {
+        .post("http://34.93.135.33:8080/api/insta_brand", {
           instaBrandName: brandname,
           brandCategoryId: brandCategoryname.brandCategory_id,
           brandSubCategoryId: brandsubcat.brandSubCategory_id,
@@ -127,7 +127,7 @@ export default function BrandRegistration({
   // const descriptionElementRef = React.useRef(null);
 
   useEffect(() => {
-    axios.get("http://192.168.29.116:8080/api/brandCategory").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/brandCategory").then((res) => {
       // console.log(res.data.data);
       setBrandCategory(res.data.data);
       setLoading(true);

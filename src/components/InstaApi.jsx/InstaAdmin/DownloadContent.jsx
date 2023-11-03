@@ -28,7 +28,7 @@ const InterpretorPageDashboard = () => {
   console.log(bradcat);
   const handlepage = () => {
     axios
-      .post("http://192.168.29.116:8080/api/get_posts_from_name", {
+      .post("http://34.93.135.33:8080/api/get_posts_from_name", {
         creatorName: creatorName,
       })
       .then((res) => {
@@ -59,7 +59,7 @@ const InterpretorPageDashboard = () => {
     for (let i = 0; i < bradcat.length - 2; i++) {
       console.log(bradcat[i]);
       axios
-        .delete(`http://192.168.29.116:8080/api/delete_brand/${bradcat[i]}`)
+        .delete(`http://34.93.135.33:8080/api/delete_brand/${bradcat[i]}`)
         .then((res) => {
           console.log(res.status);
         });

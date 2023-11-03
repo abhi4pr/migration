@@ -13,6 +13,7 @@ import image2 from "./images/image2.png";
 import image3 from "./images/i3.png";
 import image4 from "./images/i4.png";
 import image5 from "./images/image5.png";
+import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import {
@@ -23,13 +24,13 @@ import {
   View,
 } from "@react-pdf/renderer";
 import { Text, StyleSheet } from "@react-pdf/renderer";
-
 import { Button } from "@mui/material";
 import MyTemplate1 from "./Template";
 import MyTemplate2 from "./Template2";
 import MyTemplate3 from "./Template3";
 import MyTemplate4 from "./Template4";
 import MyTemplate5 from "./Template5";
+import DigitalSignature from "../../../DigitalSignature/DigitalSignature";
 // import DateFormattingComponent from "../../../DateFormater/DateFormared";
 
 const images = [
@@ -42,6 +43,7 @@ const images = [
 
 const SalaryWFH = () => {
   const { toastAlert } = useGlobalContext();
+  const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -57,6 +59,14 @@ const SalaryWFH = () => {
   const [selectedTemplate, setSelectedTempate] = useState("");
   const [templateState, setTemplateState] = useState(null);
 
+  const [thisMonthTotalSalary, setThisMonthTotalSalary] = useState(0);
+  const [thisMonthTotalBonus, setThisMonthTotalBonus] = useState(0);
+  const [thisMonthTotalDeductions, setThisMonthTotalDeductions] = useState(0);
+  const [thisMonthTDS, setThisMonthTDS] = useState(0);
+  const [employeeLeft, SetEmployeeLeft] = useState([]);
+
+  const [card2Data, setCard2Data] = useState(null);
+
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
@@ -65,7 +75,29 @@ const SalaryWFH = () => {
   const [rowData, setDataRow] = useState(null);
   const [rowDataModal, setRowDataModal] = useState(null);
 
-  const monthValue = [
+  //harshal
+  const [completedYearsMonths, setCompletedYearsMonths] = useState([]);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+
+  //cards
+  const [newJoineeCount, setNewJoineeCount] = useState([]);
+
+  //salary exits dept wise
+  const [deptSalary, setDeptSalary] = useState([]);
+  const [salaryStatus, setSalaryStatus] = useState(0);
+
+  var settings = {
+    dots: false,
+    arrows: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    swipeToSlide: true,
+    variableWidth: true,
+  };
+
+  //harshal
+  const months = [
     "January",
     "February",
     "March",
@@ -86,9 +118,15 @@ const SalaryWFH = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://44.211.225.140:8000/allwfhusers");
+        const res = await axios.get(
+          "http://34.93.135.33:8080/api/get_all_wfh_users"
+        );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
+        const filteredActive = data.filter(
+          (d) => d.dept_id === department && d.user_status
+        );
+        setActiveUsers(filteredActive);
         if (filteredUser?.length > 0) {
           const firstUser = filteredUser[0];
           setUserName(firstUser);
@@ -105,32 +143,88 @@ const SalaryWFH = () => {
 
   useEffect(() => {
     axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
       .then((res) => {
-        getDepartmentData(res.data);
+        getDepartmentData(res.data.data);
       });
+
+    //harshal
+    axios
+      .get("http://34.93.135.33:8080/api/get_month_year_data")
+      .then((res) => {
+        setCompletedYearsMonths(res.data.data);
+      });
+    //harshal
   }, []);
 
   useEffect(() => {
-    axios.get(`http://192.168.29.116:8080/api/get_all_users`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/get_all_users`).then((res) => {
       getUsersData(res.data.data);
     });
     if (department) {
       axios
-        .get(`http://44.211.225.140:8000/getuserdeptwise/${department}`)
+        .get(`http://34.93.135.33:8080/api/get_user_by_deptid/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
     }
   }, [department]);
 
-  const getUserSalary = (selectedUserId) => {
-    const userSalaryConst = userData.filter(
-      (item) => item.user_id == selectedUserId
+  //harshal.. calculating monthly salary
+  useEffect(() => {
+    const sumMonth = filterData.reduce(
+      (acc, obj) => acc + parseFloat(obj.total_salary),
+      0
     );
-    setUserSalary(userSalaryConst[0].salary);
-    setUserTds(userSalaryConst[0].tds_per);
+    const sumBonus = filterData.reduce(
+      (acc, obj) => acc + parseFloat(obj.bonus),
+      0
+    );
+    const sumDeductions = filterData.reduce(
+      (acc, obj) => acc + parseFloat(obj.salary_deduction),
+      0
+    );
+    const sumTDSDeductions = filterData.reduce(
+      (acc, obj) => acc + parseFloat(obj.tds_deduction),
+      0
+    );
+    setThisMonthTotalSalary(sumMonth);
+    setThisMonthTotalBonus(sumBonus);
+    setThisMonthTotalDeductions(sumDeductions);
+    setThisMonthTDS(sumTDSDeductions);
+  }, [filterData]);
+
+  // Get the current year and month
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonthNumber = new Date().getMonth() + 1;
+  // Function to get the previous month
+  const getPreviousMonth = () => {
+    const previousMonthIndex = currentDate.getMonth() - 1;
+    return previousMonthIndex >= 0 ? months[previousMonthIndex] : months[11];
   };
+
+  //harshal
+  const [selectedMonth, setSelectedMonth] = useState(getPreviousMonth());
+  const [selectedYear, setSelectedYear] = useState(currentYear.toString());
+  const [activeusers, setActiveUsers] = useState("");
+
+  const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
+
+  const handleCardSelect = (index, data) => {
+    setSelectedCardIndex(index);
+    setYear(data.year);
+    setMonth(data.month);
+  };
+  //harshal
+
+  // const getUserSalary = (selectedUserId) => {
+  //   const userSalaryConst = userData.filter(
+  //     (item) => item.user_id == selectedUserId
+  //   );
+  //   setUserSalary(userSalaryConst[0].salary);
+  //   setUserTds(userSalaryConst[0].tds_per);
+  // };
 
   const handleSubmit = () => {
     const payload = {
@@ -139,9 +233,10 @@ const SalaryWFH = () => {
       year: year,
     };
     axios
-      .post("http://44.211.225.140:8000/salaryfromattendence", payload)
+      .post("http://34.93.135.33:8080/api/get_salary_by_id_month_year", payload)
       .then((res) => {
         setFilterData(res.data.data);
+        setData(res.data.data);
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
@@ -155,15 +250,17 @@ const SalaryWFH = () => {
     formData.append("id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
-    axios.put(`http://192.168.29.116:8080/api/update_user`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    axios
+      .put(`http://34.93.135.33:8080/api/update_user`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => handleSubmit());
   }
 
   useEffect(() => {
-    const result = filterData.filter((d) => {
+    const result = data.filter((d) => {
       return d.user_name?.toLowerCase().includes(search.toLocaleLowerCase());
     });
     setFilterData(result);
@@ -171,13 +268,52 @@ const SalaryWFH = () => {
 
   useEffect(() => {
     if (department || month || year !== "") {
-      handleSubmit();
+      axios
+        .get("http://34.93.135.33:8080/api/get_total_salary")
+        .then((res) => setCard2Data(res.data.data[0]));
+
+      axios
+        .post("http://34.93.135.33:8080/api/left_employees", {
+          dept_id: department,
+          month: month,
+          year: year,
+        })
+        .then((res) => SetEmployeeLeft(res.data));
     }
+
+    if (month || year || department !== "") {
+      axios
+        .post("http://34.93.135.33:8080/api/new_joiners", {
+          dept_id: department,
+          month: month,
+          year: year,
+        })
+        .then((res) => setNewJoineeCount(res.data));
+    }
+
+    axios
+      .post("http://34.93.135.33:8080/api/check_salary_status", {
+        month: month,
+        year: year,
+        dept: department,
+      })
+      .then((res) =>
+        res.data.salary_status == 1 ? handleSubmit() : setFilterData([])
+      );
   }, [department, month, year]);
+
+  useEffect(() => {
+    axios
+      .post("http://34.93.135.33:8080/api/get_distinct_depts", {
+        month: month,
+        year: year,
+      })
+      .then((res) => setDeptSalary(res.data));
+  }, [month, year]);
 
   const handleAttendence = () => {
     axios
-      .post("http://44.211.225.140:8000/attendencemastpost", {
+      .post("http://34.93.135.33:8080/api/add_attendance", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
@@ -323,15 +459,16 @@ const SalaryWFH = () => {
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
-    axios.post(`http://44.211.225.140:8000/finance`, {
+    axios.post(`http://34.93.135.33:8080/api/add_finance`, {
       attendence_id: row.attendence_id,
     });
 
-    axios.put(`http://44.211.225.140:8000/updatesalary`, {
-      attendence_id: row.attendence_id,
-      sendToFinance: 1,
-    });
-    handleSubmit();
+    axios
+      .put(`http://34.93.135.33:8080/api/add_attendance`, {
+        attendence_id: row.attendence_id,
+        sendToFinance: 1,
+      })
+      .then(() => handleSubmit());
     toastAlert("Sent To Finance");
   }
 
@@ -356,12 +493,17 @@ const SalaryWFH = () => {
             <Text style={[styles.tableCell, { width: "30%" }]}>
               Employee Name
             </Text>
+            <Text style={styles.tableCell}>Deparmtent</Text>
+            <Text style={styles.tableCell}>Designation</Text>
+            <Text style={styles.tableCell}>DOJ</Text>
             <Text style={styles.tableCell}>Work Days</Text>
             <Text style={styles.tableCell}>Month</Text>
+            <Text style={styles.tableCell}>Salary</Text>
             <Text style={styles.tableCell}>Absent</Text>
             <Text style={styles.tableCell}>Present</Text>
             <Text style={styles.tableCell}>Total Salary</Text>
             <Text style={styles.tableCell}>Bonus</Text>
+            <Text style={styles.tableCell}>Deductions</Text>
             <Text style={styles.tableCell}>Net Salary</Text>
             <Text style={styles.tableCell}>TDS</Text>
             <Text style={styles.tableCell}>To Pay</Text>
@@ -374,12 +516,19 @@ const SalaryWFH = () => {
             <Text style={[styles.tableCell, { width: "30%" }]}>
               {item.user_name}
             </Text>
+            <Text style={styles.tableCell}>{item.dept_name}</Text>
+            <Text style={styles.tableCell}>{item.designation_name}</Text>
+            <Text style={styles.tableCell}>
+              {item.joining_date.split("T")[0].split("-").reverse().join("-")}
+            </Text>
             <Text style={styles.tableCell}>30</Text>
             <Text style={styles.tableCell}>{item.month}</Text>
+            <Text style={styles.tableCell}>{item.salary}</Text>
             <Text style={styles.tableCell}>{item.noOfabsent}</Text>
             <Text style={styles.tableCell}>{30 - item.noOfabsent}</Text>
             <Text style={styles.tableCell}>{item.total_salary}</Text>
             <Text style={styles.tableCell}>{item.bonus}</Text>
+            <Text style={styles.tableCell}>{item.salary_deduction}</Text>
             <Text style={styles.tableCell}>{item.net_salary}</Text>
             <Text style={styles.tableCell}>{item.tds_deduction}</Text>
             <Text style={styles.tableCell}>{item.toPay}</Text>
@@ -447,7 +596,24 @@ const SalaryWFH = () => {
       cell: (row) => row.user_name,
       width: "12%",
     },
-
+    {
+      name: "Department",
+      cell: (row) => row.dept_name,
+    },
+    {
+      name: "Designation",
+      cell: (row) => row.designation_name,
+    },
+    {
+      name: "DOJ",
+      cell: (row) => {
+        const date = new Date(row.joining_date);
+        const dd = String(date.getDate()).padStart(2, "0");
+        const mm = String(date.getMonth() + 1).padStart(2, "0");
+        const yy = String(date.getFullYear()).slice(2);
+        return `${dd}/${mm}/${yy}`;
+      },
+    },
     {
       name: "Work Days",
       width: "8%",
@@ -456,6 +622,10 @@ const SalaryWFH = () => {
     {
       name: "Month",
       cell: (row) => row.month,
+    },
+    {
+      name: "Salary",
+      cell: (row) => row.salary,
     },
     {
       name: "Absent Days",
@@ -489,7 +659,11 @@ const SalaryWFH = () => {
         },
       },
     },
-
+    {
+      name: "Deductions",
+      cell: (row) => row.salary_deduction + " ₹",
+      width: "7%",
+    },
     {
       name: "Net Salary",
       cell: (row) => row.net_salary + " ₹",
@@ -499,6 +673,7 @@ const SalaryWFH = () => {
       cell: (row) => row.tds_deduction + " ₹",
       width: "7%",
     },
+
     {
       name: "To Pay",
       cell: (row) => row.toPay + " ₹",
@@ -527,7 +702,7 @@ const SalaryWFH = () => {
               </button>
             </PDFDownloadLink>
           )}
-          {!row?.invoice_template_no && (
+          {!row?.invoice_template_no ? (
             <button
               type="button"
               title="Select Invoice"
@@ -539,15 +714,16 @@ const SalaryWFH = () => {
               {/* select invoice */}
               <FileOpenIcon />
             </button>
-          )}
-          {!row?.sendToFinance && (
-            <button
-              title="Send to Finance"
-              className="btn-outline-primary btn-sm ml-2"
-              onClick={(e) => handleSendToFinance(e, row)}
-            >
-              <IosShareIcon />
-            </button>
+          ) : (
+            !row?.sendToFinance && (
+              <button
+                title="Send to Finance"
+                className="btn-outline-primary btn-sm ml-2"
+                onClick={(e) => handleSendToFinance(e, row)}
+              >
+                <IosShareIcon />
+              </button>
+            )
           )}
 
           {row.sendToFinance == 1 && row.status_ == 1 && (
@@ -560,7 +736,9 @@ const SalaryWFH = () => {
               Paid
             </button>
           )}
-          {row.sendToFinance == 1 && row.status_ == 0 && <div>Pending</div>}
+          {row.sendToFinance == 1 && row.status_ == 0 && (
+            <button className="btn btn-danger ml-2">Pending</button>
+          )}
         </>
       ),
     },
@@ -612,9 +790,50 @@ const SalaryWFH = () => {
         </div>
       </div>
 
+      {/* Cards */}
+      <div className="timeline_wrapper mb24">
+        <Slider {...settings} className="timeline_slider">
+          {completedYearsMonths.map((data, index) => (
+            <div
+              className={`timeline_slideItem ${
+                data.atdGenerated && "completed"
+              } ${selectedCardIndex === index ? "selected" : ""} ${
+                currentMonth == data.month && "current"
+              }`}
+              onClick={() => handleCardSelect(index, data)}
+              key={index}
+            >
+              <h2>
+                {data.month} <span>{data.year}</span>
+              </h2>
+              <h3>
+                {data?.atdGenerated == 1 ? (
+                  <span>
+                    <i class="bi bi-check2-circle" />
+                  </span>
+                ) : currentMonthNumber - 4 - index < 0 ? (
+                  <span>
+                    <i class="bi bi-clock-history" />
+                  </span>
+                ) : (
+                  <span>
+                    <i class="bi bi-hourglass-top" />
+                  </span>
+                )}
+                {data.atdGenerated == 1
+                  ? "Completed"
+                  : currentMonthNumber - 4 - index < 0
+                  ? "Upcoming"
+                  : "Pending"}
+              </h3>
+            </div>
+          ))}
+        </Slider>
+      </div>
+
       {/* <FormContainer submitButton={false} handleSubmit={handleSubmit}> */}
-      <div className="from-group d-flex">
-        <div className="form-group col-3">
+      {/* <div className="from-group d-flex"> */}
+      {/* <div className="form-group col-3">
           <label className="form-label">
             Department Name <sup style={{ color: "red" }}>*</sup>
           </label>
@@ -635,8 +854,8 @@ const SalaryWFH = () => {
             }}
             required
           />
-        </div>
-        <div className="form-group col-3">
+        </div> */}
+      {/* <div className="form-group col-3">
           <label className="form-label">Year</label>
           <Select
             options={yearValue?.map((option) => ({
@@ -648,15 +867,15 @@ const SalaryWFH = () => {
             }}
             required
           />
-        </div>
+        </div> */}
 
-        <div className="form-group col-3">
+      {/* <div className="form-group col-3">
           <label className="form-label">
             Month <sup style={{ color: "red" }}>*</sup>
           </label>
           <Select
             className=""
-            options={monthValue.map((option) => ({
+            options={months.map((option) => ({
               value: option,
               label: `${option}`,
             }))}
@@ -665,18 +884,153 @@ const SalaryWFH = () => {
             }}
             required
           />
+        </div> */}
+
+      {/* </FormContainer> */}
+      {/* </div> */}
+
+      <div className="card mb24">
+        <div className="card-header">
+          <h4>Department</h4>
         </div>
-        {/* </FormContainer> */}
-        <div className="form-group col-3">
-          {filterData?.length == 0 && department && month && year && (
+        <div className="card-body">
+          <div className="d-flex gap4 h_scroller mb24">
+            {departmentdata.map((option) => {
+              const isDeptInSalary =
+                Array.isArray(deptSalary) &&
+                deptSalary.some((d) => d.dept === option.dept_id);
+
+              const className = `btn ${
+                department === option.dept_id
+                  ? "btn-primary"
+                  : isDeptInSalary
+                  ? "btn-success"
+                  : "btn-outline-primary"
+              }`;
+
+              return (
+                <button
+                  className={className}
+                  onClick={() => setDepartment(option.dept_id)}
+                >
+                  {option.dept_name}
+                </button>
+              );
+            })}
+          </div>
+
+          <h6>
+            <span style={{ color: "green" }}>
+              Active : {activeusers.length}
+            </span>
+          </h6>
+        </div>
+      </div>
+
+      <div className="form-group col-3">
+        {filterData?.length == 0 &&
+          department &&
+          selectedMonth &&
+          selectedYear && (
             <button
               onClick={handleAttendence}
               className="btn btn-warning"
               style={{ "margin-top": "25px" }}
             >
-              No Absents, Create Salary
+              No Absents, Create Attendance
             </button>
           )}
+      </div>
+
+      <div className="card mb24">
+        <div className="card-body">
+          <div className="row gap_24_0">
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+              <div className="salary_dtlCard">
+                <div className="salary_dtlCard_head">
+                  <h2>This Month</h2>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>
+                      <span>Total Salary Incurred :</span>
+                      {thisMonthTotalSalary}
+                    </li>
+                    <li>
+                      <span>Total Bonus</span>
+                      {thisMonthTotalBonus}
+                    </li>
+                    <li>
+                      <span>Total Deductions</span>
+                      {thisMonthTotalDeductions}
+                    </li>
+                    <li>
+                      <span>Total TDS Deducted</span>
+                      {thisMonthTDS}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+              <div className="salary_dtlCard">
+                <div className="salary_dtlCard_head">
+                  <h2>This Year</h2>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>
+                      <span>Total Salary :</span>
+                      {card2Data?.totalsalary}
+                    </li>
+                    <li>
+                      <span>Total Bonus</span>
+                      {card2Data?.totalBonus}
+                    </li>
+                    <li>
+                      <span>Total Deductions</span>
+                      {card2Data?.totalsalarydeduction}
+                    </li>
+                    <li>
+                      <span>Total TDS Deducted</span>
+                      {card2Data?.totaltdsdeduction}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+              <div className="salary_dtlCard">
+                <div className="salary_dtlCard_head">
+                  <h2>This Month</h2>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>
+                      <span>Active Mark :</span>
+                      {activeusers.length}
+                    </li>
+                    <li
+                      className="color_primary"
+                      data-toggle="modal"
+                      data-target="#joinee"
+                    >
+                      <span>New Joinee</span>
+                      {newJoineeCount?.NewJoiners}
+                    </li>
+                    <li
+                      className="color_primary"
+                      data-toggle="modal"
+                      data-target="#employeeleft"
+                    >
+                      <span>Employee left</span>
+                      {employeeLeft?.leftEmployeess}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -704,7 +1058,6 @@ const SalaryWFH = () => {
                   >
                     Export Excel
                   </Button>
-
                   <div className="d-flex">
                     <PDFDownloadLink
                       document={pdfTemplate()}
@@ -867,14 +1220,99 @@ const SalaryWFH = () => {
               <div>Pay Date :{rowDataModal?.pay_date}</div>
               <div>Refrence No :{rowDataModal?.reference_no}</div>
               <div>
-                ScreenSort :
+                ScreenShot :
                 <img
-                  src={`${"http://44.211.225.140:8000/user_images/"}${
+                  src={`${"http://34.93.135.33:8080/api/user_images/"}${
                     rowDataModal?.screenshot
                   }`}
                   alt="Snap"
                 />
               </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Joinee Modal  */}
+      <div
+        className="modal fade"
+        id="joinee"
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                New Joinees
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body userSalary_modal">
+              {newJoineeCount?.NewUsers?.map((data) => (
+                <h3> {data.user_name}</h3>
+              ))}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* EmployeeLeft Modal  */}
+
+      <div
+        className="modal fade"
+        id="employeeleft"
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Employee Left
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body userSalary_modal">
+              {employeeLeft?.UserLefts?.map((data) => (
+                <h3>{data?.user_name}</h3>
+              ))}
             </div>
             <div className="modal-footer">
               <button

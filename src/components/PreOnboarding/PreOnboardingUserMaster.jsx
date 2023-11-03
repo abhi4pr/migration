@@ -158,7 +158,7 @@ const PreOnboardingUserMaster = () => {
   };
   useEffect(() => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_user/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -344,7 +344,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("current_state", currentState);
     formData.append("current_pin_code", Number(currentPincode));
 
-    axios.put(`http://192.168.29.116:8080/api/update_user`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -352,7 +352,7 @@ const PreOnboardingUserMaster = () => {
 
     // After update send mail
     axios
-      .post("http://192.168.29.116:8080/api/add_send_user_mail", {
+      .post("http://34.93.135.33:8080/api/add_send_user_mail", {
         email: "lalit@creativefuel.io",
         subject: "User Pre Onboarding",
         text: "Pre Onboarding Data Update Successfully",
@@ -513,13 +513,13 @@ const PreOnboardingUserMaster = () => {
     formData.append("joining_date_extend_reason", joiningExtendReason);
     formData.append("joining_extend_document", joingingExtendDocument);
 
-    axios.put(`http://192.168.29.116:8080/api/update_user`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
     axios
-      .post("http://192.168.29.116:8080/api/add_send_user_mail", {
+      .post("http://34.93.135.33:8080/api/add_send_user_mail", {
         email: "lalit@creativefuel.io",
         subject: "User Pre Onboarding Extend Date",
         text: joiningExtendReason,

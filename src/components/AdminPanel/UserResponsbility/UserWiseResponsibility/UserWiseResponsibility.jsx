@@ -31,7 +31,7 @@ const UserWiseResponsibility = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -42,7 +42,7 @@ const UserWiseResponsibility = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://192.168.29.116:8080/api/get_all_users"
+        "http://34.93.135.33:8080/api/get_all_users"
       );
       const data = response.data.data;
 
@@ -54,7 +54,7 @@ const UserWiseResponsibility = () => {
 
   const handleTransfer = (userId) => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_kra/${userId}`)
+      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
       .then((res) => {
         setTransferResponsibilityData(res.data);
       });
@@ -88,7 +88,7 @@ const UserWiseResponsibility = () => {
     getData();
     getDatas();
     axios
-      .get("http://192.168.29.116:8080/api/get_all_jobresponsibilitys")
+      .get("http://34.93.135.33:8080/api/get_all_jobresponsibilitys")
       .then((res) => {
         setAllResponsibility(res.data.data);
       });
@@ -123,7 +123,7 @@ const UserWiseResponsibility = () => {
           console.log(MailUser, "mail user hai");
 
           axios
-            .post("http://192.168.29.116:8080/api/add_send_user_mail", {
+            .post("http://34.93.135.33:8080/api/add_send_user_mail", {
               email: MailUser.user_email_id,
               subject: "User Registration",
               text: "You Have Assign New KRA",

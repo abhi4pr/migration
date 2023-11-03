@@ -19,7 +19,7 @@ const ResponsibilityUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.29.116:8080/api/get_single_responsibility/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_single_responsibility/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         setResponsibility(fetchedData.respo_name);
@@ -29,7 +29,7 @@ const ResponsibilityUpdate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://192.168.29.116:8080/api/edit_responsibility/${id}`, {
+    axios.put(`http://34.93.135.33:8080/api/edit_responsibility/${id}`, {
       respo_name: responsibility,
       description: description,
       Last_updated_by: userId,

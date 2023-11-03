@@ -41,7 +41,7 @@ const BrandOverview = () => {
       .then((res) => setCategoryData(res.data));
 
     axios
-      .get("http://192.168.29.116:8080/api/get_all_users")
+      .get("http://34.93.135.33:8080/api/get_all_users")
       .then((res) => setEmployeeData(res.data.data));
   }
 

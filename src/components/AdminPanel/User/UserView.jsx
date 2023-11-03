@@ -152,7 +152,7 @@ const UserView = () => {
 
     try {
       await axios.put(
-        "http://192.168.29.116:8080/api/update_usernew",
+        "http://34.93.135.33:8080/api/update_usernew",
         fromData,
         {
           headers: {

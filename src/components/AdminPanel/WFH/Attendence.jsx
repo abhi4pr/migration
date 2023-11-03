@@ -1,23 +1,87 @@
 import { useEffect, useState } from "react";
-import FieldContainer from "../FieldContainer";
-import FormContainer from "../FormContainer";
 import axios from "axios";
 import { useGlobalContext } from "../../../Context/Context";
 import jwtDecode from "jwt-decode";
-import Select from "react-select";
-import DataTable from "react-data-table-component";
+import Slider from "react-slick";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridToolbar,
+  GridRowModes,
+} from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveAsIcon from "@mui/icons-material/SaveAs";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const Attendence = () => {
   const { toastAlert } = useGlobalContext();
   const [department, setDepartment] = useState("");
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
   const [departmentdata, getDepartmentData] = useState([]);
   const [noOfAbsent, setNoOfAbsent] = useState(null);
-  const [bonus, setBonus] = useState("");
+  // const [bonus, setBonus] = useState("");
   const [remark, setRemark] = useState("");
   const [userData, getUsersData] = useState([]);
   const [attendenceData, setAttendenceData] = useState([]);
+
+  const [userName, setUserName] = useState(0);
   const [filterData, setFilterData] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [completedYearsMonths, setCompletedYearsMonths] = useState([]);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [deptSalary, setDeptSalary] = useState([]);
+
+  let isInEditMode = false;
+
+  const storedToken = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(storedToken);
+  const userID = decodedToken.id;
+
+  var settings = {
+    dots: false,
+    arrows: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    swipeToSlide: true,
+    variableWidth: true,
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
+      .then((res) => {
+        getDepartmentData(res.data.data);
+      });
+
+    axios
+      .get("http://34.93.135.33:8080/api/get_month_year_data")
+      .then((res) => {
+        setCompletedYearsMonths(res.data.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          "http://34.93.135.33:8080/api/get_all_wfh_users"
+        );
+        const data = res.data.data;
+        const filteredUser = data.filter((d) => d.dept_id === department);
+        if (filteredUser?.length > 0) {
+          const firstUser = filteredUser[0];
+          setUserName(firstUser);
+        } else {
+          console.log("No users found for the selected department.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [department]);
 
   const years = ["2021", "2022", "2023", "2024", "2025", "2026", "2027"];
   const months = [
@@ -35,27 +99,82 @@ const Attendence = () => {
     "December",
   ];
 
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleCancelClick = (id) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+  };
+
+  const handleRowModesModelChange = (newRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  const handleAttendence = () => {
+    axios
+      .post("http://34.93.135.33:8080/api/add_attendance", {
+        dept: department,
+        user_id: userName.user_id,
+        noOfabsent: 0,
+        month: selectedMonth,
+        year: selectedYear,
+      })
+      .then(() => {
+        setNoOfAbsent("");
+        toastAlert("Submitted success");
+      })
+      .then(() => {
+        getAttendanceData();
+        toastAlert("Submitted success");
+      });
+  };
+
   // Get the current year and month
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-
+  const currentMonthNumber = new Date().getMonth() + 1;
   // Function to get the previous month
-  const getPreviousMonth = () => {
-    const previousMonthIndex = currentDate.getMonth() - 1;
+  const getCurrentMonth = () => {
+    const previousMonthIndex = currentDate.getMonth();
     return previousMonthIndex >= 0 ? months[previousMonthIndex] : months[11];
   };
 
   // Set the initial state for selectedMonth and selectedYear using the current date
-  const [selectedMonth, setSelectedMonth] = useState(getPreviousMonth());
+  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
   const [activeusers, setActiveUsers] = useState("");
 
-  const storedToken = sessionStorage.getItem("token");
-  const decodedToken = jwtDecode(storedToken);
-  const userID = decodedToken.id;
+  const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allwfhusers").then((res) => {
+    axios
+      .post("http://34.93.135.33:8080/api/get_distinct_depts", {
+        month: selectedMonth,
+        year: selectedYear,
+      })
+      .then((res) => setDeptSalary(res.data));
+  }, [selectedMonth, selectedYear, department]);
+
+  const handleCardSelect = (index, data) => {
+    setSelectedCardIndex(index);
+    setSelectedYear(data.year);
+    setSelectedMonth(data.month);
+  };
+  useEffect(() => {
+    axios.get("http://34.93.135.33:8080/api/get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -64,25 +183,15 @@ const Attendence = () => {
     });
   }, [department]);
 
-  useEffect(() => {
-    axios
-      .get("http://192.168.29.116:8080/api/get_all_departments")
-      .then((res) => {
-        getDepartmentData(res.data);
-      });
-  }, []);
-
   const getAttendanceData = () => {
-    console.log("reach");
     const payload = {
       dept_id: department,
       month: selectedMonth,
       year: selectedYear,
     };
     axios
-      .post("http://44.211.225.140:8000/salaryfromattendence", payload)
+      .post("http://34.93.135.33:8080/api/get_salary_by_id_month_year", payload)
       .then((res) => {
-        console.log(res.data, "res");
         setAttendenceData(res.data.data);
         setFilterData(res.data.data);
       })
@@ -101,111 +210,211 @@ const Attendence = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://44.211.225.140:8000/getuserdeptwisewfhdata/${department}`)
+        .get(`http://34.93.135.33:8080/api/get_wfh_user/${department}`)
         .then((res) => {
           getUsersData(res.data);
         });
     }
   }, [department]);
 
-  const handleSubmit = (e) => {
+  const handleCreateSalary = (e) => {
     e.preventDefault();
     axios
-      .post("http://44.211.225.140:8000/attendencemastpost", {
+      .put("http://34.93.135.33:8080/api/update_attendence_status", {
+        month: selectedMonth,
+        year: Number(selectedYear),
         dept: department,
-        user_id: userName,
-        noOfabsent: Number(noOfAbsent),
+      })
+      .then(() => toastAlert("Attendance Completed"));
+  };
+
+  const processRowUpdate = (newRow) => {
+    const updatedRow = { ...newRow, isNew: false };
+    axios
+      .post("http://34.93.135.33:8080/api/add_attendance", {
+        dept: updatedRow.dept,
+        user_id: updatedRow.user_id,
+        noOfabsent: updatedRow.noOfabsent,
+        salary_deduction: Number(updatedRow.salary_deduction),
         month: selectedMonth,
         year: selectedYear,
-        bonus: Number(bonus),
+        bonus: updatedRow.bonus,
         remark: remark,
         created_by: userID,
       })
-      .then(() => {
-        setNoOfAbsent("");
-        setRemark("");
-        setBonus("");
-        toastAlert("Submitted success");
-        getAttendanceData();
-      })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-        toastAlert("Failed to submit data");
-      });
+      .then(() => getAttendanceData());
+    return updatedRow;
   };
 
   const columns = [
     {
-      name: "S.No",
-      cell: (row, index) => <div>{index + 1}</div>,
-      width: "6%",
-      sortable: true,
-    },
-    {
-      name: "Employee Name",
-      cell: (row) => row.user_name,
-      width: "12%",
-    },
-    {
-      name: "Work Days",
-      width: "8%",
-      cell: () => 30,
-    },
-    {
-      name: "Month",
-      cell: (row) => row.month,
-    },
-    {
-      name: "Absent Days",
-      cell: (row) => row.noOfabsent,
-    },
-    {
-      name: "Present Days",
-      cell: (row) => 30 - Number(row.noOfabsent),
-    },
-    {
-      name: "Total Salary",
-      cell: (row) => row.total_salary + " ₹",
-      footer: {
-        cell: (row) =>
-          row.reduce((total, rows) => {
-            // Assuming row.bonus is a numeric value
-            return total + Number(rows.total_salary);
-          }, 0),
+      field: "S.NO",
+      headernewname: "ID",
+      width: 90,
+      editable: false,
+      renderCell: (params) => {
+        const rowIndex = filterData.indexOf(params.row);
+        return <div>{rowIndex + 1}</div>;
       },
     },
     {
-      name: "Bonus",
-      cell: (row) => row.bonus + " ₹",
-      footer: {
-        cell: (row) => {
-          const totalBonus = row.reduce((total, rows) => {
-            // Assuming row.bonus is a numeric value
-            return total + Number(rows.bonus);
-          }, 0);
-          return <div>{totalBonus + " ₹"}</div>;
-        },
+      field: "user_name",
+      headerName: "Employee Name",
+      width: 150,
+      type: "text",
+    },
+    {
+      field: "dept_name",
+      headerName: "Department",
+      type: "text",
+    },
+    {
+      field: "designation_name",
+      headerName: "Designation",
+      type: "text",
+    },
+    {
+      field: "joining_date",
+      headerName: "Joining Date",
+      width: 150,
+      type: "text",
+      renderCell: (params) => {
+        const oldDate = params.row.joining_date.split("T");
+        const arr = oldDate[0].toString().split("-");
+        const newDate = arr[2] + "-" + arr[1] + "-" + arr[0];
+        return <div>{newDate}</div>;
       },
     },
+    {
+      field: "month",
+      headerName: "Month",
+      type: "text",
+    },
+    {
+      field: "",
+      headerName: "Work Days",
+      type: "text",
+      renderCell: () => {
+        return <>30</>;
+      },
+    },
+    {
+      field: "noOfabsent",
+      headerName: "Absent Days",
+      type: "number",
+      editable: true,
+    },
+    {
+      field: "present",
+      headerName: "Present Days ",
+      type: "number",
+      renderCell: (params) => {
+        return <> {30 - Number(params.row.noOfabsent)}</>;
+      },
+    },
+    {
+      field: "total_salary",
+      headerName: "Total Salary",
+      width: 150,
+      type: "text",
+    },
+    {
+      field: "bonus",
+      headerName: "Bonus",
+      type: "Number",
+      editable: true,
+    },
+    {
+      field: "salary_deduction",
+      headerName: "Deduction",
+      type: "Number",
+      editable: true,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 100,
+      cellClassName: "actions",
+      getActions: ({ id }) => {
+        isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<ClearIcon />}
+              label="Cancel"
+              className="textPrimary"
+              onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+            <GridActionsCellItem
+              icon={<SaveAsIcon />}
+              label="Save"
+              sx={{
+                color: "primary.main",
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+          ];
+        }
 
-    {
-      name: "Net Salary",
-      cell: (row) => row.net_salary + " ₹",
-    },
-    {
-      name: "TDS",
-      cell: (row) => row.tds_deduction + " ₹",
-      width: "7%",
-    },
-    {
-      name: "To Pay",
-      cell: (row) => row.toPay + " ₹",
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+            // color="primary"
+          />,
+        ];
+      },
     },
   ];
-
   return (
     <>
-      <FormContainer
+      {/* Cards */}
+      <div className="timeline_wrapper mb24">
+        <Slider {...settings} className="timeline_slider">
+          {completedYearsMonths.map((data, index) => (
+            <div
+              className={`timeline_slideItem ${
+                data.atdGenerated && "completed"
+              } ${selectedCardIndex === index ? "selected" : ""} ${
+                currentMonth == data.month && "current"
+              }`}
+              onClick={() => handleCardSelect(index, data)}
+              key={index}
+            >
+              <h2>
+                {data.month} <span>{data.year}</span>
+              </h2>
+              <h3>
+                {data?.atdGenerated == 1 ? (
+                  <span>
+                    <i class="bi bi-check2-circle" />
+                  </span>
+                ) : currentMonthNumber - 4 - index < 0 ? (
+                  <span>
+                    <i class="bi bi-clock-history" />
+                  </span>
+                ) : (
+                  <span>
+                    <i class="bi bi-hourglass-top" />
+                  </span>
+                )}
+                {data.atdGenerated == 1
+                  ? "Completed"
+                  : currentMonthNumber - 4 - index < 0
+                  ? "Upcoming"
+                  : "Pending"}
+              </h3>
+            </div>
+          ))}
+        </Slider>
+      </div>
+
+      {/* <FormContainer
         mainTitle="Attendance"
         title="Attendance"
         handleSubmit={handleSubmit}
@@ -310,29 +519,81 @@ const Attendence = () => {
           value={remark}
           onChange={(e) => setRemark(e.target.value)}
         />
-      </FormContainer>
+      </FormContainer> */}
+
+      <div className="card mb24">
+        <div className="card-header">
+          <h4>Department</h4>
+        </div>
+        <div className="card-body">
+          <div className="d-flex gap4 h_scroller mb24">
+            {departmentdata.map((option) => {
+              const isDeptInSalary =
+                Array.isArray(deptSalary) &&
+                deptSalary.some((d) => d.dept === option.dept_id);
+
+              const className = `btn ${
+                department === option.dept_id
+                  ? "btn-primary"
+                  : isDeptInSalary
+                  ? "btn-success"
+                  : "btn-outline-primary"
+              }`;
+
+              return (
+                <button
+                  className={className}
+                  onClick={() => setDepartment(option.dept_id)}
+                >
+                  {option.dept_name}
+                </button>
+              );
+            })}
+          </div>
+
+          <h6>
+            <span style={{ color: "green" }}>
+              Active : {activeusers.length}
+            </span>
+          </h6>
+        </div>
+      </div>
+
+      {filterData?.length !== 0 && (
+        <button
+          className="btn btn-primary"
+          onClick={(e) => handleCreateSalary(e)}
+        >
+          Complete Attendance
+        </button>
+      )}
+
+      <div className="form-group col-3">
+        {filterData?.length == 0 &&
+          department &&
+          selectedMonth &&
+          selectedYear && (
+            <button onClick={handleAttendence} className="btn btn-warning">
+              No Absents, Create Attendance
+            </button>
+          )}
+      </div>
 
       <div className="card">
-        <div className="data_tbl table-responsive">
+        <div className="data_tbl table-responsive footer_none">
           {filterData.length > 0 && (
-            <DataTable
-              title="Salary Overview"
+            <DataGrid
+              rows={filterData}
+              getRowId={(row) => row.attendence_id}
               columns={columns}
-              data={filterData}
-              fixedHeader
-              fixedHeaderScrollHeight="64vh"
-              highlightOnHover
-              exportToCSV
-              subHeader
-              subHeaderComponent={
-                <input
-                  type="text"
-                  placeholder="Search here"
-                  className="w-50 form-control"
-                  // value={search}
-                  // onChange={(e) => setSearch(e.target.value)}
-                />
-              }
+              slots={{
+                toolbar: GridToolbar,
+              }}
+              editMode="row"
+              rowModesModel={rowModesModel}
+              onRowModesModelChange={handleRowModesModelChange}
+              onRowEditStop={handleRowEditStop}
+              processRowUpdate={processRowUpdate}
             />
           )}
         </div>
