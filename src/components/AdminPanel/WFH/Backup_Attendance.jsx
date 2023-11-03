@@ -55,7 +55,7 @@ const Backup_Attendence = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get("http://192.168.29.6:8080/api/get_all_wfh_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/allwfhusers").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -80,7 +80,7 @@ const Backup_Attendence = () => {
       year: selectedYear,
     };
     axios
-      .post("http://192.168.29.6:8080/api/get_salary_by_id_month_year", payload)
+      .post("http://34.93.135.33:8080/api/salaryfromattendence", payload)
       .then((res) => {
         console.log(res.data, "res");
         setAttendenceData(res.data.data);
@@ -101,7 +101,7 @@ const Backup_Attendence = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://192.168.29.6:8080/api/get_wfh_user/${department}`)
+        .get(`http://34.93.135.33:8080/api/getuserdeptwisewfhdata/${department}`)
         .then((res) => {
           getUsersData(res.data);
         });
@@ -111,7 +111,7 @@ const Backup_Attendence = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://44.211.225.140:8000/attendencemastpost", {
+      .post("http://34.93.135.33:8080/api/attendencemastpost", {
         dept: department,
         user_id: userName,
         noOfabsent: Number(noOfAbsent),

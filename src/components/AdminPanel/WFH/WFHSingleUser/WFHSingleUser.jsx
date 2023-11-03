@@ -6,14 +6,12 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import FormContainer from "../../FormContainer";
 import { useGlobalContext } from "../../../../Context/Context";
-import Select from "react-select";
 import jwtDecode from "jwt-decode";
 import image1 from "../SalaryGeneration/images/image1.png";
 import image2 from "../SalaryGeneration/images/image2.png";
 import image3 from "../SalaryGeneration/images/i3.png";
 import image4 from "../SalaryGeneration/images/i4.png";
 import image5 from "../SalaryGeneration/images/image5.png";
-import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import {
   Document,
@@ -30,6 +28,8 @@ import MyTemplate2 from "../SalaryGeneration/Template2";
 import MyTemplate3 from "../SalaryGeneration/Template3";
 import MyTemplate4 from "../SalaryGeneration/Template4";
 import MyTemplate5 from "../SalaryGeneration/Template5";
+import Modal from "react-modal";
+import DigitalSignature from "../../../DigitalSignature/DigitalSignature";
 // import DateFormattingComponent from "../../../DateFormater/DateFormared";
 
 const images = [
@@ -42,6 +42,7 @@ const images = [
 
 const WFHSingleUser = () => {
   const { toastAlert } = useGlobalContext();
+  const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -51,8 +52,6 @@ const WFHSingleUser = () => {
   const [departmentdata, getDepartmentData] = useState([]);
   const [noOfAbsent, setNoOfAbsent] = useState(null);
   const [userData, getUsersData] = useState([]);
-  const [userSalary, setUserSalary] = useState("");
-  const [userTds, setUserTds] = useState("");
   const [departmentWise, setDepartmentWise] = useState([]);
   const [selectedTemplate, setSelectedTempate] = useState("");
   const [templateState, setTemplateState] = useState(null);
@@ -60,10 +59,22 @@ const WFHSingleUser = () => {
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
+  const loginUserName = decodedToken.name;
+
   const [month, setMonth] = useState(null);
   const [year, setYear] = useState(null);
   const [rowData, setDataRow] = useState(null);
   const [rowDataModal, setRowDataModal] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const monthValue = [
     "January",
@@ -86,7 +97,9 @@ const WFHSingleUser = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://192.168.29.6:8080/api/get_all_wfh_users");
+        const res = await axios.get(
+          "http://34.93.135.33:8080/api/get_all_wfh_users"
+        );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
         if (filteredUser.length > 0) {
@@ -99,13 +112,12 @@ const WFHSingleUser = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, [department]);
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
       .then((res) => {
         getDepartmentData(res.data);
       });
@@ -117,44 +129,22 @@ const WFHSingleUser = () => {
     });
     if (department) {
       axios
-        .get(`http://44.211.225.140:8000/getuserdeptwise/${department}`)
+        .get(`http://34.93.135.33:8080/api/get_user_by_deptid/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
     }
   }, [department]);
 
-  function handleInvoiceTemplate(e) {
-    e.preventDefault();
-    // axios
-    //   .post("http://44.211.225.140:8000/generatepdf", {
-    //     emp_id: selectedEmployee,
-    //     temp_id: selectedTemplate,
-    //   })
-    //   .then((res) => {
-    //     const processedData = res.data;
-    //     const newWindow = window.open("", "_blank");
-    //     newWindow.document.write(processedData);
-    //   });
-    // return generatePdf();
-  }
-
-  const getUserSalary = (selectedUserId) => {
-    const userSalaryConst = userData.filter(
-      (item) => item.user_id == selectedUserId
-    );
-    setUserSalary(userSalaryConst[0].salary);
-    setUserTds(userSalaryConst[0].tds_per);
-  };
-
   const handleSubmit = () => {
     axios
-      .post("http://44.211.225.140:8000/allsalary", {
+      .post("http://34.93.135.33:8080/api/get_attendance_by_userid", {
         user_id: userID,
       })
       .then((res) => {
-        setFilterData(res.data.data);
-        console.log(res.data.data, "yha single user ka data");
+        const response = res.data.data;
+        setFilterData(response);
+        setData(response);
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
@@ -168,25 +158,23 @@ const WFHSingleUser = () => {
     formData.append("id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
-    axios.put(`http://44.211.225.140:8000/userupdate`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    // (() => handleSubmit(e), console.log("ggggggggg"));
   }
 
-  // useEffect(() => {
-  //   const result = salaryData.filter((d) => {
-  //     return (
-  //       d.user_name.match(search) ||
-  //       d.dept_name.match(search)
-  //     );
-  //   });
-  //   setFilterData(result);
-  // }, [search]);
+  useEffect(() => {
+    const result = data?.filter((d) => {
+      return (
+        d.user_name?.toLowerCase().includes(search.toLowerCase()) ||
+        d.month?.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+    setFilterData(result);
+  }, [search]);
 
-  // If Attendence Zero
   useEffect(() => {
     if (department || month || year !== "") {
       handleSubmit();
@@ -195,7 +183,7 @@ const WFHSingleUser = () => {
 
   const handleAttendence = () => {
     axios
-      .post("http://44.211.225.140:8000/attendencemastpost", {
+      .post("http://34.93.135.33:8080/api/add_attendance", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
@@ -220,10 +208,6 @@ const WFHSingleUser = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-
-  const handleInvoice = (data) => {
-    setDataRow(data);
-  };
 
   const styles = StyleSheet.create({
     logo: {
@@ -330,22 +314,15 @@ const WFHSingleUser = () => {
       fontWeight: "bold",
     },
   });
-  const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString();
-    return `${day}-${month}-${year}`;
-  };
 
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
-    axios.post(`http://44.211.225.140:8000/finance`, {
+    axios.post(`http://34.93.135.33:8080/api/add_finance`, {
       attendence_id: row.attendence_id,
     });
 
-    axios.put(`http://44.211.225.140:8000/updatesalary`, {
+    axios.put(`http://34.93.135.33:8080/api/add_attendance`, {
       attendence_id: row.attendence_id,
       sendToFinance: 1,
     });
@@ -528,9 +505,7 @@ const WFHSingleUser = () => {
           {row?.invoice_template_no !== "0" && (
             <PDFDownloadLink
               document={templateMap[row?.invoice_template_no]}
-              fileName={
-                rowData?.user_name + " " + rowData?.month + " " + rowData?.year
-              }
+              fileName={row?.user_name + " " + row?.month + " " + row?.year}
               style={{
                 color: "#4a4a4a",
               }}
@@ -539,10 +514,9 @@ const WFHSingleUser = () => {
                 className="btn btn-outline-primary btn-sm"
                 title="Download Invoice"
                 type="button"
-                onClick={() => handleInvoice(row)}
+                onClick={() => setDataRow(row)}
               >
                 <CloudDownloadIcon />
-                {/* Download */}
               </button>
             </PDFDownloadLink>
           )}
@@ -553,7 +527,7 @@ const WFHSingleUser = () => {
               className="btn btn-primary btn-sm"
               data-toggle="modal"
               data-target="#exampleModalCenter"
-              onClick={() => handleInvoice(row)}
+              onClick={() => setDataRow(row)}
             >
               {/* select invoice */}
               <FileOpenIcon />
@@ -568,7 +542,6 @@ const WFHSingleUser = () => {
               <IosShareIcon />
             </button>
           )}
-
           {row.sendToFinance == 1 && row.status_ == 1 && (
             <button
               className="btn btn-outline-primary ml-2"
@@ -579,7 +552,9 @@ const WFHSingleUser = () => {
               Paid
             </button>
           )}
-          {row.sendToFinance == 1 && row.status_ == 0 && <div>Pending</div>}
+          {row.sendToFinance == 1 && row.status_ == 0 && (
+            <button className="btn btn-danger ml-2">Pending</button>
+          )}
         </>
       ),
     },
@@ -589,13 +564,15 @@ const WFHSingleUser = () => {
     const formattedData = filterData?.map((row, index) => ({
       "S.No": index + 1,
       "Employee Name": row.user_name,
-      "Work Days": 26,
+      "Work Days": 30,
       Month: row.month,
       "Absent Days": row.noOfabsent,
-      "Present Days": 26 - Number(row.noOfabsent),
+      "Present Days": 30 - Number(row.noOfabsent),
       "Total Salary": `${row.total_salary} ₹`,
+      Bonus: `${row.bonus} ₹`,
       TDS: `${row.tds_deduction} ₹`,
       "Net Salary": `${row.net_salary} ₹`,
+      "To Pay": `${row.toPay} ₹`,
     }));
 
     const fileName = "data.xlsx";
@@ -646,6 +623,19 @@ const WFHSingleUser = () => {
               subHeader
               subHeaderComponent={
                 <>
+                  <button className="btn btn-primary mr-3" onClick={openModal}>
+                    Digital Signature
+                  </button>
+                  <Modal
+                    isOpen={isModalOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="Example Modal"
+                    appElement={document.getElementById("root")}
+                  >
+                    <DigitalSignature userID={userID} closeModal={closeModal} />
+                    <button onClick={closeModal}>Close Modal</button>
+                  </Modal>
+
                   <Button
                     sx={{ marginRight: "10px" }}
                     size="medium"
@@ -659,18 +649,7 @@ const WFHSingleUser = () => {
                   <div className="d-flex">
                     <PDFDownloadLink
                       document={pdfTemplate()}
-                      fileName={
-                        departmentdata.find(
-                          (user) => user.dept_id === department
-                        )?.dept_name +
-                        " " +
-                        month +
-                        " " +
-                        year +
-                        " " +
-                        " invoice" +
-                        "pdf"
-                      }
+                      fileName={loginUserName + " invoice"}
                       style={{
                         // textDecoration: "none",
                         // padding: "10px",
@@ -679,8 +658,11 @@ const WFHSingleUser = () => {
                         // border: "1px solid #4a4a4a",
                       }}
                     >
-                      <button className="btn btn-primary me-3" type="button">
-                        Download
+                      <button
+                        className="btn btn-outline-primary me-3"
+                        type="button"
+                      >
+                        PDF Download
                       </button>
                     </PDFDownloadLink>
 
@@ -817,7 +799,12 @@ const WFHSingleUser = () => {
               <div>Amount : {rowDataModal?.amount}</div>
               <div>Pay Date :{rowDataModal?.pay_date}</div>
               <div>Refrence No :{rowDataModal?.reference_no}</div>
-              <div>ScreenSort :{rowDataModal?.screenshot}</div>
+              <div>
+                ScreenShot :
+                <img
+                  src={`http://34.93.135.33:8080/api/user_images/${rowDataModal?.screenshot}`}
+                />
+              </div>
             </div>
             <div className="modal-footer">
               <button

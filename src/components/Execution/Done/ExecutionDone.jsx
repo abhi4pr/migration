@@ -118,20 +118,80 @@ export default function ExecutionDone() {
         );
       },
     },
+    // {
+    //   field: "start_date_",
+    //   headerName: "Start Date",
+    //   width: 150,
+    //   renderCell: (params) => {
+    //     return new Date(params?.row.start_date_).toLocaleDateString("en-GB");
+    //   },
+    // },
+    // {
+    //   field: "end_date",
+    //   headerName: "End Date",
+    //   width: 150,
+    //   renderCell: (params) => {
+    //     return new Date(params?.row.end_date).toLocaleDateString("en-GB");
+    //   },
+    // },
+
     {
       field: "start_date_",
       headerName: "Start Date",
-      width: 150,
+      width: 200,
       renderCell: (params) => {
-        return new Date(params?.row.start_date_).toLocaleDateString("en-GB");
+        const startDate = new Date(params.row.start_date_);
+        const dateOptions = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        };
+        const timeOptions = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        };
+    
+        const formattedDate = startDate.toLocaleDateString("en-GB", dateOptions);
+        const formattedTime = startDate.toLocaleTimeString("en-GB", timeOptions);
+    
+        return (
+          <div>
+            <span>{formattedDate}</span> &nbsp;
+            <span>{formattedTime}</span>
+          </div>
+        );
       },
     },
+    
     {
       field: "end_date",
       headerName: "End Date",
       width: 150,
       renderCell: (params) => {
-        return new Date(params?.row.end_date).toLocaleDateString("en-GB");
+        const startDate = new Date(params.row.end_date);
+        const dateOptions = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        };
+        const timeOptions = {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        };
+    
+        const formattedDate = startDate.toLocaleDateString("en-GB", dateOptions);
+        const formattedTime = startDate.toLocaleTimeString("en-GB", timeOptions);
+    
+        return (
+          <div>
+            <span>{formattedDate}</span> &nbsp;
+            <span>{formattedTime}</span>
+          </div>
+        );
       },
     },
     contextData && {
@@ -199,7 +259,8 @@ export default function ExecutionDone() {
       },
     },
 
-    {
+  
+    contextData ?{
       field: "actions",
       type: "actions",
       headerName: "Actions",
@@ -207,7 +268,7 @@ export default function ExecutionDone() {
       cellClassName: "actions",
       getActions: (params) => {
         const { id } = params;
-        return [
+        return [ 
           <GridActionsCellItem
             key={id}
             icon={<PointOfSaleTwoToneIcon />}
@@ -223,8 +284,28 @@ export default function ExecutionDone() {
           </Link>,
         ];
       },
+    }:{
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      width: 300,
+      cellClassName: "actions",
+      getActions: (params) => {
+        const { id } = params;
+        return [
+          <Link key={id} to={`/admin/exeexecution/${id}`}>
+            <GridActionsCellItem
+              icon={<ListAltOutlinedIcon />}
+              label="Delete"
+              color="inherit"
+            />
+          </Link>,
+        ];
+      },
     },
   ];
+
+
   return (
     <div>
       <div>

@@ -157,128 +157,131 @@ const PreOnboardingUserMaster = () => {
     }
   };
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_user/${id}`).then((res) => {
-      const fetchedData = res.data.data;
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        const fetchedData = res.data;
 
-      const {
-        user_name,
-        user_email_id,
-        PersonalEmail,
-        user_contact_no,
-        PersonalNumber,
-        fatherName,
-        motherName,
-        Hobbies,
-        Gender,
-        BloodGroup,
-        Nationality,
-        SpokenLanguages,
-        user_login_id,
-        user_login_password,
-        joining_date,
-        DOB,
-        MartialStatus,
-        DateOfMarriage,
-        spouse_name,
-        tenth_marksheet_validate,
-        twelveth_marksheet_validate,
-        UG_Marksheet_validate,
-        uid_validate,
-        pan_validate,
-        passport_validate,
-        pre_expe_letter_validate,
-        pre_off_letter_validate,
-        pre_relieving_letter_validate,
-        bankPassBook_Cheque_validate,
-        permanent_address,
-        permanent_city,
-        permanent_state,
-        permanent_pin_code,
-        current_address,
-        current_city,
-        current_state,
-        current_pin_code,
-      } = fetchedData;
+        const {
+          user_name,
+          user_email_id,
+          PersonalEmail,
+          user_contact_no,
+          PersonalNumber,
+          fatherName,
+          motherName,
+          Hobbies,
+          Gender,
+          BloodGroup,
+          Nationality,
+          SpokenLanguages,
+          user_login_id,
+          user_login_password,
+          joining_date,
+          DOB,
+          MartialStatus,
+          DateOfMarriage,
+          spouse_name,
+          tenth_marksheet_validate,
+          twelveth_marksheet_validate,
+          UG_Marksheet_validate,
+          uid_validate,
+          pan_validate,
+          passport_validate,
+          pre_expe_letter_validate,
+          pre_off_letter_validate,
+          pre_relieving_letter_validate,
+          bankPassBook_Cheque_validate,
+          permanent_address,
+          permanent_city,
+          permanent_state,
+          permanent_pin_code,
+          current_address,
+          current_city,
+          current_state,
+          current_pin_code,
+        } = fetchedData;
 
-      console.log(DOB, "yha birthday date hai");
+        console.log(DOB, "yha birthday date hai");
 
-      setAllUserData(fetchedData);
-      setUserName(user_name);
-      setEmail(user_email_id);
-      setPersonalEmail(PersonalEmail);
-      //setContact(PersonalNumber);
-      //setPersonalContact(user_contact_no);
-      setContact(user_contact_no);
-      setPersonalContact(PersonalNumber);
-      setFatherName(fatherName);
-      setMotherName(motherName);
-      setHobbies(Hobbies);
-      setGender(Gender);
-      setBloodGroup(BloodGroup);
-      {
-        Nationality && setNationality(Nationality);
-      }
-      setSpeakingLanguage(SpokenLanguages);
-      setLoginId(user_login_id);
-      setPassword(user_login_password);
-      setJoiningDate(joining_date?.split("T")?.[0]);
-      setMaritialStatus(MartialStatus);
-      setDateOfBirth(DOB.split("T")?.[0]);
-      setDateOfMarraige(DateOfMarriage);
-      setSpouseName(spouse_name);
-      {
-        tenth_marksheet_validate !== "" &&
-          setXMarksheetValidation(tenth_marksheet_validate);
-      }
-      {
-        twelveth_marksheet_validate !== "" &&
-          setXIIMarksheetValidation(twelveth_marksheet_validate);
-      }
-      {
-        UG_Marksheet_validate !== "" &&
-          setUnderGraduationDocValidation(UG_Marksheet_validate);
-      }
-      {
-        uid_validate !== "" && setUIDValidation(uid_validate);
-      }
-      {
-        pan_validate !== "" && setPanUploadValidation(pan_validate);
-      }
-      {
-        passport_validate !== "" && setPassportValidation(passport_validate);
-      }
-      {
-        pre_expe_letter_validate !== "" &&
-          setExperienceDocValidation(pre_expe_letter_validate);
-      }
-      {
-        pre_off_letter_validate !== "" &&
-          setPreviousOfferLetterValidation(pre_off_letter_validate);
-      }
-      {
-        pre_relieving_letter_validate !== "" &&
-          setPreviousRelievingLetterValidation(pre_relieving_letter_validate);
-      }
-      {
-        bankPassBook_Cheque_validate !== "" &&
-          setPassbookChequeValidation(bankPassBook_Cheque_validate);
-      }
-      setPermanentAddress(permanent_address);
-      setPermanentCity(permanent_city);
-      setPermanentState(permanent_state);
-      setPermanentPincode(permanent_pin_code);
-      setCurrentAddress(current_address);
-      setcurrentCity(current_city);
-      setcurrentState(current_state);
-      setcurrentPincode(current_pin_code);
-    });
+        setAllUserData(fetchedData);
+        setUserName(user_name);
+        setEmail(user_email_id);
+        setPersonalEmail(PersonalEmail);
+        //setContact(PersonalNumber);
+        //setPersonalContact(user_contact_no);
+        setContact(user_contact_no);
+        setPersonalContact(PersonalNumber);
+        setPersonalEmail(PersonalEmail);
+        setFatherName(fatherName);
+        setMotherName(motherName);
+        setHobbies(Hobbies);
+        setGender(Gender);
+        setBloodGroup(BloodGroup);
+        {
+          Nationality && setNationality(Nationality);
+        }
+        setSpeakingLanguage(SpokenLanguages);
+        setLoginId(user_login_id);
+        setPassword(user_login_password);
+        setJoiningDate(joining_date?.split("T")?.[0]);
+        setMaritialStatus(MartialStatus);
+        setDateOfBirth(DOB?.split("T")?.[0]);
+        setDateOfMarraige(DateOfMarriage);
+        setSpouseName(spouse_name);
+        {
+          tenth_marksheet_validate !== "" &&
+            setXMarksheetValidation(tenth_marksheet_validate);
+        }
+        {
+          twelveth_marksheet_validate !== "" &&
+            setXIIMarksheetValidation(twelveth_marksheet_validate);
+        }
+        {
+          UG_Marksheet_validate !== "" &&
+            setUnderGraduationDocValidation(UG_Marksheet_validate);
+        }
+        {
+          uid_validate !== "" && setUIDValidation(uid_validate);
+        }
+        {
+          pan_validate !== "" && setPanUploadValidation(pan_validate);
+        }
+        {
+          passport_validate !== "" && setPassportValidation(passport_validate);
+        }
+        {
+          pre_expe_letter_validate !== "" &&
+            setExperienceDocValidation(pre_expe_letter_validate);
+        }
+        {
+          pre_off_letter_validate !== "" &&
+            setPreviousOfferLetterValidation(pre_off_letter_validate);
+        }
+        {
+          pre_relieving_letter_validate !== "" &&
+            setPreviousRelievingLetterValidation(pre_relieving_letter_validate);
+        }
+        {
+          bankPassBook_Cheque_validate !== "" &&
+            setPassbookChequeValidation(bankPassBook_Cheque_validate);
+        }
+        setPermanentAddress(permanent_address);
+        setPermanentCity(permanent_city);
+        setPermanentState(permanent_state);
+        setPermanentPincode(permanent_pin_code);
+        setCurrentAddress(current_address);
+        setcurrentCity(current_city);
+        setcurrentState(current_state);
+        setcurrentPincode(current_pin_code);
+      });
   }, [id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("id", id);
+    formData.append("user_id", id);
     formData.append("user_name", username);
     formData.append("user_email_id", email);
     formData.append("user_login_id", loginId);
@@ -341,7 +344,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("current_state", currentState);
     formData.append("current_pin_code", Number(currentPincode));
 
-    axios.put(`http://44.211.225.140:8000/userupdate`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -349,8 +352,8 @@ const PreOnboardingUserMaster = () => {
 
     // After update send mail
     axios
-      .post("http://44.211.225.140:8000/mail2", {
-        email: email,
+      .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+        email: "lalit@creativefuel.io",
         subject: "User Pre Onboarding",
         text: "Pre Onboarding Data Update Successfully",
         attachment: "",
@@ -366,7 +369,7 @@ const PreOnboardingUserMaster = () => {
       });
     whatsappApi.callWhatsAPI(
       "Onboarding user Fill Details",
-      "9977815413",
+      "8517907328",
       username,
       [username]
     );
@@ -489,8 +492,11 @@ const PreOnboardingUserMaster = () => {
       currentPincode,
     ];
     // const fileFields = [];
-    const filledFieldsCount = filledFields.filter(
-      (value) => value !== null && value.trim() !== ""
+    // const filledFieldsCount = filledFields?.filter(
+    //   (value) => value !== null && value?.trim() !== ""
+    // ).length;
+    const filledFieldsCount = filledFields?.filter(
+      (value) => value !== null
     ).length;
     const totalFields = filledFields.length;
     const percentage = (filledFieldsCount / totalFields) * 100;
@@ -501,17 +507,33 @@ const PreOnboardingUserMaster = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("id", id);
+    formData.append("user_id", id);
     formData.append("joining_date_extend", joingingExtendDate);
     formData.append("joining_date_extend_status", "Requested");
     formData.append("joining_date_extend_reason", joiningExtendReason);
     formData.append("joining_extend_document", joingingExtendDocument);
 
-    axios.put(`http://44.211.225.140:8000/userupdate`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+    axios
+      .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+        email: "lalit@creativefuel.io",
+        subject: "User Pre Onboarding Extend Date",
+        text: joiningExtendReason,
+        attachment: "",
+        login_id: loginId,
+        name: username,
+        password: password,
+      })
+      .then((res) => {
+        console.log("Email sent successfully:", res.data);
+      })
+      .catch((error) => {
+        console.log("Failed to send email:", error);
+      });
     whatsappApi.callWhatsAPI("Extend Date by User", "9977815413", username, [
       username,
       joingingExtendDate,
@@ -1241,12 +1263,25 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.tenth_marksheet_validate == "Reject" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
+                          {allUserData?.tenth_marksheet_validate ==
+                            "Reject" && (
+                            <div className="warning_badges reject">
+                              <h4>Reject</h4>
                               <h5>
                                 {allUserData?.tenth_marksheet_validate_remark}
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.tenth_marksheet_validate ==
+                            "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.tenth_marksheet_validate ==
+                            "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1278,15 +1313,27 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.twelveth_marksheet_validate ==
+                          {allUserData?.twelveth_marksheet_validate ==
                             "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>
                                 {
                                   allUserData?.twelveth_marksheet_validate_remark
                                 }
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.twelveth_marksheet_validate ==
+                            "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.twelveth_marksheet_validate ==
+                            "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1316,12 +1363,22 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.UG_Marksheet_validate == "Reject" && (
+                          {allUserData?.UG_Marksheet_validate == "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>
                                 {allUserData?.UG_Marksheet_validate_remark}
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.UG_Marksheet_validate == "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.UG_Marksheet_validate == "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1347,10 +1404,20 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.uid_validate == "Reject" && (
+                          {allUserData?.uid_validate == "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
-                              <h5>{allUserData?.uid_remark}</h5>
+                              <h4>Reject</h4>
+                              <h5>{allUserData?.uid_validate_remark}</h5>
+                            </div>
+                          )}
+                          {allUserData?.uid_validate == "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.uid_validate == "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1378,10 +1445,20 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.pan_validate == "Reject" && (
+                          {allUserData?.pan_validate == "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>{allUserData?.pan_remark}</h5>
+                            </div>
+                          )}
+                          {allUserData?.pan_validate == "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.pan_validate == "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1407,10 +1484,20 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.passport_validate == "Reject" && (
+                          {allUserData?.passport_validate == "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>{allUserData?.passport_validate_remark}</h5>
+                            </div>
+                          )}
+                          {allUserData?.passport_validate == "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.passport_validate == "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1440,12 +1527,24 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.pre_off_letter_validate == "Reject" && (
+                          {allUserData?.pre_off_letter_validate == "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>
                                 {allUserData?.pre_off_letter_validate_remark}
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.pre_off_letter_validate ==
+                            "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.pre_off_letter_validate ==
+                            "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1475,13 +1574,25 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.pre_relieving_letter_validate ==
+                          {allUserData?.pre_relieving_letter_validate ==
                             "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>
                                 {allUserData?.pre_expe_letter_validate_remark}
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.pre_relieving_letter_validate ==
+                            "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.pre_relieving_letter_validate ==
+                            "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1511,12 +1622,25 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.pre_expe_letter_validate == "Reject" && (
+                          {allUserData?.pre_expe_letter_validate ==
+                            "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>
                                 {allUserData?.pre_expe_letter_validate_remark}
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.pre_expe_letter_validate ==
+                            "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.pre_expe_letter_validate ==
+                            "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1549,15 +1673,27 @@ const PreOnboardingUserMaster = () => {
                               </a>
                             </span>
                           </div>
-                          {allUserData.bankPassBook_Cheque_validate ==
+                          {allUserData?.bankPassBook_Cheque_validate ==
                             "Reject" && (
                             <div className="warning_badges reject">
-                              <h4>Rejected</h4>
+                              <h4>Reject</h4>
                               <h5>
                                 {
                                   allUserData?.bankPassBook_Cheque_validate_remark
                                 }
                               </h5>
+                            </div>
+                          )}
+                          {allUserData?.bankPassBook_Cheque_validate ==
+                            "Approve" && (
+                            <div className="warning_badges approve">
+                              <h4>Accepted</h4>
+                            </div>
+                          )}
+                          {allUserData?.bankPassBook_Cheque_validate ==
+                            "Pending" && (
+                            <div className="warning_badges reject">
+                              <h4>Pending</h4>
                             </div>
                           )}
                         </li>
@@ -1617,9 +1753,9 @@ const PreOnboardingUserMaster = () => {
                         </div>
                       </div>
                       <div className="ml-auto mr-auto text-center">
-                        <button className="btn btn_pill btn_cmn btn_white">
+                        {/* <button className="btn btn_pill btn_cmn btn_white">
                           Submit
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>

@@ -29,7 +29,7 @@ const AttendanceOverview = () => {
 
   function getData() {
     axios
-      .get("http://44.211.225.140:8000/allattendencemastdata")
+      .get("http://34.93.135.33:8080/api/all_attendence_mast_data")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

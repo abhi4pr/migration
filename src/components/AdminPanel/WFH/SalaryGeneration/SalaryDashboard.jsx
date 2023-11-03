@@ -3,9 +3,11 @@ import axios from "axios";
 import Select from "react-select";
 import "./SalaryDashboard.css";
 import * as XLSX from "xlsx";
+import { useParams } from "react-router-dom";
 
 const SalaryDashboard = () => {
-  const [department, setDepartment] = useState(0);
+  const { id } = useParams();
+  const [department, setDepartment] = useState("");
   const [departmentdata, getDepartmentData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [resData, setResData] = useState([]);
@@ -14,6 +16,11 @@ const SalaryDashboard = () => {
   const [allwfhusers, setAllWFHUsers] = useState([]);
   const [activeusers, setActiveUsers] = useState("");
 
+  useEffect(() => {
+    if (id !== 0) {
+      setDepartment(id);
+    }
+  }, []);
   const months = [
     " January",
     "February",
@@ -29,12 +36,12 @@ const SalaryDashboard = () => {
     "December",
   ];
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/deptwithwfh").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/dept_with_wfh").then((res) => {
       getDepartmentData(res.data);
     });
 
     axios
-      .post("http://44.211.225.140:8000/salarycount", {
+      .post("http://34.93.135.33:8080/api/get_salary_count_by_dept_year", {
         dept: department,
       })
       .then((res) => {
@@ -43,7 +50,7 @@ const SalaryDashboard = () => {
   }, [department]);
 
   useEffect(() => {
-    axios.get("http://192.168.29.6:8080/api/get_all_wfh_users").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -54,14 +61,14 @@ const SalaryDashboard = () => {
   }, [department]);
 
   useEffect(() => {
-    axios.get(" http://44.211.225.140:8000/totalsalary").then((res) => {
+    axios.get(" http://34.93.135.33:8080/api/get_total_salary").then((res) => {
       setTotalCountOfSalary(res.data.data);
     });
   }, []);
   // ----------------------------------------------------------------------
   const getAttendanceData = () => {
     axios
-      .post("http://44.211.225.140:8000/salaryfromattendencebyfilter", {
+      .post("http://34.93.135.33:8080/api/get_salary_by_filter", {
         dept: department == "" ? 0 : department,
       })
       .then((res) => {

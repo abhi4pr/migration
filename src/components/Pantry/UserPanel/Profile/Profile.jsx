@@ -45,7 +45,7 @@ const Profile = () => {
     formData.append("id", loginUserId);
     formData.append("image", profileUpdate);
     axios
-      // .put("http://44.211.225.140:8000/userupdate", formData, {
+      // .put("http://34.93.135.33:8080/api/update_user", formData, {
       .put("http://44.211.225.140:8000/userimageupdate", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

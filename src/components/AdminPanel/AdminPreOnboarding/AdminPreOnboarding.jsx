@@ -96,7 +96,7 @@ const AdminPreOnboarding = () => {
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
     formData.append("user_contact_no", contact);
-    formData.append("sitting_id", 141);
+    formData.append("sitting_id", 183);
     formData.append("room_id", roomId);
     formData.append("dept_id", department);
     formData.append("Gender", gender);
@@ -128,7 +128,7 @@ const AdminPreOnboarding = () => {
           alert("this login ID already exists");
         } else {
           await axios.post(
-            "http://44.211.225.140:8000/userspostnew",
+            "http://34.93.135.33:8080/api/add_user",
             formData,
             {
               headers: {
@@ -138,13 +138,13 @@ const AdminPreOnboarding = () => {
           );
           whatsappApi.callWhatsAPI(
             "Preonboarding Register",
-            personalContact,
+            JSON.stringify(personalContact),
             username,
             [username, loginId, password, "http://jarviscloud.in/"]
           );
 
           axios
-            .post("http://44.211.225.140:8000/mail2", {
+            .post("http://34.93.135.33:8080/api/add_send_user_mail", {
               email: email,
               subject: "User Registration",
               text: "A new user has been onboard.",

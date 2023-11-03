@@ -130,12 +130,13 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
             You are about to update the execution status.
           </Typography>
         { rowData?.execution_status!== 0 && <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              // defaultValue={dayjs("2022-04-17")}
-              value={value}
-              onChange={setValue}
-              sx={{ mb: 2, mr: 2 }}
-            />
+        <DatePicker
+  value={value}
+  onChange={setValue}
+  format="DD/MM/YYYY"
+  sx={{ mb: 2, mr: 2 }}
+/>
+
             <TimePicker
               value={value}
               onChange={setValue}
