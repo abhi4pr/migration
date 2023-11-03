@@ -182,34 +182,38 @@ const UserMaster = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
+        .get(
+          `http://192.168.29.116:8080/api/get_subdept_from_dept/${department}`
+        )
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("http://34.93.135.33:8080/api/not_alloc_sitting").then((res) => {
-      getRefrenceData(res.data.data);
-    });
+    axios
+      .get("http://192.168.29.116:8080/api/not_alloc_sitting")
+      .then((res) => {
+        getRefrenceData(res.data.data);
+      });
 
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
       const userSitting = res.data.data.map((user) => user.sitting_id);
       setAllUsersSittings(userSitting);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .get("http://192.168.29.116:8080/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -285,22 +289,26 @@ const UserMaster = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
+          await axios.post(
+            "http://192.168.29.116:8080/api/add_user",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
 
           for (const elements of documents) {
             // formData.append("user_id", loginId);
             // formDataa.append("remark", loginUserId);
-            // formDataa.append("created_by",loginId );
+            // formDataa.append("created_by", loginId);
             // formDataa.append("field_name", elements.name);
             // formDataa.append("field_value", elements.file);
             // formData.append("remark", "remark");
 
             axios.post(
-              "http://44.211.225.140:8000/userotherfieldpostnew",
+              "http://192.168.29.116:8080/api/add_user_other_field",
               { field_name: elements.name, field_value: elements.file },
               {
                 headers: {
@@ -310,7 +318,7 @@ const UserMaster = () => {
             );
           }
           axios
-            .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+            .post("http://192.168.29.116:8080/api/add_send_user_mail", {
               email: email,
               subject: "User Registration",
               text: "A new user has been registered.",
@@ -1082,7 +1090,11 @@ const UserMaster = () => {
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
         <div className="d-flex justify-content-between">
-          <button className="btn btn-primary mb-2" onClick={addMore}>
+          <button
+            type="button"
+            className="btn btn-primary mb-2"
+            onClick={addMore}
+          >
             Add More
           </button>
           {documents.length > 0 && (

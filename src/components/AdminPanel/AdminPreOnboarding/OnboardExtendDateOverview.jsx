@@ -21,7 +21,7 @@ const OnboardExtendDateOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -32,7 +32,7 @@ const OnboardExtendDateOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_users"
+        "http://192.168.29.116:8080/api/get_all_users"
       );
       const data = response.data.data.filter(
         (item) => item.joining_date_extend_status == "Requested"
@@ -54,18 +54,30 @@ const OnboardExtendDateOverview = () => {
   const statusUpdate = (user_id, status, PersonalNumber) => {
     console.log("lalit hai yha", user_id, status, PersonalNumber);
     const formData = new FormData();
-    formData.append("id", user_id);
+    formData.append("user_id", user_id);
     formData.append("joining_date_extend_status", status);
     axios
-      .put("http://44.211.225.140:8000/userupdate", formData, {
+      .put("http://192.168.29.116:8080/api/update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
-        whatsappApi.callWhatsAPI("Extend Date Admin", PersonalNumber, user_id, [
-          status,
-        ]);
+        axios.post("http://192.168.29.116:8080/api/add_send_user_mail", {
+          email: "lalit@creativefuel.io",
+          subject: "Extend Date Status",
+          text: status,
+          attachment: "",
+          // login_id: loginId,
+          // name: username,
+          // password: password,
+        });
+        whatsappApi.callWhatsAPI(
+          "Extend Date Admin",
+          JSON.stringify(PersonalNumber),
+          user_id,
+          [status]
+        );
       })
       .then(() => getData());
   };

@@ -15,10 +15,10 @@ function InstaApiContext({ children }) {
 
   useEffect(() => {
     const firstApiRequest = axios.get(
-      "http://34.93.135.33:8080/api/get_all_users"
+      "http://192.168.29.116:8080/api/get_all_users"
     );
     const secondApiRequest = axios.get(
-      `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+      `http://192.168.29.116:8080/api/get_single_user_auth_detail/${userID}`
     );
 
     // Make the first two API requests concurrently
@@ -55,7 +55,7 @@ function InstaApiContext({ children }) {
           step = 2;
         }
         // After the first two requests are completed, make the third API request
-        return axios.post("http://34.93.135.33:8080/api/creator_name_count", {
+        return axios.post("http://192.168.29.116:8080/api/creator_name_count", {
           sortOrder: step,
         });
       })

@@ -30,7 +30,7 @@ const UserResponsbility = () => {
   const loginUser = decodedToken.id;
 
   function getUserCompleteData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       const data = res.data.data;
       getUserData(data);
       setUserContact(
@@ -56,7 +56,7 @@ const UserResponsbility = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_responsibilitys")
+      .get("http://192.168.29.116:8080/api/get_all_responsibilitys")
       .then((res) => {
         setResponsibilityData(res.data);
       });
@@ -65,7 +65,7 @@ const UserResponsbility = () => {
     e.preventDefault();
     setError("");
     for (const element of todos) {
-      axios.post("http://34.93.135.33:8080/api/add_job_responsibility", {
+      axios.post("http://192.168.29.116:8080/api/add_job_responsibility", {
         user_id: userName,
         job_responsi: element.responsibility,
         description: element.description,

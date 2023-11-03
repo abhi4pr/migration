@@ -14,7 +14,7 @@ const PreOnboardingOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_users"
+        "http://192.168.29.116:8080/api/get_all_users"
       );
       const data = response.data.data;
       const onboarddata = data.filter((d) => d.onboard_status === 2);
@@ -34,10 +34,10 @@ const PreOnboardingOverview = () => {
   const handleStatusChange = (row, onboard_status) => {
     console.log("yha row id data hai", row, onboard_status);
     const formData = new FormData();
-    formData.append("id", row);
+    formData.append("user_id", row);
     formData.append("onboard_status", 1);
     axios
-      .put("http://44.211.225.140:8000/userupdate", formData, {
+      .put("http://192.168.29.116:8080/api/update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

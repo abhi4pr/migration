@@ -38,13 +38,13 @@ const SimUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .get("http://192.168.29.116:8080/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
@@ -52,7 +52,7 @@ const SimUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_sim/${id}`)
+      .get(`http://192.168.29.116:8080/api/get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         //if (fetchedData.length > 0) {
@@ -89,7 +89,7 @@ const SimUpdate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValidcontact == true) {
-      axios.put("http://34.93.135.33:8080/api/update_sim", {
+      axios.put("http://192.168.29.116:8080/api/update_sim", {
         id: simId,
         mobilenumber: mobileNumber,
         sim_no: simNumber,

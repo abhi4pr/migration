@@ -17,13 +17,13 @@ const DesignationUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_designation/${desi_id}`)
+      .get(`http://192.168.29.116:8080/api/get_single_designation/${desi_id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         const { desi_id, desi_name, dept_id, remark } = fetchedData;
@@ -37,7 +37,7 @@ const DesignationUpdate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put("http://34.93.135.33:8080/api/update_designation", {
+    axios.put("http://192.168.29.116:8080/api/update_designation", {
       desi_id: id,
       desi_name: designationName,
       dept_id: departmentName,
