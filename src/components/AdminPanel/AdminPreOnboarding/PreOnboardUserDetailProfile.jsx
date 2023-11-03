@@ -15,7 +15,7 @@ const PreOnboardUserDetailsProfile = () => {
 
   function userOtherDocuments() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_all_usersotherfielddata/${id}`)
+      .get(`http://192.168.29.116:8080/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });

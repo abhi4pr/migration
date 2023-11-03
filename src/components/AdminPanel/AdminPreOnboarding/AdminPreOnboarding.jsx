@@ -73,12 +73,12 @@ const AdminPreOnboarding = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("http://192.168.29.116:8080/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
       // const userSitting = res.data.data.map((user) => user.sitting_id);
       // setAllUsersSittings(userSitting);
@@ -127,20 +127,24 @@ const AdminPreOnboarding = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
+          await axios.post(
+            "http://192.168.29.116:8080/api/add_user",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
           whatsappApi.callWhatsAPI(
             "Preonboarding Register",
-            personalContact,
+            JSON.stringify(personalContact),
             username,
             [username, loginId, password, "http://jarviscloud.in/"]
           );
 
           axios
-            .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+            .post("http://192.168.29.116:8080/api/add_send_user_mail", {
               email: email,
               subject: "User Registration",
               text: "A new user has been onboard.",

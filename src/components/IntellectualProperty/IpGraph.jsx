@@ -232,7 +232,7 @@ const IpGraph = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("http://192.168.29.116:8080/api/get_all_users")
       .then((res) => setUserData(res.data.data));
   }, []);
 

@@ -34,7 +34,7 @@ const OverviewIndex = () => {
       const responseArray = [];
 
       axios
-        .get("http://34.93.135.33:8080/api/get_exe_sum", {
+        .get("http://192.168.29.116:8080/api/get_exe_sum", {
           loggedin_user_id: 52,
         })
         .then((response) => {
@@ -71,7 +71,7 @@ const OverviewIndex = () => {
       // }
 
       axios
-        .get("http://34.93.135.33:8080/api/execution_graph")
+        .get("http://192.168.29.116:8080/api/execution_graph")
         .then((res) => {
           console.log(res.data, "this is response");
           setCounts(res.data);

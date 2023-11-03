@@ -70,7 +70,7 @@ export default function SubCategoryMaster() {
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/projectxSubCategory", postData)
+      .post("http://192.168.29.116:8080/api/projectxSubCategory", postData)
       .then((response) => {
         postData.sub_category_name = "";
         console.log("Data saved:", response.data);
@@ -88,7 +88,7 @@ export default function SubCategoryMaster() {
   // get api ------
   const getData = () => {
     axios
-      .get("http://34.93.135.33:8080/api/projectxSubCategory")
+      .get("http://192.168.29.116:8080/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data);
         const sortedData = res.data.data.sort(
@@ -98,7 +98,7 @@ export default function SubCategoryMaster() {
       });
   };
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+    axios.get("http://192.168.29.116:8080/api/projectxCategory").then((res) => {
       console.log(res.data.data);
       setCategory(res.data.data);
     });
@@ -108,7 +108,7 @@ export default function SubCategoryMaster() {
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`http://34.93.135.33:8080/api/projectxSubCategory`, {
+      .put(`http://192.168.29.116:8080/api/projectxSubCategory`, {
         sub_category_id: editData.sub_category_id,
         sub_category_name: editData.sub_category_name,
         category_id: editData.category_id,
@@ -145,7 +145,7 @@ export default function SubCategoryMaster() {
     if (itemToDeleteId) {
       axios
         .delete(
-          `http://34.93.135.33:8080/api/projectxSubCategory/${itemToDeleteId}`
+          `http://192.168.29.116:8080/api/projectxSubCategory/${itemToDeleteId}`
         )
         .then(() => {
           getData();
