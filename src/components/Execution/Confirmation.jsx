@@ -169,7 +169,7 @@ const Confirmation = ({
         execution_time: hoursDifference.toFixed(2),
       };
       axios
-        .put(`http://34.93.135.33:8080/api/edit_exe_sum_sadfsdfs`, payload)
+        .put(`http://34.93.135.33:8080/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);
@@ -190,7 +190,7 @@ const Confirmation = ({
       };
       axios
         .post(
-          `https://sales.creativefuel.io/webservices/RestController.php?view=executionSummaryUpdate_asdfdssdf`,
+          `https://sales.creativefuel.io/webservices/RestController.php?view=executionSummaryUpdate`,
           payload1
         )
         .then((res) => {
