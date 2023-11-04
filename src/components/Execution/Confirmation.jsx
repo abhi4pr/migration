@@ -151,6 +151,15 @@ const Confirmation = ({
       setOpen(false);
       setConfirmation(false);
     } else if (status == 1) {
+      if(!value){
+        setSnackbar({
+          open: true,
+          message: "Please select date",
+          severity: "error",
+        });
+        return;
+      }
+
       const currentDateTime = new Date(getCurrentDateTime());
       const start_date = new Date(data.start_date_);
       const end_date = currentDateTime;
@@ -180,11 +189,19 @@ const Confirmation = ({
 
       setOpen(false);
       setConfirmation(false);
+      // const payload1 = {
+      //   loggedin_user_id: userID,
+      //   sale_booking_execution_id: data.sale_booking_execution_id,
+      //   execution_date_time: value ? new Date(value).toLocaleDateString('en-GB') : new Date().toISOString().split("T")[0],
+      //   execution_time: hoursDifference.toFixed(2),
+      //   execution_remark: remark ? remark : "Done",
+      //   execution_status: 3,
+      // };
       const payload1 = {
         loggedin_user_id: userID,
         sale_booking_execution_id: data.sale_booking_execution_id,
         execution_date_time: value ? new Date(value).toLocaleDateString('en-GB') : new Date().toISOString().split("T")[0],
-        execution_time: hoursDifference.toFixed(2),
+        execution_time:new Date(value).toLocaleTimeString('en-GB', { hour12: false }),
         execution_remark: remark ? remark : "Done",
         execution_status: 3,
       };

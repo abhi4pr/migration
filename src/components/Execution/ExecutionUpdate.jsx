@@ -31,7 +31,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
+export default function ExecutionUpdate({ id, rowData, setReload, status }) {
   console.log(rowData.execution_status);
   const [remark, setRemark] = useState("");
   const [data, setData] = useState([]);
@@ -45,7 +45,7 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
   const [snackbar, setSnackbar] = useState(null);
   const [value, setValue] = useState(null);
   const [confirmation, setConfirmation] = useState(false);
-  
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -80,9 +80,9 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
         onClick={() => {
           setOpen(true);
         }}
-        color={rowData?.execution_status== 0?"error":"success"}
+        color={rowData?.execution_status == 0 ? "error" : "success"}
       >
-        {rowData?.execution_status== 0?"Reject":"Done"}
+        {rowData?.execution_status == 0 ? "Reject" : "Done"}
       </Button>
       {/* <EditIcon
         onClick={() => {
@@ -91,7 +91,7 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
         }}
       /> */}
       {/* </Button> */}
-      {confirmation &&(
+      {confirmation && (
         <Confirmation
           rowData={rowData}
           value={value}
@@ -129,21 +129,17 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
           <Typography gutterBottom>
             You are about to update the execution status.
           </Typography>
-        { rowData?.execution_status!== 0 && <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-  value={value}
-  onChange={setValue}
-  format="DD/MM/YYYY"
-  sx={{ mb: 2, mr: 2 }}
-/>
-
-            <TimePicker
-              value={value}
-              onChange={setValue}
-              // referenceDate={dayjs("2022-04-17")}
-            />
-            {/* <StaticDatePicker /> */}
-          </LocalizationProvider>}
+          {rowData?.execution_status !== 0 && (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                value={value}
+                onChange={setValue}
+                format="DD/MM/YYYY"
+                sx={{ mb: 2, mr: 2 }}
+              />
+              <TimePicker value={value} onChange={setValue} />
+            </LocalizationProvider>
+          )}
           <TextField
             fullWidth
             id="fullWidth"
