@@ -29,7 +29,7 @@ const UserOverview = () => {
   const [desiOrgData, setDesiOrgData] = useState([]);
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [designationFilter, setDesignationFilter] = useState("");
-  console.log(designationFilter,"filter data ----");
+  console.log(designationFilter, "filter data ----");
   const [jobType, setJobType] = useState("");
   const [transferResponsibilityData, setTransferResponsibilityData] = useState(
     []
@@ -43,6 +43,7 @@ const UserOverview = () => {
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
+  const roleToken = decodedToken.role_id;
   const oldToken = sessionStorage.getItem("token");
   const [checkedData, setCheckedData] = useState([]);
   const [separationReasonGet, setSeparationReasonGet] = useState([]);
@@ -95,9 +96,12 @@ const UserOverview = () => {
       remark: separationRemark,
       reason: separationReason,
     });
-    whatsappApi.callWhatsAPI("separation user", usercontact, username, [
-      separationStatus,
-    ]);
+    whatsappApi.callWhatsAPI(
+      "separation user",
+      JSON.stringify(usercontact),
+      username,
+      [separationStatus]
+    );
   }
 
   useEffect(() => {
@@ -119,6 +123,7 @@ const UserOverview = () => {
         user_id: user_id,
         user_login_id: user_login_id,
         user_login_password: user_login_password,
+        role_id: roleToken,
       })
       .then((res) => {
         const token1 = res.data.token;
@@ -167,9 +172,10 @@ const UserOverview = () => {
   };
   const handleDelete = (userId) => {
     axios
-      .delete(`http://34.93.135.33:8080/api/userdelete/${userId}`)
+      .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
       .then((response) => {
         console.log("User deleted successfully", response);
+        getData();
       });
   };
 
@@ -400,9 +406,11 @@ const UserOverview = () => {
   ];
 
   const handleTransfer = (userId) => {
-    axios.get(`http://34.93.135.33:8080/api/jobrespon/${userId}`).then((res) => {
-      setTransferResponsibilityData(res.data);
-    });
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
+      .then((res) => {
+        setTransferResponsibilityData(res.data);
+      });
   };
 
   function handleAllCheckedData(event) {
@@ -436,13 +444,13 @@ const UserOverview = () => {
         Job_res_id: element.Job_res_id,
       };
       axios
-        .post("http://34.93.135.33:8080/api/kratranspost", requestData)
+        .post("http://34.93.135.33:8080/api/add_kra", requestData)
         .then(() => {
           setRemark("");
           setTransferTo("");
           toastAlert("KRA Transfer Successfully");
           const MailUser = transferToUser.find((d) => d.user_id == transferTo);
-          axios.post("http://34.93.135.33:8080/api/mail2", {
+          axios.post("http://34.93.135.33:8080/api/add_send_user_mail", {
             email: MailUser.user_email_id,
             subject: "User Registration",
             text: "You Have Assign New KRA",
@@ -609,12 +617,12 @@ const UserOverview = () => {
                         ? departmentFilter === "All"
                           ? { value: "All", label: "All" }
                           : {
-                            value: departmentFilter,
-                            label:
-                              departmentData.find(
-                                (dept) => dept.dept_id === departmentFilter
-                              )?.dept_name || "",
-                          }
+                              value: departmentFilter,
+                              label:
+                                departmentData.find(
+                                  (dept) => dept.dept_id === departmentFilter
+                                )?.dept_name || "",
+                            }
                         : null
                     }
                     onChange={(selectedOption) => {
@@ -647,12 +655,12 @@ const UserOverview = () => {
                         ? designationFilter === "All"
                           ? { value: "All", label: "All" }
                           : {
-                            value: designationFilter,
-                            label:
-                              designationData.find(
-                                (dept) => dept.desi_id === designationFilter
-                              )?.desi_name || "",
-                          }
+                              value: designationFilter,
+                              label:
+                                designationData.find(
+                                  (dept) => dept.desi_id === designationFilter
+                                )?.desi_name || "",
+                            }
                         : null
                     }
                     onChange={(selectedOption) => {
@@ -862,7 +870,7 @@ const UserOverview = () => {
                 {separationReasonGet.map((option) => (
                   <option value={option.id} key={option.id}>
                     {" "}
-                    {option.reason_name}
+                    {option.reason}
                   </option>
                 ))}
               </FieldContainer>
@@ -874,13 +882,13 @@ const UserOverview = () => {
               {(separationStatus === "On Long Leave" ||
                 separationStatus === "Subatical" ||
                 separationStatus === "Suspended") && (
-                  <FieldContainer
-                    label="Reinstated Date"
-                    type="date"
-                    value={separationReinstateDate}
-                    onChange={(e) => setSeparationReinstateDate(e.target.value)}
-                  />
-                )}
+                <FieldContainer
+                  label="Reinstated Date"
+                  type="date"
+                  value={separationReinstateDate}
+                  onChange={(e) => setSeparationReinstateDate(e.target.value)}
+                />
+              )}
               {separationStatus == "Resign Accepted" && (
                 <input
                   label="Last Working Day"

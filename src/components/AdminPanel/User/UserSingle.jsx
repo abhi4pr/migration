@@ -145,14 +145,11 @@ const UserSingle = () => {
       if (emptyState) emptyState("");
       if (hideField) hideField(false);
     });
-
+    const constaWhatsapp = user.user_contact_no + "";
     whatsappApi
-      .callWhatsAPI(
-        "doc_approve_reject",
-        user.user_contact_no,
-        user.user_name,
-        [action]
-      )
+      .callWhatsAPI("doc_approve_reject", constaWhatsapp, user.user_name, [
+        action,
+      ])
       .then(() => getData())
       .then(() => {
         axios

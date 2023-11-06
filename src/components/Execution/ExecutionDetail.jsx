@@ -221,7 +221,7 @@ function ExecutionDetail() {
             <Grid item xs={6}>
               <Typography>
                 Excel:
-                <Button href={data.excel} color="success">
+                <Button href={data.execution_excel} color="success">
                   Download
                 </Button>
               </Typography>
