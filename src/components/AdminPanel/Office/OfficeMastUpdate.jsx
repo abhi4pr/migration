@@ -10,23 +10,18 @@ function OfficeMastUpdate() {
   const [roomimage, setRoomImage] = useState("");
   const [remark, setRemark] = useState("");
   const [createdby, setCreatedBy] = useState("");
-
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // axios.put(`http://44.211.225.140:8000/roomupdate`, {
-    //   id: id,
-    //   sitting_ref_no: sittingMast,
-    //   remarks: remark,
-    //   created_by: createdby,
     const formData = new FormData();
     formData.append("room_id", id);
     formData.append("sitting_ref_no", sittingMast);
     formData.append("room_image", roomimage);
     formData.append("remarks", remark);
     formData.append("created_by", createdby);
-    axios.put(`http://34.93.135.33:8080/api/update_room`, formData, {
+
+    await axios.put(`http://34.93.135.33:8080/api/update_room`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -36,7 +31,6 @@ function OfficeMastUpdate() {
 
     toastAlert("Form Submitted success");
     setIsFormSubmitted(true);
-    // navigate("/role-overview");
   };
 
   useEffect(() => {

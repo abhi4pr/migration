@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import jwtDecode from "jwt-decode";
 import DeleteButton from "../../DeleteButton";
 import FormContainer from "../../FormContainer";
+import Modal  from "react-modal";
 
 const ResponsiblityOverview = () => {
   const [search, setSearch] = useState("");
@@ -13,6 +14,12 @@ const ResponsiblityOverview = () => {
   const [filterdata, setFilterData] = useState([]);
   const [allResponsiblility, setAllResponsibility] = useState([]);
   const [contextData, setDatas] = useState([]);
+  const [selectedUserData, setSelectedUserData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalSearch, setModalSearch] = useState("");
+
+
 
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
@@ -37,6 +44,20 @@ const ResponsiblityOverview = () => {
         setFilterData(res.data);
       });
   }
+
+  const handleRowClick = (row) => {
+    console.log(row);
+    setSelectedRow(row);
+
+    const filteredData = allResponsiblility.filter(
+      (data) => data.sjob_responsibility === row.respo_name
+    );
+    setSelectedUserData(filteredData);
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   useEffect(() => {
     getData();
     axios
@@ -48,7 +69,7 @@ const ResponsiblityOverview = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.sjob_responsibility.toLowerCase().match(search.toLowerCase());
+      return d.respo_name.toLowerCase().includes(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -70,9 +91,17 @@ const ResponsiblityOverview = () => {
     {
       name: "Assign Responsibility",
       cell: (row) => {
-        return allResponsiblility.filter(
-          (data) => data.sjob_responsibility == row.respo_name
+        const count = allResponsiblility.filter(
+          (data) => data.sjob_responsibility === row.respo_name
         ).length;
+        return (
+          <button
+            className="btn btn-outline-warning btn-sm user-button"
+            onClick={() => handleRowClick(row)}
+          >
+            {count}
+          </button>
+        );
       },
       width: "7%",
       sortable: true,
@@ -155,6 +184,57 @@ const ResponsiblityOverview = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={handleCloseModal}
+        style={{
+          content: {
+            width: "80%",
+            height: "80%",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        {selectedRow && (
+          <div>
+            <div className="d-flex justify-content-between mb-2">
+            <h2>Department: {selectedRow.dept_name}</h2>
+
+            <button className="btn btn-success float-left" onClick={handleCloseModal}>
+              X
+            </button>
+            </div>
+            <DataTable
+              columns={[
+                { name: "S.No", cell: (row, index) => <div>{index + 1}</div>, width: "10%" },
+                { name: "Name", selector: "user_name" },
+                { name: "Email", selector: "user_email_id" },
+                { name: "Contact", selector: "user_contact_no" },
+              ]}
+              data={selectedUserData.filter((user) =>
+                user.user_name.toLowerCase().includes(modalSearch.toLowerCase())
+              )}
+              highlightOnHover
+              subHeader
+              subHeaderComponent={
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-50 form-control"
+                  value={modalSearch}
+                  onChange={(e) => setModalSearch(e.target.value)}
+                />
+              }
+            />
+           
+          </div>
+        )}
+      </Modal>
     </>
   );
 };

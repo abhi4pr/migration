@@ -82,19 +82,19 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
 
   useEffect(() => {
     axios
-      .post("http://44.211.225.140:8000/userpresitting", {
+      .post("http://34.93.135.33:8080/api/userpresitting", {
         user_id: userId,
       })
       .then((res) => setSittingHistory(res.data));
 
     axios
-      .get("http://44.211.225.140:8000/allsitting")
+      .get("http://34.93.135.33:8080/api/allsitting")
       .then((res) => setSittingData(res.data.data));
   }, []);
   // new sitting api ---------------------------------------------
   useEffect(() => {
     axios
-      .get(`http://44.211.225.140:8000/sittingdatabyid/${loginUserSitting}`)
+      .get(`http://34.93.135.33:8080/api/sittingdatabyid/${loginUserSitting}`)
       .then((res) => {
         setSittingAreaData(res.data);
       });
@@ -103,7 +103,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   useEffect(() => {
     if (selectedSitting) {
       axios
-        .get(`http://44.211.225.140:8000/sittingdatabyid/${loginUserSitting}`)
+        .get(`http://34.93.135.33:8080/api/sittingdatabyid/${loginUserSitting}`)
         .then((res) => {
           handleSitting(res.data.Sitting_area);
         });

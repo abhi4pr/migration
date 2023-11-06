@@ -23,7 +23,7 @@ const DeliveryData = () => {
   const roomId = decodedToken.room_id;
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allorderreqdata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
         if(res.data.data.length !== orderLength){
           orderLength = res.data.data.length
           if(Notification.permission === 'granted'){
@@ -35,7 +35,7 @@ const DeliveryData = () => {
     });
 
     axios
-      .post("http://44.211.225.140:8000/orderreqs", {
+      .post("http://34.93.135.33:8080/api/orderreqs", {
         // Sitting_id: sittingID,
         Request_delivered_by: loginUserId,
         room_id: roomId,
@@ -55,11 +55,11 @@ const DeliveryData = () => {
   useEffect(() => {
     getData();
     axios
-      // .post(`http://44.211.225.140:8000/usersdata`, {
+      // .post(`http://34.93.135.33:8080/api/usersdata`, {
       //   user_id: loginUserId,
       //   role_id: roleId,
       // })
-      .get(`http://44.211.225.140:8000/deliveryuser`)
+      .get(`http://34.93.135.33:8080/api/deliveryuser`)
       .then((res) => {
         setDeliveryBoyData(res.data);
         // console.log(res.data);
@@ -76,7 +76,7 @@ const DeliveryData = () => {
   ) => {
     // console.log(productId, OrderReqId, userid, orderquantity, productmessage);
     axios
-      .put(`http://44.211.225.140:8000/orderrequest`, {
+      .put(`http://34.93.135.33:8080/api/orderrequest`, {
         product_id: productId,
         order_req_id: OrderReqId,
         order_quantity: orderquantity,
@@ -97,7 +97,7 @@ const DeliveryData = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("http://44.211.225.140:8000/transreq", {
+      .post("http://34.93.135.33:8080/api/transreq", {
         from_id: roleId,
         to_id: transferTo,
         reason: reason,

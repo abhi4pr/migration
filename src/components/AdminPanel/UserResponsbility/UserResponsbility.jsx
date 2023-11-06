@@ -17,7 +17,6 @@ const UserResponsbility = () => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const [submitButtonAccess, setSubmitButtonAccess] = useState(false);
   const [userData, getUserData] = useState([]);
   const [responsibilityData, setResponsibilityData] = useState([]);
   const [userContact, setUserContact] = useState("");
@@ -42,7 +41,6 @@ const UserResponsbility = () => {
   useEffect(() => {
     getUserCompleteData();
   }, [userName]);
-
   useEffect(() => {
     const selectedData = userData.filter(
       (data) => data.user_id == Number(userName)
@@ -55,28 +53,24 @@ const UserResponsbility = () => {
   }, [userName, userData]);
 
   useEffect(() => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_responsibilitys")
-      .then((res) => {
-        setResponsibilityData(res.data);
-      });
+    axios.get("http://34.93.135.33:8080/api/get_all_responsibilitys").then((res) => {
+      setResponsibilityData(res.data);
+    });
   }, [todos]);
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     for (const element of todos) {
-      axios.post("http://34.93.135.33:8080/api/add_job_responsibility", {
+      await axios.post("http://34.93.135.33:8080/api/add_job_responsibility", {
         user_id: userName,
         job_responsi: element.responsibility,
         description: element.description,
         created_by: loginUser,
       });
-      whatsappApi.callWhatsAPI(
-        "User Responsibility",
-        JSON.stringify(userContact),
-        userName,
-        [element.responsibility]
-      );
+      await whatsappApi.callWhatsAPI("User Responsibility", userContact, userName, [
+        element.responsibility,
+      ]);
     }
     setUserName("");
     setResponsibility("");
@@ -88,7 +82,8 @@ const UserResponsbility = () => {
     return <Navigate to="/admin/user-respons-overivew" />;
   }
   const handleAddTodo = () => {
-    if (responsibility.trim() === "" || description.trim() === "") {
+    console.log(responsibility , "response")
+    if (responsibility?.trim() === "" || description?.trim() === "") {
       return;
     }
     setTodos((prevTodos) => [
@@ -157,7 +152,8 @@ const UserResponsbility = () => {
             />
           </>
         )}
-        <FieldContainer
+        {/* {console.log("responsibitlity", responsibility)} */}
+        {/* <FieldContainer
           label="Responsibility"
           Tag="select"
           fieldGrid={6}
@@ -173,23 +169,56 @@ const UserResponsbility = () => {
               {option.respo_name}
             </option>
           ))}
-        </FieldContainer>
-        <FieldContainer
-          label="Description"
-          Tag="select"
-          value={description}
-          required={false}
-          onChange={(e) => setDescription(e.target.value)}
-        >
-          <option selected disabled value="">
-            Choose...
-          </option>
-          {responsibilityData.map((option) => (
-            <option key={option.id} value={option.description}>
-              {option.description}
-            </option>
-          ))}
-        </FieldContainer>
+        </FieldContainer> */}
+        <div className="">
+          <div className="form-group">
+            <label className="form-label">
+              Responsiblity <sup style={{ color: "red" }}>*</sup>
+            </label>
+            <Select
+              className=""
+              options={responsibilityData.map((option) => ({
+                value: option.respo_name,
+                label: `${option.respo_name }`,
+              }))}
+              value={{
+                value: responsibility,
+                label:
+                responsibilityData.find((user) => user.respo_name === responsibility)
+                    ?.respo_name || "",
+              }}
+              onChange={(e) => {
+                setResponsibility(e.value);
+              }}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="">
+          <div className="form-group">
+            <label className="form-label">
+            Description <sup style={{ color: "red" }}>*</sup>
+            </label>
+            <Select
+              className=""
+              options={responsibilityData.map((option) => ({
+                value: option.description,
+                label: `${option.description }`,
+              }))}
+              value={{
+                value: description,
+                label:
+                responsibilityData.find((user) => user.description === description)
+                    ?.description || "",
+              }}
+              onChange={(e) => {
+                setDescription(e.value);
+              }}
+              required
+            />
+          </div>
+        </div>
         <div className="col-md-12" style={{ margin: "10px" }}>
           <div className="d-flex justify-content-between">
             <button

@@ -22,14 +22,14 @@ const LogoCategoryUpdate = () => {
   useEffect(() => {
     if (id) {
       console.log(id);
-      axios.get(`http://44.211.225.140:8000/getlogodata/${id}`);
+      axios.get(`http://34.93.135.33:8080/api/getlogodata/${id}`);
     }
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     axios
-      .put("http://44.211.225.140:8000/logocatupdate", {
+      .put("http://34.93.135.33:8080/api/logocatupdate", {
         id: id,
         cat_name: categoryName,
         remarks: remark,

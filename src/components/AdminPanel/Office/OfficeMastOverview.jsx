@@ -18,22 +18,23 @@ const OfficeMastOverview = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios
-        .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
-        )
-        .then((res) => {
-          setDatas(res.data);
-        });
+      axios.get(`http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`).then((res) => {
+        setDatas(res.data);
+      });
     }
   }, [userID]);
 
-  function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_rooms").then((res) => {
+  async function getData() {
+    try {
+      const res = await axios.get("http://34.93.135.33:8080/api/get_all_rooms");
+      console.log(res.data.data,"hjukjkh");
       setData(res.data.data);
       setFilterData(res.data.data);
-    });
+    } catch (error) {
+      console.error("An error occurred while fetching data", error);
+    }
   }
+  
 
   const columns = [
     {
@@ -93,7 +94,7 @@ const OfficeMastOverview = () => {
             contextData[6] &&
             contextData[6].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="delete_room"
+                endpoint="roomdelete"
                 id={row.room_id}
                 getData={getData}
               />
@@ -109,7 +110,7 @@ const OfficeMastOverview = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.Role_name.toLowerCase().match(search.toLowerCase());
+      return d.sitting_ref_no.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);

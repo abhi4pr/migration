@@ -21,7 +21,7 @@ const BrandOverview = () => {
   const [employeeData, setEmployeeData] = useState([]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/logodata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/logodata").then((res) => {
       setCountData(res.data);
       const responseData = res.data;
       const uniqueBrandName = new Set();
@@ -37,7 +37,7 @@ const BrandOverview = () => {
     });
 
     axios
-      .get("http://44.211.225.140:8000/alllogocat")
+      .get("http://34.93.135.33:8080/api/alllogocat")
       .then((res) => setCategoryData(res.data));
 
     axios
@@ -71,7 +71,7 @@ const BrandOverview = () => {
 
   const deleteBrand = async (brand_name) => {
     await axios
-      .delete(`http://44.211.225.140:8000/logodeletenew/${brand_name}`)
+      .delete(`http://34.93.135.33:8080/api/logodeletenew/${brand_name}`)
       .then((res) => {
         getData();
       })

@@ -13,7 +13,7 @@ const LogoCategoryOverview = () => {
   // const [contextData, setDatas] = useState([]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/alllogocat").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alllogocat").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

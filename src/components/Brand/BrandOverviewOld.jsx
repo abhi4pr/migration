@@ -22,7 +22,7 @@ const BrandOverviewOld = () => {
   const [countData, setCountData] = useState([]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/logodata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/logodata").then((res) => {
       setCountData(res.data);
       const responseData = res.data;
       const uniqueBrandName = new Set();
@@ -38,7 +38,7 @@ const BrandOverviewOld = () => {
     });
 
     axios
-      .get("http://44.211.225.140:8000/alllogocat")
+      .get("http://34.93.135.33:8080/api/alllogocat")
       .then((res) => setCategoryData(res.data));
 
     axios

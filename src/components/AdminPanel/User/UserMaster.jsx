@@ -385,6 +385,7 @@ const UserMaster = () => {
       setValidEmail(emailRegex.test(newEmail));
     }
   }
+  const today = new Date().toISOString().split('T')[0];
 
   // Number validation
   function handleContactChange(event) {
@@ -1231,9 +1232,12 @@ const UserMaster = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-      <FieldContainer
+      <input
         label="DOB"
         type="date"
+        className="form-control mt-4"
+        style={{ width: '470px ' }}
+        max={today}
         value={dateOfBirth}
         onChange={handleDateChange}
       />
@@ -1305,13 +1309,17 @@ const UserMaster = () => {
         />
       )}
       {maritialStatus == "Married" && (
-        <FieldContainer
-          label="Date Of Marriage"
-          type="date"
-          value={dateOfMarraige}
-          onChange={(e) => setDateOfMarraige(e.target.value)}
-          required={false}
-        />
+       <input
+       label="Date Of Marriage"
+       type="date"
+       className="form-control ml-2"
+       style={{ width: '460px ' }}    
+       max={today}
+       value={dateOfMarraige}
+       onChange={(e) => setDateOfMarraige(e.target.value)}
+       required={false}
+       
+     />
       )}
     </>
   );

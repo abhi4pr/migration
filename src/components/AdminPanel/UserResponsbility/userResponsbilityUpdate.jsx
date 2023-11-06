@@ -4,11 +4,11 @@ import { Navigate } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
+import Select from "react-select";
+
 const UserResponsbilityUpdate = () => {
   const { toastAlert } = useGlobalContext();
   const [id, setId] = useState(0);
-  console.log(id, "good ");
-
   const [userName, setUserName] = useState("");
   const [responsbility, setResponsibility] = useState("");
   const [description, setDescription] = useState("");
@@ -17,6 +17,7 @@ const UserResponsbilityUpdate = () => {
   const [submitButtonAccess, setSubmitButtonAccess] = useState(false);
   const [todos, setTodos] = useState([]);
   const [userData, getUserData] = useState([]);
+  const [responsibilityData, setResponsibilityData] = useState([]);
 
   const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
@@ -24,6 +25,11 @@ const UserResponsbilityUpdate = () => {
   useEffect(() => {
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       getUserData(res.data.data);
+    });
+  }, []);
+  useEffect(() => {
+    axios.get("http://34.93.135.33:8080/api/get_all_responsibilitys").then((res) => {
+      setResponsibilityData(res.data);
     });
   }, []);
 
@@ -48,12 +54,12 @@ const UserResponsbilityUpdate = () => {
       setSubmitButtonAccess(false);
     }
   }, [todos]);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     for (const element of todos) {
       axios
-        .put(`http://192.168.29.116:8080/api/update_jobresponsibility`, {
+        .put(`http://34.93.135.33:8080/api/update_jobresponsibility`, {
           Job_res_id: id,
           user_id: userName,
           job_responsi: element.responsbility,
@@ -83,7 +89,6 @@ const UserResponsbilityUpdate = () => {
       return;
     }
     setTodos(() => [
-      // ...prevTodos,
       { description: description, responsbility: responsbility },
     ]);
     setResponsibility("");
@@ -134,12 +139,30 @@ const UserResponsbilityUpdate = () => {
           value={responsbility}
           onChange={(e) => setResponsibility(e.target.value)}
         />
-        <FieldContainer
-          label="Description"
-          Tag="textarea"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+       <div className="">
+          <div className="form-group">
+            <label className="form-label">
+            Description <sup style={{ color: "red" }}>*</sup>
+            </label>
+            <Select
+              className=""
+              options={responsibilityData.map((option) => ({
+                value: option.description,
+                label: `${option.description }`,
+              }))}
+              value={{
+                value: description,
+                label:
+                responsibilityData.find((user) => user.description === description)
+                    ?.description || "",
+              }}
+              onChange={(e) => {
+                setDescription(e.value);
+              }}
+              required
+            />
+          </div>
+        </div>
         <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
           <button
             className="btn btn-success"

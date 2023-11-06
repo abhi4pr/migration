@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import FieldContainer from "../FieldContainer";
 import FormContainer from "../FormContainer";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { useGlobalContext } from "../../../Context/Context";
-import { useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import { useAPIGlobalContext } from "../APIContext/APIContext";
+import Select from "react-select";
 
 export default function SubDepartmentMaster() {
   const { DepartmentContext } = useAPIGlobalContext();
@@ -57,22 +57,30 @@ export default function SubDepartmentMaster() {
           value={subDepartmentName}
           onChange={(e) => setSubDepartmentName(e.target.value)}
         />
-        <FieldContainer
-          Tag="select"
-          label="Department Name"
-          fieldGrid={6}
-          value={departmentName}
-          onChange={(e) => setDepartmentName(e.target.value)}
-        >
-          <option selected disabled value="">
-            Choose...
-          </option>
-          {DepartmentContext.map((option) => (
-            <option key={option.dept_id} value={option.dept_id}>
-              {option.dept_name}
-            </option>
-          ))}
-        </FieldContainer>
+               <div className="form-group col-6">
+          <label className="form-label">
+            Department Name <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={DepartmentContext.map((option) => ({
+              value: option.dept_id,
+              label: `${option.dept_name}`,
+            }))}
+            value={{
+              value: departmentName,
+              label:
+                DepartmentContext.find(
+                  (user) => user.dept_id === departmentName
+                )?.dept_name || "",
+            }}
+            onChange={(e) => {
+              setDepartmentName(e.value);
+            }}
+            required
+          />
+        </div>
+
 
         <FieldContainer
           label="Remark"

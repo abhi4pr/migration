@@ -5,22 +5,26 @@ import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useGlobalContext } from "../../../Context/Context";
+import { useAPIGlobalContext } from "../APIContext/APIContext";
+import Select from "react-select";
 
 export default function SubDepartmentUpdate() {
   const { toastAlert } = useGlobalContext();
+  const { DepartmentContext } = useAPIGlobalContext();
+
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [subDepartmentName, setSubDepartmentName] = useState("");
   const [remark, setRemark] = useState("");
-  const [departmentData, setDepartmentData] = useState([]);
+  // const [departmentData, setDepartmentData] = useState([]);
   const [deptId, setDeptId] = useState(null);
   const { id } = useParams();
 
   function getData() {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
-      .then((res) => {
-        setDepartmentData(res.data);
-      });
+    // axios
+    //   .get("http://34.93.135.33:8080/api/get_all_departments")
+    //   .then((res) => {
+    //     setDepartmentData(res.data);
+    //   });
 
     axios
       .get(`http://34.93.135.33:8080/api/get_subdept_from_id/${id}`)
@@ -50,6 +54,14 @@ export default function SubDepartmentUpdate() {
   if (isFormSubmitted) {
     return <Navigate to="/admin/sub-department-overview" />;
   }
+
+  const departmentOptions = DepartmentContext.map((option) => ({
+    value: option.dept_id,
+    label: option.dept_name,
+  }));
+
+  const selectedDepartment =
+    departmentOptions.find((option) => option.value === deptId) || null;
   // console.log(deptId, "dept id hai yaha")
   return (
     <div>
@@ -65,24 +77,18 @@ export default function SubDepartmentUpdate() {
             onChange={(e) => setSubDepartmentName(e.target.value)}
           />
 
-          <FieldContainer
-            Tag="select"
-            label="Department Name"
-            fieldGrid={6}
-            value={deptId}
-            onChange={(e) => {
-              setDeptId(e.target.value);
-            }}
-          >
-            <option selected disabled value="">
-              Choose...
-            </option>
-            {departmentData.map((option) => (
-              <option key={option.dept_id} value={option.dept_id}>
-                {option.dept_name}
-              </option>
-            ))}
-          </FieldContainer>
+          <div className="form-group col-6">
+            <label className="form-label">
+              Department Name <sup style={{ color: "red" }}>*</sup>
+            </label>
+            <Select
+              options={departmentOptions}
+              value={selectedDepartment}
+              onChange={(selectedOption) =>
+                setDeptId(selectedOption ? selectedOption.value : null)
+              }
+            />
+          </div>
           <FieldContainer
             label="Remark"
             // disabled

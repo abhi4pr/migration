@@ -21,7 +21,7 @@ const UserNav = () => {
   const [loginUserData, setLoginUserData] = useState([]);
   useEffect(() => {
     axios
-      .post("http://44.211.225.140:8000/loginuserdata", {
+      .post("http://34.93.135.33:8080/api/loginuserdata", {
         id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));

@@ -57,7 +57,7 @@ function RoleMastUpdate() {
           value={role_name}
           onChange={(e) => setRoleName(e.target.value)}
         />
-        <FieldContainer disabled label="Role ID" value={id} />
+        {/* <FieldContainer disabled label="Role ID" value={id} /> */}
         <FieldContainer
           label="Remark"
           Tag="textarea"
@@ -78,7 +78,7 @@ function RoleMastUpdate() {
           value={createdby}
           onChange={(e) => setCreatedBy(e.target.value)}
         />
-        <FieldContainer
+        {/* <FieldContainer
           label="Last Updated By"
           disabled
           value={lastupdatedby}
@@ -88,7 +88,7 @@ function RoleMastUpdate() {
           disabled
           value={updatedDate}
           onChange={(e) => setLastUpdatedBy(e.target.value)}
-        />
+        /> */}
       </FormContainer>
     </>
   );

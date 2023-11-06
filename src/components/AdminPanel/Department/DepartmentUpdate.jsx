@@ -18,15 +18,16 @@ const DepartmentUpdate = () => {
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    axios
+  await  axios
       .put(`http://34.93.135.33:8080/api/update_department`, {
         dept_id: id,
         dept_name: departmentName,
         remark: remark,
+        created_by:createdBy
       })
       .then(() => {
         setDepartmentName("");
@@ -88,7 +89,7 @@ const DepartmentUpdate = () => {
           onChange={(e) => setCreatedBy(e.target.value)}
         />
 
-        <FieldContainer
+        {/* <FieldContainer
           label="Last Updated By"
           disabled
           value={lastUpdatedBy}
@@ -101,7 +102,7 @@ const DepartmentUpdate = () => {
           value={lastUpdatedDate}
           onChange={(e) => setLastUpdatedBy(e.target.value)}
         />
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>} */}
       </FormContainer>
     </>
   );

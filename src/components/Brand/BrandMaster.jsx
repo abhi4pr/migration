@@ -35,7 +35,7 @@ const BrandMaster = () => {
 
   useEffect(()=>{
     axios
-      .get("http://44.211.225.140:8000/alllogocat")
+      .get("http://34.93.135.33:8080/api/alllogocat")
       .then((res) => setCategoryData(res.data))
 
     const today = new Date();
@@ -66,7 +66,7 @@ const BrandMaster = () => {
         formData.append("created_by", userID);
         formData.append("logocat",selectedCategories[i]);
   
-        await axios.post("http://44.211.225.140:8000/postlogodata", formData, {
+        await axios.post("http://34.93.135.33:8080/api/postlogodata", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
