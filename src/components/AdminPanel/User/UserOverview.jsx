@@ -158,6 +158,7 @@ const UserOverview = () => {
     axios
       .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
+        console.log(res.data, "Res.data.data");
         setDepartmentData(res.data);
         getData();
       });
@@ -190,6 +191,10 @@ const UserOverview = () => {
       (d) => d.dept_id == departmentFilter
     );
     setDesignationData(deptWiseDesi);
+    console.log(designationFilter);
+    console.log(
+      deptWiseDesi.map((dept) => dept.desi_id === designationFilter)?.desi_name
+    );
   }, [departmentFilter]);
 
   useEffect(() => {
@@ -205,14 +210,15 @@ const UserOverview = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       const departmentMatch =
-        !departmentFilter || d.dept_id == departmentFilter;
+        !departmentFilter || d.dept_id === departmentFilter;
       const designationMatch =
-        !designationFilter || d.user_designation == designationFilter;
-      const jobtypeMatch = !jobType || d.job_type == jobType;
+        !designationFilter || d.user_designation === designationFilter;
+      const jobtypeMatch = jobType === "ALL" || d.job_type === jobType;
       return departmentMatch && designationMatch && jobtypeMatch;
     });
     setFilterData(result);
   }, [departmentFilter, designationFilter, jobType]);
+
   const jobTypeOptions = [
     { value: "ALL", label: "All" },
     { value: "WFO", label: "WFO" },
@@ -476,13 +482,13 @@ const UserOverview = () => {
   //  value: designationFilter,
   //  label: designationData.find((desi)=>desi.desi_id ===designationFilter)?.desi_name || "",
   // }
-  const options = [
-    { value: "All", label: "All" },
-    ...designationData.map((option) => ({
-      value: option.desi_id,
-      label: option.desi_name,
-    })),
-  ];
+  // const options = [
+  //   { value: "All", label: "All" },
+  //   ...designationData.map((option) => ({
+  //     value: option.desi_id,
+  //     label: option.desi_name,
+  //   })),
+  // ];
 
   // Finding the selected option
   // const selectedOption = designationFilter
@@ -606,31 +612,29 @@ const UserOverview = () => {
                   </label>
                   <Select
                     options={[
-                      { value: "All", label: "All" },
+                      { value: "", label: "All" },
                       ...departmentData.map((option) => ({
                         value: option.dept_id,
-                        label: `${option.dept_name}`,
+                        label: option.dept_name,
                       })),
                     ]}
                     value={
-                      departmentFilter
-                        ? departmentFilter === "All"
-                          ? { value: "All", label: "All" }
-                          : {
-                              value: departmentFilter,
-                              label:
-                                departmentData.find(
-                                  (dept) => dept.dept_id === departmentFilter
-                                )?.dept_name || "",
-                            }
-                        : null
+                      departmentFilter === ""
+                        ? { value: "", label: "All" }
+                        : {
+                            value: departmentFilter,
+                            label:
+                              departmentData.find(
+                                (dept) => dept.dept_id === departmentFilter
+                              )?.dept_name || "Select...",
+                          }
                     }
                     onChange={(selectedOption) => {
                       const selectedValue = selectedOption
                         ? selectedOption.value
-                        : null;
+                        : "";
                       setDepartmentFilter(selectedValue);
-                      if (selectedValue === "All") {
+                      if (selectedValue === "") {
                         getData();
                       }
                     }}
@@ -644,37 +648,36 @@ const UserOverview = () => {
                   </label>
                   <Select
                     options={[
-                      { value: "All", label: "All" },
+                      { value: "", label: "All" },
                       ...designationData.map((option) => ({
                         value: option.desi_id,
                         label: option.desi_name,
                       })),
                     ]}
                     value={
-                      designationFilter
-                        ? designationFilter === "All"
-                          ? { value: "All", label: "All" }
-                          : {
-                              value: designationFilter,
-                              label:
-                                designationData.find(
-                                  (dept) => dept.desi_id === designationFilter
-                                )?.desi_name || "",
-                            }
-                        : null
+                      designationFilter === ""
+                        ? { value: "", label: "All" }
+                        : {
+                            value: designationFilter,
+                            label:
+                              designationData.find(
+                                (option) => option.desi_id === designationFilter
+                              )?.desi_name || "Select...",
+                          }
                     }
                     onChange={(selectedOption) => {
                       const newValue = selectedOption
                         ? selectedOption.value
-                        : null;
+                        : "";
                       setDesignationFilter(newValue);
-                      if (newValue === "All") {
+                      if (newValue === "") {
                         designationAPI();
                       }
                     }}
                     required
                   />
                 </div>
+
                 <div className="form-group col-3">
                   <label className="form-label">
                     Job Type<sup style={{ color: "red" }}>*</sup>

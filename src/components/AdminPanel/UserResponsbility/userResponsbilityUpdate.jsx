@@ -58,13 +58,14 @@ const UserResponsbilityUpdate = () => {
     e.preventDefault();
     setError("");
     for (const element of todos) {
+      console.log(userName, "userid")
       axios
-        .put(`http://34.93.135.33:8080/api/update_jobresponsibility`, {
-          Job_res_id: id,
-          user_id: userName,
-          job_responsi: element.responsbility,
-          description: element.description,
-        })
+      .put(`http://34.93.135.33:8080/api/update_jobresponsibility`, {
+        Job_res_id: Number(id),
+        user_id: Number(userName),
+        job_responsi: element.responsbility,
+        description: element.description,
+      })
         .then(() => {
           setUserName("");
           setResponsibility("");
@@ -85,6 +86,7 @@ const UserResponsbilityUpdate = () => {
     return <Navigate to="/admin/user-respons-overivew" />;
   }
   const handleAddTodo = () => {
+    
     if (responsbility.trim() === "" || description.trim() === "") {
       return;
     }
