@@ -247,7 +247,7 @@ const SalaryWFH = () => {
   function handleInvoiceNumber(data) {
     const formData = new FormData();
 
-    formData.append("id", data.user_id);
+    formData.append("user_id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
     axios
@@ -464,7 +464,7 @@ const SalaryWFH = () => {
     });
 
     axios
-      .put(`http://34.93.135.33:8080/api/add_attendance`, {
+      .put(`http://34.93.135.33:8080/api/update_salary`, {
         attendence_id: row.attendence_id,
         sendToFinance: 1,
       })
@@ -935,7 +935,7 @@ const SalaryWFH = () => {
             <button
               onClick={handleAttendence}
               className="btn btn-warning"
-              style={{ "margin-top": "25px" }}
+              style={{ marginTop: "25px" }}
             >
               No Absents, Create Attendance
             </button>

@@ -47,7 +47,6 @@ function Dashboard() {
         });
     }
   }, []);
-
   useEffect(() => {
     setRenderCount(renderCount + 1);
     axios.get("http://44.211.225.140:8000/alldataofsimmast").then((res) => {
