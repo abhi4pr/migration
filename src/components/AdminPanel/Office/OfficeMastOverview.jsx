@@ -18,23 +18,26 @@ const OfficeMastOverview = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
   }, [userID]);
 
   async function getData() {
     try {
       const res = await axios.get("http://34.93.135.33:8080/api/get_all_rooms");
-      console.log(res.data.data,"hjukjkh");
+      console.log(res.data.data, "hjukjkh");
       setData(res.data.data);
       setFilterData(res.data.data);
     } catch (error) {
       console.error("An error occurred while fetching data", error);
     }
   }
-  
 
   const columns = [
     {
@@ -94,7 +97,7 @@ const OfficeMastOverview = () => {
             contextData[6] &&
             contextData[6].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="roomdelete"
+                endpoint="delete_room"
                 id={row.room_id}
                 getData={getData}
               />

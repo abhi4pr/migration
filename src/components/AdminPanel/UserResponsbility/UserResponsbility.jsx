@@ -53,9 +53,11 @@ const UserResponsbility = () => {
   }, [userName, userData]);
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_responsibilitys").then((res) => {
-      setResponsibilityData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_responsibilitys")
+      .then((res) => {
+        setResponsibilityData(res.data);
+      });
   }, [todos]);
 
   const handleSubmit = async (e) => {
@@ -68,9 +70,12 @@ const UserResponsbility = () => {
         description: element.description,
         created_by: loginUser,
       });
-      await whatsappApi.callWhatsAPI("User Responsibility", userContact, userName, [
-        element.responsibility,
-      ]);
+      await whatsappApi.callWhatsAPI(
+        "User Responsibility",
+        JSON.stringify(userContact),
+        userName,
+        [element.responsibility]
+      );
     }
     setUserName("");
     setResponsibility("");
@@ -82,7 +87,7 @@ const UserResponsbility = () => {
     return <Navigate to="/admin/user-respons-overivew" />;
   }
   const handleAddTodo = () => {
-    console.log(responsibility , "response")
+    console.log(responsibility, "response");
     if (responsibility?.trim() === "" || description?.trim() === "") {
       return;
     }
@@ -179,13 +184,14 @@ const UserResponsbility = () => {
               className=""
               options={responsibilityData.map((option) => ({
                 value: option.respo_name,
-                label: `${option.respo_name }`,
+                label: `${option.respo_name}`,
               }))}
               value={{
                 value: responsibility,
                 label:
-                responsibilityData.find((user) => user.respo_name === responsibility)
-                    ?.respo_name || "",
+                  responsibilityData.find(
+                    (user) => user.respo_name === responsibility
+                  )?.respo_name || "",
               }}
               onChange={(e) => {
                 setResponsibility(e.value);
@@ -198,19 +204,20 @@ const UserResponsbility = () => {
         <div className="">
           <div className="form-group">
             <label className="form-label">
-            Description <sup style={{ color: "red" }}>*</sup>
+              Description <sup style={{ color: "red" }}>*</sup>
             </label>
             <Select
               className=""
               options={responsibilityData.map((option) => ({
                 value: option.description,
-                label: `${option.description }`,
+                label: `${option.description}`,
               }))}
               value={{
                 value: description,
                 label:
-                responsibilityData.find((user) => user.description === description)
-                    ?.description || "",
+                  responsibilityData.find(
+                    (user) => user.description === description
+                  )?.description || "",
               }}
               onChange={(e) => {
                 setDescription(e.value);

@@ -125,7 +125,7 @@ const Attendence = () => {
 
   const handleAttendence = () => {
     axios
-      .post("http:34.93.135.33:8080/api/add_attendance", {
+      .post("http://34.93.135.33:8080/api/add_attendance", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
