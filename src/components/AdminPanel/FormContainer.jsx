@@ -17,25 +17,27 @@ const FormContainer = ({
 }) => {
   return (
     <>
-     {mainTitleRequired&& <div className="form-heading">
-       <div className="form_heading_title">
-          <h2>{mainTitle}</h2>
-        </div>
-        {link && buttonAccess && (
-          <div className="form_heading_action">
-            <Link to={link}>
-              <button
-                title={"Add New " + mainTitle}
-                className={`btn btn-primary ${
-                  addNewButtonName && "text_button"
-                }`}
-              >
-                {addNewButtonName ? addNewButtonName : <FaUserPlus />}
-              </button>
-            </Link>
+      {mainTitleRequired && (
+        <div className="form-heading">
+          <div className="form_heading_title">
+            <h2>{mainTitle}</h2>
           </div>
-        )}
-      </div>}
+          {link && buttonAccess && (
+            <div className="form_heading_action">
+              <Link to={link}>
+                <button
+                  title={"Add New " + mainTitle}
+                  className={`btn btn-primary ${
+                    addNewButtonName && "text_button"
+                  }`}
+                >
+                  {addNewButtonName ? addNewButtonName : <FaUserPlus />}
+                </button>
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {!link && (
         <div className="card shadow mb24">

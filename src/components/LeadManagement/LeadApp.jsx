@@ -47,7 +47,6 @@ function LeadApp({ children }) {
         setSE(tempse);
         setNewData(ftrse);
         setDatalead(leadres.data);
-        console.log(leadres.data);
       } catch (error) {
         console.log(error);
       }

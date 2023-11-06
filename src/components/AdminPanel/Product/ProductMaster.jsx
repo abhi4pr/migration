@@ -58,15 +58,11 @@ const ProductMaster = () => {
       };
 
       try {
-        await axios.post(
-          `http://34.93.135.33:8080/api/add_proppost`,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        await axios.post(`http://34.93.135.33:8080/api/add_proppost`, payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         console.log("Request successfully sent for", inputField);
       } catch (error) {

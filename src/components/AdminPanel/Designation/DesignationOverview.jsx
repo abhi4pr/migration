@@ -22,7 +22,6 @@ const DesignationOverview = () => {
   const [selectedUserData, setSelectedUserData] = useState([]);
 
   const storedToken = sessionStorage.getItem("token");
-  console.log(storedToken, "stored token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
 

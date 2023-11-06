@@ -32,7 +32,6 @@ const PreOnboardingOverview = () => {
   }, []);
 
   const handleStatusChange = (row, onboard_status) => {
-    console.log("yha row id data hai", row, onboard_status);
     const formData = new FormData();
     formData.append("user_id", row);
     formData.append("onboard_status", 1);

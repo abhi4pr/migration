@@ -127,15 +127,11 @@ const AdminPreOnboarding = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post(
-            "http://34.93.135.33:8080/api/add_user",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
           whatsappApi.callWhatsAPI(
             "Preonboarding Register",
             JSON.stringify(personalContact),

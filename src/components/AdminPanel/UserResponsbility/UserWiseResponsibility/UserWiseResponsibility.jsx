@@ -114,7 +114,6 @@ const UserWiseResponsibility = () => {
       axios
         .post("http://44.211.225.140:8000/kratranspost", requestData)
         .then((res) => {
-          console.log("Transfer data submitted successfully.", res.data);
           setRemark("");
           setTransferTo("");
           toastAlert("KRA Transfer Successfully");
