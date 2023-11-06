@@ -183,7 +183,7 @@ const Confirmation = ({
       const payload1 = {
         loggedin_user_id: userID,
         sale_booking_execution_id: data.sale_booking_execution_id,
-        execution_date_time: new Date().toISOString().split("T")[0],
+        execution_date_time: new Date(value).toISOString().split("T")[0],
         execution_time: hoursDifference.toFixed(2),
         execution_remark: remark ? remark : "Done",
         execution_status: 3,
