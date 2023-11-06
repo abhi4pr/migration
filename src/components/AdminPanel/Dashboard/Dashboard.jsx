@@ -40,12 +40,13 @@ function Dashboard() {
         });
     }
     if (userId) {
-      axios.get(`http://44.211.225.140:8000/usernew/${userId}`).then((res) => {
-        setLoginUserData(res.data);
-      });
+      axios
+        .get(`http://34.93.135.33:8080/api/get_single_user/${userId}`)
+        .then((res) => {
+          setLoginUserData(res.data);
+        });
     }
   }, []);
-
   useEffect(() => {
     setRenderCount(renderCount + 1);
     axios.get("http://44.211.225.140:8000/alldataofsimmast").then((res) => {

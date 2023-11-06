@@ -41,7 +41,6 @@ const OnboardExtendDateOverview = () => {
 
       setDatas(data);
       setFilterData(data);
-      console.log(data, "all data");
     } catch (error) {
       console.log("Error fething Data", error);
     }
@@ -52,20 +51,31 @@ const OnboardExtendDateOverview = () => {
   }, []);
 
   const statusUpdate = (user_id, status, PersonalNumber) => {
-    console.log("lalit hai yha", user_id, status, PersonalNumber);
     const formData = new FormData();
-    formData.append("id", user_id);
+    formData.append("user_id", user_id);
     formData.append("joining_date_extend_status", status);
     axios
-      .put("http://44.211.225.140:8000/userupdate", formData, {
+      .put("http://34.93.135.33:8080/api/update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
-        whatsappApi.callWhatsAPI("Extend Date Admin", PersonalNumber, user_id, [
-          status,
-        ]);
+        axios.post("http://34.93.135.33:8080/api/add_send_user_mail", {
+          email: "lalit@creativefuel.io",
+          subject: "Extend Date Status",
+          text: status,
+          attachment: "",
+          // login_id: loginId,
+          // name: username,
+          // password: password,
+        });
+        whatsappApi.callWhatsAPI(
+          "Extend Date Admin",
+          JSON.stringify(PersonalNumber),
+          user_id,
+          [status]
+        );
       })
       .then(() => getData());
   };
@@ -119,7 +129,6 @@ const OnboardExtendDateOverview = () => {
       name: "Action",
       cell: (row) => (
         <>
-          {console.log(row)}
           {/* {contextData &&
             contextData[10] &&
             contextData[10].update_value === 1 && ( */}

@@ -56,49 +56,51 @@ const UserView = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/usernew/${id}`).then((res) => {
-      const fetchedData = res.data.data;
-      setFetchedAlreadyData(res.data.data);
-      const {
-        user_name,
-        Role_name,
-        user_email_id,
-        user_contact_no,
-        user_login_id,
-        department_name,
-        job_type,
-        Report_L1,
-        Report_L2,
-        Report_L3,
-        PersonalEmail,
-        PersonalNumber,
-        designation_name,
-        image_url,
-        uid_url,
-        pan_url,
-        highest_upload_url,
-        other_upload_url,
-      } = fetchedData;
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        const fetchedData = res.data;
+        setFetchedAlreadyData(res.data);
+        const {
+          user_name,
+          Role_name,
+          user_email_id,
+          user_contact_no,
+          user_login_id,
+          department_name,
+          job_type,
+          Report_L1,
+          Report_L2,
+          Report_L3,
+          PersonalEmail,
+          PersonalNumber,
+          designation_name,
+          image_url,
+          uid_url,
+          pan_url,
+          highest_upload_url,
+          other_upload_url,
+        } = fetchedData;
 
-      setUserName(user_name);
-      setEmail(user_email_id);
-      setLoginId(user_login_id);
-      setContact(user_contact_no);
-      setRoles(Role_name);
-      setDepartment(department_name);
-      setPersonalContact(PersonalNumber);
-      setPersonalEmail(PersonalEmail);
-      setJobType(job_type);
-      setReportL1(Report_L1);
-      setReportL2(Report_L2);
-      setReportL3(Report_L3);
-      setDesignation(designation_name);
-      setProfilePic(image_url);
-      setUidImage(uid_url);
-      setPanImage(pan_url);
-      setHighestQualificationImage(highest_upload_url);
-      setOtherImages(other_upload_url);
-    });
+        setUserName(user_name);
+        setEmail(user_email_id);
+        setLoginId(user_login_id);
+        setContact(user_contact_no);
+        setRoles(Role_name);
+        setDepartment(department_name);
+        setPersonalContact(PersonalNumber);
+        setPersonalEmail(PersonalEmail);
+        setJobType(job_type);
+        setReportL1(Report_L1);
+        setReportL2(Report_L2);
+        setReportL3(Report_L3);
+        setDesignation(designation_name);
+        setProfilePic(image_url);
+        setUidImage(uid_url);
+        setPanImage(pan_url);
+        setHighestQualificationImage(highest_upload_url);
+        setOtherImages(other_upload_url);
+      });
   }, [id]);
 
   const handleVerify = async (e) => {
@@ -151,7 +153,7 @@ const UserView = () => {
     formData.append("onboard_status", fetchedAlreadyData.onboard_status);
 
     try {
-      await axios.put("http://44.211.225.140:8000/userupdatenew", fromData, {
+      await axios.put("http://34.93.135.33:8080/api/update_usernew", fromData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

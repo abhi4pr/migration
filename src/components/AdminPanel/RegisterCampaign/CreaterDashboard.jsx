@@ -67,27 +67,25 @@ export default function CreaterDashboard() {
     });
   }
   const getData = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
-      .then((res) => {
-        const pending = res.data.data.filter(
-          (e) => e.status == "11" && e.stage == 2
-        );
-        const accept = res.data.data.filter(
-          (e) => e.status == "21" && e.stage == 3
-        );
-        const reject = res.data.data.filter(
-          (e) => e.status == "22" && e.stage == 2
-        );
-        const complete = res.data.data.filter(
-          (e) => e.status == "23" && e.stage == 4
-        );
-        setRows(pending);
-        setAcceptData(accept);
-        setRejectData(reject);
-        setCompData(complete);
-        console.log(pending, "this is by contentSectionReg");
-      });
+    axios.get("http://34.93.135.33:8080/api/contentSectionReg").then((res) => {
+      const pending = res.data.data.filter(
+        (e) => e.status == "11" && e.stage == 2
+      );
+      const accept = res.data.data.filter(
+        (e) => e.status == "21" && e.stage == 3
+      );
+      const reject = res.data.data.filter(
+        (e) => e.status == "22" && e.stage == 2
+      );
+      const complete = res.data.data.filter(
+        (e) => e.status == "23" && e.stage == 4
+      );
+      setRows(pending);
+      setAcceptData(accept);
+      setRejectData(reject);
+      setCompData(complete);
+      console.log(pending, "this is by contentSectionReg");
+    });
   };
 
   useEffect(() => {

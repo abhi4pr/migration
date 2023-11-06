@@ -8,9 +8,11 @@
   background-clip: border-box;
   border-radius: var(--radius);
   /* border: 1px solid rgb(95 69 255 / 13%); */
-  background-image: linear-gradient(to right,
-      rgb(95 69 255 / 30%),
-      rgb(95 69 255 / 0%));
+  background-image: linear-gradient(
+    to right,
+    rgb(95 69 255 / 30%),
+    rgb(95 69 255 / 0%)
+  );
   padding: 10px 18px;
   margin: 0px 0px 25px;
 }
@@ -801,4 +803,241 @@ label.checkbox-inline.propscss {
 .documentCard_input button {
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important;
+}
+
+.timeline_wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: var(--bg-white);
+  background-clip: border-box;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 16px;
+}
+
+.timeline_slideItem {
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-white);
+  background-clip: border-box;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  gap: 16px 0px;
+  min-width: 140px;
+}
+
+.timeline_slideItem h2 {
+  color: var(--gray-500);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.timeline_slideItem h2 span {
+  font-size: 26px;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+.timeline_slideItem h3 {
+  color: var(--gray-500);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 0px 6px;
+}
+
+.timeline_slideItem h3 span {
+  font-size: 18px;
+}
+
+.timeline_slideItem.completed {
+  border-color: var(--success);
+}
+
+.timeline_slideItem.completed h2,
+.timeline_slideItem.completed h3 {
+  color: var(--success);
+}
+
+.timeline_slideItem.selected {
+  border-color: var(--success);
+  background-color: var(--success);
+}
+
+.timeline_slideItem.selected h2,
+.timeline_slideItem.selected h3 {
+  color: var(--white);
+}
+
+.timeline_slideItem.selected {
+  border-color: var(--success);
+  background-color: var(--success);
+}
+
+.timeline_slideItem.selected h2,
+.timeline_slideItem.selected h3 {
+  color: var(--white);
+}
+
+.timeline_slideItem.current {
+  border-color: var(--primary);
+}
+
+.timeline_slideItem.current h2,
+.timeline_slideItem.current h3 {
+  color: var(--primary);
+}
+
+.timeline_slideItem.selected.current {
+  border-color: var(--success);
+  background-color: var(--success);
+}
+
+.timeline_slideItem.selected.current h2,
+.timeline_slideItem.selected.current h3 {
+  color: var(--white);
+}
+
+.timeline_slider .slick-track {
+  display: flex;
+  gap: 0px 10px;
+}
+
+.timeline_slider button.slick-arrow {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100%;
+}
+
+.timeline_slider .slick-prev:before,
+.timeline_slider .slick-next:before {
+  color: var(--gray-400);
+}
+
+.h_scroller {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  padding-bottom: 4px;
+}
+
+/* width */
+.h_scroller::-webkit-scrollbar {
+  width: 0px;
+  height: 4px;
+}
+.h_scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+.h_scroller::-webkit-scrollbar-thumb {
+  background: #a094ef;
+  border-radius: 6px;
+}
+.h_scroller::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.h_scroller button {
+  text-wrap: nowrap;
+  width: -webkit-fill-available;
+}
+
+.gap4 {
+  gap: 4px;
+}
+
+.gap_24_0 {
+  gap: 24px 0px;
+}
+
+.color_primary {
+  color: var(--primary) !important;
+}
+
+.data_tbl.footer_none .MuiDataGrid-footerContainer {
+  display: none;
+}
+
+.data_tbl.pagination_none .MuiTablePagination-toolbar {
+  display: none;
+}
+
+.salary_dtlCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: var(--bg-white);
+  background-clip: border-box;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  height: 100%;
+}
+
+.salary_dtlCard_head {
+  padding: 16px 24px;
+  margin-bottom: 0;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border);
+  background: rgb(95 69 255 / 20%);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.salary_dtlCard_head h2 {
+  color: var(--primary);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+}
+
+.salary_dtlCard_info {
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 16px 24px 24px;
+}
+
+.salary_dtlCard_info ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px 0px;
+}
+
+.salary_dtlCard_info ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--gray-800);
+  font-size: 16px;
+  list-style: 22px;
+}
+
+.userSalary_modal h3 {
+  color: var(--gray-800);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+  margin: 0px 0px 4px;
+}
+
+.MuiDataGrid-row--editing .MuiDataGrid-cell--editable {
+  background: rgb(95 69 255 / 20%) !important;
+  border-right: 1px solid rgb(95 69 255 / 20%) !important;
+}
+
+.css-5wly58-MuiDataGrid-root .MuiDataGrid-columnHeader--moving {
+  background-color: transparent !important;
 }

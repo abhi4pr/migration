@@ -294,13 +294,13 @@ const UserMaster = () => {
           for (const elements of documents) {
             // formData.append("user_id", loginId);
             // formDataa.append("remark", loginUserId);
-            // formDataa.append("created_by",loginId );
+            // formDataa.append("created_by", loginId);
             // formDataa.append("field_name", elements.name);
             // formDataa.append("field_value", elements.file);
             // formData.append("remark", "remark");
 
             axios.post(
-              "http://44.211.225.140:8000/userotherfieldpostnew",
+              "http://34.93.135.33:8080/api/add_user_other_field",
               { field_name: elements.name, field_value: elements.file },
               {
                 headers: {
@@ -1082,7 +1082,11 @@ const UserMaster = () => {
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
         <div className="d-flex justify-content-between">
-          <button className="btn btn-primary mb-2" onClick={addMore}>
+          <button
+            type="button"
+            className="btn btn-primary mb-2"
+            onClick={addMore}
+          >
             Add More
           </button>
           {documents.length > 0 && (

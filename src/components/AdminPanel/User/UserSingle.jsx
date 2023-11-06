@@ -66,7 +66,7 @@ const UserSingle = () => {
   };
   function userOtherDocuments() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_all_usersotherfielddata/${id}`)
+      .get(`http://34.93.135.33:8080/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -131,7 +131,7 @@ const UserSingle = () => {
 
     const formData = new FormData();
 
-    formData.append("id", Number(id));
+    formData.append("user_id", Number(id));
     formData.append(fieldName, action);
     if (emptyState && hideField) {
       formData.append(reasonField, reason);
@@ -139,7 +139,7 @@ const UserSingle = () => {
 
     axios({
       method: "put",
-      url: "http://44.211.225.140:8000/userupdate",
+      url: "http://34.93.135.33:8080/api/update_user",
       data: formData,
     }).then(() => {
       if (emptyState) emptyState("");

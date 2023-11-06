@@ -162,10 +162,16 @@ const SidebarLinks = () => {
               {contextData &&
                 contextData[17] &&
                 contextData[17].view_value === 1 && (
-                  <Link className="collapse-item" to="/admin/salary-dashboard">
+                  <Link
+                    className="collapse-item"
+                    to="/admin/salary-dashboard/0"
+                  >
                     Dashboard
                   </Link>
                 )}
+              <Link className="collapse-item" to="/admin/wfh-user-dashboard">
+                User Dashboard
+              </Link>
               {contextData &&
                 contextData[17] &&
                 contextData[17].view_value === 1 && (

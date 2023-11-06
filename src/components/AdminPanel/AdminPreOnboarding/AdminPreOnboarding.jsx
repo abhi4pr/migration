@@ -134,7 +134,7 @@ const AdminPreOnboarding = () => {
           });
           whatsappApi.callWhatsAPI(
             "Preonboarding Register",
-            personalContact,
+            JSON.stringify(personalContact),
             username,
             [username, loginId, password, "http://jarviscloud.in/"]
           );
