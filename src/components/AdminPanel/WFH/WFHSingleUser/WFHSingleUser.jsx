@@ -119,7 +119,7 @@ const WFHSingleUser = () => {
     axios
       .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
       .then((res) => {
-        getDepartmentData(res.data);
+        getDepartmentData(res.data.data);
       });
   }, []);
 
@@ -338,8 +338,10 @@ const WFHSingleUser = () => {
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
           <Text style={{ fontSize: 25 }}>
             Department:{" "}
-            {departmentdata.find((user) => user.dept_id === department)
-              ?.dept_name || ""}
+            {(departmentdata &&
+              departmentdata?.find((user) => user.dept_id === department)
+                ?.dept_name) ||
+              ""}
           </Text>
           <Text style={{ fontSize: 25 }}>Month: {month}</Text>
           <Text style={{ fontSize: 25 }}>Year: {year}</Text>
@@ -801,9 +803,13 @@ const WFHSingleUser = () => {
               <div>Refrence No :{rowDataModal?.reference_no}</div>
               <div>
                 ScreenShot :
-                <img
-                  src={`http://34.93.135.33:8080/api/user_images/${rowDataModal?.screenshot}`}
-                />
+                {rowDataModal?.screenshot ? (
+                  <img
+                    src={`http://34.93.135.33:8080/api/user_images/${rowDataModal?.screenshot}`}
+                  />
+                ) : (
+                  "Null"
+                )}
               </div>
             </div>
             <div className="modal-footer">
