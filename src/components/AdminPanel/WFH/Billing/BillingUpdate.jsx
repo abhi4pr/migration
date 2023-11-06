@@ -14,11 +14,11 @@ const BillingUpdate = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alldept").then((res) => {
       getDepartmentData(res.data);
     });
 
-    axios.get(`http://44.211.225.140:8000/billingheader/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/billingheader/${id}`).then((res) => {
       const fetchData = res.data;
 
       const [{ billing_header_name, dept_id }] = fetchData;
@@ -29,7 +29,7 @@ const BillingUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put("http://44.211.225.140:8000/billingheader", {
+    await axios.put("http://34.93.135.33:8080/api/billingheader", {
       billing_id: id,
       billing_header_name: bilingName,
       dept_id: department,

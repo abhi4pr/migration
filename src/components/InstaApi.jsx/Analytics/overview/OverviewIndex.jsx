@@ -34,7 +34,7 @@ const OverviewIndex = () => {
       const responseArray = [];
 
       axios
-        .get("http://44.211.225.140:8000/executionSummary", {
+        .get("http://34.93.135.33:8080/api/executionSummary", {
           loggedin_user_id: 52,
         })
         .then((response) => {

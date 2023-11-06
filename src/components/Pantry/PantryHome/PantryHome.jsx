@@ -40,7 +40,7 @@ const PantryHome = () => {
   };
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/allorderreqdata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
       setAllOrderData(res.data.data);
     });
   }, []);
@@ -56,7 +56,7 @@ const PantryHome = () => {
 
   const allOrderCount = allOrderData.length;
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alltransreq").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alltransreq").then((res) => {
       setTransferReq(res.data.data);
     });
   }, []);

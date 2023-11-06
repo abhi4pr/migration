@@ -43,7 +43,7 @@ const IpUpdate = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/dataofipregis/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/dataofipregis/${id}`).then((res) => {
       const fetchedData = res.data[0];
       setIpType(fetchedData.ip_type);
       setPlatform(fetchedData.platform);
@@ -109,7 +109,7 @@ const IpUpdate = () => {
       .padStart(3, "0")}`;
 
     e.preventDefault();
-    axios.put("http://44.211.225.140:8000/ipregiupdate", {
+    axios.put("http://34.93.135.33:8080/api/ipregiupdate", {
       id: Number(id),
       ip_type: Number(ipType),
       platform: Number(platform),

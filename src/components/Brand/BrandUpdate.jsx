@@ -39,7 +39,7 @@ const BrandUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/getlogodata/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/getlogodata/${id}`).then((res) => {
       const fetchedData = res.data;
       const { brand_name, upload_logo, remarks, cat_name } = fetchedData;
       setBrand(brand_name);
@@ -50,7 +50,7 @@ const BrandUpdate = () => {
     });
 
     axios
-      .get("http://44.211.225.140:8000/alllogocat")
+      .get("http://34.93.135.33:8080/api/alllogocat")
       .then((res) => setCategoryData(res.data));
 
     const today = new Date();
@@ -68,7 +68,7 @@ const BrandUpdate = () => {
   };
 
   const getCombinedData = async() => {
-    axios.get(`http://44.211.225.140:8000/logodata/${brand}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/logodata/${brand}`).then((res) => {
       setLogos(res.data)
     });
   }
@@ -81,7 +81,7 @@ const BrandUpdate = () => {
     if(logo_id == id){
       setError("You can't delete default image, try to delete from overview table")
     }else{
-      var data = await axios.delete(`http://44.211.225.140:8000/logodelete/${logo_id}`, null);
+      var data = await axios.delete(`http://34.93.135.33:8080/api/logodelete/${logo_id}`, null);
       if (data) {
         getCombinedData();
       }
@@ -91,7 +91,7 @@ const BrandUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios.put(`http://44.211.225.140:8000/logoupdatenew`, {
+    axios.put(`http://34.93.135.33:8080/api/logoupdatenew`, {
       id: id,
       brand_name: brand,
       Remarks: remark,
@@ -112,7 +112,7 @@ const BrandUpdate = () => {
         formData.append("created_by", loginUserId);
         formData.append("logocat",selectedCategories[i]);
 
-        await axios.post("http://44.211.225.140:8000/postlogodata", formData, {
+        await axios.post("http://34.93.135.33:8080/api/postlogodata", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

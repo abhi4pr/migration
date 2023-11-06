@@ -7,7 +7,7 @@ const Attendance = () => {
   //   const [selectedYear, setSelectedYear] = useState("");
 
   //   useEffect(() => {
-  //     axios.get("http://44.211.225.140:8000/allwfhusers").then((res) => {
+  //     axios.get("http://34.93.135.33:8080/api/allwfhusers").then((res) => {
   //       const data = res.data.data;
   //       const filteredUser = data.filter(
   //         (d) => d.dept_id === department && d.user_status
@@ -22,7 +22,7 @@ const Attendance = () => {
   //       month: selectedMonth,
   //       year: selectedYear,
   //     };
-  //     // axios.post("http://44.211.225.140:8000/salaryfromattendence", payload).then((res)=> );
+  //     // axios.post("http://34.93.135.33:8080/api/salaryfromattendence", payload).then((res)=> );
   //   };
 
   return <div>Attendance</div>;

@@ -19,7 +19,7 @@ const BillingOverview = () => {
   const userID = decodedToken.id;
 
   const getData = () => {
-    axios.get("http://44.211.225.140:8000/billingheader").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/billingheader").then((res) => {
       setBillData(res.data);
       setFilterData(res.data);
     });
@@ -27,7 +27,7 @@ const BillingOverview = () => {
   useEffect(() => {
     getData();
     if (userID && contextData.length === 0) {
-      axios.get(`http://44.211.225.140:8000/userauth/${userID}`).then((res) => {
+      axios.get(`http://34.93.135.33:8080/api/userauth/${userID}`).then((res) => {
         setDatas(res.data);
       });
     }

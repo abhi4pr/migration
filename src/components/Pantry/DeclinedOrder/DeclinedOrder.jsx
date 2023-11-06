@@ -8,7 +8,7 @@ const DeclinedOrder = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://44.211.225.140:8000/allorderreqdata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
       setData(res.data.data.filter((res) => res.Status === "declined"));
       setFilterData(res.data.data.filter((res) => res.Status === "declined"));
     });

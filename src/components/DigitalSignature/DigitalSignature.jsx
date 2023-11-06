@@ -21,7 +21,7 @@ const DigitalSignature = ({ userID, closeModal }) => {
         formData.append("digital_signature_image", blob);
 
         axios
-          .put(`http://44.211.225.140:8000/userupdate`, formData, {
+          .put(`http://34.93.135.33:8080/api/userupdate`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

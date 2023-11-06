@@ -13,7 +13,7 @@
 //   const [filterdata, setFilterData] = useState([]);
 
 //   function getData() {
-//     axios.get("http://44.211.225.140:8000/allorderrequest").then((res) => {
+//     axios.get("http://34.93.135.33:8080/api/allorderrequest").then((res) => {
 //       setData(res.data);
 //       setFilterData(res.data);
 //       console.log(res.data);
@@ -50,7 +50,7 @@
 //             "success"
 //           );
 //           axios
-//             .delete(`http://44.211.225.140:8000/userdelete/${user_id}`)
+//             .delete(`http://34.93.135.33:8080/api/userdelete/${user_id}`)
 //             .then(() => {
 //               getData();
 //             });

@@ -73,7 +73,7 @@ const UserSingle = () => {
   }
   // const subDep = async (dept_id) => {
   //   await axios
-  //     .get(`http://44.211.225.140:8000/subdept/${dept_id}`)
+  //     .get(`http://34.93.135.33:8080/api/subdept/${dept_id}`)
   //     .then((res) => {
   //       setSubDept(res.data);
   //     });

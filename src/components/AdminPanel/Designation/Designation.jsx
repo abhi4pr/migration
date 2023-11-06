@@ -1,30 +1,33 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import FieldContainer from "../FieldContainer";
 import FormContainer from "../FormContainer";
 import axios from "axios";
 import { useGlobalContext } from "../../../Context/Context";
 import { Navigate } from "react-router-dom";
+import { useAPIGlobalContext } from "../APIContext/APIContext";
+import Select from "react-select";
+
 
 const Designation = () => {
   const { toastAlert } = useGlobalContext();
+  const { DepartmentContext } = useAPIGlobalContext();
+
   const [designationName, setDesignationName] = useState("");
   const [departmentName, setDepartmentName] = useState("");
   const [remark, setRemark] = useState("");
-  const [departmentdata, getDepartmentData] = useState([]);
-
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
-      .then((res) => {
-        getDepartmentData(res.data).catch((error) => console.log(error));
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://34.93.135.33:8080/api/get_all_departments")
+  //     .then((res) => {
+  //       getDepartmentData(res.data).catch((error) => console.log(error));
+  //     });
+  // }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post("http://34.93.135.33:8080/api/add_designation", {
+     await axios.post("http://34.93.135.33:8080/api/add_designation", {
       desi_name: designationName,
       dept_id: departmentName,
       remark: remark,
@@ -51,22 +54,28 @@ const Designation = () => {
           value={designationName}
           onChange={(e) => setDesignationName(e.target.value)}
         />
-        <FieldContainer
-          Tag="select"
-          label="Department Name"
-          fieldGrid={3}
-          value={departmentName}
-          onChange={(e) => setDepartmentName(e.target.value)}
-        >
-          <option selected disabled value="">
-            Choose...
-          </option>
-          {departmentdata.map((option) => (
-            <option key={option.dept_id} value={option.dept_id}>
-              {option.dept_name}
-            </option>
-          ))}
-        </FieldContainer>
+            <div className="form-group col-6">
+          <label className="form-label">
+            Department Name <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={DepartmentContext.map((option) => ({
+              value: option.dept_id,
+              label: `${option.dept_name}`,
+            }))}
+            value={{
+              value: departmentName,
+              label:
+                DepartmentContext.find((user) => user.dept_id === departmentName)
+                  ?.dept_name || "",
+            }}
+            onChange={(e) => {
+              setDepartmentName(e.value);
+            }}
+            required
+          />
+        </div>
         <FieldContainer
           label="Remark"
           value={remark}

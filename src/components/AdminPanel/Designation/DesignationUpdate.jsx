@@ -1,96 +1,106 @@
 import { useEffect, useState } from "react";
-import FieldContainer from "../FieldContainer";
-import FormContainer from "../FormContainer";
 import axios from "axios";
+import Select from "react-select";
 import { Navigate, useParams } from "react-router-dom";
 import { useGlobalContext } from "../../../Context/Context";
+import FieldContainer from "../FieldContainer";
+import FormContainer from "../FormContainer";
 
 const DesignationUpdate = () => {
-  const { desi_id } = useParams();
   const { toastAlert } = useGlobalContext();
-  const [id, setID] = useState(0);
-  const [designationName, setDesignationName] = useState("");
-  const [departmentName, setDepartmentName] = useState("");
-  const [remark, setRemark] = useState("");
-  const [departmentdata, getDepartmentData] = useState([]);
+  const { desi_id } = useParams();
+  const [designationData, setDesignationData] = useState({
+    id: 0,
+    desi_name: "",
+    dept_id: "",
+    remark: "",
+  });
+  const [departmentOptions, setDepartmentOptions] = useState([]);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
-      .then((res) => {
-        getDepartmentData(res.data);
-      });
+    const fetchDepartmentData = async () => {
+      try {
+        const response = await axios.get("http://34.93.135.33:8080/api/get_all_departments");
+        const departmentOptions = response.data.map((dept) => ({
+          value: dept.dept_id,
+          label: dept.dept_name,
+        }));
+        setDepartmentOptions(departmentOptions);
+      } catch (error) {
+        console.error("Error fetching departments: ", error);
+        toastAlert("Failed to fetch departments");
+      }
+    };
 
-    axios
-      .get(`http://34.93.135.33:8080/api/get_single_designation/${desi_id}`)
-      .then((res) => {
-        const fetchedData = res.data.data;
-        const { desi_id, desi_name, dept_id, remark } = fetchedData;
+    const fetchDesignationData = async () => {
+      try {
+        const response = await axios.get(`http://34.93.135.33:8080/api/get_single_designation/${desi_id}`);
+        setDesignationData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching designation: ", error);
+        toastAlert("Failed to fetch designation");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        setID(desi_id);
-        setDesignationName(desi_name);
-        setDepartmentName(dept_id);
-        setRemark(remark);
-      });
-  }, [desi_id]);
+    fetchDepartmentData();
+    fetchDesignationData();
+  }, [desi_id, toastAlert]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.put("http://34.93.135.33:8080/api/update_designation", {
-      desi_id: id,
-      desi_name: designationName,
-      dept_id: departmentName,
-      remark: remark,
-    });
-    setDesignationName("");
-    setDepartmentName("");
-    setRemark("");
-
-    toastAlert("Updated success");
-    setIsFormSubmitted(true);
+    try {
+      await axios.put("http://34.93.135.33:8080/api/update_designation", designationData);
+      toastAlert("Updated success");
+      setIsFormSubmitted(true);
+    } catch (error) {
+      console.error("Error updating data: ", error);
+      toastAlert("Update failed");
+    }
   };
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/designation-overview" />;
   }
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <>
-      <FormContainer
-        mainTitle="Designation Update"
-        title="Designation Update"
-        handleSubmit={handleSubmit}
-      >
-        <FieldContainer
-          label="Designation Name"
-          value={designationName}
-          onChange={(e) => setDesignationName(e.target.value)}
+    <FormContainer
+      mainTitle="Designation Update"
+      title="Designation Update"
+      handleSubmit={handleSubmit}
+    >
+      <FieldContainer
+        label="Designation Name"
+        value={designationData.desi_name}
+        onChange={(e) => setDesignationData({ ...designationData, desi_name: e.target.value })}
+      />
+      <div className="form-group col-6">
+        <label className="form-label">
+          Department Name <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <Select
+          options={departmentOptions}
+          value={departmentOptions.find(option => option.value === designationData.dept_id)}
+          onChange={(selectedOption) =>
+            setDesignationData({ ...designationData, dept_id: selectedOption ? selectedOption.value : "" })
+          }
         />
-        <FieldContainer
-          Tag="select"
-          label="Department Name"
-          fieldGrid={6}
-          value={departmentName}
-          onChange={(e) => setDepartmentName(e.target.value)}
-        >
-          <option selected disabled value="">
-            Choose...
-          </option>
-          {departmentdata.map((option) => (
-            <option key={option.dept_id} value={option.dept_id}>
-              {option.dept_name}
-            </option>
-          ))}
-        </FieldContainer>
-        <FieldContainer
-          label="Remark"
-          required={false}
-          value={remark}
-          Tag="textarea"
-          onChange={(e) => setRemark(e.target.value)}
-        />
-      </FormContainer>
-    </>
+      </div>
+      <FieldContainer
+        label="Remark"
+        required={false}
+        value={designationData.remark}
+        Tag="textarea"
+        onChange={(e) => setDesignationData({ ...designationData, remark: e.target.value })}
+      />
+    </FormContainer>
   );
 };
 

@@ -424,7 +424,7 @@ const UserUpdate = () => {
         formDataa.append("lastupdated_by", loginUserId);
         formDataa.append("field_value", element.field_value);
         axios.put(
-          `http://44.211.225.140:8000/updateuserotherfielddata/${id}`,
+          `http://34.93.135.33:8080/api/updateuserotherfielddata/${id}`,
           // {
           //   id:element.id,
           //   field_name: element.field_name,

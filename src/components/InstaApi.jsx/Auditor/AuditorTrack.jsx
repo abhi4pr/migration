@@ -24,7 +24,7 @@ function AuditorTrack() {
     (async () => {
       try {
         const userdata = await axios.get(
-          "http://44.211.225.140:8000/getallprojectx"
+          "http://34.93.135.33:8080/api/getallprojectx"
         );
 
         const ftrrow = [];

@@ -16,19 +16,24 @@ const ResponsibilityMast = () => {
   const decodedToken = jwtDecode(token);
   const userId = decodedToken.id;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post("http://34.93.135.33:8080/api/add_responsibility", {
-      respo_name: responsibility,
-      description: description,
-      created_by: userId,
-    });
-    setResponsibility("");
-    setDescription("");
-    toastAlert("Form submitted");
-    setIsFormSubmitted(true);
+    try {
+      await axios.post("http://34.93.135.33:8080/api/add_responsibility", {
+        respo_name: responsibility,
+        description: description,
+        created_by: userId,
+      });
+      setResponsibility("");
+      setDescription("");
+      toastAlert("Form submitted");
+      setIsFormSubmitted(true);
+    } catch (error) {
+      console.error("An error occurred while submitting the form", error);
+      toastAlert("Form submission failed");
+    }
   };
-
+  
   if (isFormSubmitted) {
     return <Navigate to="/admin/responsibility-overview" />;
   }

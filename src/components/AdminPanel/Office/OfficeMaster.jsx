@@ -35,7 +35,7 @@ const OfficeMast = () => {
     formData.append("created_by", loginUserId);
     try {
       const isLoginIdExists = officeData.some(
-        (data) => data.sitting_ref_no === sittingMast
+        (data) => data.Sitting_ref_no === sittingMast
       );
       if (isLoginIdExists) {
         alert("this Room No already exists");

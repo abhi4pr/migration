@@ -19,22 +19,23 @@ const RoleOverView = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios
-        .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
-        )
-        .then((res) => {
-          setDatas(res.data);
-        });
+      axios.get( `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`).then((res) => {
+        setDatas(res.data);
+      });
     }
   }, [userID]);
 
-  function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
-    });
+  async function getData() {
+    try {
+      const response = await axios.get("http://34.93.135.33:8080/api/get_all_roles");
+      setData(response.data.data);
+      setFilterData(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   }
+  
 
   const columns = [
     {
@@ -79,7 +80,7 @@ const RoleOverView = () => {
                       row.Role_name,
                       row.Remarks,
                       row.Creation_date,
-                      row.created_by,
+                      row.created_by_name,
                       row.Last_updated_by,
                       row.Last_updated_date
                     )
@@ -93,7 +94,7 @@ const RoleOverView = () => {
             contextData[4] &&
             contextData[4].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="delete_role"
+                endpoint="roledelete"
                 id={row.role_id}
                 getData={getData}
               />
@@ -119,7 +120,7 @@ const RoleOverView = () => {
     Role_name,
     Remarks,
     Creation_date,
-    created_by,
+    created_by_name,
     Last_updated_by,
     Last_updated_date
   ) => {
@@ -127,7 +128,7 @@ const RoleOverView = () => {
     localStorage.setItem("Role_name", Role_name);
     localStorage.setItem("Remarks", Remarks);
     localStorage.setItem("Creation_date", Creation_date);
-    localStorage.setItem("created_by", created_by);
+    localStorage.setItem("created_by_name", created_by_name);
     localStorage.setItem("Last_updated_by", Last_updated_by);
     localStorage.setItem("Last_updated_date", Last_updated_date);
   };

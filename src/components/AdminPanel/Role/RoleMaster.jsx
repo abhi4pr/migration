@@ -19,18 +19,22 @@ const RoleMaster = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://34.93.135.33:8080/api/add_role", {
-      created_by: loginUserId,
-      role_name: roleName,
-      remark: remark,
-    });
-    setRoleName("");
-    setRemark("");
-    setCreatedBy("");
-
-    toastAlert("Form Submitted success");
-    setIsFormSubmitted(true);
+    try {
+      await axios.post("http://34.93.135.33:8080/api/add_role", {
+        created_by: loginUserId,
+        role_name: roleName,
+        remark: remark,
+      });
+      setRoleName("");
+      setRemark("");
+      setCreatedBy("");
+      toastAlert("Form Submitted success");
+      setIsFormSubmitted(true);
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
+  
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/role-overview" />;

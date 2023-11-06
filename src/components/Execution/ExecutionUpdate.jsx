@@ -8,18 +8,15 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import EditIcon from "@mui/icons-material/Edit";
 import { Alert, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { TimeField, TimePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
+import { TimePicker } from "@mui/x-date-pickers";
+
 import Snackbar from "@mui/material/Snackbar";
 import Confirmation from "./Confirmation";
-import axios from "axios";
-import { da } from "date-fns/locale";
+import { set } from "date-fns";
 // import { StaticDatePicker } from "@mui/x-date-pickers";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -31,7 +28,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
+export default function ExecutionUpdate({ id, rowData, setReload, status,executionStatus }) {
   console.log(rowData.execution_status);
   const [remark, setRemark] = useState("");
   const [data, setData] = useState([]);
@@ -45,18 +42,25 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
   const [snackbar, setSnackbar] = useState(null);
   const [value, setValue] = useState(null);
   const [confirmation, setConfirmation] = useState(false);
-  
+  const [validationError, setValidationError] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleSave = () => {
+   if(status==1 && !value){
+   console.log("hitted");
+   console.log(status,"execution status");
+      setValidationError(true);
+      return;
+    }
     handleClose();
-  };
-
+  }
   const handleClose = () => {
     validation();
-
+    // setValue(null);
+    // setRemark("");
+    setValidationError(false);
     // console.log("hitted");
     console.log(value);
   };
@@ -73,16 +77,14 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
   }, []);
   return (
     <div>
-      {/* <Button onClick={handleClickOpen}> */}
-
       <Button
         variant="outlined"
         onClick={() => {
           setOpen(true);
         }}
-        color={rowData?.execution_status== 0?"error":"success"}
+        color={rowData?.execution_status == 0 ? "error" : "success"}
       >
-        {rowData?.execution_status== 0?"Reject":"Done"}
+        {rowData?.execution_status == 0 ? "Reject" : "Done"}
       </Button>
       {/* <EditIcon
         onClick={() => {
@@ -91,7 +93,7 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
         }}
       /> */}
       {/* </Button> */}
-      {confirmation &&(
+      {confirmation && (
         <Confirmation
           rowData={rowData}
           value={value}
@@ -129,20 +131,43 @@ export default function ExecutionUpdate({ id, rowData, setReload ,status}) {
           <Typography gutterBottom>
             You are about to update the execution status.
           </Typography>
-        { rowData?.execution_status!== 0 && <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              // defaultValue={dayjs("2022-04-17")}
-              value={value}
-              onChange={setValue}
-              sx={{ mb: 2, mr: 2 }}
-            />
-            <TimePicker
-              value={value}
-              onChange={setValue}
-              // referenceDate={dayjs("2022-04-17")}
-            />
-            {/* <StaticDatePicker /> */}
-          </LocalizationProvider>}
+          {rowData?.execution_status !== 0 && (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                value={value}
+                onChange={setValue}
+
+                format="DD/MM/YYYY"
+                sx={{
+                  mb: 2,
+                  mr: 2,
+                  border: validationError
+                    ? "2px solid red"
+                    : "1px solid #d9d9d9",
+                  borderRadius: 2,
+                  // padding: '8px',
+                }}
+              />
+              <TimePicker
+                value={value}
+                onChange={setValue}
+                error={validationError}
+                sx={{
+                  mb: 2,
+                  mr: 2,
+                  border: validationError
+                    ? "2px solid red"
+                    : "1px solid #d9d9d9",
+                  borderRadius: 2,
+                }}
+              />
+              {validationError && (
+                <Typography variant="body2" color="error">
+                  Please fill in the date and time.
+                </Typography>
+              )}
+            </LocalizationProvider>
+          )}
           <TextField
             fullWidth
             id="fullWidth"

@@ -25,7 +25,7 @@ function LeadApp({ children }) {
     (async () => {
       try {
         const leadres = await axios.get(
-          "http://44.211.225.140:8000/allleadmastdata"
+          "http://34.93.135.33:8080/api/allleadmastdata"
         );
         const userres = await axios.get(
           "http://34.93.135.33:8080/api/get_all_users"

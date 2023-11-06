@@ -49,13 +49,13 @@ function Dashboard() {
   }, []);
   useEffect(() => {
     setRenderCount(renderCount + 1);
-    axios.get("http://44.211.225.140:8000/alldataofsimmast").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alldataofsimmast").then((res) => {
       getAllSimData(res.data.data);
     });
-    axios.get("http://44.211.225.140:8000/logodata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/logodata").then((res) => {
       getLogoBrandData(res.data);
     });
-    axios.get("http://44.211.225.140:8000/alldataofipregis").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alldataofipregis").then((res) => {
       getIntellectualProperty(res.data);
     });
   }, []);

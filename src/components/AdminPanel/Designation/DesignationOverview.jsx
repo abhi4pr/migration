@@ -41,8 +41,8 @@ const DesignationOverview = () => {
     });
   }, [userID]);
 
-  function getData() {
-    axios
+ async function getData() {
+   await axios
       .get("http://34.93.135.33:8080/api/get_all_designations")
       .then((res) => {
         setData(res.data.data);
@@ -79,7 +79,7 @@ const DesignationOverview = () => {
       sortable: true,
     },
     {
-      name: "Desi Count",
+      name: "Emp Count",
       width: "15%",
       cell: (row) => {
         const count = allUserDesignation.filter(

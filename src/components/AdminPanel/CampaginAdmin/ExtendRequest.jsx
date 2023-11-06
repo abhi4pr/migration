@@ -118,7 +118,7 @@ export default function ExtendRequest({ ReloadMain }) {
     axios.get("http://34.93.135.33:8080/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
-    axios.get("http://44.211.225.140:8000/campaign").then((response) => {
+    axios.get("http://34.93.135.33:8080/api/campaign").then((response) => {
       const data = response.data;
 
       setCommits(data);

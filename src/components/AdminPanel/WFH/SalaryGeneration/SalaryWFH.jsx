@@ -673,7 +673,6 @@ const SalaryWFH = () => {
       cell: (row) => row.tds_deduction + " ₹",
       width: "7%",
     },
-
     {
       name: "To Pay",
       cell: (row) => row.toPay + " ₹",
