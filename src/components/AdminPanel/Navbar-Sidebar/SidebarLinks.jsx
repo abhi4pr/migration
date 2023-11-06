@@ -309,7 +309,7 @@ const SidebarLinks = () => {
         </li>
       )}
 
-      {isLeadManagementVisible && (
+      {/* {isLeadManagementVisible && (
         <li className="nav-item">
           <Link
             className="nav-link collapsed"
@@ -338,7 +338,7 @@ const SidebarLinks = () => {
             </div>
           </div>
         </li>
-      )}
+      )} */}
 
       {isExecutionVisible && (
         <li className="nav-item">
@@ -584,7 +584,7 @@ const SidebarLinks = () => {
         </li>
       )}
 
-      {isInstaApiVisible && (
+      {/* {isInstaApiVisible && (
         <li className="nav-item">
           <Link
             className="nav-link collapsed"
@@ -625,20 +625,11 @@ const SidebarLinks = () => {
                     Track Page
                   </Link>
                 )}
-              {/* {contextData &&
-                contextData[28] &&
-                contextData[28].view_value === 1 && (
-                  <Link
-                    className="collapse-item"
-                    to="/admin/instaapi/interpretor"
-                  >
-                    Interpretor
-                  </Link>
-                )} */}
+              
             </div>
           </div>
         </li>
-      )}
+      )} */}
     </>
   );
 };
