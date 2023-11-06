@@ -8,7 +8,6 @@ const WhatsappAPI = () => {
     templateParams
   ) => {
     try {
-      console.log("clicked to submit");
       const response = await axios.post(
         "https://backend.api-wa.co/campaign/heyx/api",
         {

@@ -101,7 +101,9 @@ const Backup_Attendence = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/getuserdeptwisewfhdata/${department}`)
+        .get(
+          `http://34.93.135.33:8080/api/getuserdeptwisewfhdata/${department}`
+        )
         .then((res) => {
           getUsersData(res.data);
         });

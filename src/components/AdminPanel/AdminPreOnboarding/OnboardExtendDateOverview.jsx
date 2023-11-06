@@ -41,7 +41,6 @@ const OnboardExtendDateOverview = () => {
 
       setDatas(data);
       setFilterData(data);
-      console.log(data, "all data");
     } catch (error) {
       console.log("Error fething Data", error);
     }
@@ -52,7 +51,6 @@ const OnboardExtendDateOverview = () => {
   }, []);
 
   const statusUpdate = (user_id, status, PersonalNumber) => {
-    console.log("lalit hai yha", user_id, status, PersonalNumber);
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("joining_date_extend_status", status);
@@ -131,7 +129,6 @@ const OnboardExtendDateOverview = () => {
       name: "Action",
       cell: (row) => (
         <>
-          {console.log(row)}
           {/* {contextData &&
             contextData[10] &&
             contextData[10].update_value === 1 && ( */}

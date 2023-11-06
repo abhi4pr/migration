@@ -31,7 +31,6 @@ function OfficeMastUpdate() {
         "Content-Type": "multipart/form-data",
       },
     });
-    // console.log(role_name);
     setSittingMast("");
     setRemark("");
 

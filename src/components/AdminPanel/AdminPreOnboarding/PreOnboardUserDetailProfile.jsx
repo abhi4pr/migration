@@ -32,14 +32,14 @@ const PreOnboardUserDetailsProfile = () => {
   const [user, setUser] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/usernew/${id}`).then((res) => {
-      const fetchedData = res.data;
-      setUser(fetchedData);
-      console.log(fetchedData);
-      const { dept_id } = fetchedData;
-      console.log(dept_id);
-      setSubDeptId(dept_id);
-    });
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        const fetchedData = res.data;
+        setUser(fetchedData);
+        const { dept_id } = fetchedData;
+        setSubDeptId(dept_id);
+      });
 
     subDep(subDeptId);
     userOtherDocuments();

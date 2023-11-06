@@ -25,7 +25,6 @@ const UserAuthDetail = () => {
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
-        console.log(res.data);
       });
   }
   useEffect(() => {
