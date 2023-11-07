@@ -62,8 +62,8 @@ const SimOverview = () => {
   useEffect(() => {
     const MSD = userData.filter((data) => data.user_id == selectedUserTransfer);
     // setSelectedModalUserData(modalSelectedUserData);
-    console.log(MSD[0], "MSD");
-    console.log(selectedUserTransfer);
+    // console.log(MSD[0], "MSD");
+    // console.log(selectedUserTransfer);
     setModalSelectedUserData(MSD);
   }, [selectedUserTransfer]);
   useEffect(() => {
@@ -87,6 +87,7 @@ const SimOverview = () => {
       .get("http://34.93.135.33:8080/api/get_all_allocations")
       .then((res) => {
         setSimAllocationData(res.data.data);
+        // console.log(res.data.data, "there is data");
       });
 
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
@@ -137,9 +138,9 @@ const SimOverview = () => {
         (data) => data.sim_id == modalData.sim_id
       );
       setSimAllocationTransferData(simAllocationTransfer);
-      console.log(simAllocationTransfer, "simAllocationTransfer");
-      console.log(modalData, "modalData");
-      console.log(simallocationdata, "simallocationdata");
+      // console.log(simAllocationTransfer, "simAllocationTransfer");
+      // console.log(modalData, "modalData");
+      // console.log(simallocationdata, "simallocationdata");
     }
   }, [modalData]);
 
@@ -149,10 +150,10 @@ const SimOverview = () => {
         (data) => data.user_id == simAllocationTransferData[0].user_id
       );
       setParticularUserName(commonUserId[0].user_name);
-      console.log(
-        simAllocationTransferData[0].user_id,
-        "simAllocationTransferData[0].user_id"
-      );
+      // console.log(
+      //   simAllocationTransferData[0].user_id,
+      //   "simAllocationTransferData[0].user_id"
+      // );
     }
   }, [simAllocationTransferData, userData]);
 
@@ -188,7 +189,7 @@ const SimOverview = () => {
     if (selectedUserTransfer !== "") {
       axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
-
+        status: "Allocated",
         sim_id: Number(modalData.sim_id),
         dept_id: Number(modalSelectedUserData[0].dept_id),
         created_by: userID,
@@ -497,7 +498,12 @@ const SimOverview = () => {
                           value={search}
                           onChange={(e) => setSearch(e.target.value)}
                         />
-                        <button onClick={handleExport}>Export TO Exvel</button>
+                        <button
+                          className="btn btn-outline-success ml-2 btn-sm"
+                          onClick={handleExport}
+                        >
+                          Export TO Exvel
+                        </button>
                       </>
                     }
                   />

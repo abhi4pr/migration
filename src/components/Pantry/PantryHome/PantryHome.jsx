@@ -40,9 +40,11 @@ const PantryHome = () => {
   };
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
-      setAllOrderData(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .then((res) => {
+        setAllOrderData(res.data.data);
+      });
   }, []);
   const pendingOrdersCount = allOrderData.filter(
     (orders) => orders.Status.toLowerCase() === "pending"

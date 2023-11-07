@@ -23,25 +23,27 @@ const DeliveryData = () => {
   const roomId = decodedToken.room_id;
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
-        if(res.data.data.length !== orderLength){
-          orderLength = res.data.data.length
-          if(Notification.permission === 'granted'){
-            new Notification("New Order Received",{
-              body: 'Please check'
-            })
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .then((res) => {
+        if (res.data.data.length !== orderLength) {
+          orderLength = res.data.data.length;
+          if (Notification.permission === "granted") {
+            new Notification("New Order Received", {
+              body: "Please check",
+            });
           }
         }
-    });
+      });
 
     axios
-      .post("http://34.93.135.33:8080/api/orderreqs", {
+      .post("http://34.93.135.33:8080/api/add_orderreqs", {
         // Sitting_id: sittingID,
         Request_delivered_by: loginUserId,
         room_id: roomId,
       })
       .then((res) => {
-        setDeliveryData(res.data);       
+        setDeliveryData(res.data);
       })
       .catch((error) => {
         console.error("Error fetching delivery data:", error);
@@ -131,21 +133,21 @@ const DeliveryData = () => {
         <div className="col-12" key={userId}>
           <h1> {deliveryBoyData.User_name}</h1>
           {deliveryData.map((d) => (
-          <div className="order_card">
-            <div className="order_card_head">
-              <div className="emply_info">
-                <img src={d.image} alt="img" />
-                <div className="emply_title">
-                  <h2>{d.User_name}</h2>
-                  <ul>
-                    <li>Room - {d.Sitting_area}</li>
-                    <li>Chair - {d.Sitting_ref_no}</li>
-                  </ul>
+            <div className="order_card">
+              <div className="order_card_head">
+                <div className="emply_info">
+                  <img src={d.image} alt="img" />
+                  <div className="emply_title">
+                    <h2>{d.User_name}</h2>
+                    <ul>
+                      <li>Room - {d.Sitting_area}</li>
+                      <li>Chair - {d.Sitting_ref_no}</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="order_card_body">
-              <div className="order_list">
+              <div className="order_card_body">
+                <div className="order_list">
                   <div className="order_list_item" key={d.Order_req_id}>
                     <div className="order_list_item_in">
                       <div className="order_item_img">
@@ -220,9 +222,9 @@ const DeliveryData = () => {
                       </p>
                     </div>
                   </div>
+                </div>
               </div>
-            </div>
-            {/* <div className="order_card_request">
+              {/* <div className="order_card_request">
               <p>
               <span>Special Request : </span>
               {deliveryData.map((d) => (
@@ -230,7 +232,7 @@ const DeliveryData = () => {
                 ))}
                 </p>
               </div> */}
-          </div>
+            </div>
           ))}
         </div>
       );
