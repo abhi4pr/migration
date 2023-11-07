@@ -19,17 +19,23 @@ const BillingOverview = () => {
   const userID = decodedToken.id;
 
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/billingheader").then((res) => {
-      setBillData(res.data);
-      setFilterData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_billingheaders")
+      .then((res) => {
+        setBillData(res.data);
+        setFilterData(res.data);
+      });
   };
   useEffect(() => {
     getData();
     if (userID && contextData.length === 0) {
-      axios.get(`http://34.93.135.33:8080/api/userauth/${userID}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
   }, [userID]);
 
@@ -54,7 +60,7 @@ const BillingOverview = () => {
           {contextData &&
             contextData[3] &&
             contextData[3].update_value === 1 && (
-              <Link to={`/admin/billing-update/${row.billing_id}`}>
+              <Link to={`/admin/billing-update/${row?.billingheader_id}`}>
                 <button
                   title="Edit"
                   className="btn btn-outline-primary btn-sm user-button"
@@ -67,8 +73,8 @@ const BillingOverview = () => {
             contextData[3] &&
             contextData[3].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="billingheader"
-                id={row.billing_id}
+                endpoint="delete_billingheader"
+                id={row.billingheader_id}
                 getData={getData}
               />
             )}
@@ -89,9 +95,9 @@ const BillingOverview = () => {
         mainTitle="Billing"
         link="/admin/billing-master"
         buttonAccess={
-          contextData &&
-          contextData[3] &&
-          contextData[3].insert_value === 1 &&
+          // contextData &&
+          // contextData[3] &&
+          // contextData[3].insert_value === 1 &&
           "true"
         }
       />
