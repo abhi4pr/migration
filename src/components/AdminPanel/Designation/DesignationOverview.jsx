@@ -41,8 +41,8 @@ const DesignationOverview = () => {
     });
   }, [userID]);
 
- async function getData() {
-   await axios
+  async function getData() {
+    await axios
       .get("http://34.93.135.33:8080/api/get_all_designations")
       .then((res) => {
         setData(res.data.data);
@@ -208,11 +208,21 @@ const DesignationOverview = () => {
         {/* Render the modal content with the selected row data */}
         {selectedRow && (
           <div>
-            <h2>Designaiton: {selectedRow.desi_name}</h2>
-            <h5>Department: {selectedRow.department_name}</h5>
+            <div className="d-flex justify-content-between mb-4">
+              <h5>Department: {selectedRow.department_name}</h5>
+              <h5>Designaiton: {selectedRow.desi_name}</h5>
+              <button className="btn btn-success " onClick={handleCloseModal}>
+                X
+              </button>
+            </div>
 
             <DataTable
               columns={[
+                {
+                  name: "S.No",
+                  cell: (row, index) => <div>{index + 1}</div>,
+                  width: "10%",
+                },
                 { name: "Name", selector: "user_name" },
                 { name: "Email", selector: "user_email_id" },
                 { name: "Contact", selector: "user_contact_no" },

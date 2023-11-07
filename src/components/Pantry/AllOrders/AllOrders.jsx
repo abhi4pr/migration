@@ -10,11 +10,13 @@ const AllOrder = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
-      console.log(res.data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .then((res) => {
+        setData(res.data.data);
+        setFilterData(res.data.data);
+        console.log(res.data.data);
+      });
   }
 
   const columns = [
@@ -24,7 +26,7 @@ const AllOrder = () => {
       width: "7%",
       sortable: true,
     },
-    {  
+    {
       name: "Order No",
       selector: (row) => row.Order_req_id,
       sortable: true,

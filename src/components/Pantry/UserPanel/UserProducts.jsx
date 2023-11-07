@@ -11,7 +11,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const userId = decodedToken.id;
-  const loginUserSitting = decodedToken.Sitting_ref_no;
+  const loginUserSitting = decodedToken.sitting_ref_no;
   const sittingId = decodedToken.sitting_id;
 
   const { count, setCount } = useContext(DataContext);
@@ -40,9 +40,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   // Single User Product Data
   useEffect(() => {
     axios
-      .get(
-        `http://34.93.135.33:8080/api/get_single_orderreqshistory//${userId}`
-      )
+      .get(`http://34.93.135.33:8080/api/get_single_orderreqshistory/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data);
       });
@@ -105,20 +103,20 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
       axios
         .get(`http://34.93.135.33:8080/api/sittingdatabyid/${loginUserSitting}`)
         .then((res) => {
-          handleSitting(res.data.Sitting_area);
+          handleSitting(res.data.sitting_area);
         });
     }
   }, [selectedSitting]);
 
   useEffect(() => {
     const selectedOption = sittingData.find(
-      (option) => option?.Sitting_id === Number(sittingId)
+      (option) => option?.sitting_id === Number(sittingId)
     );
     // console.log(selectedOption, "selectedOption")
     // setRoomId(selectedOption);
     setSelectedSitting({
-      value: selectedOption?.Sitting_id,
-      label: `${selectedOption?.Sitting_ref_no} | ${selectedOption?.Sitting_area}`,
+      value: selectedOption?.sitting_id,
+      label: `${selectedOption?.sitting_ref_no} | ${selectedOption?.sitting_area}`,
     });
   }, [sittingData]);
 
@@ -163,7 +161,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
                 <Select
                   options={office.map((option) => ({
                     value: option.room_id,
-                    label: option.Sitting_ref_no,
+                    label: option.sitting_ref_no,
                   }))}
                   value={selectedRoomImage}
                   onChange={handleModalImage}
@@ -176,7 +174,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
                     className="sitting_select"
                     options={sittingHistory.map((option) => ({
                       value: option.Sitting_id,
-                      label: `${option.Sitting_area} | ${option.Sitting_ref_no}`,
+                      label: `${option.sitting_area} | ${option.sitting_ref_no}`,
                     }))}
                     value={selectedHistory}
                     onChange={handleHistoryChange} // Use handleHistoryChange function
@@ -193,8 +191,8 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
                     defaultInputValue={setSelectedSitting.label}
                     className="sitting_select"
                     options={sittingData.map((option) => ({
-                      value: option.Sitting_id,
-                      label: `${option.Sitting_ref_no} |${option.Sitting_area} `,
+                      value: option.sitting_id,
+                      label: `${option.sitting_ref_no} |${option.sitting_area} `,
                     }))}
                     value={selectedSitting}
                     onChange={handleSittingChange}

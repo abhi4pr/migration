@@ -79,7 +79,7 @@ const PendingOrder = () => {
 
   function handleGetOrderData() {
     axios
-      .get("http://34.93.135.33:8080/api/allorderreqdata")
+      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
       .then((res) => {
         const data = res.data.data
           .filter((res) => res.Status === "pending")

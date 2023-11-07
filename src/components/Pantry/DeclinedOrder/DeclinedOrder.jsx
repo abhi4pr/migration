@@ -8,10 +8,12 @@ const DeclinedOrder = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/allorderreqdata").then((res) => {
-      setData(res.data.data.filter((res) => res.Status === "declined"));
-      setFilterData(res.data.data.filter((res) => res.Status === "declined"));
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .then((res) => {
+        setData(res.data.data.filter((res) => res.Status === "declined"));
+        setFilterData(res.data.data.filter((res) => res.Status === "declined"));
+      });
   }
 
   const columns = [
