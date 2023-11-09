@@ -31,6 +31,7 @@ import imageTest28 from "../../../assets/img/product/Avtar28.png";
 import imageTest29 from "../../../assets/img/product/Avtar29.png";
 import imageTest30 from "../../../assets/img/product/Avtar30.png";
 import Select from "react-select";
+import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -39,6 +40,7 @@ const colourOptions = [
 ];
 
 const UserMaster = () => {
+  const whatsappApi = WhatsappAPI();
   const { toastAlert } = useGlobalContext();
   const [username, setUserName] = useState("");
 
@@ -216,19 +218,30 @@ const UserMaster = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (
-    //   !username ||
-    //   !gender ||
-    //   !personalEmail ||
-    //   !personalContact ||
-    //   !loginId ||
-    //   !password ||
-    //   !dateOfBirth ||
-    //   !gender
-    // ) {
-    //   setError("Please select All required Fields");
-    //   return;
-    // }
+    if (
+      !username ||
+      !gender ||
+      !designation ||
+      !department ||
+      !reportL1 ||
+      !roles ||
+      !personalEmail ||
+      // !speakingLanguage ||
+      !dateOfBirth ||
+      !maritialStatus ||
+      !joiningDate ||
+      !jobType ||
+      !status ||
+      !sitting ||
+      !personalContact ||
+      !loginId ||
+      !password ||
+      !dateOfBirth ||
+      !gender
+    ) {
+      setError("Please select All required Fields");
+      return;
+    }
     const formData = new FormData();
     // const formDataa = new FormData();
     formData.append("created_by", loginUserId);
@@ -343,7 +356,12 @@ const UserMaster = () => {
           // setReportL2("");
           // setReportL3("");
           // setDesignation("");
-
+          whatsappApi.callWhatsAPI(
+            "Preonboarding Register",
+            JSON.stringify(personalContact),
+            username,
+            [username, loginId, password, "http://jarviscloud.in/"]
+          );
           toastAlert("User Registerd");
           setIsFormSubmitted(true);
         }
@@ -385,7 +403,7 @@ const UserMaster = () => {
       setValidEmail(emailRegex.test(newEmail));
     }
   }
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   // Number validation
   function handleContactChange(event) {
@@ -513,6 +531,12 @@ const UserMaster = () => {
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
+    // const currentDate = new Date();
+    // const age = currentDate.getFullYear() - selectedDate.getFullYear();
+
+    // if (age <= 15) {
+    //   const result = window.confirm("Your Age Should We Greater then 15 year");
+    // }
     setDateOfBirth(selectedDate);
     calculateAge(selectedDate);
   };
@@ -601,9 +625,7 @@ const UserMaster = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Sub Department <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Sub Department</label>
         <Select
           className=""
           options={subDepartmentData.map((option) => ({
@@ -647,9 +669,7 @@ const UserMaster = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L2 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L2</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -670,9 +690,7 @@ const UserMaster = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L3 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L3</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -855,13 +873,25 @@ const UserMaster = () => {
 
   const salaryFields = (
     <>
-      <FieldContainer
+      {/* <FieldContainer
         type="date"
         label="Joining Date"
         fieldGrid={3}
         value={joiningDate}
         onChange={(e) => setJoiningDate(e.target.value)}
-      />
+      /> */}
+      <div className="from-group col-3">
+        <label className="form-label">
+          Joining Date <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          // style={{ width: "470px " }}
+          value={joiningDate}
+          onChange={(e) => setJoiningDate(e.target.value)}
+        />
+      </div>
       {/* <FieldContainer
         type="date"
         label=" Releaving Date "
@@ -1014,9 +1044,7 @@ const UserMaster = () => {
         required={false}
       />
       <div className="form-group col-3">
-        <label className="form-label">
-          Higest Qualification <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Higest Qualification</label>
         <Select
           className=""
           options={higestQualificationData.map((option) => ({
@@ -1194,9 +1222,7 @@ const UserMaster = () => {
         </div>
       </div>
       <div className="form-group col-3">
-        <label className="form-label">
-          Spoken Languages <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Spoken Languages</label>
         <Select
           isMulti
           name="langauages"
@@ -1232,15 +1258,20 @@ const UserMaster = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-      <input
-        label="DOB"
-        type="date"
-        className="form-control mt-4"
-        style={{ width: '470px ' }}
-        max={today}
-        value={dateOfBirth}
-        onChange={handleDateChange}
-      />
+      <div className="from-group col-6">
+        <label className="form-label">
+          DOB <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          label="DOB"
+          type="date"
+          className="form-control"
+          style={{ width: "470px " }}
+          max={today}
+          value={dateOfBirth}
+          onChange={handleDateChange}
+        />
+      </div>
       {dateOfBirth !== "" && <FieldContainer label="Age" value={age} />}
       <FieldContainer
         label="Father's Name"
@@ -1261,9 +1292,7 @@ const UserMaster = () => {
         required={false}
       />
       <div className="form-group col-6">
-        <label className="form-label">
-          Blood Group <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Blood Group</label>
         <Select
           className=""
           options={bloodGroupData.map((option) => ({
@@ -1309,17 +1338,16 @@ const UserMaster = () => {
         />
       )}
       {maritialStatus == "Married" && (
-       <input
-       label="Date Of Marriage"
-       type="date"
-       className="form-control ml-2"
-       style={{ width: '460px ' }}    
-       max={today}
-       value={dateOfMarraige}
-       onChange={(e) => setDateOfMarraige(e.target.value)}
-       required={false}
-       
-     />
+        <input
+          label="Date Of Marriage"
+          type="date"
+          className="form-control ml-2"
+          style={{ width: "460px " }}
+          max={today}
+          value={dateOfMarraige}
+          onChange={(e) => setDateOfMarraige(e.target.value)}
+          required={false}
+        />
       )}
     </>
   );
