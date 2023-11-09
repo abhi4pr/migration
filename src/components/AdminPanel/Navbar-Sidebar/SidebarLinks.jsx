@@ -5,6 +5,9 @@ import axios from "axios";
 
 const SidebarLinks = () => {
   const [contextData, setData] = useState([]);
+  const [allCount, setAllCount] = useState()
+  const [ownCount, setOwnCount] = useState()
+  const [otherCount, setOtherCount] = useState()
 
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
@@ -21,6 +24,29 @@ const SidebarLinks = () => {
         });
     }
   }, [userID]);
+
+  useEffect(() => {
+    const formData = new URLSearchParams();
+    formData.append("loggedin_user_id", 36);
+    axios
+      .post(
+        "https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      )
+      .then((res) => {
+        const filterVendorId = res.data.body.filter((check) => check.vendor_id == "8").length;
+        setOwnCount(filterVendorId);
+        const filterVendorId1 = res.data.body.length;
+        setAllCount(filterVendorId1);
+        const filterVendorId2 = res.data.body.filter((check) => check.vendor_id !== "8").length;
+        setOtherCount(filterVendorId2);
+      });
+  }, []);
 
   const isUserManagementVisible = [0, 1, 2, 6, 16, 23].some(
     (index) => contextData[index]?.view_value === 1
@@ -362,16 +388,51 @@ const SidebarLinks = () => {
               {contextData &&
                 contextData[24] &&
                 contextData[24].view_value === 1 && (
-                  <Link className="collapse-item" to="/admin/execution">
-                    Dashboard
-                  </Link>
+                  ''
                 )}
               {contextData &&
                 contextData[24] &&
                 contextData[24].view_value === 1 && (
-                  <Link className="collapse-item" to="/admin/exeinventory">
-                    Inventory
-                  </Link>
+                  <li className="nav-item">
+                    <a
+                      className="nav-link collapsed"
+                      data-toggle="collapse"
+                      data-target="#collapsInnerOne"
+                      aria-expanded="true"
+                      aria-controls="collapsInnerOne"
+                    >
+                      <span>Inventory</span>
+                    </a>
+                    <div
+                      id="collapsInnerOne"
+                      className="collapse"
+                      aria-labelledby="headingTwo"
+                    >
+                      <div className="bg-white collapse-inner">
+                        {/* <Link className="collapse-item" to="/admin/exeinventory">
+                          Dashboard
+                        </Link> */}
+                        <Link
+                          className="collapse-item"
+                          to="/admin/exeexecution/all"
+                        >
+                          All ({allCount})
+                        </Link>{" "}
+                        <Link
+                          className="collapse-item"
+                          to="/admin/exeexecution/own"
+                        >
+                          Own ({ownCount})
+                        </Link>{" "}
+                        <Link
+                          className="collapse-item"
+                          to="/admin/exeexecution/other"
+                        >
+                          Other ({otherCount})
+                        </Link>
+                      </div>
+                    </div>
+                  </li>
                 )}
               {contextData &&
                 contextData[24] &&
@@ -394,6 +455,9 @@ const SidebarLinks = () => {
                       // data-parent="#accordionSidebar"
                     >
                       <div className="bg-white collapse-inner">
+                        <Link className="collapse-item" to="/admin/execution">
+                          Dashboard
+                        </Link>
                         <Link
                           className="collapse-item"
                           to="/admin/exeexecution/pending"

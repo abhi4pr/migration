@@ -121,6 +121,10 @@ import AccountsOverviewWFH from "./AccountsDepartment/AccountsOverviewWFH";
 import WFHSingleUser from "./WFH/WFHSingleUser/WFHSingleUser";
 import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
 
+import ExecutionAll from "../Execution/ExecutionAll";
+import ExecutionOwn from "../Execution/ExecutionOwn";
+import ExecutionOther from "../Execution/ExecutionOther";
+
 const Admin = () => {
   const [contextData, setData] = useState([]);
 
@@ -519,6 +523,9 @@ const Admin = () => {
 
                   {/*------------------------ Execution --------------------------------*/}
                   <Route path="/execution" element={<OverviewIndex />} />
+                  <Route path="/exeexecution/all" element={<ExecutionAll />} />
+                  <Route path="/exeexecution/own" element={<ExecutionOwn />} />
+                  <Route path="/exeexecution/other" element={<ExecutionOther />} />
                   <Route
                     path="/exeexecution/pending"
                     element={
