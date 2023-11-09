@@ -588,10 +588,10 @@ const UserMaster = () => {
     setTempLanguage(selectedOption);
   }
 
-  // useEffect(() => {
-  //   const test = tempLanguage?.map((option) => option.value).join();
-  //   setSpeakingLanguage(test);
-  // }, [tempLanguage]);
+  useEffect(() => {
+    const test = tempLanguage?.map((option) => option.value).join();
+    setSpeakingLanguage(test);
+  }, [tempLanguage]);
 
   const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
@@ -1154,16 +1154,16 @@ const UserMaster = () => {
         {!isValidUID && (
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
-        <div className="d-flex justify-content-between">
+        <div className="d-flex mb-2">
           <button
             type="button"
-            className="btn btn-primary mb-2"
+            className="btn btn-outline-primary me-2"
             onClick={addMore}
           >
             Add More
           </button>
           {documents.length > 0 && (
-            <button className="btn btn-primary" onClick={reomveField}>
+            <button className="btn btn-outline-primary" onClick={reomveField}>
               Remove Field
             </button>
           )}

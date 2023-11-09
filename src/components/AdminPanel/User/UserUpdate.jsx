@@ -333,7 +333,9 @@ const UserUpdate = () => {
         setJoiningDate(joining_date?.split("T")?.[0]);
         setReleavingDate(releaving_date?.split("T")?.[0]);
         setSalary(salary);
-        setSpeakingLanguage(SpokenLanguages);
+        // console.log("SpokenLanguages", SpokenLanguages.split(","));
+        setTempLanguage(SpokenLanguages.split(","));
+        console.log(SpokenLanguages);
         setGender(Gender);
         setNationality(Nationality);
         setDateOfBirth(DOB.split("T")?.[0]);
@@ -1081,7 +1083,7 @@ const UserUpdate = () => {
       <FieldContainer
         label="UID Number"
         onChange={handleUIDInputChange}
-        fieldGrid={3}
+        fieldGrid={5}
         type="text"
         required={false}
         value={uidNo}
@@ -1098,14 +1100,25 @@ const UserUpdate = () => {
       <FieldContainer
         label="UID"
         onChange={(e) => setUID(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
+
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {uidImage && (
+            <a href={uidImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> UID Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       <FieldContainer
         label="PAN Number"
         onChange={handlePANChange}
-        fieldGrid={3}
+        fieldGrid={5}
         type="text"
         required={false}
         value={panNo}
@@ -1121,11 +1134,22 @@ const UserUpdate = () => {
       <FieldContainer
         label="Pan Image"
         onChange={(e) => setPanUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
-      <div className="form-group col-3">
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {panImage && (
+            <a href={panImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> PAN Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div className="form-group col-5">
         <label className="form-label">Higest Qualification</label>
         <Select
           className=""
@@ -1146,17 +1170,39 @@ const UserUpdate = () => {
       <FieldContainer
         label="Highest Qualification"
         onChange={(e) => setHighestUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {highestQualificationImage && (
+            <a href={highestQualificationImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       <FieldContainer
         label="Other Image"
         onChange={(e) => setOtherUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={10}
         type="file"
         required={false}
       />
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {otherImage && (
+            <a href={otherImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       {!isValidPAN && <p style={{ color: "red" }}>Invalid PAN format</p>}
       {!isValidUID && (
         <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
@@ -1186,19 +1232,6 @@ const UserUpdate = () => {
           })}
         </div>
       )}
-
-      <a href={uidImage} download>
-        UID Download{" "}
-      </a>
-      <a href={panImage} download>
-        PAN Download{" "}
-      </a>
-      <a href={highestQualificationImage} download>
-        Highest Qualification Download{" "}
-      </a>
-      <a href={otherImage} download>
-        Other Image Download{" "}
-      </a>
     </>
   );
 

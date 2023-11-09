@@ -65,19 +65,9 @@ const FormContainer = ({
             <div className="thm_form">
               <form onSubmit={handleSubmit} className="needs-validation">
                 <div className="row">{children}</div>
-                <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                  {accordionButtons.length == 0 && submitButton && (
-                    <button
-                      className="btn btn btn-primary"
-                      style={{ marginRight: "5px" }}
-                      type="submit"
-                    >
-                      Submit
-                    </button>
-                  )}
-
-                  {activeAccordionIndex === accordionButtons.length - 1 &&
-                    submitButton && (
+                <div className="row">
+                  <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    {accordionButtons.length == 0 && submitButton && (
                       <button
                         className="btn btn btn-primary"
                         style={{ marginRight: "5px" }}
@@ -86,6 +76,18 @@ const FormContainer = ({
                         Submit
                       </button>
                     )}
+
+                    {activeAccordionIndex === accordionButtons.length - 1 &&
+                      submitButton && (
+                        <button
+                          className="btn btn btn-success"
+                          style={{ marginRight: "5px" }}
+                          type="submit"
+                        >
+                          Submit
+                        </button>
+                      )}
+                  </div>
                 </div>
               </form>
             </div>
