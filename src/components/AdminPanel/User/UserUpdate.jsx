@@ -418,6 +418,9 @@ const UserUpdate = () => {
         ]);
       }
 
+      toastAlert("User Update");
+      setIsFormSubmitted(true);
+
       for (const element of otherDocuments) {
         formDataa.append("id", element.id);
         formDataa.append("field_name", element.field_name);
@@ -462,9 +465,6 @@ const UserUpdate = () => {
       //   .catch((error) => {
       //     console.log("Failed to send email:", error);
       //   });
-
-      toastAlert("User Update");
-      setIsFormSubmitted(true);
     } else {
       if (contact.length !== 10) {
         if (isValidcontact == false)
@@ -671,9 +671,7 @@ const UserUpdate = () => {
         />
       </div>
       <div className="form-group col-3">
-        <label className="form-label">
-          Sub Department <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Sub Department</label>
         <Select
           className=""
           options={subDepartmentData.map((option) => ({
@@ -717,9 +715,7 @@ const UserUpdate = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L2 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L2</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -740,9 +736,7 @@ const UserUpdate = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L3 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L3</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -898,13 +892,24 @@ const UserUpdate = () => {
 
   const salaryFields = (
     <>
-      <FieldContainer
+      {/* <FieldContainer
         type="date"
         label="Joining Date"
         fieldGrid={3}
         value={joiningDate}
         onChange={(e) => setJoiningDate(e.target.value)}
-      />
+      /> */}
+      <div className="from-group col-3">
+        <label className="form-label">
+          Joining Date <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          value={joiningDate}
+          onChange={(e) => setJoiningDate(e.target.value)}
+        />
+      </div>
       {/* <FieldContainer
         type="date"
         label=" Releaving Date "
@@ -1073,9 +1078,7 @@ const UserUpdate = () => {
         required={false}
       />
       <div className="form-group col-3">
-        <label className="form-label">
-          Higest Qualification <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Higest Qualification</label>
         <Select
           className=""
           options={higestQualificationData.map((option) => ({
@@ -1141,9 +1144,7 @@ const UserUpdate = () => {
   const personalFields = (
     <>
       <div className="form-group col-3">
-        <label className="form-label">
-          Spoken Languages <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Spoken Languages</label>
         <Select
           isMulti
           name="langauages"
@@ -1192,12 +1193,24 @@ const UserUpdate = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-      <FieldContainer
+      {/* <FieldContainer
         label="DOB"
         type="date"
         value={dateOfBirth}
-        onChange={handleDateChange}
-      />
+        onChange={handleDateChange} */}
+      {/* /> */}
+      <div className="from-group col-6">
+        <label className="form-label">
+          DOB <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          label="DOB"
+          type="date"
+          className="form-control"
+          value={dateOfBirth}
+          onChange={handleDateChange}
+        />
+      </div>
       {dateOfBirth !== "" && <FieldContainer label="Age" value={age} />}
       <FieldContainer
         label="Father's Name"
@@ -1218,9 +1231,7 @@ const UserUpdate = () => {
         onChange={(e) => setHobbies(e.target.value)}
       />
       <div className="form-group col-6">
-        <label className="form-label">
-          Blood Group <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Blood Group</label>
         <Select
           className=""
           options={bloodGroupData.map((option) => ({
@@ -1237,7 +1248,6 @@ const UserUpdate = () => {
           required={false}
         />
       </div>
-
       <div className="form-group col-6">
         <label className="form-label">
           Maritial Status <sup style={{ color: "red" }}>*</sup>
