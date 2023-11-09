@@ -315,6 +315,31 @@ const UserMaster = () => {
               "Content-Type": "multipart/form-data",
             },
           });
+          if (reportL1 !== "") {
+            axios
+              .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+                email: email,
+                subject: "User Registration",
+                text: "A new user has been registered.",
+                attachment: selectedImage,
+                login_id: loginId,
+                name: username,
+                password: password,
+              })
+              .then((res) => {
+                console.log("Email sent successfully:", res.data);
+              })
+              .catch((error) => {
+                console.log("Failed to send email:", error);
+              });
+
+            whatsappApi.callWhatsAPI(
+              "Extend Date by User",
+              JSON.stringify(personalContact),
+              username,
+              ["You have assinge Report L1", "ok"]
+            );
+          }
 
           for (const elements of documents) {
             // formData.append("user_id", loginId);
@@ -350,24 +375,7 @@ const UserMaster = () => {
             .catch((error) => {
               console.log("Failed to send email:", error);
             });
-          // setUserName("");
-          // setRoles("");
-          // setEmail("");
-          // setPersonalEmail("");
-          // setLoginId("");
-          // setContact("");
-          // setPersonalContact("");
-          // setPassword("");
-          // setDepartment("");
-          // setSitting("");
-          // setRoomId("");
-          // setPersonalContact("");
-          // setPersonalEmail("");
-          // setJobType("");
-          // setReportL1("");
-          // setReportL2("");
-          // setReportL3("");
-          // setDesignation("");
+
           whatsappApi.callWhatsAPI(
             "Preonboarding Register",
             JSON.stringify(personalContact),
@@ -538,19 +546,25 @@ const UserMaster = () => {
     const currentDate = new Date();
     const birthDate = new Date(dob);
     let age = currentDate.getFullYear() - birthDate.getFullYear();
-    setAge(age);
+    const m = currentDate.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
   };
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    // const currentDate = new Date();
-    // const age = currentDate.getFullYear() - selectedDate.getFullYear();
+    const age = calculateAge(selectedDate);
 
-    // if (age <= 15) {
-    //   const result = window.confirm("Your Age Should We Greater then 15 year");
-    // }
-    setDateOfBirth(selectedDate);
-    calculateAge(selectedDate);
+    if (age < 15) {
+      window.alert("Your age must be greater than 15 years.");
+    } else {
+      setDateOfBirth(selectedDate);
+      setAge(age);
+    }
   };
 
   function addMore() {
@@ -579,7 +593,7 @@ const UserMaster = () => {
   //   setSpeakingLanguage(test);
   // }, [tempLanguage]);
 
-  const accordionButtons = ["Genral", "Personal", "Salary", "Documents"];
+  const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
   const genralFields = (
     <>
