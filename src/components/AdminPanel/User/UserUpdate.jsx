@@ -103,6 +103,13 @@ const UserUpdate = () => {
   const [isValidPAN, setIsValidPAN] = useState(true);
   const [isValidUID, setIsValidUID] = useState(true); // State to track UID validation
   const [defaultSeatData, setDefaultSeatData] = useState([]);
+
+  const [uidImage, setUidImage] = useState("");
+  const [panImage, setPanImage] = useState("");
+  const [highestQualificationImage, setHighestQualificationImage] =
+    useState("");
+  const [otherImage, setOtherImage] = useState("");
+
   const higestQualificationData = [
     "10th",
     "12th",
@@ -243,7 +250,6 @@ const UserUpdate = () => {
     axios
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
-        console.log(res.data, "yha data hai");
         const fetchedData = res.data;
 
         const {
@@ -289,6 +295,10 @@ const UserUpdate = () => {
           spouse_name,
           sub_dept_id,
           highest_qualification_name,
+          uid_url,
+          pan_url,
+          highest_upload_url,
+          other_upload_url,
         } = fetchedData;
         setPanNo(pan_no);
         setUidNo(uid_no);
@@ -313,13 +323,19 @@ const UserUpdate = () => {
         setReportL3(Report_L3);
         setDesignation(user_designation);
         setUID(UID);
+        setUidImage(uid_url);
         setPanUpload(pan);
+        setPanImage(pan_url);
         setHighestUpload(highest_upload);
+        setHighestQualificationImage(highest_upload_url);
         setOtherUpload(other_upload);
+        setOtherImage(other_upload_url);
         setJoiningDate(joining_date?.split("T")?.[0]);
         setReleavingDate(releaving_date?.split("T")?.[0]);
         setSalary(salary);
-        setSpeakingLanguage(SpokenLanguages);
+        // console.log("SpokenLanguages", SpokenLanguages.split(","));
+        setTempLanguage(SpokenLanguages.split(","));
+        console.log(SpokenLanguages);
         setGender(Gender);
         setNationality(Nationality);
         setDateOfBirth(DOB.split("T")?.[0]);
@@ -329,7 +345,7 @@ const UserUpdate = () => {
         setHobbies(Hobbies);
         setBloodGroup(BloodGroup);
         setMaritialStatus(MartialStatus);
-        setDateOfMarraige(DateOfMarriage);
+        setDateOfMarraige(DateOfMarriage?.split("T")?.[0]);
         setTdsApplicable(tbs_applicable);
         setTdsPercentage(tds_per);
         setSubDeparment(sub_dept_id);
@@ -401,6 +417,32 @@ const UserUpdate = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      if (reportL1 !== "") {
+        axios
+          .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+            email: email,
+            subject: "User Registration",
+            text: "A new user has been registered.",
+            attachment: selectedImage,
+            login_id: loginId,
+            name: username,
+            password: password,
+          })
+          .then((res) => {
+            console.log("Email sent successfully:", res.data);
+          })
+          .catch((error) => {
+            console.log("Failed to send email:", error);
+          });
+
+        whatsappApi.callWhatsAPI(
+          "Extend Date by User",
+          JSON.stringify(personalContact),
+          username,
+          ["You have assinge Report L1", "ok"]
+        );
+      }
 
       if (incomingPassword !== password) {
         whatsappApi.callWhatsAPI(
@@ -596,25 +638,31 @@ const UserUpdate = () => {
     const selectedLoginId = event.target.value;
     setLoginId(selectedLoginId);
   };
-  const calculateAge = (selectedDate) => {
-    const today = new Date();
-    const birthDate = new Date(selectedDate);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const month = today.getMonth() - birthDate.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+  const calculateAge = (dob) => {
+    const currentDate = new Date();
+    const birthDate = new Date(dob);
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const m = currentDate.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
       age--;
     }
-    setAge(age);
+
+    return age;
   };
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    setDateOfBirth(selectedDate);
-    calculateAge(selectedDate);
+    const age = calculateAge(selectedDate);
 
-    // calculateAge(selectedDate);
+    if (age < 15) {
+      window.alert("Your age must be greater than 15 years.");
+    } else {
+      setDateOfBirth(selectedDate);
+      setAge(age);
+    }
   };
 
-  const accordionButtons = ["Genral", "Personal", "Salary", "Documents"];
+  const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
   const genralFields = (
     <>
@@ -1031,10 +1079,11 @@ const UserUpdate = () => {
         type="file"
         required={false}
       /> */}
+
       <FieldContainer
         label="UID Number"
         onChange={handleUIDInputChange}
-        fieldGrid={3}
+        fieldGrid={5}
         type="text"
         required={false}
         value={uidNo}
@@ -1047,17 +1096,29 @@ const UserUpdate = () => {
        
         required={false}
       /> */}
+
       <FieldContainer
         label="UID"
         onChange={(e) => setUID(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
+
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {uidImage && (
+            <a href={uidImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> UID Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       <FieldContainer
         label="PAN Number"
         onChange={handlePANChange}
-        fieldGrid={3}
+        fieldGrid={5}
         type="text"
         required={false}
         value={panNo}
@@ -1073,11 +1134,22 @@ const UserUpdate = () => {
       <FieldContainer
         label="Pan Image"
         onChange={(e) => setPanUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
-      <div className="form-group col-3">
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {panImage && (
+            <a href={panImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> PAN Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div className="form-group col-5">
         <label className="form-label">Higest Qualification</label>
         <Select
           className=""
@@ -1098,17 +1170,39 @@ const UserUpdate = () => {
       <FieldContainer
         label="Highest Qualification"
         onChange={(e) => setHighestUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {highestQualificationImage && (
+            <a href={highestQualificationImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       <FieldContainer
         label="Other Image"
         onChange={(e) => setOtherUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={10}
         type="file"
         required={false}
       />
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {otherImage && (
+            <a href={otherImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       {!isValidPAN && <p style={{ color: "red" }}>Invalid PAN format</p>}
       {!isValidUID && (
         <p style={{ color: "red" }}>Invalid Aadhaar number format</p>

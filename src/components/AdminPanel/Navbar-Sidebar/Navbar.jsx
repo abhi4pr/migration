@@ -16,7 +16,7 @@ const Navbar = () => {
   const [loginUserData, setLoginUserData] = useState([]);
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/loginuserdata", {
+      .post("http://34.93.135.33:8080/api/login_user_data", {
         id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));
