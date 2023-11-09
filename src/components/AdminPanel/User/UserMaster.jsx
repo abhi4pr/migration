@@ -108,7 +108,15 @@ const UserMaster = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [maritialStatus, setMaritialStatus] = useState("");
   const [dateOfMarraige, setDateOfMarraige] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
+
+  const [bankName, setBankName] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [IFSC, setIFSC] = useState("");
 
   const [isEmptyRequiredField, setIsEmptyRequiredField] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
@@ -280,6 +288,10 @@ const UserMaster = () => {
     formData.append("BloodGroup", bloodGroup);
     formData.append("MartialStatus", maritialStatus);
     formData.append("DateofMarriage", dateOfMarraige);
+    formData.append("permanent_address", address);
+    formData.append("permanent_city", city);
+    formData.append("permanent_state", state);
+    formData.append("permanent_pin_code", Number(pincode));
     formData.append("user_status", status);
     formData.append("tds_applicable", tdsApplicable);
     formData.append("tds_per", tdsPercentage);
@@ -983,6 +995,24 @@ const UserMaster = () => {
           required
         />
       </div>
+      <FieldContainer
+        label="Bank Name"
+        value={bankName}
+        onChange={(e) => setBankName(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="Bank Account Number"
+        value={bankAccountNumber}
+        onChange={(e) => setBankAccountNumber(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="IFSC"
+        value={IFSC}
+        onChange={(e) => setIFSC(e.target.value)}
+        required={false}
+      />
     </>
   );
 
@@ -1258,6 +1288,7 @@ const UserMaster = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
+<<<<<<< Updated upstream
       <div className="from-group col-6">
         <label className="form-label">
           DOB <sup style={{ color: "red" }}>*</sup>
@@ -1272,6 +1303,17 @@ const UserMaster = () => {
           onChange={handleDateChange}
         />
       </div>
+=======
+      <input
+        label="DOB"
+        type="date"
+        className="form-control mt-4"
+        style={{ width: "470px " }}
+        max={today}
+        value={dateOfBirth}
+        onChange={handleDateChange}
+      />
+>>>>>>> Stashed changes
       {dateOfBirth !== "" && <FieldContainer label="Age" value={age} />}
       <FieldContainer
         label="Father's Name"
@@ -1329,6 +1371,7 @@ const UserMaster = () => {
           required={false}
         />
       </div>
+
       {maritialStatus === "Married" && (
         <FieldContainer
           label="Spouse Name"
@@ -1338,6 +1381,7 @@ const UserMaster = () => {
         />
       )}
       {maritialStatus == "Married" && (
+<<<<<<< Updated upstream
         <input
           label="Date Of Marriage"
           type="date"
@@ -1346,9 +1390,41 @@ const UserMaster = () => {
           max={today}
           value={dateOfMarraige}
           onChange={(e) => setDateOfMarraige(e.target.value)}
+=======
+        <FieldContainer
+          type="date"
+          label="Date Of Marraige"
+          value={dateOfMarraige}
+          onChange={(e) => setDateOfMarraige(e.target.value)}
+          max={today}
+>>>>>>> Stashed changes
           required={false}
         />
       )}
+      <FieldContainer
+        label="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="City"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="State"
+        value={state}
+        onChange={(e) => setState(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="Pincode"
+        value={pincode}
+        onChange={(e) => setPincode(e.target.value)}
+        required={false}
+      />
     </>
   );
 

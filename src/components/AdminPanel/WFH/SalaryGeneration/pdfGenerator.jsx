@@ -19,7 +19,6 @@ export const generatePDF = (rowData) => {
     return;
   }
 
-  console.log("temmplate me jaa raha hai ", rowData);
   const templateHTML = ReactDOMServer.renderToStaticMarkup(
     <TemplateComponent data={rowData} />
   );
