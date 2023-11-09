@@ -33,6 +33,11 @@ function ExecutionOwn() {
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [copiedData, setCopiedData] = useState("");
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [reach, setReach] = useState(0);
+  const [impression, setImpression] = useState(0);
+  const [engagement, setEngagement] = useState(0);
+  const [storyView, setStoryView] = useState(0);
+  const [rowData, setRowData] = useState({});
 
   const theme = createTheme({
     palette: {
@@ -61,7 +66,7 @@ function ExecutionOwn() {
       )
       .then((res) => {
         const filterVendorId = res.data.body.filter((check) => check.vendor_id == "8");
-        console.log("filtervendorid",filterVendorId);
+        // console.log("filtervendorid",filterVendorId);
         setAlldata(filterVendorId);
         // let tempdata = alldata.filter((ele) => {
         let tempdata = filterVendorId.filter((ele) => {
@@ -158,7 +163,7 @@ function ExecutionOwn() {
     let ftrdata = alldata.filter((ele) => {
       return ele.platform == name;
     });
-    console.log(ftrdata);
+    // console.log(ftrdata);
     setRows(ftrdata);
     setPagemode(id);
   };
@@ -277,23 +282,11 @@ function ExecutionOwn() {
           // width: 150,
         },
     pagemode == 1 || pagemode == 2
-      ? ({
-          field: "story",
-          headerName: "Story",
-          type: "number",
-          // width: 110,
-        },
+      ? (
         {
-          field: "post",
-          headerName: "Post",
-          // width: 150,
+          field: "reach",
+          headerName: "Reach",
         }
-        // {
-        //   field: "both_",
-        //   headerName: "Both",
-        //   type: "number",
-        //   width: 110,
-        // }
         )
       : pagemode == 3
       ? {
@@ -327,14 +320,58 @@ function ExecutionOwn() {
           headerName: "Brand Integration",
           // width: 150,
         }),
-
-    {
-      field: "page_health",
-      headerName: "Page Health",
-      type: "number",
-      // width: 110,
-    },
+        {
+          field: "impression",
+          headerName: "Impression",
+        },
+        {
+          field: "engagement",
+          headerName: "Engagement",
+        },
+        {
+          field: "story_view",
+          headerName: "Story view",
+        },
+        // {
+        //   field: "page_health",
+        //   headerName: "Page Health",
+        //   type: "number",
+        // },
+        {
+          headerName: "Update",
+          renderCell: (params) => {
+            return (
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-toggle="modal"
+                data-target="#myModal1"
+                onClick={() => handleRowClick(params.row)}
+              >
+                Set Stats
+              </button>
+            );
+          }
+        }
   ];
+
+  const handleRowClick = (row) => {
+    setRowData(row);
+  };
+
+  const saveStats = async (e) => {
+    e.preventDefault();
+    axios.post(`http://34.93.135.33:8080/api/add_exe_pid_history`, {
+      p_id: rowData.p_id,
+      reach: reach,
+      impression: impression,
+      engagement: engagement,
+      story_view: storyView
+    });
+    toastAlert("Form Submitted success");
+    // setIsFormSubmitted(true);
+  };
+
   function CustomColumnMenu(props) {
     return (
       <GridColumnMenu
@@ -533,6 +570,83 @@ function ExecutionOwn() {
           )}
         </Paper>
       </ThemeProvider>
+
+      <div id="myModal1" className="modal fade" role="dialog">
+        <div className="modal-dialog" style={{ marginLeft: "25%" }}>
+          <div className="modal-content" style={{ width: "150%" }}>
+            <div className="modal-header">
+              <h4 className="modal-title">Page Name :- {rowData.page_name}</h4>
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="row">
+                <div className="col-md-6">
+                <label>Reach:- &nbsp;</label>
+                  <input
+                    label="Reach"
+                    type="number"
+                    value={reach}
+                    // fieldGrid={4}
+                    onChange={(e) => setReach(e.target.value)}
+                  />
+                </div>
+                <div className="col-md-6">
+                <label>Impression:- &nbsp;</label>
+                  <input
+                    label="Impressions"
+                    type="number"
+                    value={impression}
+                    // fieldGrid={4}
+                    onChange={(e) => setImpression(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6">
+                <label>Engagement:- &nbsp;</label>
+                  <input
+                    label="Engagement"
+                    type="number"
+                    value={engagement}
+                    // fieldGrid={4}
+                    onChange={(e) => setEngagement(e.target.value)}
+                  />
+                </div>
+                <div className="col-md-6">
+                <label>Story View:- &nbsp;</label>
+                  <input
+                    label="Story View"
+                    type="number"
+                    value={storyView}
+                    // fieldGrid={4}
+                    onChange={(e) => setStoryView(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={saveStats}
+                data-dismiss="modal"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 }
