@@ -1288,7 +1288,6 @@ const UserMaster = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-<<<<<<< Updated upstream
       <div className="from-group col-6">
         <label className="form-label">
           DOB <sup style={{ color: "red" }}>*</sup>
@@ -1303,17 +1302,6 @@ const UserMaster = () => {
           onChange={handleDateChange}
         />
       </div>
-=======
-      <input
-        label="DOB"
-        type="date"
-        className="form-control mt-4"
-        style={{ width: "470px " }}
-        max={today}
-        value={dateOfBirth}
-        onChange={handleDateChange}
-      />
->>>>>>> Stashed changes
       {dateOfBirth !== "" && <FieldContainer label="Age" value={age} />}
       <FieldContainer
         label="Father's Name"
@@ -1381,23 +1369,12 @@ const UserMaster = () => {
         />
       )}
       {maritialStatus == "Married" && (
-<<<<<<< Updated upstream
-        <input
-          label="Date Of Marriage"
-          type="date"
-          className="form-control ml-2"
-          style={{ width: "460px " }}
-          max={today}
-          value={dateOfMarraige}
-          onChange={(e) => setDateOfMarraige(e.target.value)}
-=======
         <FieldContainer
           type="date"
           label="Date Of Marraige"
           value={dateOfMarraige}
           onChange={(e) => setDateOfMarraige(e.target.value)}
           max={today}
->>>>>>> Stashed changes
           required={false}
         />
       )}
