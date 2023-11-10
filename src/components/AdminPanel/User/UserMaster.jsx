@@ -189,6 +189,12 @@ const UserMaster = () => {
     const uidPattern = /^\d{12}$/;
     return uidPattern.test(uid);
   };
+
+  useEffect(() => {
+    const test = tempLanguage?.map((option) => option.value).join();
+    setSpeakingLanguage(test);
+  }, [tempLanguage]);
+  
   useEffect(() => {
     if (department) {
       axios
@@ -588,10 +594,6 @@ const UserMaster = () => {
     setTempLanguage(selectedOption);
   }
 
-  useEffect(() => {
-    const test = tempLanguage?.map((option) => option.value).join();
-    setSpeakingLanguage(test);
-  }, [tempLanguage]);
 
   const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
