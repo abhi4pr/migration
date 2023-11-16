@@ -1,50 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import UserNav from "../../Pantry/UserPanel/UserNav";
 import FormContainer from "../../AdminPanel/FormContainer";
 import FieldContainer from "../../AdminPanel/FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
-import UserNav from "../../Pantry/UserPanel/UserNav";
-import { useNavigate } from "react-router-dom";
 
-const AssetCategoryMaster = () => {
-  const { toastAlert } = useGlobalContext();
+const AssetCategoryUpdate = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { toastAlert } = useGlobalContext();
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
   const [categoryName, setCategoryName] = useState("");
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    getData();
+  }, [id]);
+
+  const getData = () => {
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_asset_category/${id}`)
+      .then((res) => {
+        const response = res.data.data;
+        setCategoryName(response.category_name);
+        setDescription(response.description);
+      });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://34.93.135.33:8080/api/add_asset_category",
+      const response = await axios.put(
+        "http://34.93.135.33:8080/api/update_asset_category",
         {
+          category_id: id,
           category_name: categoryName,
           description: description,
-          created_by: loginUserId,
           last_updated_by: loginUserId,
         }
       );
-      toastAlert("Data posted successfully!");
+      toastAlert("Data Updated Successfully");
       setCategoryName("");
       setDescription("");
       if (response.status == 200) {
         navigate("/asset-category-overview");
       }
     } catch (error) {
-      toastAlert(error.mesaage);
+      toastAlert(error.message);
     }
   };
+
   return (
     <>
       <UserNav />
       <div style={{ width: "80%", margin: "40px 0 0 10%" }}>
         <FormContainer
-          mainTitle="Asset "
-          title="Category Master"
+          mainTitle="Asset"
+          title="Category Update"
           handleSubmit={handleSubmit}
           buttonAccess={false}
         >
@@ -64,4 +81,4 @@ const AssetCategoryMaster = () => {
   );
 };
 
-export default AssetCategoryMaster;
+export default AssetCategoryUpdate;

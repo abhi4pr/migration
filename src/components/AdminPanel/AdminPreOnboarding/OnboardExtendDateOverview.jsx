@@ -68,7 +68,7 @@ const OnboardExtendDateOverview = () => {
     getData();
   }, []);
 
-  const statusUpdate = (user_id, status, PersonalNumber) => {
+  const statusUpdate = (user_id, status, PersonalNumber, userName) => {
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("joining_date_extend_status", status);
@@ -95,10 +95,10 @@ const OnboardExtendDateOverview = () => {
           // password: password,
         });
         whatsappApi.callWhatsAPI(
-          "Extend Date Admin",
+          "CF_Extend_status_update",
           JSON.stringify(PersonalNumber),
           user_id,
-          [status]
+          [userName]
         );
       })
       .then(() => getData());
@@ -191,7 +191,12 @@ const OnboardExtendDateOverview = () => {
                 title="Approve"
                 className="btn btn-outline-primary mr-3"
                 onClick={() =>
-                  statusUpdate(row.user_id, "Approve", row.PersonalNumber)
+                  statusUpdate(
+                    row.user_id,
+                    "Approve",
+                    row.PersonalNumber,
+                    row.user_name
+                  )
                 }
               >
                 <CheckIcon />
@@ -210,7 +215,12 @@ const OnboardExtendDateOverview = () => {
               title="Save"
               className="btn btn-outline-primary"
               onClick={() =>
-                statusUpdate(row.user_id, "Reject", row.PersonalNumber)
+                statusUpdate(
+                  row.user_id,
+                  "Reject",
+                  row.PersonalNumber,
+                  row.user_name
+                )
               }
             >
               Save
