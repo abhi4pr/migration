@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import FieldContainer from "../FieldContainer";
 import FormContainer from "../FormContainer";
 import axios from "axios";
@@ -6,7 +6,6 @@ import { useGlobalContext } from "../../../Context/Context";
 import { Navigate } from "react-router-dom";
 import { useAPIGlobalContext } from "../APIContext/APIContext";
 import Select from "react-select";
-
 
 const Designation = () => {
   const { toastAlert } = useGlobalContext();
@@ -27,18 +26,25 @@ const Designation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     await axios.post("http://34.93.135.33:8080/api/add_designation", {
-      desi_name: designationName,
-      dept_id: departmentName,
-      remark: remark,
-    });
-    setDesignationName("");
-    setDepartmentName("");
-    setRemark("");
-
-    toastAlert("Submitted success");
-    setIsFormSubmitted(true);
+    try {
+      await axios.post("http://34.93.135.33:8080/api/add_designation", {
+        desi_name: designationName,
+        dept_id: departmentName,
+        remark: remark,
+      });
+      setDesignationName("");
+      setDepartmentName("");
+      setRemark("");
+      toastAlert("Submitted successfully");
+      setIsFormSubmitted(true);
+    } catch (error) {
+      const errorMessage = error?.response?.data?.sms
+        ? error?.response?.data?.sms
+        : "An error occurred while submitting the form.";
+      toastAlert(errorMessage);
+    }
   };
+
   if (isFormSubmitted) {
     return <Navigate to="/admin/designation-overview" />;
   }
@@ -54,7 +60,7 @@ const Designation = () => {
           value={designationName}
           onChange={(e) => setDesignationName(e.target.value)}
         />
-            <div className="form-group col-6">
+        <div className="form-group col-6">
           <label className="form-label">
             Department Name <sup style={{ color: "red" }}>*</sup>
           </label>
@@ -67,8 +73,9 @@ const Designation = () => {
             value={{
               value: departmentName,
               label:
-                DepartmentContext.find((user) => user.dept_id === departmentName)
-                  ?.dept_name || "",
+                DepartmentContext.find(
+                  (user) => user.dept_id === departmentName
+                )?.dept_name || "",
             }}
             onChange={(e) => {
               setDepartmentName(e.value);

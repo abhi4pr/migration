@@ -31,10 +31,9 @@ const RoleMaster = () => {
       toastAlert("Form Submitted success");
       setIsFormSubmitted(true);
     } catch (error) {
-      console.error("An error occurred:", error);
+      toastAlert();
     }
   };
-  
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/role-overview" />;

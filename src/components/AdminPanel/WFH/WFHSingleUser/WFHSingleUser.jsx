@@ -155,7 +155,7 @@ const WFHSingleUser = () => {
   function handleInvoiceNumber(data) {
     const formData = new FormData();
 
-    formData.append("id", data.user_id);
+    formData.append("user_id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
     axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {

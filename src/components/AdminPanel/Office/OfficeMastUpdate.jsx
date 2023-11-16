@@ -79,6 +79,7 @@ function OfficeMastUpdate() {
                     type="file"
                     className="form-control"
                     id="validationCustom01"
+                    name="This is laskjl"
                     onChange={(e) => setRoomImage(e.target.files[0])}
                   />
                 </div>
@@ -95,8 +96,8 @@ function OfficeMastUpdate() {
                     id=""
                     cols="45"
                     rows="5"
-                    required
-                  ></textarea>
+                    required={false}
+                  />
                 </div>
               </div>
 

@@ -29,16 +29,18 @@ const Reason = () => {
       getData();
       toastAlert("Form Submitted success");
     } catch (error) {
-      console.error("Error submitting reason and remark", error);
+      toastAlert("Reason Already Exists");
     }
   }
 
   async function getData() {
     try {
-      const response = await axios.get("http://34.93.135.33:8080/api/get_all_reasons");
+      const response = await axios.get(
+        "http://34.93.135.33:8080/api/get_all_reasons"
+      );
       setData(response.data);
     } catch (error) {
-      console.error("An error occurred:", error);
+      toastAlert("An error occurred:", error);
     }
   }
   const columns = [

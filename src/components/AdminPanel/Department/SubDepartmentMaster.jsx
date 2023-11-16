@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import FieldContainer from "../FieldContainer";
 import FormContainer from "../FormContainer";
 import { Navigate } from "react-router-dom";
@@ -29,19 +29,27 @@ export default function SubDepartmentMaster() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://34.93.135.33:8080/api/add_sub_department", {
-      sub_dept_name: subDepartmentName,
-      dept_id: departmentName,
-      remark: remark,
-      created_by: loginUserId,
-    });
-    setSubDepartmentName("");
-    setDepartmentName("");
-    setRemark("");
+    try {
+      await axios.post("http://34.93.135.33:8080/api/add_sub_department", {
+        sub_dept_name: subDepartmentName,
+        dept_id: departmentName,
+        remark: remark,
+        created_by: loginUserId,
+      });
 
-    toastAlert("Submitted success");
-    setIsFormSubmitted(true);
+      setSubDepartmentName("");
+      setDepartmentName("");
+      setRemark("");
+      toastAlert("Submitted success");
+      setIsFormSubmitted(true);
+    } catch (error) {
+      toastAlert(
+        "Error occurred: " +
+          (error.response ? error.response.data.message : "Unknown error")
+      );
+    }
   };
+
   if (isFormSubmitted) {
     return <Navigate to="/admin/sub-department-overview" />;
   }
@@ -57,7 +65,7 @@ export default function SubDepartmentMaster() {
           value={subDepartmentName}
           onChange={(e) => setSubDepartmentName(e.target.value)}
         />
-               <div className="form-group col-6">
+        <div className="form-group col-6">
           <label className="form-label">
             Department Name <sup style={{ color: "red" }}>*</sup>
           </label>
@@ -80,7 +88,6 @@ export default function SubDepartmentMaster() {
             required
           />
         </div>
-
 
         <FieldContainer
           label="Remark"
