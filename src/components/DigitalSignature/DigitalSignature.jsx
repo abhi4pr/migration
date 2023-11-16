@@ -17,7 +17,7 @@ const DigitalSignature = ({ userID, closeModal }) => {
     canvas.toBlob((blob) => {
       if (blob) {
         const formData = new FormData();
-        formData.append("id", userID);
+        formData.append("user_id", userID);
         formData.append("digital_signature_image", blob);
 
         axios

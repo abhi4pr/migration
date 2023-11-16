@@ -196,8 +196,10 @@ const Attendence = () => {
         setFilterData(res.data.data);
       })
       .catch((error) => {
-        console.error("Error submitting data:", error);
-        toastAlert("Failed to submit data");
+        department &&
+          selectedMonth &&
+          selectedYear &&
+          toastAlert("Failed to submit data");
       });
   };
 

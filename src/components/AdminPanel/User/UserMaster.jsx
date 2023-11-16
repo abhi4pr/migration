@@ -32,6 +32,7 @@ import imageTest29 from "../../../assets/img/product/Avtar29.png";
 import imageTest30 from "../../../assets/img/product/Avtar30.png";
 import Select from "react-select";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import IndianStates from "../../ReusableComponents/IndianStates";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -256,6 +257,7 @@ const UserMaster = () => {
       setError("Please select All required Fields");
       return;
     }
+
     const formData = new FormData();
     // const formDataa = new FormData();
     formData.append("created_by", loginUserId);
@@ -301,6 +303,9 @@ const UserMaster = () => {
     formData.append("user_status", status);
     formData.append("tds_applicable", tdsApplicable);
     formData.append("tds_per", tdsPercentage);
+    formData.append("bank_name", bankName);
+    formData.append("ifsc_code", IFSC);
+    formData.append("account_no", bankAccountNumber);
     formData.append("uid_no", UIDNumber);
     formData.append("pan_no", PANNumber);
     formData.append("spouse_name", spouseName);
@@ -872,6 +877,9 @@ const UserMaster = () => {
         />
       </div>
 
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
       {/* <FieldContainer
         label="Seat Number"
         Tag="select"
@@ -1026,9 +1034,12 @@ const UserMaster = () => {
       <FieldContainer
         label="IFSC"
         value={IFSC}
-        onChange={(e) => setIFSC(e.target.value)}
+        onChange={(e) => setIFSC(e.target.value.toUpperCase())}
         required={false}
       />
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        Submit
+      </button>
     </>
   );
 
@@ -1171,7 +1182,6 @@ const UserMaster = () => {
           )}
         </div>
       </div>
-      {error}
     </>
   );
 
@@ -1406,18 +1416,20 @@ const UserMaster = () => {
         onChange={(e) => setCity(e.target.value)}
         required={false}
       />
-      <FieldContainer
-        label="State"
-        value={state}
-        onChange={(e) => setState(e.target.value)}
-        required={false}
-      />
+      <div className="form-group col-6">
+        <IndianStates
+          onChange={(option) => setState(option ? option.value : null)}
+        />
+      </div>
       <FieldContainer
         label="Pincode"
         value={pincode}
         onChange={(e) => setPincode(e.target.value)}
         required={false}
       />
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        Submit
+      </button>
     </>
   );
 

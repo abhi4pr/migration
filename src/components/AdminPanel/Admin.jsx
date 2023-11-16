@@ -226,7 +226,7 @@ const Admin = () => {
 
                   {/* Attendence  */}
                   <Route
-                    path="/salary-dashboard"
+                    path="/salary-dashboard/:id"
                     element={<SalaryDashboard />}
                   />
                   <Route

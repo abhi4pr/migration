@@ -8,6 +8,7 @@ import { AiOutlineReload } from "react-icons/ai";
 import Select from "react-select";
 import jwtDecode from "jwt-decode";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import IndianStates from "../../ReusableComponents/IndianStates";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -87,6 +88,10 @@ const UserUpdate = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [maritialStatus, setMaritialStatus] = useState("");
   const [dateOfMarraige, setDateOfMarraige] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
 
   // TDS State
@@ -109,6 +114,10 @@ const UserUpdate = () => {
   const [highestQualificationImage, setHighestQualificationImage] =
     useState("");
   const [otherImage, setOtherImage] = useState("");
+  //SalaryFields
+  const [bankName, setBankName] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [IFSC, setIFSC] = useState("");
 
   const higestQualificationData = [
     "10th",
@@ -299,6 +308,9 @@ const UserUpdate = () => {
           pan_url,
           highest_upload_url,
           other_upload_url,
+          bank_name,
+          ifsc_code,
+          account_no,
         } = fetchedData;
         setPanNo(pan_no);
         setUidNo(uid_no);
@@ -350,6 +362,9 @@ const UserUpdate = () => {
         setTdsPercentage(tds_per);
         setSubDeparment(sub_dept_id);
         setHigestQualification(highest_qualification_name);
+        setBankName(bank_name);
+        setIFSC(ifsc_code);
+        setBankAccountNumber(account_no);
         // set;
       })
       .then(() => {});
@@ -402,6 +417,14 @@ const UserUpdate = () => {
     formData.append("BloodGroup", bloodGroup);
     formData.append("MartialStatus", maritialStatus);
     formData.append("DateofMarriage", dateOfMarraige);
+    formData.append("permanent_address", address);
+    formData.append("permanent_city", city);
+    formData.append("permanent_state", state);
+    formData.append("permanent_pin_code", Number(pincode));
+
+    formData.append("bank_name", bankName);
+    formData.append("ifsc_code", IFSC);
+    formData.append("account_no", bankAccountNumber);
 
     formData.append("tds_applicable", tdsApplicable);
     formData.append("tds_per", tdsPercentage);
@@ -935,6 +958,9 @@ const UserUpdate = () => {
           required={false}
         />
       </div>
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
     </>
   );
 
@@ -1059,6 +1085,24 @@ const UserUpdate = () => {
         />
       )}
 
+      <FieldContainer
+        label="Bank Name"
+        value={bankName}
+        onChange={(e) => setBankName(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="Bank Account Number"
+        value={bankAccountNumber}
+        onChange={(e) => setBankAccountNumber(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="IFSC"
+        value={IFSC}
+        onChange={(e) => setIFSC(e.target.value.toUpperCase())}
+        required={false}
+      />
       {/*       
       <FieldContainer
       type="date"
@@ -1067,6 +1111,10 @@ const UserUpdate = () => {
         value={dateOfBirth}
         // onChange={handleDateChange}
       /> */}
+
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
     </>
   );
 
@@ -1207,7 +1255,7 @@ const UserUpdate = () => {
       {!isValidUID && (
         <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
       )}
-      {error}
+
       {otherDocuments && (
         <div>
           <h3>Other Documents</h3>
@@ -1380,6 +1428,34 @@ const UserUpdate = () => {
           required={false}
         />
       )}
+
+      <FieldContainer
+        label="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="City"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        required={false}
+      />
+      <div className="form-group col-6">
+        <IndianStates
+          onChange={(option) => setState(option ? option.value : null)}
+        />
+      </div>
+      <FieldContainer
+        label="Pincode"
+        value={pincode}
+        onChange={(e) => setPincode(e.target.value)}
+        required={false}
+      />
+
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
     </>
   );
 

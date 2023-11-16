@@ -86,7 +86,7 @@ const OnboardExtendDateOverview = () => {
     },
     {
       name: "Joining Date",
-      selector: (row) => row.joining_date,
+      selector: (row) => row.joining_date?.split("T")?.[0],
       sortable: true,
     },
     {

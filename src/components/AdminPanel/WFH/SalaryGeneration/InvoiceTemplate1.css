@@ -276,6 +276,13 @@ table {
   font-weight: 600;
   color: #000;
 }
-
+.signBox {
+  padding: 0px 15px 10px 0px;
+  text-align: right;
+  float: right;
+}
+.signBox img {
+  width: 160px;
+}
 @media only screen and (max-width: 600px) {
 }

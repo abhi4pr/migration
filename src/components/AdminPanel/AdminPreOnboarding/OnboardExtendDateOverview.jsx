@@ -4,6 +4,11 @@ import DataTable from "react-data-table-component";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckIcon from "@mui/icons-material/Check";
+import Modal from "react-modal";
+import FieldContainer from "../FieldContainer";
 
 const OnboardExtendDateOverview = () => {
   const whatsappApi = WhatsappAPI();
@@ -11,11 +16,23 @@ const OnboardExtendDateOverview = () => {
   const [data, setData] = useState([]);
   const [filterdata, setFilterData] = useState([]);
   const [contextData, setDatas] = useState([]);
-  const [extendStatus, setExtendStatus] = useState("");
+  const [extendDate, setExtendDate] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [rejectReason, setRejectReason] = useState("");
+
+  const [reasonField, setReasonField] = useState(false);
+
+  const [editableRowId, setEditableRowId] = useState(null);
 
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
+
+  const handleRejectClick = (rowId) => {
+    setEditableRowId(rowId);
+    setReasonField(true);
+  };
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
@@ -41,6 +58,7 @@ const OnboardExtendDateOverview = () => {
 
       setDatas(data);
       setFilterData(data);
+      setExtendDate(data[0].joining_date_extend);
     } catch (error) {
       console.log("Error fething Data", error);
     }
@@ -54,6 +72,12 @@ const OnboardExtendDateOverview = () => {
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("joining_date_extend_status", status);
+    if (status == "Approve") {
+      formData.append("joining_date", extendDate);
+    }
+    if (status == "Reject") {
+      formData.append("joining_date_reject_reason", rejectReason);
+    }
     axios
       .put("http://34.93.135.33:8080/api/update_user", formData, {
         headers: {
@@ -87,6 +111,14 @@ const OnboardExtendDateOverview = () => {
     setFilterData(result);
   }, [search]);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const columns = [
     {
       name: "S.No",
@@ -101,12 +133,14 @@ const OnboardExtendDateOverview = () => {
     },
     {
       name: "Joining Date",
-      selector: (row) => row.joining_date,
+      selector: (row) =>
+        row.joining_date?.split("T")[0].split("-").reverse().join("-"),
       sortable: true,
     },
     {
-      name: "Extended Date",
-      selector: (row) => row.joining_date_extend_status,
+      name: "Requested Joining",
+      selector: (row) =>
+        row?.joining_date_extend.split("T")[0].split("-").reverse().join("-"),
       sortable: true,
     },
     {
@@ -115,49 +149,77 @@ const OnboardExtendDateOverview = () => {
       sortable: true,
     },
     {
-      name: "Prove of Doc",
-      selector: (row) => row.joining_extend_document,
-      sortable: true,
-    },
-    {
       name: "Reason",
       selector: (row) => row.joining_date_extend_reason,
       sortable: true,
     },
-
+    {
+      name: "Proof Doc",
+      selector: (row) => (
+        <a
+          href={`http://34.93.135.33:8080/uploads/${row.joining_extend_document}`}
+        >
+          <CloudDownloadIcon />
+        </a>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Reason",
+      cell: (row) => {
+        if (editableRowId === row.user_id && reasonField) {
+          return (
+            <input
+              type="text"
+              className="form-control"
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+          );
+        }
+        return row.joining_date_extend_reason;
+      },
+      sortable: true,
+    },
     {
       name: "Action",
       cell: (row) => (
         <>
-          {/* {contextData &&
-            contextData[10] &&
-            contextData[10].update_value === 1 && ( */}
-          <button
-            title="Approve"
-            className="btn btn-outline-primary btn-md user-button"
-            onClick={() =>
-              statusUpdate(row.user_id, "Approve", row.PersonalNumber)
-            }
-          >
-            Approve
-          </button>
-          {/* {contextData &&
-            contextData[10] &&
-            contextData[10].update_value === 1 && ( */}
-          <button
-            title="Reject"
-            className="btn btn-outline-primary btn-md user-button"
-            onClick={() =>
-              statusUpdate(row.user_id, "Reject", row.PersonalNumber)
-            }
-          >
-            Reject
-          </button>
-          {/* )} */}
+          {!reasonField && (
+            <>
+              <button
+                title="Approve"
+                className="btn btn-outline-primary mr-3"
+                onClick={() =>
+                  statusUpdate(row.user_id, "Approve", row.PersonalNumber)
+                }
+              >
+                <CheckIcon />
+              </button>
+              <button
+                title="Reject"
+                className="btn btn-outline-danger"
+                onClick={() => handleRejectClick(row.user_id)}
+              >
+                <CancelIcon />
+              </button>
+            </>
+          )}
+          {reasonField && (
+            <button
+              title="Save"
+              className="btn btn-outline-primary"
+              onClick={() =>
+                statusUpdate(row.user_id, "Reject", row.PersonalNumber)
+              }
+            >
+              Save
+            </button>
+          )}
         </>
       ),
+      width: "300px",
       allowOverflow: true,
-      width: "22%",
     },
   ];
 

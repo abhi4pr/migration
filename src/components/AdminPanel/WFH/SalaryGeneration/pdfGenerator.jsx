@@ -1,14 +1,13 @@
 import ReactDOMServer from "react-dom/server";
 import html2pdf from "html2pdf.js";
-import Template1 from "./InvoiceTemplate1";
-import Template2 from "./InoviceTemplate2";
+import React from "react";
+import InvoiceTemplate1 from "./InvoiceTemplate1";
 
 const templates = {
-  1: Template1,
-  2: Template2,
+  1: InvoiceTemplate1,
 };
 
-export const generatePDF = (rowData) => {
+export const generatePDF = async (rowData) => {
   const TemplateComponent = templates[rowData.invoice_template_no];
 
   if (!TemplateComponent) {
@@ -19,20 +18,43 @@ export const generatePDF = (rowData) => {
     return;
   }
 
+  const signatureImageUrl = `http://34.93.135.33:8080/uploads/${rowData.digital_signature_image}`;
+
+  const dataWithImage = {
+    ...rowData,
+    signatureImageUrl,
+  };
+
   const templateHTML = ReactDOMServer.renderToStaticMarkup(
-    <TemplateComponent data={rowData} />
+    <TemplateComponent data={dataWithImage} />
   );
 
   const element = document.createElement("div");
   element.innerHTML = templateHTML;
+  document.body.appendChild(element);
+
+  const images = Array.from(element.getElementsByTagName("img"));
+  await Promise.all(
+    images.map((img) => {
+      if (img.complete) {
+        return Promise.resolve();
+      }
+      return new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    })
+  );
 
   const options = {
     margin: 10,
-    filename: `${rowData.user_name} ${rowData.month} invoice.pdf`,
+    filename: `${rowData.user_name}_${rowData.month}_invoice.pdf`,
     image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
+    html2canvas: { scale: 2, logging: true, useCORS: true },
     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
   };
 
-  html2pdf().from(element).set(options).save();
+  await html2pdf().from(element).set(options).save();
+
+  document.body.removeChild(element);
 };
