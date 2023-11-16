@@ -151,8 +151,8 @@ const UserSingle = () => {
     });
     const constaWhatsapp = user.user_contact_no + "";
     whatsappApi
-      .callWhatsAPI("doc_approve_reject", constaWhatsapp, user.user_name, [
-        action,
+      .callWhatsAPI("CF_Upload_verification", constaWhatsapp, user.user_name, [
+        user.user_name,
       ])
       .then(() => getData())
       .then(() => {

@@ -385,12 +385,9 @@ const PreOnboardingUserMaster = () => {
       .catch((error) => {
         console.log("Failed to send email:", error);
       });
-    whatsappApi.callWhatsAPI(
-      "Onboarding user Fill Details",
-      "8517907328",
+    whatsappApi.callWhatsAPI("CF_Document_upload", "9826116769", username, [
       username,
-      [username]
-    );
+    ]);
 
     toastAlert("User Update");
   };
@@ -556,9 +553,9 @@ const PreOnboardingUserMaster = () => {
         console.log("Failed to send email:", error);
       });
     whatsappApi
-      .callWhatsAPI("Extend Date by User", "9977815413", username, [
+      .callWhatsAPI("CF_Extend_request_new", "9826116769", username, [
         username,
-        joingingExtendDate,
+        joingingExtendDate.split("-").reverse().join("-"),
       ])
       .then(() => {
         setJoiningExtendDate("");

@@ -29,7 +29,6 @@ const UserOverview = () => {
   const [desiOrgData, setDesiOrgData] = useState([]);
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [designationFilter, setDesignationFilter] = useState("");
-  console.log(designationFilter, "filter data ----");
   const [jobType, setJobType] = useState("");
   const [transferResponsibilityData, setTransferResponsibilityData] = useState(
     []
@@ -97,10 +96,10 @@ const UserOverview = () => {
       reason: separationReason,
     });
     whatsappApi.callWhatsAPI(
-      "separation user",
+      "CF_Separation",
       JSON.stringify(usercontact),
       username,
-      [separationStatus]
+      [username, separationStatus]
     );
   }
 

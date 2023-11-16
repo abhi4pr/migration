@@ -195,7 +195,7 @@ const Attendence = () => {
         setAttendenceData(res.data.data);
         setFilterData(res.data.data);
       })
-      .catch((error) => {
+      .catch(() => {
         department &&
           selectedMonth &&
           selectedYear &&
