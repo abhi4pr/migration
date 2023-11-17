@@ -124,6 +124,9 @@ import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
 import ExecutionAll from "../Execution/ExecutionAll";
 import ExecutionOwn from "../Execution/ExecutionOwn";
 import ExecutionOther from "../Execution/ExecutionOther";
+import CocMaster from "./AdminPreOnboarding/CocMaster";
+import CocOverview from "./AdminPreOnboarding/CocOverview";
+import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -424,6 +427,18 @@ const Admin = () => {
                   <Route
                     path="/pre-onboard-extend-date-overview"
                     element={<OnboardExtendDateOverview />}
+                  />
+                  <Route
+                    path="/pre-onboard-coc-master"
+                    element={<CocMaster/>}
+                  />
+                  <Route
+                    path="/pre-onboard-coc-overview"
+                    element={<CocOverview />}
+                  />
+                  <Route
+                    path="/pre-onboard-coc-update/:id"
+                    element={<CocUpdate />}
                   />
                   <Route
                     path="/only-pre-onboard-user-data"

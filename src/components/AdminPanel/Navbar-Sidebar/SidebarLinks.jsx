@@ -315,6 +315,22 @@ const SidebarLinks = () => {
                   Extend Date Overview
                 </Link>
               )}
+              {contextData && contextData[18]?.view_value == 1 && (
+                <Link
+                  className="collapse-item"
+                  to="/admin/pre-onboard-coc-master"
+                >
+                  Coc Master
+                </Link>
+              )}
+              {contextData && contextData[18]?.view_value == 1 && (
+                <Link
+                  className="collapse-item"
+                  to="/admin/pre-onboard-coc-overview"
+                >
+                  Coc Overview
+                </Link>
+              )}
 
               {/* {contextData &&
                 contextData[20] &&
