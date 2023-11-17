@@ -124,9 +124,9 @@ import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
 import ExecutionAll from "../Execution/ExecutionAll";
 import ExecutionOwn from "../Execution/ExecutionOwn";
 import ExecutionOther from "../Execution/ExecutionOther";
+import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
-import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);

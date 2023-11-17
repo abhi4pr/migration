@@ -62,7 +62,7 @@ const CocUpdate = () => {
   };
 
   if (isFormSubmitted) {
-    return <Navigate to="/admin/user-overview" />;
+    return <Navigate to="/admin/pre-onboard-coc-overview" />
   }
 
   const handleDateChange = (e) => {

@@ -4,12 +4,14 @@ import {
   Autocomplete,
   Button,
   Checkbox,
+  OutlinedInput,
   Paper,
+  SvgIcon,
   TextField,
   Typography,
 } from "@mui/material";
-
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import CopyAllOutlinedIcon from "@mui/icons-material/CopyAllOutlined";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
@@ -21,6 +23,8 @@ import axios from "axios";
 import { useState } from "react";
 import CircularWithValueLabel from "../InstaApi.jsx/CircularWithValueLabel";
 import { useCallback } from "react";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { toast } from "react-toastify";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -38,6 +42,23 @@ function ExecutionAll() {
   const [engagement, setEngagement] = useState(0);
   const [storyView, setStoryView] = useState(0);
   const [rowData, setRowData] = useState({});
+  const [statesFor, setStatesFor] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [demoFile, setDemoFile] = useState();
+  const [stateForIsValid, setStateForIsValid] = useState(false);
+
+  const dropdownStaticData = [
+    "Daily",
+    "weekly",
+    "fortnight",
+    "monthly",
+    "quarterly",
+  ];
+
+  const handleFileChange = (event) => {
+    setDemoFile(event.target.files[0]);
+  };
 
   const theme = createTheme({
     palette: {
@@ -137,7 +158,6 @@ function ExecutionAll() {
     converttoclipboard(copydata);
   };
 
-  const showlimiteddata = () => {};
   const copyAllRows = () => {
     let copydata = [];
     let Followerscount = 0;
@@ -164,6 +184,30 @@ function ExecutionAll() {
     // console.log(ftrdata);
     setRows(ftrdata);
     setPagemode(id);
+  };
+
+  const handleStartDateChange = (newValue) => {
+    const date = new Date(newValue.$d);
+    const isoDate = date.toISOString(); // This will be in UTC
+
+    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+
+    // If you want to display the date with the original offset (+00:00)
+    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+
+    setStartDate(newValue);
+  };
+
+  const handleEndDateChange = (newValue) => {
+    const date = new Date(newValue.$d);
+    const isoDate = date.toISOString(); // This will be in UTC
+
+    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+
+    // If you want to display the date with the original offset (+00:00)
+    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+
+    setEndDate(newValue);
   };
 
   const columns = [
@@ -206,7 +250,7 @@ function ExecutionAll() {
     {
       field: "cat_name",
       headerName: "Account Category",
-      // width: 110,
+      width: 150,
     },
     pagemode == 1 || pagemode == 2
       ? {
@@ -280,12 +324,10 @@ function ExecutionAll() {
           // width: 150,
         },
     pagemode == 1 || pagemode == 2
-      ? (
-        {
+      ? {
           field: "reach",
           headerName: "Reach",
         }
-        )
       : pagemode == 3
       ? {
           field: "post",
@@ -318,34 +360,34 @@ function ExecutionAll() {
           headerName: "Brand Integration",
           // width: 150,
         }),
-        {
-          field: "impression",
-          headerName: "Impression",
-        },
-        {
-          field: "engagement",
-          headerName: "Engagement",
-        },
-        {
-          field: "story_view",
-          headerName: "Story view",
-        },
-        {
-          headerName: "Update",
-          renderCell: (params) => {
-            return (
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-toggle="modal"
-                data-target="#myModal1"
-                onClick={() => handleRowClick(params.row)}
-              >
-                Set Stats
-              </button>
-            );
-          }
-        }
+    {
+      field: "impression",
+      headerName: "Impression",
+    },
+    {
+      field: "engagement",
+      headerName: "Engagement",
+    },
+    {
+      field: "story_view",
+      headerName: "Story view",
+    },
+    {
+      headerName: "Update",
+      renderCell: (params) => {
+        return (
+          <button
+            type="button"
+            className="btn btn-primary"
+            data-toggle="modal"
+            data-target="#myModal1"
+            onClick={() => handleRowClick(params.row)}
+          >
+            Set Stats
+          </button>
+        );
+      },
+    },
   ];
 
   const handleRowClick = (row) => {
@@ -353,15 +395,30 @@ function ExecutionAll() {
   };
 
   const saveStats = async (e) => {
+    const formData = new FormData();
+    formData.append("p_id", rowData.p_id);
+    formData.append("reach", reach);
+    formData.append("impression", impression);
+    formData.append("engagement", engagement);
+    formData.append("story_view", storyView);
+    formData.append("media", demoFile);
+    formData.append("start_date", startDate);
+    formData.append("end_date", endDate);
+    formData.append("state", statesFor);
+
     e.preventDefault();
-    axios.post(`http://34.93.135.33:8080/api/add_exe_pid_history`, {
-      p_id: rowData.p_id,
-      reach: reach,
-      impression: impression,
-      engagement: engagement,
-      story_view: storyView
+    axios.post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+    
+    ).then((res) => {
+      console.log(res);
+      console.log(res.data);
+      
+      toast("Form Submitted success")
     });
-    toastAlert("Form Submitted success");
     // setIsFormSubmitted(true);
   };
 
@@ -523,6 +580,16 @@ function ExecutionAll() {
           </Stack>
         </Paper>
         {/* Third Paper */}
+        <TextField label="Search by Page Name"
+         onChange={e=>{
+          const temp = alldata.filter((ele) => {
+            return ele.page_name.toLowerCase().includes(e.target.value.toLowerCase());
+          });
+          setRows(temp);
+
+        }
+      }
+        />
         <Paper
           justifyContent="space-between"
           sx={{ flexWrap: "wrap", flexDirection: "row", p: 3, mt: 3, mb: 4 }}
@@ -576,7 +643,7 @@ function ExecutionAll() {
             <div className="modal-body">
               <div className="row">
                 <div className="col-md-6">
-                <label>Reach:- &nbsp;</label>
+                  <label>Reach:- &nbsp;</label>
                   <input
                     label="Reach"
                     type="number"
@@ -586,7 +653,7 @@ function ExecutionAll() {
                   />
                 </div>
                 <div className="col-md-6">
-                <label>Impression:- &nbsp;</label>
+                  <label>Impression:- &nbsp;</label>
                   <input
                     label="Impressions"
                     type="number"
@@ -598,7 +665,7 @@ function ExecutionAll() {
               </div>
               <div className="row">
                 <div className="col-md-6">
-                <label>Engagement:- &nbsp;</label>
+                  <label>Engagement:- &nbsp;</label>
                   <input
                     label="Engagement"
                     type="number"
@@ -608,7 +675,7 @@ function ExecutionAll() {
                   />
                 </div>
                 <div className="col-md-6">
-                <label>Story View:- &nbsp;</label>
+                  <label>Story View:- &nbsp;</label>
                   <input
                     label="Story View"
                     type="number"
@@ -618,6 +685,46 @@ function ExecutionAll() {
                   />
                 </div>
               </div>
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={dropdownStaticData}
+                onChange={(e, value) =>{ setStatesFor(value),value?.length>0?setStateForIsValid(true):setStateForIsValid(false)}}
+                value={statesFor}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="States for" />
+                )}
+              />
+         { stateForIsValid &&    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                <DateTimePicker
+                className="my-3"
+                  label="Start Date"
+                  format="MM/DD/YY hh:mm a"
+                  value={startDate}
+                  onChange={(newValue) => handleStartDateChange(newValue)}
+                />
+              </LocalizationProvider>}
+              { stateForIsValid &&   <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                className="my-3 mx-3"
+                  label="End Date"
+                  format="MM/DD/YY hh:mm a"
+                  // timezone="merica/New_York"
+                  value={endDate}
+                  onChange={(newValue) => handleEndDateChange(newValue)}
+                />
+              </LocalizationProvider>}
+              <OutlinedInput
+                // variant="outlined"
+                type="file"
+                accept="image/png, image/jpeg, video/mp4, video/avi"
+                inputProps={{
+                  accept: ".pdf, .doc, .docx, .mp4, .avi, .png, .jpeg",
+                }}
+                sx={{ width: "50%", ml: 1 }}
+                onChange={(event) => handleFileChange(event)}
+              />
             </div>
             <div className="modal-footer">
               <button
@@ -639,7 +746,6 @@ function ExecutionAll() {
           </div>
         </div>
       </div>
-
     </>
   );
 }

@@ -58,7 +58,7 @@ const PantryHome = () => {
 
   const allOrderCount = allOrderData.length;
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/alltransreq").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_transreq").then((res) => {
       setTransferReq(res.data.data);
     });
   }, []);

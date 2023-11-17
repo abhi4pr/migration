@@ -64,7 +64,7 @@ const ProductUpdate = () => {
       };
 
       try {
-        axios.post(`http://34.93.135.33:8080/api/proppost`, payload, {
+        axios.post(`http://34.93.135.33:8080/api/add_proppost`, payload, {
           headers: {
             "Content-Type": "application/json",
           },

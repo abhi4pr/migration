@@ -50,7 +50,7 @@ const PendingOrder = () => {
       return;
     } else {
       axios
-        .put("http://34.93.135.33:8080/api/orderrequest", {
+        .put("http://34.93.135.33:8080/api/update_orderrequest", {
           product_id: row.product_id,
           order_req_id: row.Order_req_id,
           order_quantity: row.Order_quantity,
@@ -111,7 +111,7 @@ const PendingOrder = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/deliveryuser`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/get_delivery_user`).then((res) => {
       setDeliveryBoyData(res.data);
     });
   }, []);
@@ -120,7 +120,7 @@ const PendingOrder = () => {
     // console.log("selectedRow", selectedRow);
     if (remarks.length > 2) {
       axios
-        .put("http://34.93.135.33:8080/api/orderrequest", {
+        .put("http://34.93.135.33:8080/api/update_orderrequest", {
           product_id: selectedRow.product_id,
           order_req_id: selectedRow.Order_req_id,
           order_quantity: selectedRow.Order_quantity,
@@ -150,7 +150,7 @@ const PendingOrder = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/transreq", {
+      .post("http://34.93.135.33:8080/api/add_transreq", {
         from_id: orderRequestTransfer[1],
         to_id: transferTo,
         reason: reason,
