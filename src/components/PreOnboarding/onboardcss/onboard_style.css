@@ -130,7 +130,7 @@ img {
 }
 
 .btn_primary:first-child:active,
-:not(.btn-check)+.btn_primary:active {
+:not(.btn-check) + .btn_primary:active {
   border-color: var(--primary-board);
   background-color: var(--primary-board);
   color: var(--text-white);
@@ -157,7 +157,7 @@ img {
 }
 
 .btn_white:first-child:active,
-:not(.btn-check)+.btn_white:active {
+:not(.btn-check) + .btn_white:active {
   border-color: var(--bg-white);
   background-color: var(--bg-white);
   color: var(--primary-board);
@@ -175,7 +175,8 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url(../../../assets/imgs/bg/auth-bg.png) var(--bg-board) center no-repeat;
+  background: url(../../../assets/imgs/bg/auth-bg.png) var(--bg-board) center
+    no-repeat;
   background-size: cover;
   padding: 40px 40px;
 }
@@ -184,11 +185,14 @@ img {
   width: 460px;
   border-radius: 15px;
   background: rgba(255, 255, 255, 0.07);
-  box-shadow: -22.366666793823242px 22.366666793823242px 22.366666793823242px 0px rgba(255, 255, 255, 0.07) inset,
-    22.366666793823242px -22.366666793823242px 22.366666793823242px 0px rgba(194,
-      194,
-      194,
-      0.07) inset,
+  box-shadow: -22.366666793823242px 22.366666793823242px 22.366666793823242px
+      0px rgba(255, 255, 255, 0.07) inset,
+    22.366666793823242px -22.366666793823242px 22.366666793823242px 0px rgba(
+        194,
+        194,
+        194,
+        0.07
+      ) inset,
     0px 0px 16px 0px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
 }
@@ -1283,7 +1287,10 @@ img {
 .sidebar_item_active .progress-circle,
 .sidebar_item_active .progress-circle .progress-circle-border,
 .sidebar_item_active .progress-circle .progress-circle-border .left-half-circle,
-.sidebar_item_active .progress-circle .progress-circle-border .right-half-circle {
+.sidebar_item_active
+  .progress-circle
+  .progress-circle-border
+  .right-half-circle {
   height: 90px;
   width: 90px;
 }
@@ -1514,7 +1521,7 @@ img {
   color: rgb(255 255 255 / 50%);
 }
 
-.board_form input[type=date]::-webkit-calendar-picker-indicator {
+.board_form input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0;
   width: 20px;
   height: 20px;
@@ -1524,7 +1531,7 @@ img {
   right: -42px;
 }
 
-.board_form input[type=date]::after {
+.board_form input[type="date"]::after {
   content: "\F1F3";
   display: inline-block;
   font-family: bootstrap-icons !important;
@@ -1774,7 +1781,10 @@ img {
   fill: var(--white) !important;
 }
 
-.board_form label[data-shrink=false]+.MuiInputBase-formControl .MuiInputBase-input {
+.board_form
+  label[data-shrink="false"]
+  + .MuiInputBase-formControl
+  .MuiInputBase-input {
   color: transparent !important;
 }
 
@@ -1794,7 +1804,10 @@ img {
   height: 38px;
 }
 
-.board_form .form-group .input-group-append button.btn.btn-outline-primary:hover {
+.board_form
+  .form-group
+  .input-group-append
+  button.btn.btn-outline-primary:hover {
   border-color: transparent;
   color: var(--white);
   background-color: transparent;
@@ -1841,11 +1854,11 @@ img {
   border-radius: 6px;
 }
 
-.cstm_check:hover input~.checkmark {
+.cstm_check:hover input ~ .checkmark {
   background-color: transparent;
 }
 
-.cstm_check input:checked~.checkmark {
+.cstm_check input:checked ~ .checkmark {
   background-color: var(--white);
 }
 
@@ -1855,7 +1868,7 @@ img {
   display: none;
 }
 
-.cstm_check input:checked~.checkmark:after {
+.cstm_check input:checked ~ .checkmark:after {
   display: block;
 }
 
@@ -1901,6 +1914,10 @@ img {
   background: var(--success);
 }
 
+.warning_badges.pending h4 {
+  background: var(--warning);
+}
+
 .warning_badges h4 span {
   margin: 0px 0px;
   font-size: 13px;
@@ -1927,6 +1944,6 @@ img {
 }
 
 .board_form h3 span {
-  color: #F0B734;
+  color: #f0b734;
   font-weight: 500;
 }

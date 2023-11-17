@@ -18,23 +18,17 @@ const UserResposOverview = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios
-        .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
-        )
-        .then((res) => {
-          setDatas(res.data);
-        });
+      axios.get(`http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`).then((res) => {
+        setDatas(res.data);
+      });
     }
   }, [userID]);
 
-  function getData() {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_jobresponsibilitys")
-      .then((res) => {
-        setData(res.data.data);
-        setFilterData(res.data.data);
-      });
+  const getData = async () => {
+  await axios.get("http://34.93.135.33:8080/api/get_all_jobresponsibilitys").then((res) => {
+      setData(res.data.data);
+      setFilterData(res.data.data);
+    });
   }
   useEffect(() => {
     getData();
@@ -51,7 +45,7 @@ const UserResposOverview = () => {
     {
       name: "S.No",
       cell: (row, index) => <div>{index + 1}</div>,
-      width: "3%",
+      width: "10%",
       sortable: true,
     },
     {
@@ -116,7 +110,7 @@ const UserResposOverview = () => {
             contextData[1] &&
             contextData[1].delete_flag_value === 1 && (
               <DeleteButton
-                endpoint="delete_jobresponsibility"
+                endpoint="userjobrespodelete"
                 id={row.Job_res_id}
                 getData={getData}
               />

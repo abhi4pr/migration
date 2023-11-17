@@ -65,13 +65,13 @@ const IpMaster = () => {
     let intervalId;
 
     try {
-      const apiUrl = "http://44.211.225.140:8000/instagram";
+      const apiUrl = "http://34.93.135.33:8080/api/instagram";
       const response = await axios.post(apiUrl, { IPName: IPName });
       const dataRequestId = response.data.data_request_id;
 
       intervalId = setInterval(async () => {
         try {
-          const secondApiUrl = `http://44.211.225.140:8000/instagram2/${dataRequestId}`;
+          const secondApiUrl = `http://34.93.135.33:8080/api/instagram2/${dataRequestId}`;
           const secondApiResponse = await axios.get(secondApiUrl);
           const followers =
             secondApiResponse.data.response_entries[0].followers;

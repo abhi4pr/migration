@@ -10,34 +10,27 @@ function OfficeMastUpdate() {
   const [roomimage, setRoomImage] = useState("");
   const [remark, setRemark] = useState("");
   const [createdby, setCreatedBy] = useState("");
-
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // axios.put(`http://44.211.225.140:8000/roomupdate`, {
-    //   id: id,
-    //   sitting_ref_no: sittingMast,
-    //   remarks: remark,
-    //   created_by: createdby,
     const formData = new FormData();
     formData.append("room_id", id);
     formData.append("sitting_ref_no", sittingMast);
     formData.append("room_image", roomimage);
     formData.append("remarks", remark);
     formData.append("created_by", createdby);
-    axios.put(`http://34.93.135.33:8080/api/update_room`, formData, {
+
+    await axios.put(`http://34.93.135.33:8080/api/update_room`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    // console.log(role_name);
     setSittingMast("");
     setRemark("");
 
     toastAlert("Form Submitted success");
     setIsFormSubmitted(true);
-    // navigate("/role-overview");
   };
 
   useEffect(() => {
@@ -86,6 +79,7 @@ function OfficeMastUpdate() {
                     type="file"
                     className="form-control"
                     id="validationCustom01"
+                    name="This is laskjl"
                     onChange={(e) => setRoomImage(e.target.files[0])}
                   />
                 </div>
@@ -102,8 +96,8 @@ function OfficeMastUpdate() {
                     id=""
                     cols="45"
                     rows="5"
-                    required
-                  ></textarea>
+                    required={false}
+                  />
                 </div>
               </div>
 

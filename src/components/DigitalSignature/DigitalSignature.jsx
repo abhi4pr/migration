@@ -17,11 +17,11 @@ const DigitalSignature = ({ userID, closeModal }) => {
     canvas.toBlob((blob) => {
       if (blob) {
         const formData = new FormData();
-        formData.append("id", userID);
+        formData.append("user_id", userID);
         formData.append("digital_signature_image", blob);
 
         axios
-          .put(`http://44.211.225.140:8000/userupdate`, formData, {
+          .put(`http://34.93.135.33:8080/api/update_user`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

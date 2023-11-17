@@ -27,7 +27,7 @@ const AccountsOverviewWFH = () => {
 
   const [isloading, setIsLoading] = useState(false);
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/finance`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/get_finances`).then((res) => {
       const response = res.data;
       setData(response);
       setFilterData(
@@ -62,7 +62,7 @@ const AccountsOverviewWFH = () => {
     formData.append("reference_no", refrenceNumber);
     formData.append("pay_date", date);
 
-    axios.put(`http://44.211.225.140:8000/finance`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/edit_finance`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -112,23 +112,23 @@ const AccountsOverviewWFH = () => {
       sortable: true,
     },
     {
+      name: "Salary",
+      selector: (row) => row.total_salary + " ₹",
+      sortable: true,
+    },
+    {
       name: "Net Salary",
-      selector: (row) => row.net_salary,
+      selector: (row) => row.net_salary + " ₹",
       sortable: true,
     },
     {
       name: "TDS Deduction",
-      selector: (row) => row.tds_deduction,
-      sortable: true,
-    },
-    {
-      name: "Salary",
-      selector: (row) => row.total_salary,
+      selector: (row) => row.tds_deduction + " ₹",
       sortable: true,
     },
     {
       name: "To Pay",
-      selector: (row) => row.toPay,
+      selector: (row) => row.toPay + " ₹",
       sortable: true,
     },
     {
@@ -145,9 +145,7 @@ const AccountsOverviewWFH = () => {
           </button>
           <PDFDownloadLink
             document={templateMap[row?.invoice_template_no]}
-            fileName={
-              rowData?.user_name + " " + rowData?.month + " " + rowData?.year
-            }
+            fileName={row?.user_name + " " + row?.month + " " + row?.year}
             style={{
               color: "#4a4a4a",
             }}
@@ -159,7 +157,6 @@ const AccountsOverviewWFH = () => {
               onClick={() => handleInvoice(row)}
             >
               <CloudDownloadIcon />
-              {/* Download */}
             </button>
           </PDFDownloadLink>
         </>

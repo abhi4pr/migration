@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
@@ -37,7 +37,6 @@ export default function SubDepartmentOverview() {
       .get(`http://34.93.135.33:8080/api/get_subdept_from_dept"/${dept_id}`)
       .then((res) => {
         setSubDeparmentData(res.data);
-        console.log(res.data, "hello sub");
       });
   }
 

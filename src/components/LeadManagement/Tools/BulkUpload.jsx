@@ -94,7 +94,7 @@ export default function BulkUpload({ setUpload }) {
     const uniqueData = [];
     for (let i = 0; i < bulklead.length; i++) {
       try {
-        axios.post("http://44.211.225.140:8000/leadmastpost", {
+        axios.post("http://34.93.135.33:8080/api/leadmastpost", {
           lead_name: bulklead[i].lead_name,
           mobile_no: bulklead[i].mobile_no,
           alternate_mobile_no: bulklead[i].alternate_mobile_no,

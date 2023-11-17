@@ -156,12 +156,13 @@ const PreOnboardingUserMaster = () => {
       setPermanentPincode("");
     }
   };
-  useEffect(() => {
+
+  const gettingData = () => {
     axios
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
-
+        console.log(res.data);
         const {
           user_name,
           user_email_id,
@@ -201,9 +202,6 @@ const PreOnboardingUserMaster = () => {
           current_state,
           current_pin_code,
         } = fetchedData;
-
-        console.log(DOB, "yha birthday date hai");
-
         setAllUserData(fetchedData);
         setUserName(user_name);
         setEmail(user_email_id);
@@ -224,7 +222,9 @@ const PreOnboardingUserMaster = () => {
         setSpeakingLanguage(SpokenLanguages);
         setLoginId(user_login_id);
         setPassword(user_login_password);
-        setJoiningDate(joining_date?.split("T")?.[0]);
+        setJoiningDate(
+          joining_date?.split("T")[0].split("-").reverse().join("-")
+        );
         setMaritialStatus(MartialStatus);
         setDateOfBirth(DOB?.split("T")?.[0]);
         setDateOfMarraige(DateOfMarriage);
@@ -275,6 +275,10 @@ const PreOnboardingUserMaster = () => {
         setcurrentState(current_state);
         setcurrentPincode(current_pin_code);
       });
+  };
+
+  useEffect(() => {
+    gettingData();
   }, [id]);
 
   const handleSubmit = (e) => {
@@ -344,11 +348,25 @@ const PreOnboardingUserMaster = () => {
     formData.append("current_state", currentState);
     formData.append("current_pin_code", Number(currentPincode));
 
-    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    axios
+      .put(`http://34.93.135.33:8080/api/update_user`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        setXIIMarksheet(null);
+        setXIIMarksheet(null);
+        setUnderGraduationDoc(null);
+        setUID(null);
+        setPanUpload(null);
+        setPassport(null);
+        setExperienceDoc(null);
+        setPreviousOfferLetter(null);
+        setPreviousRelievingLetter(null);
+        setPassbookCheque(null);
+      })
+      .then(() => gettingData());
 
     // After update send mail
     axios
@@ -367,12 +385,9 @@ const PreOnboardingUserMaster = () => {
       .catch((error) => {
         console.log("Failed to send email:", error);
       });
-    whatsappApi.callWhatsAPI(
-      "Onboarding user Fill Details",
-      "8517907328",
+    whatsappApi.callWhatsAPI("CF_Document_upload", "9826116769", username, [
       username,
-      [username]
-    );
+    ]);
 
     toastAlert("User Update");
   };
@@ -513,11 +528,14 @@ const PreOnboardingUserMaster = () => {
     formData.append("joining_date_extend_reason", joiningExtendReason);
     formData.append("joining_extend_document", joingingExtendDocument);
 
-    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    axios
+      .put(`http://34.93.135.33:8080/api/update_user`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => toastAlert("Extend Date Requested Successfully"));
+
     axios
       .post("http://34.93.135.33:8080/api/add_send_user_mail", {
         email: "lalit@creativefuel.io",
@@ -534,10 +552,17 @@ const PreOnboardingUserMaster = () => {
       .catch((error) => {
         console.log("Failed to send email:", error);
       });
-    whatsappApi.callWhatsAPI("Extend Date by User", "9977815413", username, [
-      username,
-      joingingExtendDate,
-    ]);
+    whatsappApi
+      .callWhatsAPI("CF_Extend_request_new", "9826116769", username, [
+        username,
+        joingingExtendDate.split("-").reverse().join("-"),
+      ])
+      .then(() => {
+        setJoiningExtendDate("");
+        setJoiningExtendReason("");
+        setJoiningExtendDocument(null);
+      })
+      .then(() => gettingData());
   };
 
   const progressPercentage = calculateProgressPercentage();
@@ -1252,6 +1277,7 @@ const PreOnboardingUserMaster = () => {
                               value=""
                               onChange={(e) => {
                                 setXMarksheet(e.target.files[0]);
+                                setXMarksheetValidation("Pending");
                               }}
                             />
                             <span
@@ -1280,7 +1306,7 @@ const PreOnboardingUserMaster = () => {
                           )}
                           {allUserData?.tenth_marksheet_validate ==
                             "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1301,6 +1327,7 @@ const PreOnboardingUserMaster = () => {
                               // name=""
                               onChange={(e) => {
                                 setXIIMarksheet(e.target.files[0]);
+                                setXIIMarksheetValidation("Pending");
                               }}
                             />
 
@@ -1332,7 +1359,7 @@ const PreOnboardingUserMaster = () => {
                           )}
                           {allUserData?.twelveth_marksheet_validate ==
                             "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1349,9 +1376,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) =>
-                                setUnderGraduationDoc(e.target.files[0])
-                              }
+                              onChange={(e) => {
+                                setUnderGraduationDoc(e.target.files[0]);
+                                setUnderGraduationDocValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1377,7 +1405,7 @@ const PreOnboardingUserMaster = () => {
                             </div>
                           )}
                           {allUserData?.UG_Marksheet_validate == "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1392,7 +1420,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) => setUID(e.target.files[0])}
+                              onChange={(e) => {
+                                setUID(e.target.files[0]);
+                                setUIDValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1416,7 +1447,7 @@ const PreOnboardingUserMaster = () => {
                             </div>
                           )}
                           {allUserData?.uid_validate == "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1433,7 +1464,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) => setPanUpload(e.target.files[0])}
+                              onChange={(e) => {
+                                setPanUpload(e.target.files[0]);
+                                setPanUploadValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1457,7 +1491,7 @@ const PreOnboardingUserMaster = () => {
                             </div>
                           )}
                           {allUserData?.pan_validate == "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1472,7 +1506,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) => setPassport(e.target.files[0])}
+                              onChange={(e) => {
+                                setPassport(e.target.files[0]);
+                                setPassportValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1496,7 +1533,7 @@ const PreOnboardingUserMaster = () => {
                             </div>
                           )}
                           {allUserData?.passport_validate == "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1513,9 +1550,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) =>
-                                setPreviousOfferLetter(e.target.files[0])
-                              }
+                              onChange={(e) => {
+                                setPreviousOfferLetter(e.target.files[0]);
+                                setPreviousOfferLetterValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1543,7 +1581,7 @@ const PreOnboardingUserMaster = () => {
                           )}
                           {allUserData?.pre_off_letter_validate ==
                             "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1560,9 +1598,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) =>
-                                setPreviousRelievingLetter(e.target.files[0])
-                              }
+                              onChange={(e) => {
+                                setPreviousRelievingLetter(e.target.files[0]);
+                                setPreviousRelievingLetterValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1591,7 +1630,7 @@ const PreOnboardingUserMaster = () => {
                           )}
                           {allUserData?.pre_relieving_letter_validate ==
                             "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1608,9 +1647,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) =>
-                                setExperienceDoc(e.target.files[0])
-                              }
+                              onChange={(e) => {
+                                setExperienceDoc(e.target.files[0]);
+                                setExperienceDocValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1639,7 +1679,7 @@ const PreOnboardingUserMaster = () => {
                           )}
                           {allUserData?.pre_expe_letter_validate ==
                             "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1659,9 +1699,10 @@ const PreOnboardingUserMaster = () => {
                             <input
                               type="file"
                               value=""
-                              onChange={(e) =>
-                                setPassbookCheque(e.target.files[0])
-                              }
+                              onChange={(e) => {
+                                setPassbookCheque(e.target.files[0]);
+                                setPassbookChequeValidation("Pending");
+                              }}
                             />
 
                             <span
@@ -1692,7 +1733,7 @@ const PreOnboardingUserMaster = () => {
                           )}
                           {allUserData?.bankPassBook_Cheque_validate ==
                             "Pending" && (
-                            <div className="warning_badges reject">
+                            <div className="warning_badges pending">
                               <h4>Pending</h4>
                             </div>
                           )}
@@ -1872,9 +1913,6 @@ const PreOnboardingUserMaster = () => {
                 {activeTab == 5 && (
                   <form>
                     <div className="formarea">
-                      {allUserData.joining_date_extend_status == "Reject" && (
-                        <h1>Request is rejected</h1>
-                      )}
                       {setAllUserData.joining_date_extend_status ==
                         "Approve" && <h1>Request is Accepted</h1>}
                       <div className="row spacing_lg">
@@ -1888,16 +1926,6 @@ const PreOnboardingUserMaster = () => {
                               <span>{joiningDate}</span>
                             </h3>
                             <div className="form-group">
-                              {/* <input
-                                className="form-control"
-                                placeholder="Extend To"
-                                type="date"
-                                value={joingingExtendDate}
-                                onChange={(e) =>
-                                  setJoiningExtendDate(e.target.value)
-                                }
-                              /> */}
-
                               <TextField
                                 id="outlined-basic"
                                 label="Extend To"
@@ -1909,17 +1937,6 @@ const PreOnboardingUserMaster = () => {
                                 }
                               />
                             </div>
-                            {/* <div className="form-group">
-                              <input
-                                type="text"
-                                placeholder="Reason"
-                                className="form-control"
-                                value={joiningExtendReason}
-                                onChange={(e) =>
-                                  setJoiningExtendReason(e.target.value)
-                                }
-                              />
-                            </div> */}
 
                             <div className="form-group">
                               <TextField
@@ -1953,14 +1970,6 @@ const PreOnboardingUserMaster = () => {
                                       )
                                     }
                                   />
-                                  {/* {allUserData.tenth_marksheet_validate == "Reject" && (
-                                    <>
-                                      <h5>Rejected: Upload Again</h5>
-                                      <h5>
-                                        {allUserData?.tenth_marksheet_validate_remark}
-                                      </h5>
-                                    </>
-                                  )} */}
                                   <span
                                     className="delete"
                                     onClick={() =>
@@ -1987,6 +1996,13 @@ const PreOnboardingUserMaster = () => {
                             </div> */}
                           </div>
                         </div>
+                        {allUserData?.joining_date_extend_status ==
+                          "Reject" && (
+                          <h1>
+                            Request Rejected:{" "}
+                            {allUserData?.joining_date_extend_reason}
+                          </h1>
+                        )}
                         <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                           <div className="form-group ml-auto mr-auto text-center">
                             <button

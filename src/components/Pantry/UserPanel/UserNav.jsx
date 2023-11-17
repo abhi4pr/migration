@@ -21,7 +21,7 @@ const UserNav = () => {
   const [loginUserData, setLoginUserData] = useState([]);
   useEffect(() => {
     axios
-      .post("http://44.211.225.140:8000/loginuserdata", {
+      .post("http://34.93.135.33:8080/api/login_user_data", {
         id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));
@@ -44,7 +44,10 @@ const UserNav = () => {
               <a className="navbar-brand" href="/">
                 <img src={logo} alt="Logo" />
                 <h4>
-                  Creative<span>Fuel</span> {location==="/pantry-user"&& <span className="text-black-50">Pantry</span>}
+                  Creative<span>Fuel</span>{" "}
+                  {location === "/pantry-user" && (
+                    <span className="text-black-50">Pantry</span>
+                  )}
                 </h4>
               </a>
               <ul className="navbar-nav right_nav ms-auto">
@@ -65,16 +68,28 @@ const UserNav = () => {
                   >
                     <span>{userName}</span>
                     {loginUserData[0]?.image == null ? (
-                      <img className="img-profile" src={imageTest1} style={{height:"40px",borderRadius:"50%",width:"40px"}}/>
+                      <img
+                        className="img-profile"
+                        src={imageTest1}
+                        style={{
+                          height: "40px",
+                          borderRadius: "50%",
+                          width: "40px",
+                        }}
+                      />
                     ) : (
                       // loginUserData.map((d) => (
-                        <img
-                          key={1}
-                          className="img-profile"
-                          src={loginUserData[0]?.image}
-                          alt="user"
-                          style={{height:"40px",borderRadius:"50%",width:"40px"}}
-                        />
+                      <img
+                        key={1}
+                        className="img-profile"
+                        src={loginUserData[0]?.image}
+                        alt="user"
+                        style={{
+                          height: "40px",
+                          borderRadius: "50%",
+                          width: "40px",
+                        }}
+                      />
                       // ))
                     )}
                   </a>

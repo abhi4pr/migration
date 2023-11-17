@@ -126,7 +126,6 @@ export default function RegisteredCampaign() {
     const newValue = event.target.value;
     const updatedFields = [...formData.fields];
     updatedFields[index].selectValue = newValue;
-    // Use setFormData to update the state
     setFormData((prevData) => ({
       ...prevData,
       fields: updatedFields,
@@ -303,15 +302,11 @@ export default function RegisteredCampaign() {
 
         try {
           const response = await axios
-            .post(
-              "http://34.93.135.33:8080/api/contentSectionReg",
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data", // Important for file uploads
-                },
-              }
-            )
+            .post("http://34.93.135.33:8080/api/contentSectionReg", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data", // Important for file uploads
+              },
+            })
             .then((response) => {
               axios
                 .put("http://34.93.135.33:8080/api/register_campaign", {
@@ -468,7 +463,7 @@ export default function RegisteredCampaign() {
       .catch((err) => {
         console.log(err);
       });
-    // axios.get("http://44.211.225.140:8000/campaign").then((response) => {
+    // axios.get("http://34.93.135.33:8080/api/campaign").then((response) => {
     //   const data = response.data;
     //   console.log(data, "<--------");
 
@@ -974,9 +969,9 @@ export default function RegisteredCampaign() {
                                 onChange={(event) =>
                                   handleUploadLinkChange(event, index)
                                 }
-                                // name="value"
-                                // error={!!errors.fields?.textValue}
-                                // helperText={errors.fields?.textValue}
+                              // name="value"
+                              // error={!!errors.fields?.textValue}
+                              // helperText={errors.fields?.textValue}
                               />
                               {/* <Typography variant="h6">File Upload Example</Typography> */}
                               <OutlinedInput
@@ -1047,15 +1042,15 @@ export default function RegisteredCampaign() {
                   {videoType.filter(
                     (e) => !fields.map((e) => e.selectValue).includes(e)
                   ).length > 0 && (
-                    <Button
-                      variant="outlined"
-                      sx={{ marginBottom: "10px", marginRight: "10px" }}
-                      color="primary"
-                      onClick={handleAddField}
-                    >
-                      Add Row
-                    </Button>
-                  )}
+                      <Button
+                        variant="outlined"
+                        sx={{ marginBottom: "10px", marginRight: "10px" }}
+                        color="primary"
+                        onClick={handleAddField}
+                      >
+                        Add Row
+                      </Button>
+                    )}
                 </div>
               </div>
               <div className="d-flex justify-content-between">

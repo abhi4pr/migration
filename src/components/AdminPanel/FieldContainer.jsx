@@ -15,6 +15,7 @@ const FieldContainer = ({
   multiple,
   placeholder,
   accept,
+  max,
 }) => {
   return (
     <div
@@ -27,7 +28,7 @@ const FieldContainer = ({
       <div className="form-group">
         <label className="form-label">{label}</label>
         <Tag
-        step={step}
+          step={step}
           className={Tag == "select" ? "form-select" : "form-control"}
           type={type}
           value={value}
@@ -40,6 +41,7 @@ const FieldContainer = ({
           multiple={multiple}
           accept={accept}
           placeholder={placeholder}
+          max={max}
         >
           {children}
         </Tag>

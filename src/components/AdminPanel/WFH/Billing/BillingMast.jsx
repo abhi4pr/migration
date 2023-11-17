@@ -13,18 +13,21 @@ const BillingMast = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
-    axios.get("http://44.211.225.140:8000/alldept").then((res) => {
-      getDepartmentData(res.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .then((res) => {
+        getDepartmentData(res.data);
+      });
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://44.211.225.140:8000/billingheader", {
-      billing_header_name: bilingName,
-      dept_id: department,
-    });
-    setIsFormSubmitted(true);
+    axios
+      .post("http://34.93.135.33:8080/api/add_billingheader", {
+        billing_header_name: bilingName,
+        dept_id: department,
+      })
+      .then(() => setIsFormSubmitted(true));
   };
 
   if (isFormSubmitted) {

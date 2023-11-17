@@ -22,7 +22,7 @@ const LogoCategoryMaster = () => {
     e.preventDefault();
     setError("");
     await axios
-      .post("http://44.211.225.140:8000/logocat", {
+      .post("http://34.93.135.33:8080/api/logocat", {
         cat_name: categoryName,
         remarks: remark,
         created_by: loginUserID,

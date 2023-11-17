@@ -119,7 +119,7 @@ const WFHSingleUser = () => {
     axios
       .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
       .then((res) => {
-        getDepartmentData(res.data);
+        getDepartmentData(res.data.data);
       });
   }, []);
 
@@ -155,7 +155,7 @@ const WFHSingleUser = () => {
   function handleInvoiceNumber(data) {
     const formData = new FormData();
 
-    formData.append("id", data.user_id);
+    formData.append("user_id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
     axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
@@ -322,7 +322,7 @@ const WFHSingleUser = () => {
       attendence_id: row.attendence_id,
     });
 
-    axios.put(`http://34.93.135.33:8080/api/add_attendance`, {
+    axios.post(`http://34.93.135.33:8080/api/add_attendance`, {
       attendence_id: row.attendence_id,
       sendToFinance: 1,
     });
@@ -338,8 +338,10 @@ const WFHSingleUser = () => {
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
           <Text style={{ fontSize: 25 }}>
             Department:{" "}
-            {departmentdata.find((user) => user.dept_id === department)
-              ?.dept_name || ""}
+            {(departmentdata &&
+              departmentdata?.find((user) => user.dept_id === department)
+                ?.dept_name) ||
+              ""}
           </Text>
           <Text style={{ fontSize: 25 }}>Month: {month}</Text>
           <Text style={{ fontSize: 25 }}>Year: {year}</Text>
@@ -801,16 +803,20 @@ const WFHSingleUser = () => {
               <div>Refrence No :{rowDataModal?.reference_no}</div>
               <div>
                 ScreenShot :
-                <img
-                  src={`http://34.93.135.33:8080/api/user_images/${rowDataModal?.screenshot}`}
-                />
+                {rowDataModal?.screenshot ? (
+                  <img
+                    src={`http://34.93.135.33:8080/api/user_images/${rowDataModal?.screenshot}`}
+                  />
+                ) : (
+                  "Null"
+                )}
               </div>
             </div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-dismiss="modal"
+                data-dismiss="xiomodal"
               >
                 Close
               </button>

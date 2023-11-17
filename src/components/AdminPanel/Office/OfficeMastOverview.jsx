@@ -28,11 +28,15 @@ const OfficeMastOverview = () => {
     }
   }, [userID]);
 
-  function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_rooms").then((res) => {
+  async function getData() {
+    try {
+      const res = await axios.get("http://34.93.135.33:8080/api/get_all_rooms");
+      console.log(res.data.data, "hjukjkh");
       setData(res.data.data);
       setFilterData(res.data.data);
-    });
+    } catch (error) {
+      console.error("An error occurred while fetching data", error);
+    }
   }
 
   const columns = [
@@ -109,7 +113,7 @@ const OfficeMastOverview = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.Role_name.toLowerCase().match(search.toLowerCase());
+      return d.sitting_ref_no.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);

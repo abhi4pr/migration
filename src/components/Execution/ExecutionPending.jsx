@@ -172,11 +172,15 @@ function ExecutionPending() {
       },
     },
     {
-      field: "start_date_",
+      field: "start_date",
       headerName: "Start Date",
       width: 200,
       renderCell: (params) => {
-        const startDate = new Date(params.row.start_date_);
+        if (!params.row.start_date || params.row.start_date === "0000-00-00 00:00:00" || params.row.start_date === null || params.row.start_date === undefined) {
+          return " ";
+        }
+    
+        const startDate = new Date(params.row.start_date);
         const dateOptions = {
           year: "numeric",
           month: "2-digit",
@@ -190,7 +194,7 @@ function ExecutionPending() {
         };
     
         const formattedDate = startDate.toLocaleDateString("en-GB", dateOptions);
-        const formattedTime = startDate.toLocaleTimeString("en-GB", timeOptions);
+        const formattedTime =  startDate.toISOString().split('T')[1].substring(0, 8);
     
         return (
           <div>
@@ -220,7 +224,7 @@ function ExecutionPending() {
         };
     
         const formattedDate = startDate.toLocaleDateString("en-GB", dateOptions);
-        const formattedTime = startDate.toLocaleTimeString("en-GB", timeOptions);
+        const formattedTime =  startDate.toISOString().split('T')[1].substring(0, 8);
     
         return (
           <div>

@@ -14,7 +14,6 @@ import image3 from "./images/i3.png";
 import image4 from "./images/i4.png";
 import image5 from "./images/image5.png";
 import Slider from "react-slick";
-import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import {
   Document,
@@ -30,8 +29,8 @@ import MyTemplate2 from "./Template2";
 import MyTemplate3 from "./Template3";
 import MyTemplate4 from "./Template4";
 import MyTemplate5 from "./Template5";
-import DigitalSignature from "../../../DigitalSignature/DigitalSignature";
-// import DateFormattingComponent from "../../../DateFormater/DateFormared";
+
+import { generatePDF } from "./pdfGenerator";
 
 const images = [
   { temp_id: 1, image: image1 },
@@ -53,8 +52,6 @@ const SalaryWFH = () => {
   const [departmentdata, getDepartmentData] = useState([]);
   const [noOfAbsent, setNoOfAbsent] = useState(null);
   const [userData, getUsersData] = useState([]);
-  const [userSalary, setUserSalary] = useState("");
-  const [userTds, setUserTds] = useState("");
   const [departmentWise, setDepartmentWise] = useState([]);
   const [selectedTemplate, setSelectedTempate] = useState("");
   const [templateState, setTemplateState] = useState(null);
@@ -84,7 +81,6 @@ const SalaryWFH = () => {
 
   //salary exits dept wise
   const [deptSalary, setDeptSalary] = useState([]);
-  const [salaryStatus, setSalaryStatus] = useState(0);
 
   var settings = {
     dots: false,
@@ -204,7 +200,6 @@ const SalaryWFH = () => {
     return previousMonthIndex >= 0 ? months[previousMonthIndex] : months[11];
   };
 
-  //harshal
   const [selectedMonth, setSelectedMonth] = useState(getPreviousMonth());
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
   const [activeusers, setActiveUsers] = useState("");
@@ -216,21 +211,12 @@ const SalaryWFH = () => {
     setYear(data.year);
     setMonth(data.month);
   };
-  //harshal
-
-  // const getUserSalary = (selectedUserId) => {
-  //   const userSalaryConst = userData.filter(
-  //     (item) => item.user_id == selectedUserId
-  //   );
-  //   setUserSalary(userSalaryConst[0].salary);
-  //   setUserTds(userSalaryConst[0].tds_per);
-  // };
 
   const handleSubmit = () => {
     const payload = {
       dept_id: department,
       month: month,
-      year: year,
+      year: Number(year),
     };
     axios
       .post("http://34.93.135.33:8080/api/get_salary_by_id_month_year", payload)
@@ -247,7 +233,7 @@ const SalaryWFH = () => {
   function handleInvoiceNumber(data) {
     const formData = new FormData();
 
-    formData.append("id", data.user_id);
+    formData.append("user_id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
     axios
@@ -319,6 +305,13 @@ const SalaryWFH = () => {
         noOfabsent: 0,
         month: month,
         year: year,
+      })
+      .then(() => {
+        axios.put("http://34.93.135.33:8080/api/update_attendence_status", {
+          month: month,
+          year: Number(year),
+          dept: department,
+        });
       })
       .then(() => {
         setNoOfAbsent("");
@@ -424,16 +417,6 @@ const SalaryWFH = () => {
       fontSize: 10,
       color: "gray",
     },
-    // tableHeader: {
-    //   backgroundColor: "#f2f2f2",
-    // },
-
-    // tableCell: {
-    //   padding: 5,
-    //   fontSize: 12,
-    //   textAlign: "center",
-    // },
-
     // Styles for the TDS and Net Invoice sections
     tdsSection: {
       marginTop: 10,
@@ -464,7 +447,7 @@ const SalaryWFH = () => {
     });
 
     axios
-      .put(`http://34.93.135.33:8080/api/add_attendance`, {
+      .put(`http://34.93.135.33:8080/api/update_salary`, {
         attendence_id: row.attendence_id,
         sendToFinance: 1,
       })
@@ -588,13 +571,13 @@ const SalaryWFH = () => {
     {
       name: "S.No",
       cell: (row, index) => <div>{index + 1}</div>,
-      width: "6%",
+      width: "80px",
       sortable: true,
     },
     {
       name: "Employee Name",
       cell: (row) => row.user_name,
-      width: "12%",
+      width: "150px",
     },
     {
       name: "Department",
@@ -616,7 +599,6 @@ const SalaryWFH = () => {
     },
     {
       name: "Work Days",
-      width: "8%",
       cell: () => 30,
     },
     {
@@ -662,7 +644,6 @@ const SalaryWFH = () => {
     {
       name: "Deductions",
       cell: (row) => row.salary_deduction + " ₹",
-      width: "7%",
     },
     {
       name: "Net Salary",
@@ -671,9 +652,7 @@ const SalaryWFH = () => {
     {
       name: "TDS",
       cell: (row) => row.tds_deduction + " ₹",
-      width: "7%",
     },
-
     {
       name: "To Pay",
       cell: (row) => row.toPay + " ₹",
@@ -685,9 +664,7 @@ const SalaryWFH = () => {
           {row?.invoice_template_no !== "0" && (
             <PDFDownloadLink
               document={templateMap[row?.invoice_template_no]}
-              fileName={
-                rowData?.user_name + " " + rowData?.month + " " + rowData?.year
-              }
+              fileName={row?.user_name + " " + row?.month + " " + row?.year}
               style={{
                 color: "#4a4a4a",
               }}
@@ -738,6 +715,17 @@ const SalaryWFH = () => {
           )}
           {row.sendToFinance == 1 && row.status_ == 0 && (
             <button className="btn btn-danger ml-2">Pending</button>
+          )}
+
+          {row?.invoice_template_no !== "0" && (
+            <button
+              className="btn btn-outline-primary btn-sm"
+              title="Download Invoice"
+              type="button"
+              onClick={() => generatePDF(row)}
+            >
+              <CloudDownloadIcon />
+            </button>
           )}
         </>
       ),
@@ -809,15 +797,15 @@ const SalaryWFH = () => {
               <h3>
                 {data?.atdGenerated == 1 ? (
                   <span>
-                    <i class="bi bi-check2-circle" />
+                    <i className="bi bi-check2-circle" />
                   </span>
                 ) : currentMonthNumber - 4 - index < 0 ? (
                   <span>
-                    <i class="bi bi-clock-history" />
+                    <i className="bi bi-clock-history" />
                   </span>
                 ) : (
                   <span>
-                    <i class="bi bi-hourglass-top" />
+                    <i className="bi bi-hourglass-top" />
                   </span>
                 )}
                 {data.atdGenerated == 1
@@ -830,64 +818,6 @@ const SalaryWFH = () => {
           ))}
         </Slider>
       </div>
-
-      {/* <FormContainer submitButton={false} handleSubmit={handleSubmit}> */}
-      {/* <div className="from-group d-flex"> */}
-      {/* <div className="form-group col-3">
-          <label className="form-label">
-            Department Name <sup style={{ color: "red" }}>*</sup>
-          </label>
-          <Select
-            className=""
-            options={departmentdata.map((option) => ({
-              value: option.dept_id,
-              label: `${option.dept_name}`,
-            }))}
-            value={{
-              value: department,
-              label:
-                departmentdata.find((user) => user.dept_id === department)
-                  ?.dept_name || "",
-            }}
-            onChange={(e) => {
-              setDepartment(e.value);
-            }}
-            required
-          />
-        </div> */}
-      {/* <div className="form-group col-3">
-          <label className="form-label">Year</label>
-          <Select
-            options={yearValue?.map((option) => ({
-              value: option,
-              label: `${option}`,
-            }))}
-            onChange={(e) => {
-              setYear(e.value);
-            }}
-            required
-          />
-        </div> */}
-
-      {/* <div className="form-group col-3">
-          <label className="form-label">
-            Month <sup style={{ color: "red" }}>*</sup>
-          </label>
-          <Select
-            className=""
-            options={months.map((option) => ({
-              value: option,
-              label: `${option}`,
-            }))}
-            onChange={(e) => {
-              setMonth(e.value);
-            }}
-            required
-          />
-        </div> */}
-
-      {/* </FormContainer> */}
-      {/* </div> */}
 
       <div className="card mb24">
         <div className="card-header">
@@ -935,7 +865,7 @@ const SalaryWFH = () => {
             <button
               onClick={handleAttendence}
               className="btn btn-warning"
-              style={{ "margin-top": "25px" }}
+              style={{ marginTop: "25px" }}
             >
               No Absents, Create Attendance
             </button>
@@ -1016,7 +946,9 @@ const SalaryWFH = () => {
                       data-target="#joinee"
                     >
                       <span>New Joinee</span>
-                      {newJoineeCount?.NewJoiners}
+                      {newJoineeCount?.NewJoiners
+                        ? newJoineeCount?.NewJoiners
+                        : "0"}
                     </li>
                     <li
                       className="color_primary"
@@ -1024,7 +956,7 @@ const SalaryWFH = () => {
                       data-target="#employeeleft"
                     >
                       <span>Employee left</span>
-                      {employeeLeft?.leftEmployeess}
+                      {employeeLeft?.leftEmployees}
                     </li>
                   </ul>
                 </div>
@@ -1062,8 +994,8 @@ const SalaryWFH = () => {
                     <PDFDownloadLink
                       document={pdfTemplate()}
                       fileName={
-                        departmentdata.find(
-                          (user) => user.dept_id === department
+                        departmentdata?.find(
+                          (user) => user?.dept_id === department
                         )?.dept_name +
                         " " +
                         month +

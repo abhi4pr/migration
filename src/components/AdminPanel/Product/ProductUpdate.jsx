@@ -64,7 +64,7 @@ const ProductUpdate = () => {
       };
 
       try {
-        axios.post(`http:////192.168.29.6:8080/api/add_proppost`, payload, {
+        axios.post(`http://34.93.135.33:8080/api/add_proppost`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -91,10 +91,7 @@ const ProductUpdate = () => {
 
   const removeProp = async (propid) => {
     var data = await axios
-      .delete(
-        `http://34.93.135.33:8080/api/delete_propdelete/${propid}`,
-        null
-      )
+      .delete(`http://34.93.135.33:8080/api/delete_propdelete/${propid}`, null)
       .then((crash) => {
         axios
           .get(`http://34.93.135.33:8080/api/get_single_productdata/${id}`)

@@ -79,7 +79,7 @@ const UserWiseResponsibility = () => {
   }
 
   function getDatas() {
-    axios.get(`http://44.211.225.140:8000/userbyjobres/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/userbyjobres/${id}`).then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });
@@ -112,9 +112,8 @@ const UserWiseResponsibility = () => {
         Job_res_id: element.Job_res_id,
       };
       axios
-        .post("http://44.211.225.140:8000/kratranspost", requestData)
+        .post("http://34.93.135.33:8080/api/kratranspost", requestData)
         .then((res) => {
-          console.log("Transfer data submitted successfully.", res.data);
           setRemark("");
           setTransferTo("");
           toastAlert("KRA Transfer Successfully");

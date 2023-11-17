@@ -40,21 +40,22 @@ function Dashboard() {
         });
     }
     if (userId) {
-      axios.get(`http://44.211.225.140:8000/usernew/${userId}`).then((res) => {
-        setLoginUserData(res.data);
-      });
+      axios
+        .get(`http://34.93.135.33:8080/api/get_single_user/${userId}`)
+        .then((res) => {
+          setLoginUserData(res.data);
+        });
     }
   }, []);
-
   useEffect(() => {
     setRenderCount(renderCount + 1);
-    axios.get("http://44.211.225.140:8000/alldataofsimmast").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alldataofsimmast").then((res) => {
       getAllSimData(res.data.data);
     });
-    axios.get("http://44.211.225.140:8000/logodata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/logodata").then((res) => {
       getLogoBrandData(res.data);
     });
-    axios.get("http://44.211.225.140:8000/alldataofipregis").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/alldataofipregis").then((res) => {
       getIntellectualProperty(res.data);
     });
   }, []);
@@ -157,6 +158,27 @@ function Dashboard() {
                 </div>
               </>
             )}
+
+          {/* asset */}
+          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+            <div className="d_infocard card shadow">
+              <div
+                className="card-body"
+                onClick={() => navigate("/asset-category-master")}
+              >
+                <div className="d_infocard_txt">
+                  <h3>Asset category</h3>
+                  <h2>{AllSimData}</h2>
+                </div>
+                <div className="d_infocard_icon">
+                  <span>
+                    <BsFillSimFill />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {contextData &&
             contextData[12] &&
             contextData[12].view_value === 1 && (

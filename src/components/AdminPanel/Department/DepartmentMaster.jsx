@@ -3,6 +3,8 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
+import jwtDecode from "jwt-decode";
+
 import { useGlobalContext } from "../../../Context/Context";
 
 const DepartmentMaster = () => {
@@ -10,16 +12,22 @@ const DepartmentMaster = () => {
   const [departmentName, setDepartmentName] = useState("");
   const [remark, setRemark] = useState("");
   const [error, setError] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const token = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+  const loginUserId = decodedToken.id;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    axios
+    await axios
       .post("http://34.93.135.33:8080/api/add_department", {
         dept_name: departmentName,
         remark: remark,
+        created_by: loginUserId,
+
       })
       .then(() => {
         setDepartmentName("");
@@ -51,6 +59,12 @@ const DepartmentMaster = () => {
           label="Deparment Name"
           value={departmentName}
           onChange={(e) => setDepartmentName(e.target.value)}
+        />
+            <FieldContainer
+          label="Created By"
+          value={createdBy}
+          onChange={(e) => setCreatedBy(e.target.value)}
+          disabled
         />
         <FieldContainer
           label="Remark"

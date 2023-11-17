@@ -27,7 +27,7 @@ const BrandView = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/getlogodata/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/getlogodata/${id}`).then((res) => {
       const fetchedData = res.data;
       const { 
         brand_name,
@@ -44,7 +44,7 @@ const BrandView = () => {
   }, [id]);
 
   useEffect(() => {
-    axios.get(`http://44.211.225.140:8000/logodata/${brand}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/logodata/${brand}`).then((res) => {
       setLogos(res.data);
     });
   }, [brand]);

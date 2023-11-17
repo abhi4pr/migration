@@ -8,7 +8,7 @@ const TransferReq = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://192.168.29.6:8080/api/get_all_transreq").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_transreq").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

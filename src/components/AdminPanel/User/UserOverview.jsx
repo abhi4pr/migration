@@ -3,16 +3,18 @@ import axios from "axios";
 import "./ShowData.css";
 import { Link, useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { FaEdit } from "react-icons/fa";
 import { RiLoginBoxLine } from "react-icons/ri";
 import FormContainer from "../FormContainer";
-import DeleteButton from "../DeleteButton";
 import jwtDecode from "jwt-decode";
 import FieldContainer from "../FieldContainer";
 import Select from "react-select";
 import { useGlobalContext } from "../../../Context/Context";
 import Modal from "react-modal";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Button } from "@mui/material";
 
 const UserOverview = () => {
   const whatsappApi = WhatsappAPI();
@@ -22,35 +24,27 @@ const UserOverview = () => {
   const [filterdata, setFilterData] = useState([]);
   const [isloading, setLoading] = useState(true);
   const [contextData, setData] = useState([]);
-
   const [departmentData, setDepartmentData] = useState([]);
   const [designationData, setDesignationData] = useState([]);
   const [desiOrgData, setDesiOrgData] = useState([]);
-
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [designationFilter, setDesignationFilter] = useState("");
   const [jobType, setJobType] = useState("");
-
   const [transferResponsibilityData, setTransferResponsibilityData] = useState(
     []
   );
   const [remark, setRemark] = useState("");
   const [transferTo, setTransferTo] = useState(0);
   const [transferToUser, setTransferToUser] = useState([]);
-
   const [username, setUserName] = useState("");
   const [usercontact, setUserContact] = useState("");
-
   const navigate = useNavigate();
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
   const roleToken = decodedToken.role_id;
-
   const oldToken = sessionStorage.getItem("token");
-
   const [checkedData, setCheckedData] = useState([]);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [separationReasonGet, setSeparationReasonGet] = useState([]);
   const [separationUserID, setSeparationUserID] = useState(null);
   const [separationStatus, setSeparationStatus] = useState("");
@@ -60,12 +54,10 @@ const UserOverview = () => {
   const [separationResignationDate, setSeparationResignationDate] =
     useState("");
   const [separationLWD, setSeparationLWD] = useState("");
-
-  const [filterCriteria, setFilterCriteria] = useState(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [KRIData, setKRIData] = useState([]);
   const handleKRA = (userId) => {
+    console.log(userId, "user is is here");
     setIsModalOpen(true);
     KRAAPI(userId);
   };
@@ -83,6 +75,7 @@ const UserOverview = () => {
   };
 
   function handleSeprationReason(userId, username, user_contact_no) {
+    console.log(userId, username, "---------()");
     setSeparationUserID(userId);
     setUserName(username);
     setUserContact(user_contact_no);
@@ -90,6 +83,7 @@ const UserOverview = () => {
       .get("http://34.93.135.33:8080/api/get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
+  const today = new Date().toISOString().split("T")[0];
 
   function handleSeparationDataPost() {
     axios.post("http://34.93.135.33:8080/api/add_separation", {
@@ -101,9 +95,12 @@ const UserOverview = () => {
       remark: separationRemark,
       reason: separationReason,
     });
-    whatsappApi.callWhatsAPI("separation user", usercontact, username, [
-      separationStatus,
-    ]);
+    whatsappApi.callWhatsAPI(
+      "CF_Separation",
+      JSON.stringify(usercontact),
+      username,
+      [username, separationStatus]
+    );
   }
 
   useEffect(() => {
@@ -145,9 +142,6 @@ const UserOverview = () => {
       const response = await axios.get(
         "http://34.93.135.33:8080/api/get_all_users"
       );
-      // const data = response.data.data.filter(
-      //   (item) => item.onboard_status !== 2
-      // );
       const data = response.data.data;
       setDatas(data);
       setFilterData(data);
@@ -163,6 +157,7 @@ const UserOverview = () => {
     axios
       .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
+        console.log(res.data, "Res.data.data");
         setDepartmentData(res.data);
         getData();
       });
@@ -173,6 +168,14 @@ const UserOverview = () => {
       .get("http://34.93.135.33:8080/api/get_all_designations")
       .then((res) => {
         setDesiOrgData(res.data.data);
+      });
+  };
+  const handleDelete = (userId) => {
+    axios
+      .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
+      .then((response) => {
+        console.log("User deleted successfully", response);
+        getData();
       });
   };
 
@@ -187,6 +190,10 @@ const UserOverview = () => {
       (d) => d.dept_id == departmentFilter
     );
     setDesignationData(deptWiseDesi);
+    console.log(designationFilter);
+    console.log(
+      deptWiseDesi.map((dept) => dept.desi_id === designationFilter)?.desi_name
+    );
   }, [departmentFilter]);
 
   useEffect(() => {
@@ -202,215 +209,204 @@ const UserOverview = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       const departmentMatch =
-        !departmentFilter || d.dept_id == departmentFilter;
+        !departmentFilter || d.dept_id === departmentFilter;
       const designationMatch =
-        !designationFilter || d.user_designation == designationFilter;
-      const jobtypeMatch = !jobType || d.job_type == jobType;
+        !designationFilter || d.user_designation === designationFilter;
+      const jobtypeMatch = jobType === "ALL" || d.job_type === jobType;
       return departmentMatch && designationMatch && jobtypeMatch;
     });
     setFilterData(result);
   }, [departmentFilter, designationFilter, jobType]);
 
+  const jobTypeOptions = [
+    { value: "ALL", label: "All" },
+    { value: "WFO", label: "WFO" },
+    { value: "WFH", label: "WFH" },
+  ];
+
   const columns = [
     {
-      name: "S.No",
-      cell: (row, index) => <div>{index + 1}</div>,
-      width: "5%",
-      sortable: true,
+      field: "id",
+      headerName: "S.No",
+      width: 70,
+      renderCell: (params) => <div>{params.row.id + 1}</div>,
     },
     {
-      name: "User Name",
-      selector: (row) => (
-        <>
-          <Link to={`/admin/user-single/${row.user_id}`}>
-            <span style={{ color: "blue" }}>{row.user_name}</span>
-          </Link>
-        </>
+      field: "user_name",
+      headerName: "User Name",
+      width: 120,
+      renderCell: (params) => (
+        <Link
+          to={`/admin/user-single/${params.row.user_id}`}
+          style={{ color: "blue" }}
+        >
+          {params.row.user_name}
+        </Link>
       ),
-      width: "10%",
+      sortable: true,
+    },
+    { field: "Role_name", headerName: "Role", width: 110, sortable: true },
+    {
+      field: "user_login_id",
+      headerName: "Login ID",
+      width: 190,
       sortable: true,
     },
     {
-      name: "Role",
-      selector: (row) => row.Role_name,
-      width: "5%",
+      field: "designation_name",
+      headerName: "Designation",
+      width: 180,
       sortable: true,
     },
     {
-      name: "Login ID",
-      selector: (row) => row.user_login_id,
+      field: "department_name",
+      headerName: "Department",
+      width: 120,
       sortable: true,
     },
+    { field: "user_email_id", headerName: "Email", width: 230 },
     {
-      name: "Designation",
-      selector: (row) => row.designation_name,
-      sortable: true,
-      width: "10%",
-    },
-    {
-      name: "Department",
-      selector: (row) => row.department_name,
-      sortable: true,
-    },
-    // {
-    //   name: "Contact No",
-    //   selector: (row) => row.user_contact_no,
-    // },
-    {
-      name: "Email",
-      selector: (row) => row.user_email_id,
-      width: "16%",
-    },
-    {
-      name: "Status",
-      selector: (row) => row.user_status,
-      width: "4%",
-      // cell: (row) => (
-      //   <>
-      //     {row.user_status === "Active" ? (
-      //       <span className="badge badge-success">Active</span>
-      //     ) : (
-      //       <span className="badge badge-warning">Inactive</span>
-      //     )}
-      //   </>
-      // ),
-      cell: (row) => (
+      field: "user_status",
+      headerName: "Status",
+      width: 100,
+      renderCell: (params) => (
         <>
-          {row.user_status === "Active" ? (
+          {params.row.user_status === "Active" ? (
             <span className="badge badge-success">Active</span>
-          ) : row.user_status === "Exit" || row.user_status === "On Leave" ? (
-            <span className="badge badge-warning">{row.user_status}</span>
-          ) : row.user_status === "Resign" ? (
+          ) : params.row.user_status === "Exit" ||
+            params.row.user_status === "On Leave" ? (
+            <span className="badge badge-warning">
+              {params.row.user_status}
+            </span>
+          ) : params.row.user_status === "Resign" ? (
             <span className="badge badge-danger">Resigned</span>
           ) : null}
         </>
       ),
     },
     {
-      name: "Auth",
-      width: "6%",
-      cell: (row) => (
+      field: "auth",
+      headerName: "Auth",
+
+      width: 90,
+      renderCell: (params) => (
         <>
           {contextData &&
             contextData[0] &&
-            contextData[0].update_value === 1 && (
-              <Link to={`/admin/user-auth-detail/${row.user_id}`}>
-                <button className="btn btn-primary btn-sm">Auth</button>
+            contextData[3].update_value === 1 && (
+              <Link to={`/admin/user-auth-detail/${params.row.user_id}`}>
+                <Button variant="contained" color="primary" size="small">
+                  Auth
+                </Button>
               </Link>
             )}
         </>
       ),
     },
     {
-      name: "KRA",
-      width: "6%",
-      cell: (row) => (
+      field: "kra",
+      headerName: "KRA",
+      width: 90,
+      renderCell: (params) => (
         <>
           {contextData &&
             contextData[0] &&
-            contextData[0].update_value === 1 && (
-              // <Link to={`/admin/user-auth-detail/${row.user_id}`}>
-              <button
-                onClick={() => handleKRA(row.user_id)}
-                className="btn btn-primary btn-sm"
+            contextData[3].update_value === 1 && (
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => handleKRA(params.row.user_id)}
               >
                 KRA
-              </button>
-              /* </Link> */
+              </Button>
             )}
         </>
       ),
     },
-
     {
-      name: "Log",
-      cell: (row) => (
-        <button
-          title="Login"
-          className="btn btn-primary btn-sm"
+      field: "log",
+      headerName: "Log",
+      width: 80,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<RiLoginBoxLine />}
           onClick={() =>
-            handleLogin(row.user_id, row.user_login_id, row.user_login_password)
+            handleLogin(
+              params.row.user_id,
+              params.row.user_login_id,
+              params.row.user_login_password
+            )
           }
-        >
-          <RiLoginBoxLine />
-        </button>
+        ></Button>
       ),
-      width: "5%",
     },
     {
-      name: "Transfer Res",
-      selector: (row) => (
-        <button
-          type="button"
-          className="btn btn-outline-warning btn-sm"
+      field: "transfer_res",
+      headerName: "Transfer Res",
+      width: 110,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="error"
           data-toggle="modal"
           data-target="#exampleModal1"
           data-whatever="@mdo"
-          onClick={() => handleTransfer(row.user_id)}
+          onClick={() => handleTransfer(params.row.user_id)}
         >
           Transfer
-        </button>
+        </Button>
       ),
-      width: "8%",
     },
     {
-      name: "Separation",
-      selector: (row) => (
-        <>
-          <button
-            type="button"
-            className="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-            onClick={() =>
-              handleSeprationReason(
-                row.user_id,
-                row.user_name,
-                row.user_contact_no
-              )
-            }
-          >
-            Sep
-          </button>
-        </>
+      field: "separation",
+      headerName: "Separation",
+      width: 100,
+      renderCell: (params) => (
+        <Button
+          className="btn btn-primary"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={() =>
+            handleSeprationReason(
+              params.row.user_id,
+              params.row.user_name,
+              params.row.user_contact_no
+            )
+          }
+        >
+          Sep
+        </Button>
       ),
-      width: "7%",
     },
-
     {
-      name: "Action",
-      cell: (row) => (
+      field: "actions",
+      headerName: "Action",
+      width: 150,
+      renderCell: (params) => (
         <>
           {contextData &&
             contextData[0] &&
             contextData[0].update_value === 1 && (
-              <Link to={`/admin/user-update/${row.user_id}`}>
-                <button
-                  title="Edit"
-                  className="btn btn-outline-primary btn-sm user-button"
-                >
-                  <FaEdit />
-                </button>
+              <Link to={`/admin/user-update/${params.row.user_id}`}>
+                <EditIcon sx={{ gap: "4px", margin: "5px", color: "blue" }} />
               </Link>
             )}
-          {/* <Link to={`/admin/user_view/${row.user_id}`}>
-            <button title="View" className="btn btn-outline-success btn-sml">
-              <BsFillEyeFill />{" "}
-            </button>
-          </Link> */}
           {contextData &&
             contextData[0] &&
             contextData[0].delete_flag_value === 1 && (
-              <DeleteButton
-                endpoint="delete_user"
-                id={row.user_id}
-                getData={getData}
+              <DeleteOutlineIcon
+                sx={{ gap: "4px", margin: "15px" }}
+                color="error"
+                onClick={() => handleDelete(params.row.user_id)}
               />
             )}
         </>
       ),
-      allowOverflow: true,
-      width: "22%",
     },
   ];
 
@@ -454,25 +450,49 @@ const UserOverview = () => {
       };
       axios
         .post("http://34.93.135.33:8080/api/add_kra", requestData)
-        .then((res) => {
+        .then(() => {
           setRemark("");
           setTransferTo("");
           toastAlert("KRA Transfer Successfully");
-
           const MailUser = transferToUser.find((d) => d.user_id == transferTo);
-
           axios.post("http://34.93.135.33:8080/api/add_send_user_mail", {
             email: MailUser.user_email_id,
             subject: "User Registration",
             text: "You Have Assign New KRA",
-            // attachment: selectedImage,
-            // login_id: loginId,
-            // name: username,
-            // password: password,
           });
         });
     }
   };
+
+  // const options = [
+  //   { value: "All", label: "All" },
+  //   ...designationData.map((option) => ({
+  //     value: option.desi_id,
+  //     label: option.desi_name,
+  //   })),
+  // ];
+
+  // const selectedOption =
+  //   options.find((option) => option.value === designationFilter) || null;
+
+  // const selectedOption = designationFilter ? designationFilter ==="All"
+  // ?     { value: "All", label: "All" }:
+  // {
+  //  value: designationFilter,
+  //  label: designationData.find((desi)=>desi.desi_id ===designationFilter)?.desi_name || "",
+  // }
+  // const options = [
+  //   { value: "All", label: "All" },
+  //   ...designationData.map((option) => ({
+  //     value: option.desi_id,
+  //     label: option.desi_name,
+  //   })),
+  // ];
+
+  // Finding the selected option
+  // const selectedOption = designationFilter
+  //   ? options.find((option) => option.value === designationFilter)
+  //   : null;
 
   return (
     <>
@@ -485,6 +505,11 @@ const UserOverview = () => {
           />
         </div>
         <div className="action_btns">
+          <Link to="/admin/users-dashboard">
+            <button type="button" className="btn btn-outline-primary btn-sm">
+              Dashboard
+            </button>
+          </Link>
           <Link to="/admin/reason">
             <button type="button" className="btn btn-outline-primary btn-sm">
               Reason
@@ -495,11 +520,7 @@ const UserOverview = () => {
               User Roles
             </button>
           </Link>
-          <Link to="/admin/users-dashboard">
-            <button type="button" className="btn btn-outline-primary btn-sm">
-              Dashboard
-            </button>
-          </Link>
+
           {contextData && contextData[3] && contextData[3].view_value === 1 && (
             <Link to="/admin/department-overview">
               <button type="button" className="btn btn-outline-primary btn-sm">
@@ -584,78 +605,107 @@ const UserOverview = () => {
           <div className="card mb-4">
             <div className="card-body pb0 pb4">
               <div className="row thm_form">
-                <FieldContainer
-                  label="Department"
-                  Tag="select"
-                  fieldGrid={3}
-                  value={departmentFilter}
-                  onChange={(e) => {
-                    const selectedValue = e.target.value;
-                    setDepartmentFilter(selectedValue);
-                    if (selectedValue === "All") {
-                      getData();
+                <div className="form-group col-3">
+                  <label className="form-label">
+                    Department Name<sup style={{ color: "red" }}>*</sup>
+                  </label>
+                  <Select
+                    options={[
+                      { value: "", label: "All" },
+                      ...departmentData.map((option) => ({
+                        value: option.dept_id,
+                        label: option.dept_name,
+                      })),
+                    ]}
+                    value={
+                      departmentFilter === ""
+                        ? { value: "", label: "All" }
+                        : {
+                            value: departmentFilter,
+                            label:
+                              departmentData.find(
+                                (dept) => dept.dept_id === departmentFilter
+                              )?.dept_name || "Select...",
+                          }
                     }
-                  }}
-                >
-                  <option value="All">All</option>
-                  {departmentData.map((option) => (
-                    <option value={option.dept_id} key={option.dept_id}>
-                      {option.dept_name}
-                    </option>
-                  ))}
-                </FieldContainer>
-                <FieldContainer
-                  label="Designation"
-                  Tag="select"
-                  fieldGrid={3}
-                  value={designationFilter}
-                  onChange={(e) => {
-                    const desiAll = e.target.value;
-                    setDesignationFilter(desiAll);
-                  }}
-                >
-                  <option value="All">All</option>
-                  {designationData.map((option) => (
-                    <option value={option.desi_id} key={option.desi_id}>
-                      {option.desi_name}
-                    </option>
-                  ))}
-                </FieldContainer>
-                <FieldContainer
-                  label="Job Type"
-                  Tag="select"
-                  fieldGrid={3}
-                  value={jobType}
-                  onChange={(e) => {
-                    setJobType(e.target.value);
-                  }}
-                >
-                  <option value="WFO">WFO</option>
-                  <option value="WFH">WFH</option>
-                </FieldContainer>
+                    onChange={(selectedOption) => {
+                      const selectedValue = selectedOption
+                        ? selectedOption.value
+                        : "";
+                      setDepartmentFilter(selectedValue);
+                      if (selectedValue === "") {
+                        getData();
+                      }
+                    }}
+                    required
+                  />
+                </div>
+
+                <div className="form-group col-3">
+                  <label className="form-label">
+                    Designation<sup style={{ color: "red" }}>*</sup>
+                  </label>
+                  <Select
+                    options={[
+                      { value: "", label: "All" },
+                      ...designationData.map((option) => ({
+                        value: option.desi_id,
+                        label: option.desi_name,
+                      })),
+                    ]}
+                    value={
+                      designationFilter === ""
+                        ? { value: "", label: "All" }
+                        : {
+                            value: designationFilter,
+                            label:
+                              designationData.find(
+                                (option) => option.desi_id === designationFilter
+                              )?.desi_name || "Select...",
+                          }
+                    }
+                    onChange={(selectedOption) => {
+                      const newValue = selectedOption
+                        ? selectedOption.value
+                        : "";
+                      setDesignationFilter(newValue);
+                      if (newValue === "") {
+                        designationAPI();
+                      }
+                    }}
+                    required
+                  />
+                </div>
+
+                <div className="form-group col-3">
+                  <label className="form-label">
+                    Job Type<sup style={{ color: "red" }}>*</sup>
+                  </label>
+                  <Select
+                    value={jobTypeOptions.find(
+                      (option) => option.value === jobType
+                    )}
+                    onChange={(selectedOption) => {
+                      setJobType(selectedOption.value);
+                    }}
+                    options={jobTypeOptions}
+                  />
+                </div>
               </div>
             </div>
-            <div className="data_tbl table-responsive">
-              <DataTable
-                title="User Overview"
+
+            <div className="data_tbl" style={{ height: "64vh", width: "100%" }}>
+              <DataGrid
+                rows={filterdata.map((data, index) => ({ ...data, id: index }))}
                 columns={columns}
-                data={filterdata}
-                fixedHeader
-                // pagination
-                fixedHeaderScrollHeight="64vh"
-                highlightOnHover
-                subHeader
-                subHeaderComponent={
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Search here"
-                      className="w-50 form-control "
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </>
-                }
+                pageSize={10}
+                rowsPerPageOptions={[10]}
+                disableColumnMenu
+                disableSelectionOnClick
+                getRowId={(row) => row.id}
+                slots={{
+                  toolbar: GridToolbar,
+                }}
               />
             </div>
           </div>
@@ -831,16 +881,6 @@ const UserOverview = () => {
                 value={separationRemark}
                 onChange={(e) => setSeparationRemark(e.target.value)}
               />
-              {/* {["On Long Leave", "Subatical", "Suspended"].includes(
-                separationStatus
-              ) && (
-                <FieldContainer
-                  label="Reinstated Date"
-                  type="date"
-                  value={separationReinstateDate}
-                  onChange={(e) => setSeparationReinstateDate(e.target.value)}
-                />
-              )} */}
               {(separationStatus === "On Long Leave" ||
                 separationStatus === "Subatical" ||
                 separationStatus === "Suspended") && (
@@ -852,10 +892,13 @@ const UserOverview = () => {
                 />
               )}
               {separationStatus == "Resign Accepted" && (
-                <FieldContainer
+                <input
                   label="Last Working Day"
+                  className="form-control"
+                  style={{ width: "220px" }}
                   type="date"
                   value={separationLWD}
+                  max={today}
                   onChange={(e) => setSeparationLWD(e.target.value)}
                 />
               )}

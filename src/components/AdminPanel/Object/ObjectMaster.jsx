@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
+import Select from "react-select";
 const ObjectMaster = () => {
   const { toastAlert } = useGlobalContext();
   const [objectName, setObjectName] = useState("");
@@ -62,7 +63,7 @@ const ObjectMaster = () => {
           onChange={(e) => setSoftwareName(e.target.value)}
         />
 
-        <FieldContainer
+        {/* <FieldContainer
           label="Department"
           Tag="select"
           className="form-select"
@@ -77,7 +78,29 @@ const ObjectMaster = () => {
               {d.dept_name}
             </option>
           ))}
-        </FieldContainer>
+        </FieldContainer> */}
+        <div className="form-group col-6">
+          <label className="form-label">
+            Department  <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+           options={deptData.map((option) => ({
+            value: option.dept_id,
+            label: `${option.dept_name}`,
+          }))}
+          value={{
+            value: selectedDepartment,
+            label:
+            deptData.find(
+                (user) => user.dept_id === selectedDepartment
+              )?.dept_name || "",
+          }}
+          onChange={(e) => {
+            setSelectedDepartment(e.value);
+          }}
+          required
+          />
+        </div>
       </FormContainer>
     </>
   );

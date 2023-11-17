@@ -121,6 +121,10 @@ import AccountsOverviewWFH from "./AccountsDepartment/AccountsOverviewWFH";
 import WFHSingleUser from "./WFH/WFHSingleUser/WFHSingleUser";
 import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
 
+import ExecutionAll from "../Execution/ExecutionAll";
+import ExecutionOwn from "../Execution/ExecutionOwn";
+import ExecutionOther from "../Execution/ExecutionOther";
+
 const Admin = () => {
   const [contextData, setData] = useState([]);
 
@@ -222,7 +226,7 @@ const Admin = () => {
 
                   {/* Attendence  */}
                   <Route
-                    path="/salary-dashboard"
+                    path="/salary-dashboard/:id"
                     element={<SalaryDashboard />}
                   />
                   <Route
@@ -422,6 +426,18 @@ const Admin = () => {
                     element={<OnboardExtendDateOverview />}
                   />
                   <Route
+                    path="/pre-onboard-coc-master"
+                    element={<CocMaster/>}
+                  />
+                  <Route
+                    path="/pre-onboard-coc-overview"
+                    element={<CocOverview />}
+                  />
+                  <Route
+                    path="/pre-onboard-coc-update/:id"
+                    element={<CocUpdate />}
+                  />
+                  <Route
                     path="/only-pre-onboard-user-data"
                     element={<PreOnboardVerifyDetails />}
                   />
@@ -519,6 +535,9 @@ const Admin = () => {
 
                   {/*------------------------ Execution --------------------------------*/}
                   <Route path="/execution" element={<OverviewIndex />} />
+                  <Route path="/exeexecution/all" element={<ExecutionAll />} />
+                  <Route path="/exeexecution/own" element={<ExecutionOwn />} />
+                  <Route path="/exeexecution/other" element={<ExecutionOther />} />
                   <Route
                     path="/exeexecution/pending"
                     element={

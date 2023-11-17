@@ -33,10 +33,9 @@ const OfficeMast = () => {
     formData.append("room_image", roomimage);
     formData.append("remarks", remark);
     formData.append("created_by", loginUserId);
-    // console.log("yha image ai", roomimage);
     try {
       const isLoginIdExists = officeData.some(
-        (data) => data.sitting_ref_no === sittingMast
+        (data) => data.Sitting_ref_no === sittingMast
       );
       if (isLoginIdExists) {
         alert("this Room No already exists");

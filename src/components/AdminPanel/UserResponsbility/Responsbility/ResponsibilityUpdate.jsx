@@ -18,25 +18,29 @@ const ResponsibilityUpdate = () => {
   const userId = decodedToken.id;
 
   useEffect(() => {
-    axios
-      .get(`http://34.93.135.33:8080/api/get_single_responsibility/${id}`)
-      .then((res) => {
-        const fetchedData = res.data;
-        setResponsibility(fetchedData.respo_name);
-        setDescription(fetchedData.description);
-      });
+    axios.get(`http://34.93.135.33:8080/api/get_single_responsibility/${id}`).then((res) => {
+      const fetchedData = res.data;
+      setResponsibility(fetchedData.respo_name);
+      setDescription(fetchedData.description);
+    });
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.put(`http://34.93.135.33:8080/api/edit_responsibility/${id}`, {
-      respo_name: responsibility,
-      description: description,
-      Last_updated_by: userId,
-    });
-    toastAlert("Form submitted");
-    setIsFormSubmitted(true);
+    try {
+      await axios.put(`http://34.93.135.33:8080/api/edit_responsibility/${id}`, {
+        respo_name: responsibility,
+        description: description,
+        Last_updated_by: userId,
+      });
+      toastAlert("Form submitted");
+      setIsFormSubmitted(true);
+    } catch (error) {
+      console.error("An error occurred while submitting the form", error);
+      toastAlert("Form submission failed");
+    }
   };
+  
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/responsibility-overview" />;

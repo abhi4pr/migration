@@ -31,6 +31,9 @@ import IpGraph from "./components/IntellectualProperty/IpGraph";
 // import Notification from "./Notification";
 import PendingOrderSingleUser from "./components/Pantry/UserPanel/PendingOrderSingleUser";
 import { APIContext } from "./components/AdminPanel/APIContext/APIContext";
+import AssetCategoryMaster from "./components/Sim/AssetCategory/AssetCategoryMaster";
+import AssetCategoryOverview from "./components/Sim/AssetCategory/AssetCategoryOverview";
+import AssetCategoryUpdate from "./components/Sim/AssetCategory/AssetCategoryUpdate";
 
 function App() {
   return (
@@ -64,6 +67,7 @@ function App() {
             }
           />
 
+          {/* sim */}
           <Route path="/sim-overview" element={<SimOverview />} />
           <Route path="/sim-master" element={<SimMaster />} />
           <Route path="/sim-update/:id" element={<SimUpdate />} />
@@ -72,8 +76,21 @@ function App() {
             path="/sim-allocation-overview"
             element={<SimAllocationOverview />}
           />
-
           <Route path="/sim-summary/:id" element={<SimSummary />} />
+
+          <Route
+            path="/asset-category-master"
+            element={<AssetCategoryMaster />}
+          />
+          <Route
+            path="/asset-category-overview"
+            element={<AssetCategoryOverview />}
+          />
+          <Route
+            path="/asset-category-update/:id"
+            element={<AssetCategoryUpdate />}
+          />
+
           <Route path="/ip-overview" element={<IpOverview />} />
           <Route path="/ip-master" element={<IpMaster />} />
           <Route path="/ip-update/:id" element={<IpUpdate />} />

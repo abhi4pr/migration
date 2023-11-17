@@ -68,15 +68,17 @@ const SimAllocationOverview = () => {
   };
 
   const handleSubmit = (row) => {
+    console.log(simData.allo_id, "tullo id");
+
     const currentReason = reason[row.sim_id];
     const currSubDate = subDate[row.sim_id];
     if (currSubDate && currentReason) {
       axios.put("http://34.93.135.33:8080/api/update_allocationsim", {
         sim_id: row.sim_id,
-        id: simData.allo_id,
+        allo_id: simData.allo_id,
         user_id: simData.user_id,
         dept_id: simData.dept_id,
-        status: "status",
+        status: "Available",
         submitted_by: userID,
         Last_updated_by: userID,
         Reason: currentReason,
@@ -219,7 +221,7 @@ const SimAllocationOverview = () => {
         <div className="card mb-4">
           <div className="data_tbl table-responsive">
             <DataTable
-              title="User Overview"
+              title="Sim Allocation Overview"
               columns={columns}
               data={filterdata}
               fixedHeader

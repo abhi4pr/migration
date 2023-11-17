@@ -195,9 +195,11 @@ const Attendence = () => {
         setAttendenceData(res.data.data);
         setFilterData(res.data.data);
       })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-        toastAlert("Failed to submit data");
+      .catch(() => {
+        department &&
+          selectedMonth &&
+          selectedYear &&
+          toastAlert("Failed to submit data");
       });
   };
 

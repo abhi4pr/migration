@@ -41,7 +41,7 @@ export default function AddPage({setXlxsData}) {
   //  Interagation of followerData api ----- ** start ** ------------------
   useEffect(() => {
     console.log( "gridRows");
-    axios.get('http://44.211.225.140:8000/getallprojectx').then((response) => {
+    axios.get('http://34.93.135.33:8080/api/getallprojectx').then((response) => {
       const data = response.data;
       console.log(data,"<--------");
       // if (gridRows.length > 0) {

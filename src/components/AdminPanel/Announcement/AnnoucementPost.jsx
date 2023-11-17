@@ -32,7 +32,7 @@ const AnnouncementPost = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://44.211.225.140:8000/annomastpost", {
+      .post("http://34.93.135.33:8080/api/annomastpost", {
         dept_id: department,
         desi_id: designation,
         onboard_status: announcementFor,

@@ -33,7 +33,7 @@ const UserHierarchy = () => {
       setData(allUserData);
     } else {
       axios
-        .post("http://44.211.225.140:8000/l1l2l3usersbydept", {
+        .post("http://34.93.135.33:8080/api/l1l2l3usersbydept", {
           dept_id: selectedDepartment,
         })
         .then((res) => {

@@ -86,7 +86,7 @@ const Backup_WFHSalary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://192.168.29.6:8080/api/get_all_wfh_users");
+        const res = await axios.get("http://34.93.135.33:8080/api/get_all_wfh_users");
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
         if (filteredUser?.length > 0) {
@@ -117,7 +117,7 @@ const Backup_WFHSalary = () => {
     });
     if (department) {
       axios
-        .get(`http://44.211.225.140:8000/getuserdeptwise/${department}`)
+        .get(`http://34.93.135.33:8080/api/getuserdeptwise/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
@@ -139,7 +139,7 @@ const Backup_WFHSalary = () => {
       year: year,
     };
     axios
-      .post("http://192.168.29.6:8080/api/get_salary_by_id_month_year", payload)
+      .post("http://34.93.135.33:8080/api/get_salary_by_id_month_year", payload)
       .then((res) => {
         setFilterData(res.data.data);
       })
@@ -155,7 +155,7 @@ const Backup_WFHSalary = () => {
     formData.append("id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
-    axios.put(`http://44.211.225.140:8000/userupdate`, formData, {
+    axios.put(`http://34.93.135.33:8080/api/userupdate`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -177,7 +177,7 @@ const Backup_WFHSalary = () => {
 
   const handleAttendence = () => {
     axios
-      .post("http://44.211.225.140:8000/attendencemastpost", {
+      .post("http://34.93.135.33:8080/api/attendencemastpost", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
@@ -323,11 +323,11 @@ const Backup_WFHSalary = () => {
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
-    axios.post(`http://44.211.225.140:8000/finance`, {
+    axios.post(`http://34.93.135.33:8080/api/finance`, {
       attendence_id: row.attendence_id,
     });
 
-    axios.put(`http://44.211.225.140:8000/updatesalary`, {
+    axios.put(`http://34.93.135.33:8080/api/updatesalary`, {
       attendence_id: row.attendence_id,
       sendToFinance: 1,
     });
@@ -869,7 +869,7 @@ const Backup_WFHSalary = () => {
               <div>
                 ScreenSort :
                 <img
-                  src={`${"http://44.211.225.140:8000/user_images/"}${
+                  src={`${"http://34.93.135.33:8080/api/user_images/"}${
                     rowDataModal?.screenshot
                   }`}
                   alt="Snap"

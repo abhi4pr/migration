@@ -39,13 +39,16 @@ const SittingOverview = () => {
   }, []);
   useEffect(() => {
     const result = datas.filter((d) => {
+      const user = userData.find((user) => user.sitting_id === d.sitting_id);
+      const userName = user ? user.user_name.toLowerCase() : "";
       return (
-        d.sitting_area.toLowerCase().match(search.toLowerCase()) ||
-        d.sitting_ref_no.toLowerCase().match(search.toLowerCase())
+        d.sitting_area.toLowerCase().includes(search.toLowerCase()) ||
+        d.sitting_ref_no.toLowerCase().includes(search.toLowerCase()) ||
+        userName.includes(search.toLowerCase())
       );
     });
     setFilterData(result);
-  }, [search]);
+  }, [search, datas, userData]);
   const columns = [
     {
       name: "S.No",

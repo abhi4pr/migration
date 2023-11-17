@@ -136,11 +136,11 @@ export default function ExecutionDone() {
     // },
 
     {
-      field: "start_date_",
+      field: "start_date",
       headerName: "Start Date",
       width: 200,
       renderCell: (params) => {
-        const startDate = new Date(params.row.start_date_);
+        const startDate = new Date(params.row.start_date);
         const dateOptions = {
           year: "numeric",
           month: "2-digit",
@@ -154,15 +154,20 @@ export default function ExecutionDone() {
         };
     
         const formattedDate = startDate.toLocaleDateString("en-GB", dateOptions);
-        const formattedTime = startDate.toLocaleTimeString("en-GB", timeOptions);
+        const formattedTime =startDate.toISOString().split('T')[1].substring(0, 8);
+
+        if(params.row.start_date == "0000-00-00 00:00:00" || params.row.start_date == null || params.row.start_date == undefined){
+          return " "
+        }else{
     
-        return (
-          <div>
-            <span>{formattedDate}</span> &nbsp;
-            <span>{formattedTime}</span>
-          </div>
-        );
-      },
+          return (
+            <div>
+                <span>{formattedDate}</span> &nbsp;
+                <span>{formattedTime}</span>
+              </div>
+            );
+          }
+          },
     },
     
     {
@@ -184,7 +189,7 @@ export default function ExecutionDone() {
         };
     
         const formattedDate = startDate.toLocaleDateString("en-GB", dateOptions);
-        const formattedTime = startDate.toLocaleTimeString("en-GB", timeOptions);
+        const formattedTime = startDate.toISOString().split('T')[1].substring(0, 8);
     
         return (
           <div>

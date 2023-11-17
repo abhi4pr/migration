@@ -34,7 +34,7 @@ const OverviewIndex = () => {
       const responseArray = [];
 
       axios
-        .get("http://44.211.225.140:8000/executionSummary", {
+        .get("http://34.93.135.33:8080/api/executionSummary", {
           loggedin_user_id: 52,
         })
         .then((response) => {
@@ -70,19 +70,17 @@ const OverviewIndex = () => {
       //   }
       // }
 
-      axios
-        .get("http://34.93.135.33:8080/api/execution_graph")
-        .then((res) => {
-          console.log(res.data, "this is response");
-          setCounts(res.data);
-          console.log(
-            res.data.filter(
-              (count) =>
-                count.interval_type === "Weekly" && count.execution_status === 1
-            )[0].count,
-            "filter data"
-          );
-        });
+      axios.get("http://34.93.135.33:8080/api/execution_graph").then((res) => {
+        console.log(res.data, "this is response");
+        setCounts(res.data);
+        console.log(
+          res.data.filter(
+            (count) =>
+              count.interval_type === "Weekly" && count.execution_status === 1
+          )[0].count,
+          "filter data"
+        );
+      });
 
       setCounts(responseArray);
     };

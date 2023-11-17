@@ -16,7 +16,7 @@ const IpHistory = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get(`http://44.211.225.140:8000/dataofiphistory/${id}`).then((res) => {
+    axios.get(`http://34.93.135.33:8080/api/dataofiphistory/${id}`).then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

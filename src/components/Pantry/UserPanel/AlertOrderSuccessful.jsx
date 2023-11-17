@@ -8,7 +8,9 @@ const AlertOrderSuccessful = () => {
 
   async function getData() {
     try {
-      const res = await axios.get("http://192.168.29.6:8080/api/get_all_orderreqdata");
+      const res = await axios.get(
+        "http://34.93.135.33:8080/api/get_all_orderreqdata"
+      );
       setData(res.data.data);
       console.log(res.data.data);
     } catch (error) {

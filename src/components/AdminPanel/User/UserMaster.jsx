@@ -31,6 +31,8 @@ import imageTest28 from "../../../assets/img/product/Avtar28.png";
 import imageTest29 from "../../../assets/img/product/Avtar29.png";
 import imageTest30 from "../../../assets/img/product/Avtar30.png";
 import Select from "react-select";
+import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import IndianStates from "../../ReusableComponents/IndianStates";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -39,6 +41,7 @@ const colourOptions = [
 ];
 
 const UserMaster = () => {
+  const whatsappApi = WhatsappAPI();
   const { toastAlert } = useGlobalContext();
   const [username, setUserName] = useState("");
 
@@ -106,7 +109,15 @@ const UserMaster = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [maritialStatus, setMaritialStatus] = useState("");
   const [dateOfMarraige, setDateOfMarraige] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
+
+  const [bankName, setBankName] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [IFSC, setIFSC] = useState("");
 
   const [isEmptyRequiredField, setIsEmptyRequiredField] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
@@ -179,12 +190,16 @@ const UserMaster = () => {
     const uidPattern = /^\d{12}$/;
     return uidPattern.test(uid);
   };
+
+  useEffect(() => {
+    const test = tempLanguage?.map((option) => option.value).join();
+    setSpeakingLanguage(test);
+  }, [tempLanguage]);
+  
   useEffect(() => {
     if (department) {
       axios
-        .get(
-          `http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`
-        )
+        .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
@@ -200,11 +215,9 @@ const UserMaster = () => {
         getDepartmentData(res.data);
       });
 
-    axios
-      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
-      .then((res) => {
-        getRefrenceData(res.data.data);
-      });
+    axios.get("http://34.93.135.33:8080/api/not_alloc_sitting").then((res) => {
+      getRefrenceData(res.data.data);
+    });
 
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
@@ -220,19 +233,31 @@ const UserMaster = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (
-    //   !username ||
-    //   !gender ||
-    //   !personalEmail ||
-    //   !personalContact ||
-    //   !loginId ||
-    //   !password ||
-    //   !dateOfBirth ||
-    //   !gender
-    // ) {
-    //   setError("Please select All required Fields");
-    //   return;
-    // }
+    if (
+      !username ||
+      !gender ||
+      !designation ||
+      !department ||
+      !reportL1 ||
+      !roles ||
+      !personalEmail ||
+      // !speakingLanguage ||
+      !dateOfBirth ||
+      !maritialStatus ||
+      !joiningDate ||
+      !jobType ||
+      !status ||
+      !sitting ||
+      !personalContact ||
+      !loginId ||
+      !password ||
+      !dateOfBirth ||
+      !gender
+    ) {
+      setError("Please select All required Fields");
+      return;
+    }
+
     const formData = new FormData();
     // const formDataa = new FormData();
     formData.append("created_by", loginUserId);
@@ -271,9 +296,16 @@ const UserMaster = () => {
     formData.append("BloodGroup", bloodGroup);
     formData.append("MartialStatus", maritialStatus);
     formData.append("DateofMarriage", dateOfMarraige);
+    formData.append("permanent_address", address);
+    formData.append("permanent_city", city);
+    formData.append("permanent_state", state);
+    formData.append("permanent_pin_code", Number(pincode));
     formData.append("user_status", status);
     formData.append("tds_applicable", tdsApplicable);
     formData.append("tds_per", tdsPercentage);
+    formData.append("bank_name", bankName);
+    formData.append("ifsc_code", IFSC);
+    formData.append("account_no", bankAccountNumber);
     formData.append("uid_no", UIDNumber);
     formData.append("pan_no", PANNumber);
     formData.append("spouse_name", spouseName);
@@ -289,15 +321,36 @@ const UserMaster = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post(
-            "http://34.93.135.33:8080/api/add_user",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          if (reportL1 !== "") {
+            axios
+              .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+                email: email,
+                subject: "User Registration",
+                text: "A new user has been registered.",
+                attachment: selectedImage,
+                login_id: loginId,
+                name: username,
+                password: password,
+              })
+              .then((res) => {
+                console.log("Email sent successfully:", res.data);
+              })
+              .catch((error) => {
+                console.log("Failed to send email:", error);
+              });
+
+            whatsappApi.callWhatsAPI(
+              "Extend Date by User",
+              JSON.stringify(personalContact),
+              username,
+              ["You have assinge Report L1", "ok"]
+            );
+          }
 
           for (const elements of documents) {
             // formData.append("user_id", loginId);
@@ -333,25 +386,13 @@ const UserMaster = () => {
             .catch((error) => {
               console.log("Failed to send email:", error);
             });
-          // setUserName("");
-          // setRoles("");
-          // setEmail("");
-          // setPersonalEmail("");
-          // setLoginId("");
-          // setContact("");
-          // setPersonalContact("");
-          // setPassword("");
-          // setDepartment("");
-          // setSitting("");
-          // setRoomId("");
-          // setPersonalContact("");
-          // setPersonalEmail("");
-          // setJobType("");
-          // setReportL1("");
-          // setReportL2("");
-          // setReportL3("");
-          // setDesignation("");
 
+          whatsappApi.callWhatsAPI(
+            "Preonboarding Register",
+            JSON.stringify(personalContact),
+            username,
+            [username, loginId, password, "http://jarviscloud.in/"]
+          );
           toastAlert("User Registerd");
           setIsFormSubmitted(true);
         }
@@ -393,6 +434,7 @@ const UserMaster = () => {
       setValidEmail(emailRegex.test(newEmail));
     }
   }
+  const today = new Date().toISOString().split("T")[0];
 
   // Number validation
   function handleContactChange(event) {
@@ -515,13 +557,25 @@ const UserMaster = () => {
     const currentDate = new Date();
     const birthDate = new Date(dob);
     let age = currentDate.getFullYear() - birthDate.getFullYear();
-    setAge(age);
+    const m = currentDate.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
   };
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    setDateOfBirth(selectedDate);
-    calculateAge(selectedDate);
+    const age = calculateAge(selectedDate);
+
+    if (age < 15) {
+      window.alert("Your age must be greater than 15 years.");
+    } else {
+      setDateOfBirth(selectedDate);
+      setAge(age);
+    }
   };
 
   function addMore() {
@@ -545,12 +599,8 @@ const UserMaster = () => {
     setTempLanguage(selectedOption);
   }
 
-  // useEffect(() => {
-  //   const test = tempLanguage?.map((option) => option.value).join();
-  //   setSpeakingLanguage(test);
-  // }, [tempLanguage]);
 
-  const accordionButtons = ["Genral", "Personal", "Salary", "Documents"];
+  const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
   const genralFields = (
     <>
@@ -608,9 +658,7 @@ const UserMaster = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Sub Department <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Sub Department</label>
         <Select
           className=""
           options={subDepartmentData.map((option) => ({
@@ -654,9 +702,7 @@ const UserMaster = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L2 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L2</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -677,9 +723,7 @@ const UserMaster = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L3 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L3</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -833,6 +877,9 @@ const UserMaster = () => {
         />
       </div>
 
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
       {/* <FieldContainer
         label="Seat Number"
         Tag="select"
@@ -862,13 +909,25 @@ const UserMaster = () => {
 
   const salaryFields = (
     <>
-      <FieldContainer
+      {/* <FieldContainer
         type="date"
         label="Joining Date"
         fieldGrid={3}
         value={joiningDate}
         onChange={(e) => setJoiningDate(e.target.value)}
-      />
+      /> */}
+      <div className="from-group col-3">
+        <label className="form-label">
+          Joining Date <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          // style={{ width: "470px " }}
+          value={joiningDate}
+          onChange={(e) => setJoiningDate(e.target.value)}
+        />
+      </div>
       {/* <FieldContainer
         type="date"
         label=" Releaving Date "
@@ -960,6 +1019,27 @@ const UserMaster = () => {
           required
         />
       </div>
+      <FieldContainer
+        label="Bank Name"
+        value={bankName}
+        onChange={(e) => setBankName(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="Bank Account Number"
+        value={bankAccountNumber}
+        onChange={(e) => setBankAccountNumber(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="IFSC"
+        value={IFSC}
+        onChange={(e) => setIFSC(e.target.value.toUpperCase())}
+        required={false}
+      />
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        Submit
+      </button>
     </>
   );
 
@@ -1021,9 +1101,7 @@ const UserMaster = () => {
         required={false}
       />
       <div className="form-group col-3">
-        <label className="form-label">
-          Higest Qualification <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Higest Qualification</label>
         <Select
           className=""
           options={higestQualificationData.map((option) => ({
@@ -1089,22 +1167,21 @@ const UserMaster = () => {
         {!isValidUID && (
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
-        <div className="d-flex justify-content-between">
+        <div className="d-flex mb-2">
           <button
             type="button"
-            className="btn btn-primary mb-2"
+            className="btn btn-outline-primary me-2"
             onClick={addMore}
           >
             Add More
           </button>
           {documents.length > 0 && (
-            <button className="btn btn-primary" onClick={reomveField}>
+            <button className="btn btn-outline-primary" onClick={reomveField}>
               Remove Field
             </button>
           )}
         </div>
       </div>
-      {error}
     </>
   );
 
@@ -1201,9 +1278,7 @@ const UserMaster = () => {
         </div>
       </div>
       <div className="form-group col-3">
-        <label className="form-label">
-          Spoken Languages <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Spoken Languages</label>
         <Select
           isMulti
           name="langauages"
@@ -1239,12 +1314,20 @@ const UserMaster = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-      <FieldContainer
-        label="DOB"
-        type="date"
-        value={dateOfBirth}
-        onChange={handleDateChange}
-      />
+      <div className="from-group col-6">
+        <label className="form-label">
+          DOB <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          label="DOB"
+          type="date"
+          className="form-control"
+          style={{ width: "470px " }}
+          max={today}
+          value={dateOfBirth}
+          onChange={handleDateChange}
+        />
+      </div>
       {dateOfBirth !== "" && <FieldContainer label="Age" value={age} />}
       <FieldContainer
         label="Father's Name"
@@ -1265,9 +1348,7 @@ const UserMaster = () => {
         required={false}
       />
       <div className="form-group col-6">
-        <label className="form-label">
-          Blood Group <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Blood Group</label>
         <Select
           className=""
           options={bloodGroupData.map((option) => ({
@@ -1304,6 +1385,7 @@ const UserMaster = () => {
           required={false}
         />
       </div>
+
       {maritialStatus === "Married" && (
         <FieldContainer
           label="Spouse Name"
@@ -1314,13 +1396,40 @@ const UserMaster = () => {
       )}
       {maritialStatus == "Married" && (
         <FieldContainer
-          label="Date Of Marriage"
           type="date"
+          label="Date Of Marraige"
           value={dateOfMarraige}
           onChange={(e) => setDateOfMarraige(e.target.value)}
+          max={today}
           required={false}
         />
       )}
+      <FieldContainer
+        label="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="City"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        required={false}
+      />
+      <div className="form-group col-6">
+        <IndianStates
+          onChange={(option) => setState(option ? option.value : null)}
+        />
+      </div>
+      <FieldContainer
+        label="Pincode"
+        value={pincode}
+        onChange={(e) => setPincode(e.target.value)}
+        required={false}
+      />
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        Submit
+      </button>
     </>
   );
 

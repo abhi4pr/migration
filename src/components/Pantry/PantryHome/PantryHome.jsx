@@ -40,9 +40,11 @@ const PantryHome = () => {
   };
 
   useEffect(() => {
-    axios.get("http://192.168.29.6:8080/api/get_all_orderreqdata").then((res) => {
-      setAllOrderData(res.data.data[0]?res.data.data:[]);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .then((res) => {
+        setAllOrderData(res.data.data);
+      });
   }, []);
   const pendingOrdersCount = allOrderData.filter(
     (orders) => orders.Status.toLowerCase() === "pending"
@@ -56,7 +58,7 @@ const PantryHome = () => {
 
   const allOrderCount = allOrderData.length;
   useEffect(() => {
-    axios.get("http://192.168.29.6:8080/api/get_all_transreq").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_transreq").then((res) => {
       setTransferReq(res.data.data);
     });
   }, []);

@@ -21,7 +21,7 @@ const AccessTypeMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://44.211.225.140:8000/Iptype", {
+      .post("http://34.93.135.33:8080/api/Iptype", {
         name: accessTypeName,
         remark: remark,
         created_by: userID

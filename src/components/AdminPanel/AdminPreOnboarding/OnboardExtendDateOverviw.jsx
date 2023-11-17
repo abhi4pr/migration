@@ -45,7 +45,6 @@ const OnboardExtendDateOverview = () => {
   }, []);
 
   const statusUpdate = (user_id, status, user_contact_no) => {
-    console.log("www", status, user_contact_no);
     const formData = new FormData();
     formData.append("id", user_id);
     formData.append("joining_date_extend_status", status);
@@ -87,7 +86,7 @@ const OnboardExtendDateOverview = () => {
     },
     {
       name: "Joining Date",
-      selector: (row) => row.joining_date,
+      selector: (row) => row.joining_date?.split("T")?.[0],
       sortable: true,
     },
     {

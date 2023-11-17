@@ -112,7 +112,7 @@ function EditLead() {
       setAddRows(false);
       // console.log("post api hitted");
       try {
-        axios.post("http://44.211.225.140:8000/leadmastpost", {
+        axios.post("http://34.93.135.33:8080/api/leadmastpost", {
           lead_name: updatedRow.lead_name,
           mobile_no: updatedRow.mobile_no,
           alternate_mobile_no: updatedRow.alternate_mobile_no,
@@ -132,7 +132,7 @@ function EditLead() {
       return updatedRow;
     }
     try {
-      axios.put("http://44.211.225.140:8000/leadmastupdate", {
+      axios.put("http://34.93.135.33:8080/api/leadmastupdate", {
         id: updatedRow.leadmast_id,
         lead_name: updatedRow.lead_name,
         mobile_no: updatedRow.mobile_no,

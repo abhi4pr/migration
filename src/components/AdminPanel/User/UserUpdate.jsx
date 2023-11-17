@@ -8,6 +8,7 @@ import { AiOutlineReload } from "react-icons/ai";
 import Select from "react-select";
 import jwtDecode from "jwt-decode";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import IndianStates from "../../ReusableComponents/IndianStates";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -87,6 +88,10 @@ const UserUpdate = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [maritialStatus, setMaritialStatus] = useState("");
   const [dateOfMarraige, setDateOfMarraige] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
 
   // TDS State
@@ -103,6 +108,17 @@ const UserUpdate = () => {
   const [isValidPAN, setIsValidPAN] = useState(true);
   const [isValidUID, setIsValidUID] = useState(true); // State to track UID validation
   const [defaultSeatData, setDefaultSeatData] = useState([]);
+
+  const [uidImage, setUidImage] = useState("");
+  const [panImage, setPanImage] = useState("");
+  const [highestQualificationImage, setHighestQualificationImage] =
+    useState("");
+  const [otherImage, setOtherImage] = useState("");
+  //SalaryFields
+  const [bankName, setBankName] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [IFSC, setIFSC] = useState("");
+
   const higestQualificationData = [
     "10th",
     "12th",
@@ -212,11 +228,9 @@ const UserUpdate = () => {
         getDepartmentData(res.data);
       });
 
-    axios
-      .get("http://34.93.135.33:8080/api/not_alloc_sitting")
-      .then((res) => {
-        setRefrenceData(res.data.data);
-      });
+    axios.get("http://34.93.135.33:8080/api/not_alloc_sitting").then((res) => {
+      setRefrenceData(res.data.data);
+    });
 
     axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
@@ -245,7 +259,6 @@ const UserUpdate = () => {
     axios
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
-        console.log(res.data, "yha data hai");
         const fetchedData = res.data;
 
         const {
@@ -291,6 +304,13 @@ const UserUpdate = () => {
           spouse_name,
           sub_dept_id,
           highest_qualification_name,
+          uid_url,
+          pan_url,
+          highest_upload_url,
+          other_upload_url,
+          bank_name,
+          ifsc_code,
+          account_no,
         } = fetchedData;
         setPanNo(pan_no);
         setUidNo(uid_no);
@@ -315,13 +335,19 @@ const UserUpdate = () => {
         setReportL3(Report_L3);
         setDesignation(user_designation);
         setUID(UID);
+        setUidImage(uid_url);
         setPanUpload(pan);
+        setPanImage(pan_url);
         setHighestUpload(highest_upload);
+        setHighestQualificationImage(highest_upload_url);
         setOtherUpload(other_upload);
+        setOtherImage(other_upload_url);
         setJoiningDate(joining_date?.split("T")?.[0]);
         setReleavingDate(releaving_date?.split("T")?.[0]);
         setSalary(salary);
-        setSpeakingLanguage(SpokenLanguages);
+        // console.log("SpokenLanguages", SpokenLanguages.split(","));
+        setTempLanguage(SpokenLanguages.split(","));
+        console.log(SpokenLanguages);
         setGender(Gender);
         setNationality(Nationality);
         setDateOfBirth(DOB.split("T")?.[0]);
@@ -331,11 +357,14 @@ const UserUpdate = () => {
         setHobbies(Hobbies);
         setBloodGroup(BloodGroup);
         setMaritialStatus(MartialStatus);
-        setDateOfMarraige(DateOfMarriage);
+        setDateOfMarraige(DateOfMarriage?.split("T")?.[0]);
         setTdsApplicable(tbs_applicable);
         setTdsPercentage(tds_per);
         setSubDeparment(sub_dept_id);
         setHigestQualification(highest_qualification_name);
+        setBankName(bank_name);
+        setIFSC(ifsc_code);
+        setBankAccountNumber(account_no);
         // set;
       })
       .then(() => {});
@@ -388,6 +417,14 @@ const UserUpdate = () => {
     formData.append("BloodGroup", bloodGroup);
     formData.append("MartialStatus", maritialStatus);
     formData.append("DateofMarriage", dateOfMarraige);
+    formData.append("permanent_address", address);
+    formData.append("permanent_city", city);
+    formData.append("permanent_state", state);
+    formData.append("permanent_pin_code", Number(pincode));
+
+    formData.append("bank_name", bankName);
+    formData.append("ifsc_code", IFSC);
+    formData.append("account_no", bankAccountNumber);
 
     formData.append("tds_applicable", tdsApplicable);
     formData.append("tds_per", tdsPercentage);
@@ -403,6 +440,32 @@ const UserUpdate = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      if (reportL1 !== "") {
+        axios
+          .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+            email: email,
+            subject: "User Registration",
+            text: "A new user has been registered.",
+            attachment: selectedImage,
+            login_id: loginId,
+            name: username,
+            password: password,
+          })
+          .then((res) => {
+            console.log("Email sent successfully:", res.data);
+          })
+          .catch((error) => {
+            console.log("Failed to send email:", error);
+          });
+
+        whatsappApi.callWhatsAPI(
+          "Extend Date by User",
+          JSON.stringify(personalContact),
+          username,
+          ["You have assinge Report L1", "ok"]
+        );
+      }
 
       if (incomingPassword !== password) {
         whatsappApi.callWhatsAPI(
@@ -420,13 +483,16 @@ const UserUpdate = () => {
         ]);
       }
 
+      toastAlert("User Update");
+      setIsFormSubmitted(true);
+
       for (const element of otherDocuments) {
         formDataa.append("id", element.id);
         formDataa.append("field_name", element.field_name);
         formDataa.append("lastupdated_by", loginUserId);
         formDataa.append("field_value", element.field_value);
         axios.put(
-          `http://44.211.225.140:8000/updateuserotherfielddata/${id}`,
+          `http://34.93.135.33:8080/api/updateuserotherfielddata/${id}`,
           // {
           //   id:element.id,
           //   field_name: element.field_name,
@@ -464,9 +530,6 @@ const UserUpdate = () => {
       //   .catch((error) => {
       //     console.log("Failed to send email:", error);
       //   });
-
-      toastAlert("User Update");
-      setIsFormSubmitted(true);
     } else {
       if (contact.length !== 10) {
         if (isValidcontact == false)
@@ -598,25 +661,31 @@ const UserUpdate = () => {
     const selectedLoginId = event.target.value;
     setLoginId(selectedLoginId);
   };
-  const calculateAge = (selectedDate) => {
-    const today = new Date();
-    const birthDate = new Date(selectedDate);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const month = today.getMonth() - birthDate.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+  const calculateAge = (dob) => {
+    const currentDate = new Date();
+    const birthDate = new Date(dob);
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const m = currentDate.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && currentDate.getDate() < birthDate.getDate())) {
       age--;
     }
-    setAge(age);
+
+    return age;
   };
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;
-    setDateOfBirth(selectedDate);
-    calculateAge(selectedDate);
+    const age = calculateAge(selectedDate);
 
-    // calculateAge(selectedDate);
+    if (age < 15) {
+      window.alert("Your age must be greater than 15 years.");
+    } else {
+      setDateOfBirth(selectedDate);
+      setAge(age);
+    }
   };
 
-  const accordionButtons = ["Genral", "Personal", "Salary", "Documents"];
+  const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
   const genralFields = (
     <>
@@ -673,9 +742,7 @@ const UserUpdate = () => {
         />
       </div>
       <div className="form-group col-3">
-        <label className="form-label">
-          Sub Department <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Sub Department</label>
         <Select
           className=""
           options={subDepartmentData.map((option) => ({
@@ -719,9 +786,7 @@ const UserUpdate = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L2 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L2</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -742,9 +807,7 @@ const UserUpdate = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Report L3 <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Report L3</label>
         <Select
           className=""
           options={usersData.map((option) => ({
@@ -895,18 +958,32 @@ const UserUpdate = () => {
           required={false}
         />
       </div>
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
     </>
   );
 
   const salaryFields = (
     <>
-      <FieldContainer
+      {/* <FieldContainer
         type="date"
         label="Joining Date"
         fieldGrid={3}
         value={joiningDate}
         onChange={(e) => setJoiningDate(e.target.value)}
-      />
+      /> */}
+      <div className="from-group col-3">
+        <label className="form-label">
+          Joining Date <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          type="date"
+          className="form-control"
+          value={joiningDate}
+          onChange={(e) => setJoiningDate(e.target.value)}
+        />
+      </div>
       {/* <FieldContainer
         type="date"
         label=" Releaving Date "
@@ -1008,6 +1085,24 @@ const UserUpdate = () => {
         />
       )}
 
+      <FieldContainer
+        label="Bank Name"
+        value={bankName}
+        onChange={(e) => setBankName(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="Bank Account Number"
+        value={bankAccountNumber}
+        onChange={(e) => setBankAccountNumber(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="IFSC"
+        value={IFSC}
+        onChange={(e) => setIFSC(e.target.value.toUpperCase())}
+        required={false}
+      />
       {/*       
       <FieldContainer
       type="date"
@@ -1016,6 +1111,10 @@ const UserUpdate = () => {
         value={dateOfBirth}
         // onChange={handleDateChange}
       /> */}
+
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
     </>
   );
 
@@ -1028,10 +1127,11 @@ const UserUpdate = () => {
         type="file"
         required={false}
       /> */}
+
       <FieldContainer
         label="UID Number"
         onChange={handleUIDInputChange}
-        fieldGrid={3}
+        fieldGrid={5}
         type="text"
         required={false}
         value={uidNo}
@@ -1044,17 +1144,29 @@ const UserUpdate = () => {
        
         required={false}
       /> */}
+
       <FieldContainer
         label="UID"
         onChange={(e) => setUID(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
+
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {uidImage && (
+            <a href={uidImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> UID Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       <FieldContainer
         label="PAN Number"
         onChange={handlePANChange}
-        fieldGrid={3}
+        fieldGrid={5}
         type="text"
         required={false}
         value={panNo}
@@ -1070,14 +1182,23 @@ const UserUpdate = () => {
       <FieldContainer
         label="Pan Image"
         onChange={(e) => setPanUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
-      <div className="form-group col-3">
-        <label className="form-label">
-          Higest Qualification <sup style={{ color: "red" }}>*</sup>
-        </label>
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {panImage && (
+            <a href={panImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> PAN Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div className="form-group col-5">
+        <label className="form-label">Higest Qualification</label>
         <Select
           className=""
           options={higestQualificationData.map((option) => ({
@@ -1097,22 +1218,44 @@ const UserUpdate = () => {
       <FieldContainer
         label="Highest Qualification"
         onChange={(e) => setHighestUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={5}
         type="file"
         required={false}
       />
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {highestQualificationImage && (
+            <a href={highestQualificationImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       <FieldContainer
         label="Other Image"
         onChange={(e) => setOtherUpload(e.target.files[0])}
-        fieldGrid={3}
+        fieldGrid={10}
         type="file"
         required={false}
       />
+      <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12">
+        <div className="form-group download_btn">
+          <label>&nbsp;</label>
+          {otherImage && (
+            <a href={otherImage} download>
+              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              Download{" "}
+            </a>
+          )}
+        </div>
+      </div>
       {!isValidPAN && <p style={{ color: "red" }}>Invalid PAN format</p>}
       {!isValidUID && (
         <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
       )}
-      {error}
+
       {otherDocuments && (
         <div>
           <h3>Other Documents</h3>
@@ -1143,9 +1286,7 @@ const UserUpdate = () => {
   const personalFields = (
     <>
       <div className="form-group col-3">
-        <label className="form-label">
-          Spoken Languages <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Spoken Languages</label>
         <Select
           isMulti
           name="langauages"
@@ -1194,12 +1335,24 @@ const UserUpdate = () => {
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-      <FieldContainer
+      {/* <FieldContainer
         label="DOB"
         type="date"
         value={dateOfBirth}
-        onChange={handleDateChange}
-      />
+        onChange={handleDateChange} */}
+      {/* /> */}
+      <div className="from-group col-6">
+        <label className="form-label">
+          DOB <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <input
+          label="DOB"
+          type="date"
+          className="form-control"
+          value={dateOfBirth}
+          onChange={handleDateChange}
+        />
+      </div>
       {dateOfBirth !== "" && <FieldContainer label="Age" value={age} />}
       <FieldContainer
         label="Father's Name"
@@ -1220,9 +1373,7 @@ const UserUpdate = () => {
         onChange={(e) => setHobbies(e.target.value)}
       />
       <div className="form-group col-6">
-        <label className="form-label">
-          Blood Group <sup style={{ color: "red" }}>*</sup>
-        </label>
+        <label className="form-label">Blood Group</label>
         <Select
           className=""
           options={bloodGroupData.map((option) => ({
@@ -1239,7 +1390,6 @@ const UserUpdate = () => {
           required={false}
         />
       </div>
-
       <div className="form-group col-6">
         <label className="form-label">
           Maritial Status <sup style={{ color: "red" }}>*</sup>
@@ -1278,6 +1428,34 @@ const UserUpdate = () => {
           required={false}
         />
       )}
+
+      <FieldContainer
+        label="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        required={false}
+      />
+      <FieldContainer
+        label="City"
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        required={false}
+      />
+      <div className="form-group col-6">
+        <IndianStates
+          onChange={(option) => setState(option ? option.value : null)}
+        />
+      </div>
+      <FieldContainer
+        label="Pincode"
+        value={pincode}
+        onChange={(e) => setPincode(e.target.value)}
+        required={false}
+      />
+
+      <button className="btn btn-primary" onClick={() => handleSubmit()}>
+        submit
+      </button>
     </>
   );
 
