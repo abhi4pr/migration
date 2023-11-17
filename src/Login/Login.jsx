@@ -96,7 +96,15 @@ const Login = () => {
               <div className="container-login100-form-btn">
                 <button className="login100-form-btn" type="submit">
                   Log in
+                </button> 
+                <button className="btn btn-danger" type="submit" onClick={
+                  () => {
+                    navigate("/forget-password")
+                  }
+                }>
+                  Forget Password
                 </button>
+                
               </div>
               <div className="flex-col-c p-t-170 p-b-40">
                 <span className="txt1 p-b-9"> Creativefuel </span>
