@@ -34,6 +34,7 @@ import { APIContext } from "./components/AdminPanel/APIContext/APIContext";
 import AssetCategoryMaster from "./components/Sim/AssetCategory/AssetCategoryMaster";
 import AssetCategoryOverview from "./components/Sim/AssetCategory/AssetCategoryOverview";
 import AssetCategoryUpdate from "./components/Sim/AssetCategory/AssetCategoryUpdate";
+import ForgetPassword from "./Login/Forget/ForgetPassword";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/" element={<Protected />}>
             <Route path="/" element={<Home />} />
             <Route
