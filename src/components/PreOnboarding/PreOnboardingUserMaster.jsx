@@ -64,6 +64,7 @@ const PreOnboardingUserMaster = () => {
   const [speakingLanguage, setSpeakingLanguage] = useState("");
 
   const [joiningDate, setJoiningDate] = useState("");
+  const [daysLeftToJoining, setDaysLeftToJoining] = useState("");
 
   const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -141,6 +142,15 @@ const PreOnboardingUserMaster = () => {
   const [joiningExtendReason, setJoiningExtendReason] = useState("");
   const [joingingExtendDocument, setJoiningExtendDocument] = useState(null);
 
+  //contact
+  const [emergencyContact, setEmergencyContact] = useState(null);
+
+  //Guardian Fields
+  const [guardianName, setGuardianName] = useState("");
+  const [guardianContact, setGuardianContact] = useState(null);
+  const [relationToGuardian, setRelationToGuardian] = useState("");
+  const [guardianAddress, setGuardianAddress] = useState("");
+
   const handleCheckboxChange = (e) => {
     const { checked } = e.target;
     setSameAsCurrent(checked);
@@ -162,7 +172,6 @@ const PreOnboardingUserMaster = () => {
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
-        console.log(res.data);
         const {
           user_name,
           user_email_id,
@@ -201,6 +210,11 @@ const PreOnboardingUserMaster = () => {
           current_city,
           current_state,
           current_pin_code,
+          emergency_contact,
+          guardian_name,
+          gaurdian_number,
+          relation_with_guardian,
+          guardian_address,
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
@@ -225,6 +239,7 @@ const PreOnboardingUserMaster = () => {
         setJoiningDate(
           joining_date?.split("T")[0].split("-").reverse().join("-")
         );
+        setDaysLeftToJoining(joining_date);
         setMaritialStatus(MartialStatus);
         setDateOfBirth(DOB?.split("T")?.[0]);
         setDateOfMarraige(DateOfMarriage);
@@ -274,6 +289,11 @@ const PreOnboardingUserMaster = () => {
         setcurrentCity(current_city);
         setcurrentState(current_state);
         setcurrentPincode(current_pin_code);
+        setEmergencyContact(emergency_contact);
+        setGuardianName(guardian_name);
+        setGuardianContact(gaurdian_number);
+        setRelationToGuardian(relation_with_guardian);
+        setGuardianAddress(guardian_address);
       });
   };
 
@@ -293,6 +313,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("user_contact_no", contact);
     formData.append("personal_number", personalContact);
     formData.append("Personal_email", personalEmail);
+    formData.append("emergency_contact", Number(emergencyContact));
 
     // document open ---------->
     formData.append("tenth_marksheet", XMarksheet);
@@ -347,6 +368,12 @@ const PreOnboardingUserMaster = () => {
     formData.append("current_city", currentCity);
     formData.append("current_state", currentState);
     formData.append("current_pin_code", Number(currentPincode));
+
+    //Guardian Details --------------->
+    formData.append("guardian_name", guardianName);
+    formData.append("gaurdian_number", Number(guardianContact));
+    formData.append("relation_with_guardian", relationToGuardian);
+    formData.append("guardian_address", guardianAddress);
 
     axios
       .put(`http://34.93.135.33:8080/api/update_user`, formData, {
@@ -564,6 +591,20 @@ const PreOnboardingUserMaster = () => {
       })
       .then(() => gettingData());
   };
+
+  function daysUntil(isoDateString) {
+    const oneDay = 24 * 60 * 60 * 1000; // milliseconds in one day
+    const currentDate = new Date();
+    const futureDate = new Date(isoDateString);
+
+    // Calculate the difference in milliseconds
+    const diffInTime = futureDate.getTime() - currentDate.getTime();
+
+    // Convert the difference in time to days
+    return Math.ceil(diffInTime / oneDay);
+  }
+
+  const daysLeftCount = daysUntil(daysLeftToJoining);
 
   const progressPercentage = calculateProgressPercentage();
   return (
@@ -1096,6 +1137,66 @@ const PreOnboardingUserMaster = () => {
                                 type="text"
                                 value={nationality}
                                 onChange={(e) => setNationality(e.target.value)}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <TextField
+                                id="outlined-basic"
+                                label="Emergency Contact"
+                                variant="outlined"
+                                type="number"
+                                value={emergencyContact}
+                                onChange={(e) =>
+                                  setEmergencyContact(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div className="form-group">
+                              <TextField
+                                id="outlined-basic"
+                                label="Guardian Name"
+                                variant="outlined"
+                                type="text"
+                                value={guardianName}
+                                onChange={(e) =>
+                                  setGuardianName(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div className="form-group">
+                              <TextField
+                                id="outlined-basic"
+                                label="Guardian Contact"
+                                variant="outlined"
+                                type="number"
+                                value={guardianContact}
+                                onChange={(e) =>
+                                  setGuardianContact(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div className="form-group">
+                              <TextField
+                                id="outlined-basic"
+                                label="Relation With Guardian"
+                                variant="outlined"
+                                type="text"
+                                value={relationToGuardian}
+                                onChange={(e) =>
+                                  setRelationToGuardian(e.target.value)
+                                }
+                              />
+                            </div>
+                            <div className="form-group">
+                              <TextField
+                                id="outlined-basic"
+                                label="Guardian Address"
+                                variant="outlined"
+                                type="text"
+                                value={guardianAddress}
+                                onChange={(e) =>
+                                  setGuardianAddress(e.target.value)
+                                }
                               />
                             </div>
                           </div>
@@ -1924,6 +2025,9 @@ const PreOnboardingUserMaster = () => {
                             <h3>
                               Your Current Joning Date is:{" "}
                               <span>{joiningDate}</span>
+                            </h3>
+                            <h3>
+                              <span>{daysLeftCount}</span> days left to Join
                             </h3>
                             <div className="form-group">
                               <TextField
