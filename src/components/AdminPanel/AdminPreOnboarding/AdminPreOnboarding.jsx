@@ -11,7 +11,11 @@ import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 
 const onBoardStatus = 2;
 
+
 const AdminPreOnboarding = () => {
+  const offerLetter = [
+    {label:"Yes",value:true},{label:"No",value:false}
+    ];
   const whatsappApi = WhatsappAPI();
   const genderData = ["Male", "Female", "Other"];
   const { toastAlert } = useGlobalContext();
@@ -21,15 +25,17 @@ const AdminPreOnboarding = () => {
   const [reportL1, setReportL1] = useState("");
   const [reportL2, setReportL2] = useState("");
   const [reportL3, setReportL3] = useState("");
-
-  const [roledata, getRoleData] = useState([]);
-
   const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+
   const [personalEmail, setPersonalEmail] = useState("");
   const [validEmail, setValidEmail] = useState(true);
+  const [annexurePdf, setAnnexurePdf] = useState("");
 
   const [contact, setContact] = useState("");
   const [personalContact, setPersonalContact] = useState("");
+  const [userCtc, setUserCtc] = useState("");
+
   const [isValidcontact, setValidContact] = useState(false);
   const [isValidcontact1, setValidContact1] = useState(false);
   const [isContactTouched, setisContactTouched] = useState(false);
@@ -37,7 +43,6 @@ const AdminPreOnboarding = () => {
 
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
-  // const [sitting, setSitting] = useState("");
 
   const [sitting, setSitting] = useState("");
   const [roomId, setRoomId] = useState("");
@@ -50,7 +55,7 @@ const AdminPreOnboarding = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const [designation, setDesignation] = useState("");
-
+  const [sendLetter, setSendLetter] = useState({});
   const [uid, setUID] = useState("");
   const [panUpload, setPanUpload] = useState("");
   const [highestUpload, setHighestUpload] = useState("");
@@ -58,11 +63,9 @@ const AdminPreOnboarding = () => {
   const [joiningDate, setJoiningDate] = useState("");
   const [releavingDate, setReleavingDate] = useState("");
   const [salary, setSalary] = useState("");
+  const [designationData, setDesignationData] = useState([]);
 
   const [selectedImage, setSelectedImage] = useState(null);
-
-  // const [sittingData, setSittingData] = useState([]);
-  // const [allUsersSittings, setAllUsersSittings] = useState([]);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -77,11 +80,14 @@ const AdminPreOnboarding = () => {
       .then((res) => {
         getDepartmentData(res.data);
       });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .then((res) => {
+        setDesignationData(res.data.data);
+      });
 
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
-      // const userSitting = res.data.data.map((user) => user.sitting_id);
-      // setAllUsersSittings(userSitting);
     });
   }, []);
 
@@ -93,6 +99,11 @@ const AdminPreOnboarding = () => {
     formData.append("role_id", roles);
     formData.append("image", selectedImage);
     formData.append("user_email_id", email);
+    formData.append("permanent_city", city);
+    formData.append("ctc", userCtc);
+    formData.append("offer_letter_send", sendLetter.value);
+    formData.append("annexure_pdf", annexurePdf);
+
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
     formData.append("user_contact_no", contact);
@@ -163,18 +174,22 @@ const AdminPreOnboarding = () => {
           setLoginId("");
           setContact("");
           setPersonalContact("");
+          setUserCtc("");
           setPassword("");
           setDepartment("");
           setSitting("");
           setRoomId("");
           setPersonalContact("");
+          setCity("");
+          setSendLetter("");
+          setAnnexurePdf("")
           setPersonalEmail("");
           setJobType("");
           setReportL1("");
           setReportL2("");
           setReportL3("");
           setDesignation("");
-
+          setSendLetter("")
           toastAlert("User Registerd");
           setIsFormSubmitted(true);
         }
@@ -257,15 +272,6 @@ const AdminPreOnboarding = () => {
   };
 
   const handleDateChange = (e) => {
-    // const selectedDate = new Date(e.target.value);
-    // const currentDate = new Date();
-    // const age = currentDate.getFullYear() - selectedDate.getFullYear();
-
-    // if (age <= 15) {
-    //   const result = window.confirm("Your Age Should We Greater then 15 year");
-    // }
-
-    // Update the state with the selected date
     setDateOfBirth(e.target.value);
   };
 
@@ -308,6 +314,29 @@ const AdminPreOnboarding = () => {
 
         <div className="form-group col-3">
           <label className="form-label">
+            Designation <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={designationData.map((option) => ({
+              value: option.desi_id,
+              label: `${option.desi_name}`,
+            }))}
+            value={{
+              value: designation,
+              label:
+                designationData.find((user) => user.desi_id === designation)
+                  ?.desi_name || "",
+            }}
+            onChange={(e) => {
+              setDesignation(e.value);
+            }}
+            required
+          />
+        </div>
+
+        <div className="form-group col-3">
+          <label className="form-label">
             Report L1 <sup style={{ color: "red" }}>*</sup>
           </label>
           <Select
@@ -340,7 +369,43 @@ const AdminPreOnboarding = () => {
         {!validEmail && (
           <p style={{ color: "red" }}>*Please enter valid email</p>
         )}
+        <FieldContainer
+          label=" City"
+          type="text"
+          fieldGrid={3}
+          required={false}
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
 
+        <FieldContainer
+          label=" CTC"
+          type="number"
+          fieldGrid={3}
+          required={false}
+          value={userCtc}
+          onChange={(e) => setUserCtc(e.target.value)}
+        />
+        <div className="form-group col-3">
+          <label className="form-label">
+            offer letter send <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            options={offerLetter.map((option) => ({
+              value: `${option.value}`,
+              label: `${option.label}`,
+            }))}
+            value={{
+              value: sendLetter.value,
+              label: sendLetter.label || "" // Fallback to empty string if label is undefined
+            }}
+            onChange={(e) => {
+              setSendLetter(e);
+            }}
+            
+            required
+          />
+        </div>
         <FieldContainer
           label="Personal Contact"
           type="number"
@@ -435,6 +500,13 @@ const AdminPreOnboarding = () => {
             required
           />
         </div>
+        <FieldContainer
+        label="Annexure pdf"
+        fieldGrid={3}
+        type="file"
+        onChange={(e) => setAnnexurePdf(e.target.files[0])}
+        required={false}
+      />
       </FormContainer>
     </>
   );
