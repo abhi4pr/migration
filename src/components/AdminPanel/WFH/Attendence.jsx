@@ -293,12 +293,10 @@ const Attendence = () => {
       type: "text",
     },
     {
-      field: "",
+      field: "workdays",
       headerName: "Work Days",
-      type: "text",
-      renderCell: () => {
-        return <>30</>;
-      },
+      type: "number",
+      valueGetter: () => 30,
     },
     {
       field: "noOfabsent",
@@ -310,9 +308,7 @@ const Attendence = () => {
       field: "present",
       headerName: "Present Days ",
       type: "number",
-      renderCell: (params) => {
-        return <> {30 - Number(params.row.noOfabsent)}</>;
-      },
+      valueGetter: (params) => 30 - Number(params.row.noOfabsent),
     },
     {
       field: "total_salary",

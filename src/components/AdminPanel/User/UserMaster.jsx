@@ -195,7 +195,7 @@ const UserMaster = () => {
     const test = tempLanguage?.map((option) => option.value).join();
     setSpeakingLanguage(test);
   }, [tempLanguage]);
-  
+
   useEffect(() => {
     if (department) {
       axios
@@ -598,7 +598,6 @@ const UserMaster = () => {
   function handleLanguageSelect(selectedOption) {
     setTempLanguage(selectedOption);
   }
-
 
   const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 

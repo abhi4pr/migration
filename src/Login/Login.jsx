@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./Login.css";
 import "./LoginResponsive.css";
 import { useNavigate } from "react-router-dom";
-import loginlogo from "../assets/img/logo/logo_white.svg";
+import loginlogo from "../assets/img/logo/logo_login1.png";
 import jwtDecode from "jwt-decode";
 import { useGlobalContext } from "../Context/Context";
 
@@ -45,10 +45,10 @@ const Login = () => {
   return (
     <>
       {/* new login page  */}
-      <div className="limiter newlogin">
-        <div className="container-login100">
-          <div className="wrap-login100">
-            <form
+      {/* <div className="limiter newlogin">
+        <div className="container-login100"> */}
+      {/* <div className="wrap-login100"> */}
+      {/* <form
               onSubmit={handleSubmit}
               className="login100-form validate-form p-l-55 p-r-55 p-t-178"
             >
@@ -86,7 +86,7 @@ const Login = () => {
                 </div>
                 <span className="focus-input100" />
               </div>
-              <div className="text-right p-t-13 p-b-23">
+              <div className="text-right">
                 {isError !== "" && (
                   <span className="mb-1 d-block" style={{ color: "red" }}>
                     Invalid Login Id or Password
@@ -96,24 +96,93 @@ const Login = () => {
               <div className="container-login100-form-btn">
                 <button className="login100-form-btn" type="submit">
                   Log in
-                </button> 
-                <button className="btn btn-danger" style={{marginTop:"20px"}} type="submit" onClick={
-                  () => {
-                    navigate("/forget-password")
-                  }
-                }>
+                </button>
+                <button
+                  className="btn btn-danger"
+                  type="submit"
+                  onClick={() => {
+                    navigate("/forget-password");
+                  }}
+                >
                   Forget Password
                 </button>
-                
               </div>
               <div className="flex-col-c p-t-170 p-b-40">
                 <span className="txt1 p-b-9"> Creativefuel </span>
-                {/* <a href="#" class="txt3"> Sign up now </a> */}
+              </div>
+            </form> */}
+      {/* </div> */}
+
+      <section className="section authwrapper">
+        <div className="authbox">
+          <div
+            className="authtext authbrand_spacing"
+            style={{ display: "none" }}
+          >
+            <h1>Welcome.</h1>
+            <p>
+              To Creativefuel <br /> A Leading Marketing Agency. <br /> Let's
+              onboard you to your next home.
+            </p>
+          </div>
+          <div className="authlogo authbrand_spacing">
+            <img src={loginlogo} alt="CreativeFuel" />
+          </div>
+          <div className="authform_area">
+            <div className="authform_head">
+              <h2>Login</h2>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="authform">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="username"
+                    placeholder="Username"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    name="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type={showPassword ? "password" : "text"}
+                  />
+                </div>
+                <div className="text-right p-t-13 p-b-23">
+                  {isError !== "" && (
+                    <span className="mb-1 d-block" style={{ color: "red" }}>
+                      Invalid Login Id or Password
+                    </span>
+                  )}
+                </div>
+                <div className="form-group mb-0">
+                  <button className="btn btn-icon btn_primary" type="submit">
+                    <i className="fas fa-arrow-right" />
+                  </button>
+
+                  <button
+                    className="btn btn-outline-danger mt-2"
+                    type="submit"
+                    onClick={() => {
+                      navigate("/forget-password");
+                    }}
+                  >
+                    Forget Password
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </div>
-      </div>
+      </section>
+      {/* </div>
+      </div> */}
     </>
   );
 };

@@ -813,13 +813,13 @@ const WFHSingleUser = () => {
               </div>
             </div>
             <div className="modal-footer">
-              <button
+              {/* <button
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="xiomodal"
               >
                 Close
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
