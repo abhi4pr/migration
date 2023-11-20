@@ -23,8 +23,11 @@ import axios from "axios";
 import { useState } from "react";
 import CircularWithValueLabel from "../InstaApi.jsx/CircularWithValueLabel";
 import { useCallback } from "react";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import { set } from "date-fns";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -47,14 +50,23 @@ function ExecutionAll() {
   const [endDate, setEndDate] = useState("");
   const [demoFile, setDemoFile] = useState();
   const [stateForIsValid, setStateForIsValid] = useState(false);
+  const [stateForIsNotQuater, setStateForIsNotQuater] = useState(false);
+  const [quater, setQuater] = useState("");
+  const [quaterIsValid, setQuaterIsValid] = useState(false);
+  const [startDateIsValid, setStartDateIsValid] = useState(false);
+  const [endDateIsValid, setEndDateIsValid] = useState(false);
+
+  const navigate = useNavigate();
 
   const dropdownStaticData = [
     "Daily",
     "weekly",
     "fortnight",
     "monthly",
-    "quarterly",
+    "Quarterly",
   ];
+
+  const QuarterStaticData = ["Quater 1", "Quater 2", "Quater 3", "Quater 4"];
 
   const handleFileChange = (event) => {
     setDemoFile(event.target.files[0]);
@@ -86,13 +98,11 @@ function ExecutionAll() {
         }
       )
       .then((res) => {
-        // console.log(res.data.body);
         setAlldata(res.data.body);
         let tempdata = res.data.body.filter((ele) => {
           return ele.platform.toLowerCase() == "instagram";
         });
         setRows(tempdata);
-        // console.log(tempdata);
       });
   }, []);
   const converttoclipboard = (copydata) => {
@@ -210,6 +220,12 @@ function ExecutionAll() {
     setEndDate(newValue);
   };
 
+  
+  const handleHistoryRowClick = (row) => { 
+    console.log(row.p_id);
+    navigate(`/exe-history/${row.p_id}`, {state: row});
+   }
+
   const columns = [
     {
       field: "id",
@@ -323,57 +339,60 @@ function ExecutionAll() {
           headerName: "Subscribers",
           // width: 150,
         },
-    pagemode == 1 || pagemode == 2
-      ? {
-          field: "reach",
-          headerName: "Reach",
-        }
-      : pagemode == 3
-      ? {
-          field: "post",
-          headerName: "Post",
-          // width: 150,
-        }
-      : pagemode == 4
-      ? ({
-          field: "post",
-          headerName: "Post",
-          // width: 150,
-        },
-        {
-          field: "repost",
-          headerName: "Repost",
-          // width: 150,
-        })
-      : ({
-          field: "shorts",
-          headerName: "Shorts",
-          // width: 150,
-        },
-        {
-          field: "logo_Integration",
-          headerName: "Logo Integration",
-          // width: 150,
-        },
-        {
-          field: "brand_Integration",
-          headerName: "Brand Integration",
-          // width: 150,
-        }),
+    // pagemode == 1 || pagemode == 2
+    //   ? {
+    //       field: "reach",
+    //       headerName: "Reach",
+    //     }
+    //   : pagemode == 3
+    //   ? {
+    //       field: "post",
+    //       headerName: "Post",
+    //       // width: 150,
+    //     }
+    //   : pagemode == 4
+    //   ? ({
+    //       field: "post",
+    //       headerName: "Post",
+    //       // width: 150,
+    //     },
+    //     {
+    //       field: "repost",
+    //       headerName: "Repost",
+    //       // width: 150,
+    //     })
+    //   : ({
+    //       field: "shorts",
+    //       headerName: "Shorts",
+    //       // width: 150,
+    //     },
+    //     {
+    //       field: "logo_Integration",
+    //       headerName: "Logo Integration",
+    //       // width: 150,
+    //     },
+    //     {
+    //       field: "brand_Integration",
+    //       headerName: "Brand Integration",
+    //       // width: 150,
+    //     }),
+    // {
+    //   field: "impression",
+    //   headerName: "Impression",
+    // },
+    // {
+    //   field: "engagement",
+    //   headerName: "Engagement",
+    // },
+    // {
+    //   field: "story_view",
+    //   headerName: "Story view",
+    // },
+    
     {
-      field: "impression",
-      headerName: "Impression",
-    },
-    {
-      field: "engagement",
-      headerName: "Engagement",
-    },
-    {
-      field: "story_view",
-      headerName: "Story view",
-    },
-    {
+      field:"update",
       headerName: "Update",
+      width:130,
       renderCell: (params) => {
         return (
           <button
@@ -388,6 +407,22 @@ function ExecutionAll() {
         );
       },
     },
+    {
+      field: "history",
+      width: 150,
+      headerName: "History",
+      renderCell: (params) => {
+        return (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => handleHistoryRowClick(params.row)}
+          >
+            See History
+          </button>
+        );
+      }
+    }
   ];
 
   const handleRowClick = (row) => {
@@ -401,25 +436,81 @@ function ExecutionAll() {
     formData.append("impression", impression);
     formData.append("engagement", engagement);
     formData.append("story_view", storyView);
-    formData.append("media", demoFile);
+    demoFile ? formData.append("media", demoFile) : "";
+    quater ? formData.append("quater", demoFile) : "";
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
-    formData.append("state", statesFor);
-
+    formData.append("stats_for", statesFor);
     e.preventDefault();
-    axios.post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+
+    if (statesFor === "Quarterly") {
+      statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
+      console.log(quater, "<------quater");
+      // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
+
+      if (!stateForIsValid || !quaterIsValid) {
+        console.log(
+          "quaterly error",
+          stateForIsValid,
+          "<----state",
+          quaterIsValid,
+          "<----quater"
+        );
+        return;
+      } else {
+        axios
+          .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            console.log(res.data);
+
+            toast("Form Submitted success");
+          });
+      }
     }
-    
-    ).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      
-      toast("Form Submitted success")
-    });
-    // setIsFormSubmitted(true);
+
+    if (statesFor !== "Quarterly" ) {
+      console.log(
+        "daily error",
+        stateForIsValid,
+        "<----state",
+        startDateIsValid,
+        "<----quater"
+      );
+      statesFor === "" || statesFor== null ? setStateForIsValid(false) : setStateForIsValid(true);
+      startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
+      endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
+
+      if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
+        console.log(
+          "!quaterly error",
+          stateForIsValid,
+          "<----state",
+          startDateIsValid,
+          "<----startDate",
+          endDateIsValid,
+          "<----endDate"
+        );
+        return;
+      } else {
+        axios
+          .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            console.log(res.data);
+
+            toast("Form Submitted success");
+          });
+      }
+    }
   };
 
   function CustomColumnMenu(props) {
@@ -580,15 +671,16 @@ function ExecutionAll() {
           </Stack>
         </Paper>
         {/* Third Paper */}
-        <TextField label="Search by Page Name"
-         onChange={e=>{
-          const temp = alldata.filter((ele) => {
-            return ele.page_name.toLowerCase().includes(e.target.value.toLowerCase());
-          });
-          setRows(temp);
-
-        }
-      }
+        <TextField
+          label="Search by Page Name"
+          onChange={(e) => {
+            const temp = alldata.filter((ele) => {
+              return ele.page_name
+                .toLowerCase()
+                .includes(e.target.value.toLowerCase());
+            });
+            setRows(temp);
+          }}
         />
         <Paper
           justifyContent="space-between"
@@ -643,18 +735,16 @@ function ExecutionAll() {
             <div className="modal-body">
               <div className="row">
                 <div className="col-md-6">
-                  <label>Reach:- &nbsp;</label>
-                  <input
+                  <TextField
                     label="Reach"
                     type="number"
                     value={reach}
-                    // fieldGrid={4}
                     onChange={(e) => setReach(e.target.value)}
                   />
                 </div>
                 <div className="col-md-6">
-                  <label>Impression:- &nbsp;</label>
-                  <input
+
+                  <TextField
                     label="Impressions"
                     type="number"
                     value={impression}
@@ -664,9 +754,9 @@ function ExecutionAll() {
                 </div>
               </div>
               <div className="row">
-                <div className="col-md-6">
-                  <label>Engagement:- &nbsp;</label>
-                  <input
+                <div className="col-md-6 my-3">
+                  <TextField
+                  
                     label="Engagement"
                     type="number"
                     value={engagement}
@@ -674,9 +764,9 @@ function ExecutionAll() {
                     onChange={(e) => setEngagement(e.target.value)}
                   />
                 </div>
-                <div className="col-md-6">
-                  <label>Story View:- &nbsp;</label>
-                  <input
+                <div className="col-md-6 my-3">
+
+                  <TextField
                     label="Story View"
                     type="number"
                     value={storyView}
@@ -686,35 +776,86 @@ function ExecutionAll() {
                 </div>
               </div>
               <Autocomplete
+              className="my-3"
                 disablePortal
                 id="combo-box-demo"
                 options={dropdownStaticData}
-                onChange={(e, value) =>{ setStatesFor(value),value?.length>0?setStateForIsValid(true):setStateForIsValid(false)}}
+                onChange={(e, value) => {
+                  setStatesFor(value),
+                    value !== "Quarterly"
+                      ? setStateForIsNotQuater(true)
+                      : setStateForIsNotQuater(false);
+                  value?.length > 0
+                    ? setStateForIsValid(true)
+                    : setStateForIsValid(false);
+                  value == "Daily" ? setStartDate(dayjs()) : setStartDate("");
+                  value == "Daily" ? setEndDate(dayjs()) : setEndDate("");
+                }}
                 value={statesFor}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="States for" />
+                  <TextField
+                    {...params}
+                    label="Stats for"
+                    error={!stateForIsValid}
+                    helperText={
+                      !stateForIsValid ? "Please select an option" : ""
+                    }
+                  />
                 )}
               />
-         { stateForIsValid &&    <LocalizationProvider dateAdapter={AdapterDayjs} >
-                <DateTimePicker
-                className="my-3"
-                  label="Start Date"
-                  format="MM/DD/YY hh:mm a"
-                  value={startDate}
-                  onChange={(newValue) => handleStartDateChange(newValue)}
+              {statesFor !== "Quarterly" && statesFor!==null &&  stateForIsNotQuater && (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    className="my-3"
+                    label="Start Date"
+                    format="DD/MM/YY"
+                    value={startDate}
+                    onChange={(newValue) => {
+                      handleStartDateChange(newValue);
+                      statesFor == "Daily" ? setEndDate(newValue) : "";
+                    }}
+                  />
+                </LocalizationProvider>
+              )}
+              {  statesFor!==null && statesFor !== "Quarterly" && stateForIsNotQuater && (
+                
+                <LocalizationProvider dateAdapter={AdapterDayjs} >
+                  <DatePicker
+                    className="my-3 mx-3"
+                    label="End Date"
+                    format="DD/MM/YY"
+                    value={endDate}
+                    onChange={(newValue) => handleEndDateChange(newValue)}
+                  />
+                </LocalizationProvider>
+              )}
+              {statesFor == "Quarterly" && !stateForIsNotQuater && (
+                <Autocomplete
+                  className="my-3"
+                  disablePortal
+                  id="combo-box-demo"
+                  options={QuarterStaticData}
+                  onChange={(e, value) => {
+                    setQuater(value);
+                    value?.length > 0
+                      ? setQuaterIsValid(true)
+                      : setQuaterIsValid(false);
+                  }}
+                  value={quater}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Quarter"
+                      error={!quaterIsValid}
+                      helperText={
+                        !quaterIsValid ? "Please select an option" : ""
+                      }
+                    />
+                  )}
                 />
-              </LocalizationProvider>}
-              { stateForIsValid &&   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                className="my-3 mx-3"
-                  label="End Date"
-                  format="MM/DD/YY hh:mm a"
-                  // timezone="merica/New_York"
-                  value={endDate}
-                  onChange={(newValue) => handleEndDateChange(newValue)}
-                />
-              </LocalizationProvider>}
+              )}
               <OutlinedInput
                 // variant="outlined"
                 type="file"
@@ -722,7 +863,7 @@ function ExecutionAll() {
                 inputProps={{
                   accept: ".pdf, .doc, .docx, .mp4, .avi, .png, .jpeg",
                 }}
-                sx={{ width: "50%", ml: 1 }}
+                sx={{ width: "42%", }}
                 onChange={(event) => handleFileChange(event)}
               />
             </div>
@@ -738,7 +879,7 @@ function ExecutionAll() {
                 type="button"
                 className="btn btn-success"
                 onClick={saveStats}
-                data-dismiss="modal"
+                // data-dismiss="modal"
               >
                 Save
               </button>
