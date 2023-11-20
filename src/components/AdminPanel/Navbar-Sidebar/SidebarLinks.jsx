@@ -5,9 +5,9 @@ import axios from "axios";
 
 const SidebarLinks = () => {
   const [contextData, setData] = useState([]);
-  const [allCount, setAllCount] = useState()
-  const [ownCount, setOwnCount] = useState()
-  const [otherCount, setOtherCount] = useState()
+  const [allCount, setAllCount] = useState();
+  const [ownCount, setOwnCount] = useState();
+  const [otherCount, setOtherCount] = useState();
 
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
@@ -39,11 +39,15 @@ const SidebarLinks = () => {
         }
       )
       .then((res) => {
-        const filterVendorId = res.data.body.filter((check) => check.vendor_id == "8").length;
+        const filterVendorId = res.data.body.filter(
+          (check) => check.vendor_id == "8"
+        ).length;
         setOwnCount(filterVendorId);
         const filterVendorId1 = res.data.body.length;
         setAllCount(filterVendorId1);
-        const filterVendorId2 = res.data.body.filter((check) => check.vendor_id !== "8").length;
+        const filterVendorId2 = res.data.body.filter(
+          (check) => check.vendor_id !== "8"
+        ).length;
         setOtherCount(filterVendorId2);
       });
   }, []);
@@ -403,9 +407,8 @@ const SidebarLinks = () => {
             <div className="bg-white collapse-inner">
               {contextData &&
                 contextData[24] &&
-                contextData[24].view_value === 1 && (
-                  ''
-                )}
+                contextData[24].view_value === 1 &&
+                ""}
               {contextData &&
                 contextData[24] &&
                 contextData[24].view_value === 1 && (

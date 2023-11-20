@@ -1159,6 +1159,7 @@ const SalaryWFH = () => {
                   }`}
                   alt="Snap"
                 />
+                {console.log()}
               </div>
             </div>
             <div className="modal-footer">

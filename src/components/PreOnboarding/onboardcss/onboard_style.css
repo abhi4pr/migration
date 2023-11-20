@@ -223,7 +223,9 @@ img {
 .authlogo {
   text-align: center;
 }
-
+.authlogo img {
+  margin: 0 auto;
+}
 .authlogo img {
   width: 150px;
 }
