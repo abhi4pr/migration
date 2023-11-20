@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { set } from "date-fns";
 import { Navigate, useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -55,6 +56,17 @@ function ExecutionAll() {
   const [quaterIsValid, setQuaterIsValid] = useState(false);
   const [startDateIsValid, setStartDateIsValid] = useState(false);
   const [endDateIsValid, setEndDateIsValid] = useState(false);
+  const [reachValidation, setReachValidation] = useState(true);
+  const [impressionValidation, setImpressionValidation] = useState(true);
+  const [engagementValidation, setEngagementValidation] = useState(true);
+  const [storyViewValidation, setStoryViewValidation] = useState(true);
+  const storedToken = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(storedToken);
+  const userID = decodedToken.id;
+  const [contextData, setContextData] = useState(false);
+  const [alert, setAlert] = useState([]);
+
+
 
   const navigate = useNavigate();
 
@@ -104,6 +116,18 @@ function ExecutionAll() {
         });
         setRows(tempdata);
       });
+      if (userID && contextData == false) {
+        axios
+          .get(
+            `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          )
+          .then((res) => {
+            if (res.data[33].view_value == 1) {
+              setContextData(true);
+              setAlert(res.data);
+            }
+          });
+      }
   }, []);
   const converttoclipboard = (copydata) => {
     const copyData = copydata
@@ -220,11 +244,10 @@ function ExecutionAll() {
     setEndDate(newValue);
   };
 
-  
-  const handleHistoryRowClick = (row) => { 
+  const handleHistoryRowClick = (row) => {
     console.log(row.p_id);
-    navigate(`/exe-history/${row.p_id}`, {state: row});
-   }
+    navigate(`/exe-history/${row.p_id}`, { state: row });
+  };
 
   const columns = [
     {
@@ -388,11 +411,11 @@ function ExecutionAll() {
     //   field: "story_view",
     //   headerName: "Story view",
     // },
-    
-    {
-      field:"update",
+
+    contextData && {
+      field: "update",
       headerName: "Update",
-      width:130,
+      width: 130,
       renderCell: (params) => {
         return (
           <button
@@ -421,8 +444,8 @@ function ExecutionAll() {
             See History
           </button>
         );
-      }
-    }
+      },
+    },
   ];
 
   const handleRowClick = (row) => {
@@ -445,17 +468,15 @@ function ExecutionAll() {
 
     if (statesFor === "Quarterly") {
       statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
+      reach <=0 ? setReachValidation(false):setReachValidation(true);
+      impression <=0 ? setImpressionValidation(false):setImpressionValidation(true);
+      engagement <=0 ? setEngagementValidation(false):setEngagementValidation(true);
+      storyView <=0 ? setStoryViewValidation(false):setStoryViewValidation(true);
+
       console.log(quater, "<------quater");
       // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
 
       if (!stateForIsValid || !quaterIsValid) {
-        console.log(
-          "quaterly error",
-          stateForIsValid,
-          "<----state",
-          quaterIsValid,
-          "<----quater"
-        );
         return;
       } else {
         axios
@@ -473,28 +494,18 @@ function ExecutionAll() {
       }
     }
 
-    if (statesFor !== "Quarterly" ) {
-      console.log(
-        "daily error",
-        stateForIsValid,
-        "<----state",
-        startDateIsValid,
-        "<----quater"
-      );
-      statesFor === "" || statesFor== null ? setStateForIsValid(false) : setStateForIsValid(true);
+    if (statesFor !== "Quarterly") {
+      statesFor === "" || statesFor == null
+        ? setStateForIsValid(false)
+        : setStateForIsValid(true);
       startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
       endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
+      reach <=0 ? setReachValidation(false):setReachValidation(true);
+      impression <=0 ? setImpressionValidation(false):setImpressionValidation(true);
+      engagement <=0 ? setEngagementValidation(false):setEngagementValidation(true);
+      storyView <=0 ? setStoryViewValidation(false):setStoryViewValidation(true);
 
       if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
-        console.log(
-          "!quaterly error",
-          stateForIsValid,
-          "<----state",
-          startDateIsValid,
-          "<----startDate",
-          endDateIsValid,
-          "<----endDate"
-        );
         return;
       } else {
         axios
@@ -739,44 +750,58 @@ function ExecutionAll() {
                     label="Reach"
                     type="number"
                     value={reach}
-                    onChange={(e) => setReach(e.target.value)}
+                    onChange={(e) =>{ e.target.value >0? setReachValidation(true):setReachValidation(false), setReach(e.target.value)}}
+                    error={!reachValidation}
+                    helperText={
+                      !reachValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
                 <div className="col-md-6">
-
                   <TextField
                     label="Impressions"
                     type="number"
                     value={impression}
                     // fieldGrid={4}
-                    onChange={(e) => setImpression(e.target.value)}
+                    onChange={(e) =>{e.target.value >0? setImpressionValidation(true):setImpressionValidation(false), setImpression(e.target.value)}}
+                    error={!impressionValidation}
+                    helperText={
+                      !impressionValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-6 my-3">
                   <TextField
-                  
                     label="Engagement"
                     type="number"
                     value={engagement}
                     // fieldGrid={4}
-                    onChange={(e) => setEngagement(e.target.value)}
+                    onChange={(e) =>{e.target.value >0? setEngagementValidation(true):setEndDateIsValid(false), setEngagement(e.target.value)}}
+                    error={!engagementValidation}
+                    helperText={
+                      !engagementValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
                 <div className="col-md-6 my-3">
-
                   <TextField
                     label="Story View"
                     type="number"
                     value={storyView}
                     // fieldGrid={4}
-                    onChange={(e) => setStoryView(e.target.value)}
+                    onChange={(e) =>{e.target.value >0? setStoryViewValidation(true):setStoryViewValidation(false), setStoryView(e.target.value)}}
+                    error={!storyViewValidation}
+                    helperText={
+                      !storyViewValidation ? "Please enter a valid Count" : ""
+                    }
+
                   />
                 </div>
               </div>
               <Autocomplete
-              className="my-3"
+                className="my-3"
                 disablePortal
                 id="combo-box-demo"
                 options={dropdownStaticData}
@@ -804,32 +829,35 @@ function ExecutionAll() {
                   />
                 )}
               />
-              {statesFor !== "Quarterly" && statesFor!==null &&  stateForIsNotQuater && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    className="my-3"
-                    label="Start Date"
-                    format="DD/MM/YY"
-                    value={startDate}
-                    onChange={(newValue) => {
-                      handleStartDateChange(newValue);
-                      statesFor == "Daily" ? setEndDate(newValue) : "";
-                    }}
-                  />
-                </LocalizationProvider>
-              )}
-              {  statesFor!==null && statesFor !== "Quarterly" && stateForIsNotQuater && (
-                
-                <LocalizationProvider dateAdapter={AdapterDayjs} >
-                  <DatePicker
-                    className="my-3 mx-3"
-                    label="End Date"
-                    format="DD/MM/YY"
-                    value={endDate}
-                    onChange={(newValue) => handleEndDateChange(newValue)}
-                  />
-                </LocalizationProvider>
-              )}
+              {statesFor !== "Quarterly" &&
+                statesFor !== null &&
+                stateForIsNotQuater && (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      className="my-3"
+                      label="Start Date"
+                      format="DD/MM/YY"
+                      value={startDate}
+                      onChange={(newValue) => {
+                        handleStartDateChange(newValue);
+                        statesFor == "Daily" ? setEndDate(newValue) : "";
+                      }}
+                    />
+                  </LocalizationProvider>
+                )}
+              {statesFor !== null &&
+                statesFor !== "Quarterly" &&
+                stateForIsNotQuater && (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      className="my-3 mx-3"
+                      label="End Date"
+                      format="DD/MM/YY"
+                      value={endDate}
+                      onChange={(newValue) => handleEndDateChange(newValue)}
+                    />
+                  </LocalizationProvider>
+                )}
               {statesFor == "Quarterly" && !stateForIsNotQuater && (
                 <Autocomplete
                   className="my-3"
@@ -863,7 +891,7 @@ function ExecutionAll() {
                 inputProps={{
                   accept: ".pdf, .doc, .docx, .mp4, .avi, .png, .jpeg",
                 }}
-                sx={{ width: "42%", }}
+                sx={{ width: "42%" }}
                 onChange={(event) => handleFileChange(event)}
               />
             </div>

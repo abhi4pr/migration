@@ -26,6 +26,8 @@ import { toast } from "react-toastify";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -53,6 +55,18 @@ function ExecutionOther() {
   const [quaterIsValid, setQuaterIsValid] = useState(false);
   const [startDateIsValid, setStartDateIsValid] = useState(false);
   const [endDateIsValid, setEndDateIsValid] = useState(false);
+  const [reachValidation, setReachValidation] = useState(true);
+  const [impressionValidation, setImpressionValidation] = useState(true);
+  const [engagementValidation, setEngagementValidation] = useState(true);
+  const [storyViewValidation, setStoryViewValidation] = useState(true);
+  const [contextData, setContextData] = useState(false);
+  const [alert, setAlert] = useState([]);
+
+  const storedToken = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(storedToken);
+  const userID = decodedToken.id;
+
+  const navigate = useNavigate();
 
   const dropdownStaticData = [
     "Daily",
@@ -93,7 +107,9 @@ function ExecutionOther() {
         }
       )
       .then((res) => {
-        const filterVendorId = res.data.body.filter((check) => check.vendor_id !== "8");
+        const filterVendorId = res.data.body.filter(
+          (check) => check.vendor_id !== "8"
+        );
         // console.log("filtervendorid",filterVendorId);
         setAlldata(filterVendorId);
         // let tempdata = alldata.filter((ele) => {
@@ -103,6 +119,18 @@ function ExecutionOther() {
         setRows(tempdata);
         // console.log('after',alldata);
       });
+      if (userID && contextData == false) {
+        axios
+          .get(
+            `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          )
+          .then((res) => {
+            if (res.data[33].view_value == 1) {
+              setContextData(true);
+              setAlert(res.data);
+            }
+          });
+      }
   }, []);
   const converttoclipboard = (copydata) => {
     const copyData = copydata
@@ -220,6 +248,10 @@ function ExecutionOther() {
     setEndDate(newValue);
   };
 
+  const handleHistoryRowClick = (row) => {
+    console.log(row.p_id);
+    navigate(`/exe-history/${row.p_id}`, { state: row });
+  };
 
   const columns = [
     {
@@ -385,22 +417,38 @@ function ExecutionOther() {
     //       field: "story_view",
     //       headerName: "Story view",
     //     },
-        {
-          headerName: "Update",
-          renderCell: (params) => {
-            return (
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-toggle="modal"
-                data-target="#myModal1"
-                onClick={() => handleRowClick(params.row)}
-              >
-                Set Stats
-              </button>
-            );
-          }
-        }
+    contextData && {
+      headerName: "Update",
+      renderCell: (params) => {
+        return (
+          <button
+            type="button"
+            className="btn btn-primary"
+            data-toggle="modal"
+            data-target="#myModal1"
+            onClick={() => handleRowClick(params.row)}
+          >
+            Set Stats
+          </button>
+        );
+      },
+    },
+    {
+      field: "history",
+      width: 150,
+      headerName: "History",
+      renderCell: (params) => {
+        return (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => handleHistoryRowClick(params.row)}
+          >
+            See History
+          </button>
+        );
+      },
+    },
   ];
 
   const handleRowClick = (row) => {
@@ -423,6 +471,16 @@ function ExecutionOther() {
 
     if (statesFor === "Quarterly") {
       statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
+      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
+      impression <= 0
+        ? setImpressionValidation(false)
+        : setImpressionValidation(true);
+      engagement <= 0
+        ? setEngagementValidation(false)
+        : setEngagementValidation(true);
+      storyView <= 0
+        ? setStoryViewValidation(false)
+        : setStoryViewValidation(true);
       console.log(quater, "<------quater");
       // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
 
@@ -459,9 +517,21 @@ function ExecutionOther() {
         startDateIsValid,
         "<----quater"
       );
-      statesFor === "" || statesFor== null ? setStateForIsValid(false) : setStateForIsValid(true);
+      statesFor === "" || statesFor == null
+        ? setStateForIsValid(false)
+        : setStateForIsValid(true);
       startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
       endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
+      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
+      impression <= 0
+        ? setImpressionValidation(false)
+        : setImpressionValidation(true);
+      engagement <= 0
+        ? setEngagementValidation(false)
+        : setEngagementValidation(true);
+      storyView <= 0
+        ? setStoryViewValidation(false)
+        : setStoryViewValidation(true);
 
       if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
         console.log(
@@ -650,15 +720,16 @@ function ExecutionOther() {
         </Paper>
         {/* Third Paper */}
 
-        <TextField label="Search by Page Name"
-         onChange={e=>{
-          const temp = alldata.filter((ele) => {
-            return ele.page_name.toLowerCase().includes(e.target.value.toLowerCase());
-          });
-          setRows(temp);
-
-        }
-      }
+        <TextField
+          label="Search by Page Name"
+          onChange={(e) => {
+            const temp = alldata.filter((ele) => {
+              return ele.page_name
+                .toLowerCase()
+                .includes(e.target.value.toLowerCase());
+            });
+            setRows(temp);
+          }}
         />
         <Paper
           justifyContent="space-between"
@@ -713,45 +784,77 @@ function ExecutionOther() {
             <div className="modal-body">
               <div className="row">
                 <div className="col-md-6 my-3">
-
                   <TextField
                     label="Reach"
                     type="number"
                     value={reach}
                     // fieldGrid={4}
-                    onChange={(e) => setReach(e.target.value)}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setReachValidation(true)
+                        : setReachValidation(false),
+                        setReach(e.target.value);
+                    }}
+                    error={!reachValidation}
+                    helperText={
+                      !reachValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
                 <div className="col-md-6 my-3">
-
                   <TextField
                     label="Impressions"
                     type="number"
                     value={impression}
                     // fieldGrid={4}
-                    onChange={(e) => setImpression(e.target.value)}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setImpressionValidation(true)
+                        : setImpressionValidation(false),
+                        setImpression(e.target.value);
+                    }}
+                    error={!impressionValidation}
+                    helperText={
+                      !impressionValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
               </div>
               <div className="row">
                 <div className="col-md-6 my-3">
-
                   <TextField
                     label="Engagement"
                     type="number"
                     value={engagement}
                     // fieldGrid={4}
-                    onChange={(e) => setEngagement(e.target.value)}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setEngagementValidation(true)
+                        : setEndDateIsValid(false),
+                        setEngagement(e.target.value);
+                    }}
+                    error={!engagementValidation}
+                    helperText={
+                      !engagementValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
                 <div className="col-md-6 my-3">
-
                   <TextField
                     label="Story View"
                     type="number"
                     value={storyView}
                     // fieldGrid={4}
-                    onChange={(e) => setStoryView(e.target.value)}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setStoryViewValidation(true)
+                        : setStoryViewValidation(false),
+                        setStoryView(e.target.value);
+                    }}
+                    error={!storyViewValidation}
+                    helperText={
+                      !storyViewValidation ? "Please enter a valid Count" : ""
+                    }
                   />
                 </div>
               </div>
@@ -783,7 +886,9 @@ function ExecutionOther() {
                   />
                 )}
               />
-                     {statesFor !== "Quarterly" && stateForIsNotQuater && (
+              {statesFor !== "Quarterly" &&
+                statesFor !== null &&
+                stateForIsNotQuater &&(
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     className="my-3"
@@ -797,7 +902,9 @@ function ExecutionOther() {
                   />
                 </LocalizationProvider>
               )}
-              {statesFor !== "Quarterly" && stateForIsNotQuater && (
+             {statesFor !== "Quarterly" &&
+                statesFor !== null &&
+                stateForIsNotQuater && (
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     className="my-3 mx-3"
@@ -865,7 +972,6 @@ function ExecutionOther() {
           </div>
         </div>
       </div>
-
     </>
   );
 }
