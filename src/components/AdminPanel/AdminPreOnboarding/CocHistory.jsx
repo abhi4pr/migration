@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import { FaEdit } from "react-icons/fa";
@@ -9,8 +9,8 @@ import FieldContainer from "../FieldContainer";
 import DataTable from "react-data-table-component";
 import { useGlobalContext } from "../../../Context/Context";
 
-const CocOverview = () => {
-  
+const CocHistory = () => {
+  const { id } = useParams();
   const { toastAlert } = useGlobalContext();
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
@@ -22,7 +22,7 @@ const CocOverview = () => {
 
   async function getData() {
     await axios
-      .get("http://34.93.135.33:8080/api/get_all_cocs")
+      .get(`http://34.93.135.33:8080/api/get_coc_history/${id}`)
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);
@@ -63,44 +63,23 @@ const CocOverview = () => {
       sortable: true,
     },
     {
-      name: "Action",
-      cell: (row) => (
-        <>
-          <Link to={`/admin/pre-onboard-coc-update/${row._id}`}>
-            <button
-              title="Edit"
-              className="btn btn-outline-primary btn-sm user-button"
-            >
-              <FaEdit />{" "}
-            </button>
-          </Link>
-
-          <Link to={`/admin/pre-onboard-coc-history/${row._id}`}>
-            <button
-              title="Coc History"
-              className="btn btn-outline-success btn-sml"
-            >
-              {"H"}
-            </button>
-          </Link>
-
-          <DeleteButton
-            endpoint="delete_coc"
-            id={row._id}
-            getData={getData}
-          />
-        </>
-      ),
-      allowOverflow: true,
-      width: "22%",
+        name: "Updated By",
+        selector: (row) => row.updated_by,
+        sortable: true,
     },
+    {
+        name: "Updated Date",
+        selector: (row) =>{return  <div>{new Date(row.updated_date).toISOString().substr(8, 2)}/{new Date(row.updated_date).toISOString().substr(5, 2)}/{new Date(row.updated_date).toISOString().substr(2, 2)}</div> },
+        sortable: true,
+        
+    }
   ];
 
   return (
     <>
       <FormContainer
         mainTitle="COC"
-        title="Coc Creation"
+        title="Coc History"
         // handleSubmit={handleSubmit}
       >
       
@@ -135,4 +114,4 @@ const CocOverview = () => {
   );
 };
 
-export default CocOverview;
+export default CocHistory;

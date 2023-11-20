@@ -127,6 +127,7 @@ import ExecutionOther from "../Execution/ExecutionOther";
 import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
+import CocHistory from "./AdminPreOnboarding/CocHistory";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -439,6 +440,10 @@ const Admin = () => {
                   <Route
                     path="/pre-onboard-coc-update/:id"
                     element={<CocUpdate />}
+                  />
+                  <Route
+                    path="/pre-onboard-coc-history/:id"
+                    element={<CocHistory />}
                   />
                   <Route
                     path="/only-pre-onboard-user-data"

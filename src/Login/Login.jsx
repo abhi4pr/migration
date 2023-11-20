@@ -97,7 +97,7 @@ const Login = () => {
                 <button className="login100-form-btn" type="submit">
                   Log in
                 </button> 
-                <button className="btn btn-danger" type="submit" onClick={
+                <button className="btn btn-danger" style={{marginTop:"20px"}} type="submit" onClick={
                   () => {
                     navigate("/forget-password")
                   }
