@@ -45,6 +45,7 @@ const PreOnboardingUserMaster = () => {
   const { toastAlert } = useGlobalContext();
 
   const [activeTab, setActiveTab] = useState(0);
+  const [cocData, setCocData] = useState([]);
 
   const [allUserData, setAllUserData] = useState([]);
   const [username, setUserName] = useState("");
@@ -150,6 +151,45 @@ const PreOnboardingUserMaster = () => {
   const [guardianContact, setGuardianContact] = useState(null);
   const [relationToGuardian, setRelationToGuardian] = useState("");
   const [guardianAddress, setGuardianAddress] = useState("");
+
+  useEffect(() => {
+    // Function to fetch data
+    const fetchCOCData = async () => {
+      try {
+        const response = await axios.get('http://34.93.135.33:8080/api/get_all_cocs');
+        const data = response.data;
+        setCocData(data.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchCOCData();
+  }, []);
+  // Step 1: Group data by display_sequence
+  const groupedData = cocData?.reduce((result, item) => {
+    const displaySequence = item.display_sequence;
+    if (!result[displaySequence]) {
+      result[displaySequence] = [];
+    }
+    result[displaySequence].push(item);
+    return result;
+  }, {});
+  // Step 2: Render the list
+  const renderList = () => {
+    return Object.entries(groupedData).map(([displaySequence, items]) => (
+      <div key={displaySequence}>
+         <h3>{displaySequence} {items[0].heading}</h3>
+         <p> {items[0].heading_desc}</p>
+        {items.map((item, index) => (
+          <div key={index}>
+            <h5>{item.sub_heading_sequence} {item.sub_heading}</h5>
+            <p> {item.sub_heading_sequence} {item.sub_heading_desc}</p>
+          </div>
+        ))}
+         <p> {items[0].description}</p>
+      </div>
+    ));
+  }  
 
   const handleCheckboxChange = (e) => {
     const { checked } = e.target;
@@ -1873,7 +1913,8 @@ const PreOnboardingUserMaster = () => {
                             issues or have any questions.
                           </p>
                         </div>
-                        <div className="thm_textbx">
+                        {renderList()}
+                        {/* <div className="thm_textbx">
                           <h3>A. Cyber security and digital devices</h3>
                           <p>
                             This section deals with all things digital at work.
@@ -1892,7 +1933,7 @@ const PreOnboardingUserMaster = () => {
                             Also, we expect you to temporarily halt personal
                             activities that slow down our internet connection.
                           </p>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="ml-auto mr-auto text-center">
                         {/* <button className="btn btn_pill btn_cmn btn_white">
