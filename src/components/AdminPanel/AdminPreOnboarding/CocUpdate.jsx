@@ -14,7 +14,9 @@ const CocUpdate = () => {
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
   const [heading, setHeading] = useState("");
+  const [headingDesc, setHeadingDesc] = useState("");
   const [subHeading, setSubHeading] = useState("");
+  const [subHeadingDesc, setSubHeadingDesc] = useState("");
   const [subHeadingSeq, setSubHeadingSeq] = useState("");
   const [description, setDescription] = useState("");
   const [remarks, setRemarks] = useState("");
@@ -43,7 +45,9 @@ const CocUpdate = () => {
         _id: id,
         display_sequence: displaySeq,
         heading: heading,
+        heading_desc: headingDesc,
         sub_heading: subHeading,
+        sub_heading_desc: subHeadingDesc,
         sub_heading_sequence: subHeadingSeq,
         description: description,
         remarks: remarks,
@@ -86,7 +90,6 @@ const CocUpdate = () => {
 
         <FieldContainer
           label="Heading"
-          // type="email"
           fieldGrid={4}
           required={false}
           value={heading}
@@ -95,37 +98,53 @@ const CocUpdate = () => {
 
         <FieldContainer
           label="Sub Heading"
-          // type="number"
           fieldGrid={4}
           value={subHeading}
           required={false}
           onChange={(e)=> setSubHeading(e.target.value)}
-          // onChange={handlePersonalContactChange}
-          // onBlur={handleContentBlur}
         />
 
         <FieldContainer
           label="Sub Heading Sequence"
           type="number"
+          disabled="true"
           fieldGrid={4}
           value={subHeadingSeq}
           onChange={(e) => setSubHeadingSeq(e.target.value)}
         />
 
         <FieldContainer
-          // type="description"
+          label="Remarks"
+          fieldGrid={4}
+          // type="date"
+          value={remarks}
+          onChange={(e) => setRemarks(e.target.value)}
+        />
+
+        <FieldContainer
+          label="Heading Description"
+          Tag="textarea"
+          fieldGrid={4}
+          required={false}
+          value={headingDesc}
+          onChange={(e)=> setHeadingDesc(e.target.value)}
+        />
+
+        <FieldContainer
+          label="Sub Heading Description"
+          Tag="textarea"
+          fieldGrid={4}
+          required={false}
+          value={subHeadingDesc}
+          onChange={(e)=> setSubHeadingDesc(e.target.value)}
+        />
+
+        <FieldContainer
+          Tag="textarea"
           label="description"
           fieldGrid={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <FieldContainer
-          label="Remarks"
-          // type="date"
-          fieldGrid={4}
-          value={remarks}
-          onChange={(e) => setRemarks(e.target.value)}
         />
 
       </FormContainer>

@@ -8,13 +8,16 @@ import { AiOutlineReload } from "react-icons/ai";
 import { useGlobalContext } from "../../../Context/Context";
 import Select from "react-select";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import { TextField } from "@mui/material";
 
 const CocMaster = () => {
   
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
   const [heading, setHeading] = useState("");
+  const [headingDesc, setHeadingDesc] = useState("");
   const [subHeading, setSubHeading] = useState("");
+  const [subHeadingDesc, setSubHeadingDesc] = useState("");
   const [subHeadingSeq, setSubHeadingSeq] = useState("");
   const [description, setDescription] = useState("");
   const [remarks, setRemarks] = useState("");
@@ -30,7 +33,9 @@ const CocMaster = () => {
       await axios.post("http://34.93.135.33:8080/api/add_coc",{
         display_sequence: displaySeq,
         heading: heading,
+        heading_desc: headingDesc,
         sub_heading: subHeading,
+        sub_heading_desc: subHeadingDesc,
         sub_heading_sequence: subHeadingSeq,
         description: description,
         remarks: remarks,
@@ -73,7 +78,6 @@ const CocMaster = () => {
 
         <FieldContainer
           label="Heading"
-          // type="email"
           fieldGrid={4}
           required={false}
           value={heading}
@@ -82,13 +86,10 @@ const CocMaster = () => {
 
         <FieldContainer
           label="Sub Heading"
-          // type="number"
           fieldGrid={4}
           value={subHeading}
           required={false}
           onChange={(e)=> setSubHeading(e.target.value)}
-          // onChange={handlePersonalContactChange}
-          // onBlur={handleContentBlur}
         />
 
         <FieldContainer
@@ -100,19 +101,37 @@ const CocMaster = () => {
         />
 
         <FieldContainer
-          // type="description"
-          label="description"
-          fieldGrid={4}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-
-        <FieldContainer
           label="Remarks"
           fieldGrid={4}
           // type="date"
           value={remarks}
           onChange={(e) => setRemarks(e.target.value)}
+        />
+
+        <FieldContainer
+          label="Heading Description"
+          Tag="textarea"
+          fieldGrid={4}
+          required={false}
+          value={headingDesc}
+          onChange={(e)=> setHeadingDesc(e.target.value)}
+        />
+
+        <FieldContainer
+          label="Sub Heading Description"
+          Tag="textarea"
+          fieldGrid={4}
+          required={false}
+          value={subHeadingDesc}
+          onChange={(e)=> setSubHeadingDesc(e.target.value)}
+        />
+
+        <FieldContainer
+          Tag="textarea"
+          label="description"
+          fieldGrid={4}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
 
       </FormContainer>
