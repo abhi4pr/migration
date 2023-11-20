@@ -108,11 +108,16 @@ const PreOnboardingOverview = () => {
     },
     {
       name: "Contact No",
-      selector: (row) => row.user_contact_no,
+      selector: (row) => row.PersonalNumber,
     },
     {
       name: "Email",
       selector: (row) => row.user_email_id,
+      width: "16%",
+    },
+    {
+      name: "City",
+      selector: (row) => row.permanent_city,
       width: "16%",
     },
     {
