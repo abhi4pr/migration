@@ -35,6 +35,7 @@ import AssetCategoryMaster from "./components/Sim/AssetCategory/AssetCategoryMas
 import AssetCategoryOverview from "./components/Sim/AssetCategory/AssetCategoryOverview";
 import AssetCategoryUpdate from "./components/Sim/AssetCategory/AssetCategoryUpdate";
 import ForgetPassword from "./Login/Forget/ForgetPassword";
+import ExeHistory from "./components/Execution/ExeHistory";
 
 function App() {
   return (
@@ -105,6 +106,10 @@ function App() {
           <Route path="/brand-overview" element={<BrandOverview />} />
           <Route path="/brand-update/:id" element={<BrandUpdate />} />
           <Route path="/brand-view/:id" element={<BrandView />} />
+
+{/* Execution history */}
+          <Route path="/exe-history/:id" element={<ExeHistory />} />
+
         </Routes>
       </BrowserRouter>
     </>

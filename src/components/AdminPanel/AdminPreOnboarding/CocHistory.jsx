@@ -69,8 +69,9 @@ const CocHistory = () => {
     },
     {
         name: "Updated Date",
-        selector: (row) => row.updated_date,
+        selector: (row) =>{return  <div>{new Date(row.updated_date).toISOString().substr(8, 2)}/{new Date(row.updated_date).toISOString().substr(5, 2)}/{new Date(row.updated_date).toISOString().substr(2, 2)}</div> },
         sortable: true,
+        
     }
   ];
 
