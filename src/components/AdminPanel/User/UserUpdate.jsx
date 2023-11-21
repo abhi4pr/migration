@@ -316,7 +316,7 @@ const UserUpdate = () => {
           permanent_city,
           permanent_address,
           permanent_state,
-          permanent_pin_code
+          permanent_pin_code,
         } = fetchedData;
         setPanNo(pan_no);
         setUidNo(uid_no);
@@ -371,10 +371,10 @@ const UserUpdate = () => {
         setBankName(bank_name);
         setIFSC(ifsc_code);
         setBankAccountNumber(account_no);
-        setCity(permanent_city)
+        setCity(permanent_city);
         setAddress(permanent_address);
         setState(permanent_state);
-        setPincode(permanent_pin_code)
+        setPincode(permanent_pin_code);
         // set;
       })
       .then(() => {});
@@ -968,15 +968,15 @@ const UserUpdate = () => {
           required={false}
         />
       </div>
-      
-      <div style={{display:"flex",justifyContent:"flex-end"}}>
-        <button className="btn btn-primary"
-          onClick={()=> setActiveAccordionIndex((prev) => prev+1)}
+
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
         >
           <ArrowForwardIosIcon />
         </button>
       </div>
-
     </>
   );
 
@@ -1049,7 +1049,7 @@ const UserUpdate = () => {
               }))}
               value={{
                 value: tdsApplicable,
-                label: `${tdsApplicable}`,
+                label: tdsApplicable,
               }}
               onChange={(e) => {
                 const selectedValue = e.value;
@@ -1128,7 +1128,7 @@ const UserUpdate = () => {
         // onChange={handleDateChange}
       /> */}
 
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <button
           className="btn btn-primary"
           onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
@@ -1141,8 +1141,7 @@ const UserUpdate = () => {
         >
           <ArrowForwardIosIcon />
         </button>
-    </div>
-
+      </div>
     </>
   );
 
@@ -1255,8 +1254,8 @@ const UserUpdate = () => {
           <label>&nbsp;</label>
           {highestQualificationImage && (
             <a href={highestQualificationImage} download>
-              <i className="bi bi-cloud-arrow-down"></i> Highest QualificationImage
-              Download{" "}
+              <i className="bi bi-cloud-arrow-down"></i> Highest
+              QualificationImage Download{" "}
             </a>
           )}
         </div>
@@ -1273,8 +1272,8 @@ const UserUpdate = () => {
           <label>&nbsp;</label>
           {otherImage && (
             <a href={otherImage} download>
-              <i className="bi bi-cloud-arrow-down"></i> Highest QualificationImage
-              Download{" "}
+              <i className="bi bi-cloud-arrow-down"></i> Highest
+              QualificationImage Download{" "}
             </a>
           )}
         </div>
@@ -1286,8 +1285,8 @@ const UserUpdate = () => {
 
       <div
         style={{
-          display:"flex",
-          marginBottom:"10px",
+          display: "flex",
+          marginBottom: "10px",
           // justifyContent:"space-between"
           // marginRight:"10px"
         }}
@@ -1512,7 +1511,6 @@ const UserUpdate = () => {
           <ArrowForwardIosIcon />
         </button>
       </div>
-
     </>
   );
 
