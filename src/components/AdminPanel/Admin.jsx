@@ -130,14 +130,9 @@ import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
 import CocHistory from "./AdminPreOnboarding/CocHistory";
-<<<<<<< Updated upstream
 import PreonboardingDocuments from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocuments";
 import PreonboardingDocumentOverview from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentOverview";
 import PreonboardingDocumentsUpdate from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentsUpdate";
-=======
-import DashboardWFHUser from "./WFH/DashboardWFHUser";
-import DashboardWFHCardDetails from "./WFH/DashboardWFHCardDetails";
->>>>>>> Stashed changes
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
