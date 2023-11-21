@@ -14,6 +14,34 @@ import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import WhatsappAPI from "../WhatsappAPI/WhatsappAPI";
 
+import imageTest1 from "../../assets/img/product/Avtrar1.png";
+import imageTest2 from "../../assets/img/product/Avtrar2.png";
+import imageTest3 from "../../assets/img/product/Avtrar3.png";
+import imageTest14 from "../../assets/img/product/Avtrar14.png";
+import imageTest5 from "../../assets/img/product/Avtrar5.png";
+import imageTest6 from "../../assets/img/product/Avtrar6.png";
+import imageTest7 from "../../assets/img/product/Avtrar7.png";
+import imageTest8 from "../../assets/img/product/Avtrar8.png";
+import imageTest15 from "../../assets/img/product/Avtar15.png";
+import imageTest16 from "../../assets/img/product/Avtar16.png";
+import imageTest17 from "../../assets/img/product/Avtar17.png";
+import imageTest18 from "../../assets/img/product/Avtar18.png";
+import imageTest19 from "../../assets/img/product/Avtar19.png";
+import imageTest20 from "../../assets/img/product/Avtar20.png";
+import imageTest21 from "../../assets/img/product/Avtar21.png";
+import imageTest22 from "../../assets/img/product/Avtar22.png";
+import imageTest23 from "../../assets/img/product/Avtar23.png";
+import imageTest24 from "../../assets/img/product/Avtar24.png";
+import imageTest25 from "../../assets/img/product/Avtar25.png";
+import imageTest26 from "../../assets/img/product/Avtar26.png";
+import imageTest27 from "../../assets/img/product/Avtar27.png";
+import imageTest28 from "../../assets/img/product/Avtar28.png";
+import imageTest29 from "../../assets/img/product/Avtar29.png";
+import imageTest30 from "../../assets/img/product/Avtar30.png";
+
+var profileimage;
+var nicknames;
+
 const colourOptions = [
   { value: "English", label: "English" },
   { value: "Hindi", label: "Hindi" },
@@ -89,10 +117,6 @@ const PreOnboardingUserMaster = () => {
   const [XIIMarksheetValidation, setXIIMarksheetValidation] =
     useState("Pending");
 
-  // const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-  // const [imagePreviewUrlValidation, setImagePreviewUrlValidation] =
-  //   useState("Pending");
-
   const [underGraduationDoc, setUnderGraduationDoc] = useState(null);
   const [underGraduationDocValidation, setUnderGraduationDocValidation] =
     useState("Pending");
@@ -152,15 +176,42 @@ const PreOnboardingUserMaster = () => {
   const [relationToGuardian, setRelationToGuardian] = useState("");
   const [guardianAddress, setGuardianAddress] = useState("");
 
+  const [showModal, setShowModal] = useState(true);
+  const [conditonValue, setConditonValue] = useState(0);
+  const [selectedImage, setSelectedImage] = useState();
+  const [imagePreview, setImagePreview] = useState(null);
+  const [nickName, setNickName] = useState("");
+
+  const profileSingleData = () => {
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        const fetchedData = res.data.profileflag;
+        profileimage = res.data.image_url;
+        nicknames = res.data.nick_name;
+        setConditonValue(fetchedData);
+      });
+  };
+  useEffect(() => {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+      getUsersData(res.data.data);
+      const userSitting = res.data.data.map((user) => user.sitting_id);
+      setAllUsersSittings(userSitting);
+    });
+
+    profileSingleData();
+  }, []);
   useEffect(() => {
     // Function to fetch data
     const fetchCOCData = async () => {
       try {
-        const response = await axios.get('http://34.93.135.33:8080/api/get_all_cocs');
+        const response = await axios.get(
+          "http://34.93.135.33:8080/api/get_all_cocs"
+        );
         const data = response.data;
         setCocData(data.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
     fetchCOCData();
@@ -178,18 +229,25 @@ const PreOnboardingUserMaster = () => {
   const renderList = () => {
     return Object.entries(groupedData).map(([displaySequence, items]) => (
       <div key={displaySequence}>
-         <h3>{displaySequence} {items[0].heading}</h3>
-         <p> {items[0].heading_desc}</p>
+        <h3>
+          {displaySequence} {items[0].heading}
+        </h3>
+        <p> {items[0].heading_desc}</p>
         {items.map((item, index) => (
           <div key={index}>
-            <h5>{item.sub_heading_sequence} {item.sub_heading}</h5>
-            <p> {item.sub_heading_sequence} {item.sub_heading_desc}</p>
+            <h5>
+              {item.sub_heading_sequence} {item.sub_heading}
+            </h5>
+            <p>
+              {" "}
+              {item.sub_heading_sequence} {item.sub_heading_desc}
+            </p>
           </div>
         ))}
-         <p> {items[0].description}</p>
+        <p> {items[0].description}</p>
       </div>
     ));
-  }  
+  };
 
   const handleCheckboxChange = (e) => {
     const { checked } = e.target;
@@ -647,6 +705,88 @@ const PreOnboardingUserMaster = () => {
   const daysLeftCount = daysUntil(daysLeftToJoining);
 
   const progressPercentage = calculateProgressPercentage();
+
+  const images = [
+    imageTest1,
+    imageTest2,
+    imageTest3,
+    imageTest14,
+    imageTest5,
+    imageTest6,
+    imageTest7,
+    imageTest8,
+    imageTest15,
+    imageTest16,
+    imageTest17,
+    imageTest18,
+    imageTest19,
+    imageTest20,
+    imageTest21,
+    imageTest22,
+    imageTest23,
+    imageTest24,
+    imageTest25,
+    imageTest26,
+    imageTest27,
+    imageTest28,
+    imageTest29,
+    imageTest30,
+  ];
+  const openModal = () => {
+    setShowModal(true);
+    setConditonValue(0);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setConditonValue(1);
+  };
+
+  const handleImageClick = async (image) => {
+    try {
+      const response = await axios.get(image, {
+        responseType: "arraybuffer", // Request the image as an array buffer
+      });
+
+      setImagePreview(image);
+
+      const blob = new Blob([response.data], { type: "image/jpeg" });
+      setSelectedImage(blob);
+    } catch (error) {
+      console.error("Error loading image:", error);
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setImagePreview(URL.createObjectURL(file));
+    setSelectedImage(file);
+  };
+
+  const handleSubmitProfile = () => {
+    const formData = new FormData();
+    formData.append("user_id", id);
+    formData.append("image", selectedImage);
+    formData.append("nick_name", nickName);
+    formData.append("profileflag", 1);
+
+    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    // profileSingleData();
+    axios
+      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .then((res) => {
+        const fetchedData = res.data.profileflag;
+        profileimage = res.data.image_url;
+        nicknames = res.data.nick_name;
+        // setConditonValue(fetchedData);
+      });
+    setShowModal(false);
+  };
+
   return (
     <>
       {/* Dashboard Section Start */}
@@ -790,11 +930,11 @@ const PreOnboardingUserMaster = () => {
                 <div className="user_name">
                   <h3>
                     <span>Welcome back,</span>
-                    {loginUserName}
+                    {nicknames}
                   </h3>
                 </div>
                 <div className="user_img">
-                  <img src={profilepic} alt="user" />
+                  <img src={profileimage} alt="user" />
                 </div>
                 <div className="user_logout">
                   <a href="#" onClick={handleLogOut}>
@@ -812,6 +952,12 @@ const PreOnboardingUserMaster = () => {
                       <h1>Welcome </h1>
                       <h2>{loginUserName}</h2>
                     </div>
+                    {/* <button
+                      className="btn btn-success d-block w-100"
+                      onClick={openModal}
+                    >
+                      Profile
+                    </button> */}
                     <div className="welcome_board_img">
                       <img src={welcomeImage} alt="welcome" />
                     </div>
@@ -987,28 +1133,11 @@ const PreOnboardingUserMaster = () => {
                                 label="Hobbies"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="hobbies "
-                                // placeholder="Hobbies "
                                 value={hobbies}
                                 onChange={(e) => setHobbies(e.target.value)}
                               />
                             </div>
                             <div className="form-group form_select">
-                              {/* <Select
-                                placeholder="Blood Group"
-                                options={bloodGroupData.map((option) => ({
-                                  value: `${option}`,
-                                  label: `${option}`,
-                                }))}
-                                value={{
-                                  value: bloodGroup,
-                                  label: `${bloodGroup}`,
-                                }}
-                                onChange={(e) => {
-                                  setBloodGroup(e.value);
-                                }}
-                              /> */}
                               <Autocomplete
                                 disablePortal
                                 id="combo-box-demo"
@@ -1020,21 +1149,6 @@ const PreOnboardingUserMaster = () => {
                             </div>
 
                             <div className="form-group">
-                              {/* <Select
-                                placeholder="Maritial Status"
-                                options={maritialStatusData.map((option) => ({
-                                  value: `${option}`,
-                                  label: `${option}`,
-                                }))}
-                                value={{
-                                  value: maritialStatus,
-                                  label: `${maritialStatus}`,
-                                }}
-                                onChange={(e) => {
-                                  setMaritialStatus(e.value);
-                                }}
-                                required
-                              /> */}
                               <Autocomplete
                                 disablePortal
                                 id="combo-box-demo"
@@ -1054,9 +1168,6 @@ const PreOnboardingUserMaster = () => {
                                   label="Spouse Name"
                                   variant="outlined"
                                   type="text"
-                                  // className="form-control"
-                                  // placeholder="Spouse Name"
-                                  // name="Spouse Name"
                                   value={spouseName}
                                   onChange={(e) =>
                                     setSpouseName(e.target.value)
@@ -1070,8 +1181,6 @@ const PreOnboardingUserMaster = () => {
                                   id="outlined-basic"
                                   label="Date Of Marriage"
                                   variant="outlined"
-                                  // className="form-control"
-                                  // label="Date Of Marriage"
                                   type="date"
                                   value={dateOfMarraige}
                                   onChange={(e) =>
@@ -1103,23 +1212,12 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
 
-                            {/* <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Age"
-                              value={age}
-                            />
-                          </div> */}
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Login ID"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="Login ID "
-                                // placeholder="Login ID"
                                 value={loginId}
                                 onChange={handleLoginIdChange}
                               />
@@ -1162,9 +1260,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Joining Date"
                                 variant="outlined"
                                 type="date"
-                                // className="form-control"
-                                // name="Joining Date "
-                                // placeholder="Joining Date"
                                 value={joiningDate}
                                 onChange={(e) => setJoiningDate(e.target.value)}
                               />
@@ -1251,9 +1346,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Current Address"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="complete address"
-                                // placeholder="Complete Address"
                                 value={currentAddress}
                                 onChange={(e) =>
                                   setCurrentAddress(e.target.value)
@@ -1266,9 +1358,6 @@ const PreOnboardingUserMaster = () => {
                                 label="City"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="City"
-                                // placeholder="City"
                                 value={currentCity}
                                 onChange={(e) => setcurrentCity(e.target.value)}
                               />
@@ -1279,9 +1368,6 @@ const PreOnboardingUserMaster = () => {
                                 label="State"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="nearby landmark"
-                                // placeholder="State"
                                 value={currentState}
                                 onChange={(e) =>
                                   setcurrentState(e.target.value)
@@ -2168,7 +2254,6 @@ const PreOnboardingUserMaster = () => {
         </div>
       </section>
       {/* Dashboard Section End */}
-
       {/* Document Modal */}
       <div
         className="modal fade document_modal"
@@ -2192,19 +2277,7 @@ const PreOnboardingUserMaster = () => {
                 <i className="bi bi-x-lg" />
               </button>
             </div>
-            {/* <div className="modal-body">
-              <div className="d-flex justify-content-center">
-                {imagePreviewUrl && (
-                  <img
-                    style={{ height: "300px", width: "300px" }}
-                    height={40}
-                    src={imagePreviewUrl}
-                    alt="Preview"
-                  />
-                )}
-                {!imagePreviewUrl && <p>No image selected.</p>}
-              </div>
-            </div> */}
+
             <div className="modal-footer">
               <button
                 type="button"
@@ -2217,6 +2290,93 @@ const PreOnboardingUserMaster = () => {
           </div>
         </div>
       </div>
+
+      {/* Profile picture modal */}
+      {conditonValue === 0 ? (
+        <div
+          className={`modal ${showModal ? "show" : ""}`}
+          tabIndex={-1}
+          role="dialog"
+          style={{ display: showModal ? "block" : "none" }}
+        >
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-body">
+                <div>
+                  {selectedImage && (
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <img
+                        src={imagePreview}
+                        alt="Selected"
+                        style={{
+                          width: "150px",
+                          height: "80px",
+                          marginBottom: "10px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <h5>Choose Image:</h5>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {images.map((image) => (
+                        <img
+                          key={image}
+                          src={image}
+                          // alt={imageName}
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            margin: "5px",
+                            cursor: "pointer",
+                            borderRadius: "50%",
+                          }}
+                          onClick={() => handleImageClick(image)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="mt-1">Upload Image :</h5>
+                    <input
+                      className="form-control"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      required={false}
+                    />
+                    <h5>Nick Name :</h5>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={nickName}
+                      onChange={(e) => setNickName(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="alert_text">
+                  <button
+                    className="btn cmnbtn btn_success"
+                    data-bs-dismiss="modal"
+                    onClick={handleSubmitProfile}
+                  >
+                    Upload
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 };

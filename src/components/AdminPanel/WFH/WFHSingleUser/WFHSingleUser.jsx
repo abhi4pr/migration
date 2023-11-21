@@ -805,7 +805,7 @@ const WFHSingleUser = () => {
                 ScreenShot :
                 {rowDataModal?.screenshot ? (
                   <img
-                    src={`http://34.93.135.33:8080/api/user_images/${rowDataModal?.screenshot}`}
+                    src={`http://34.93.135.33:8080/api/uploads/${rowDataModal?.screenshot}`}
                   />
                 ) : (
                   "Null"
