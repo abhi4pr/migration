@@ -272,14 +272,14 @@ const Admin = () => {
                     element={<DashboardWFHCardDetails />}
                   />
 
-                  <Route
+                  {/* <Route
                     path="/wfh-user-dashboard"
                     element={<DashboardWFHUser />}
                   />
                   <Route
                     path="/wfh-dashboard-overview/:id"
                     element={<DashboardWFHCardDetails />}
-                  />
+                  /> */}
 
                   {contextData &&
                     contextData[1] &&
