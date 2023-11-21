@@ -29,6 +29,12 @@ import dayjs from "dayjs";
 import { set } from "date-fns";
 import { Navigate, useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -65,10 +71,27 @@ function ExecutionAll() {
   const userID = decodedToken.id;
   const [contextData, setContextData] = useState(false);
   const [alert, setAlert] = useState([]);
+  const [openExeDialog, setOpenExeDialog] = React.useState(false);
 
-
-
+  const handleClickOpenExeDialog = () => {
+    setOpenExeDialog(true);
+  };
+ 
+ 
   const navigate = useNavigate();
+
+  const handleCloseExeModal=()=>{
+    setQuater("");
+    setStatesFor(null);
+    setStartDate(null);
+    setEndDate(null);
+    setReach(0);
+    setImpression(0);
+    setEngagement(0);
+    setStoryView(0);
+    setDemoFile();
+    setRowData({});
+  }
 
   const dropdownStaticData = [
     "Daily",
@@ -89,7 +112,6 @@ function ExecutionAll() {
       primary: {
         main: "rgb(13, 110, 253)",
       },
-      //   secondary: purple,
     },
   });
 
@@ -116,19 +138,21 @@ function ExecutionAll() {
         });
         setRows(tempdata);
       });
-      if (userID && contextData == false) {
-        axios
-          .get(
-            `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
-          )
-          .then((res) => {
-            if (res.data[33].view_value == 1) {
-              setContextData(true);
-              setAlert(res.data);
-            }
-          });
-      }
+    if (userID && contextData == false) {
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          if (res.data[33].view_value == 1) {
+            setContextData(true);
+            setAlert(res.data);
+          }
+        });
+    }
   }, []);
+
+
   const converttoclipboard = (copydata) => {
     const copyData = copydata
       .map((row) => {
@@ -204,7 +228,6 @@ function ExecutionAll() {
       ];
       Followerscount += Number(rows[i].follower_count);
       copydata.push(temp);
-      // }
     }
     copydata.push([rows.length, Followerscount]);
     converttoclipboard(copydata);
@@ -215,7 +238,7 @@ function ExecutionAll() {
     let ftrdata = alldata.filter((ele) => {
       return ele.platform == name;
     });
-    // console.log(ftrdata);
+
     setRows(ftrdata);
     setPagemode(id);
   };
@@ -362,55 +385,6 @@ function ExecutionAll() {
           headerName: "Subscribers",
           // width: 150,
         },
-    // pagemode == 1 || pagemode == 2
-    //   ? {
-    //       field: "reach",
-    //       headerName: "Reach",
-    //     }
-    //   : pagemode == 3
-    //   ? {
-    //       field: "post",
-    //       headerName: "Post",
-    //       // width: 150,
-    //     }
-    //   : pagemode == 4
-    //   ? ({
-    //       field: "post",
-    //       headerName: "Post",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "repost",
-    //       headerName: "Repost",
-    //       // width: 150,
-    //     })
-    //   : ({
-    //       field: "shorts",
-    //       headerName: "Shorts",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "logo_Integration",
-    //       headerName: "Logo Integration",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "brand_Integration",
-    //       headerName: "Brand Integration",
-    //       // width: 150,
-    //     }),
-    // {
-    //   field: "impression",
-    //   headerName: "Impression",
-    // },
-    // {
-    //   field: "engagement",
-    //   headerName: "Engagement",
-    // },
-    // {
-    //   field: "story_view",
-    //   headerName: "Story view",
-    // },
 
     contextData && {
       field: "update",
@@ -450,6 +424,7 @@ function ExecutionAll() {
 
   const handleRowClick = (row) => {
     setRowData(row);
+    handleClickOpenExeDialog();
   };
 
   const saveStats = async (e) => {
@@ -468,10 +443,16 @@ function ExecutionAll() {
 
     if (statesFor === "Quarterly") {
       statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
-      reach <=0 ? setReachValidation(false):setReachValidation(true);
-      impression <=0 ? setImpressionValidation(false):setImpressionValidation(true);
-      engagement <=0 ? setEngagementValidation(false):setEngagementValidation(true);
-      storyView <=0 ? setStoryViewValidation(false):setStoryViewValidation(true);
+      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
+      impression <= 0
+        ? setImpressionValidation(false)
+        : setImpressionValidation(true);
+      engagement <= 0
+        ? setEngagementValidation(false)
+        : setEngagementValidation(true);
+      storyView <= 0
+        ? setStoryViewValidation(false)
+        : setStoryViewValidation(true);
 
       console.log(quater, "<------quater");
       // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
@@ -486,8 +467,16 @@ function ExecutionAll() {
             },
           })
           .then((res) => {
-            console.log(res);
-            console.log(res.data);
+            setQuater("");
+            setStatesFor(null);
+            setStartDate(null);
+            setEndDate(null);
+            setReach(0);
+            setImpression(0);
+            setEngagement(0);
+            setStoryView(0);
+            setDemoFile();
+            setRowData({});
 
             toast("Form Submitted success");
           });
@@ -500,10 +489,16 @@ function ExecutionAll() {
         : setStateForIsValid(true);
       startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
       endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
-      reach <=0 ? setReachValidation(false):setReachValidation(true);
-      impression <=0 ? setImpressionValidation(false):setImpressionValidation(true);
-      engagement <=0 ? setEngagementValidation(false):setEngagementValidation(true);
-      storyView <=0 ? setStoryViewValidation(false):setStoryViewValidation(true);
+      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
+      impression <= 0
+        ? setImpressionValidation(false)
+        : setImpressionValidation(true);
+      engagement <= 0
+        ? setEngagementValidation(false)
+        : setEngagementValidation(true);
+      storyView <= 0
+        ? setStoryViewValidation(false)
+        : setStoryViewValidation(true);
 
       if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
         return;
@@ -515,9 +510,19 @@ function ExecutionAll() {
             },
           })
           .then((res) => {
+            setQuater("");
+            setStatesFor(null);
+            setStartDate(null);
+            setEndDate(null);
+            setReach(0);
+            setImpression(0);
+            setEngagement(0);
+            setStoryView(0);
+            setDemoFile();
+            setRowData({});
+
             console.log(res);
             console.log(res.data);
-
             toast("Form Submitted success");
           });
       }
@@ -539,14 +544,10 @@ function ExecutionAll() {
     setSelectedOptions(value);
     console.log(value);
   };
-  const handleoptions = (option, props) => {
-    console.log(option, "*****");
-    console.log(props);
-  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
-        {/* <div style={{}}> */}
         <div className="form-heading">
           <div className="form_heading_title">
             <h2>Pages</h2>
@@ -735,71 +736,21 @@ function ExecutionAll() {
       </ThemeProvider>
 
       <div id="myModal1" className="modal fade" role="dialog">
-        <div className="modal-dialog" style={{ marginLeft: "25%" }}>
-          <div className="modal-content" style={{ width: "150%" }}>
+        <div
+          className="modal-dialog"
+          style={{ marginLeft: "25%", height: "40%", marginTop: "-5%" }}
+        >
+          <div
+            className="modal-content"
+            style={{ width: "150%", height: "200%" }}
+          >
             <div className="modal-header">
               <h4 className="modal-title">Page Name :- {rowData.page_name}</h4>
-              <button type="button" className="close" data-dismiss="modal">
+              <button type="button" className="close" onClick={handleCloseExeModal} data-dismiss="modal">
                 &times;
               </button>
             </div>
             <div className="modal-body">
-              <div className="row">
-                <div className="col-md-6">
-                  <TextField
-                    label="Reach"
-                    type="number"
-                    value={reach}
-                    onChange={(e) =>{ e.target.value >0? setReachValidation(true):setReachValidation(false), setReach(e.target.value)}}
-                    error={!reachValidation}
-                    helperText={
-                      !reachValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-                <div className="col-md-6">
-                  <TextField
-                    label="Impressions"
-                    type="number"
-                    value={impression}
-                    // fieldGrid={4}
-                    onChange={(e) =>{e.target.value >0? setImpressionValidation(true):setImpressionValidation(false), setImpression(e.target.value)}}
-                    error={!impressionValidation}
-                    helperText={
-                      !impressionValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6 my-3">
-                  <TextField
-                    label="Engagement"
-                    type="number"
-                    value={engagement}
-                    // fieldGrid={4}
-                    onChange={(e) =>{e.target.value >0? setEngagementValidation(true):setEndDateIsValid(false), setEngagement(e.target.value)}}
-                    error={!engagementValidation}
-                    helperText={
-                      !engagementValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-                <div className="col-md-6 my-3">
-                  <TextField
-                    label="Story View"
-                    type="number"
-                    value={storyView}
-                    // fieldGrid={4}
-                    onChange={(e) =>{e.target.value >0? setStoryViewValidation(true):setStoryViewValidation(false), setStoryView(e.target.value)}}
-                    error={!storyViewValidation}
-                    helperText={
-                      !storyViewValidation ? "Please enter a valid Count" : ""
-                    }
-
-                  />
-                </div>
-              </div>
               <Autocomplete
                 className="my-3"
                 disablePortal
@@ -815,13 +766,14 @@ function ExecutionAll() {
                     : setStateForIsValid(false);
                   value == "Daily" ? setStartDate(dayjs()) : setStartDate("");
                   value == "Daily" ? setEndDate(dayjs()) : setEndDate("");
+
                 }}
                 value={statesFor}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Stats for"
+                    label="Stats for *"
                     error={!stateForIsValid}
                     helperText={
                       !stateForIsValid ? "Please select an option" : ""
@@ -835,26 +787,28 @@ function ExecutionAll() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       className="my-3"
-                      label="Start Date"
+                      label="Start Date *"
                       format="DD/MM/YY"
                       value={startDate}
                       onChange={(newValue) => {
                         handleStartDateChange(newValue);
                         statesFor == "Daily" ? setEndDate(newValue) : "";
+
                       }}
                     />
                   </LocalizationProvider>
                 )}
+
               {statesFor !== null &&
                 statesFor !== "Quarterly" &&
                 stateForIsNotQuater && (
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       className="my-3 mx-3"
-                      label="End Date"
+                      label="End Date *"
                       format="DD/MM/YY"
                       value={endDate}
-                      onChange={(newValue) => handleEndDateChange(newValue)}
+                      onChange={(newValue) => {handleEndDateChange(newValue)}}
                     />
                   </LocalizationProvider>
                 )}
@@ -869,13 +823,14 @@ function ExecutionAll() {
                     value?.length > 0
                       ? setQuaterIsValid(true)
                       : setQuaterIsValid(false);
+
                   }}
                   value={quater}
                   sx={{ width: 300 }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Quarter"
+                      label="Quarter *"
                       error={!quaterIsValid}
                       helperText={
                         !quaterIsValid ? "Please select an option" : ""
@@ -884,6 +839,87 @@ function ExecutionAll() {
                   )}
                 />
               )}
+              <div className="row">
+                <div className="col-md-6">
+                  <TextField
+                    label="Reach *"
+                    type="number"
+                    value={reach}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setReachValidation(true)
+                        : setReachValidation(false),
+                        setReach(e.target.value);
+
+                    }}
+                    error={!reachValidation}
+                    helperText={
+                      !reachValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+                <div className="col-md-6">
+                  <TextField
+                    label="Impressions *"
+                    type="number"
+                    value={impression}
+                    // fieldGrid={4}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setImpressionValidation(true)
+                        : setImpressionValidation(false),
+                        setImpression(e.target.value);
+
+                    }}
+                    error={!impressionValidation}
+                    helperText={
+                      !impressionValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 my-3">
+                  <TextField
+                    label="Engagement *"
+                    type="number"
+                    value={engagement}
+                    // fieldGrid={4}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setEngagementValidation(true)
+                        : setEndDateIsValid(false),
+                        setEngagement(e.target.value);
+
+                    }}
+                    error={!engagementValidation}
+                    helperText={
+                      !engagementValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+                <div className="col-md-6 my-3">
+                  <TextField
+                    label="Story View *"
+                    type="number"
+                    value={storyView}
+                    // fieldGrid={4}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setStoryViewValidation(true)
+                        : setStoryViewValidation(false),
+                        setStoryView(e.target.value);
+
+                    }}
+                    error={!storyViewValidation}
+                    helperText={
+                      !storyViewValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+              </div>
+
               <OutlinedInput
                 // variant="outlined"
                 type="file"
@@ -900,6 +936,7 @@ function ExecutionAll() {
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
+                onClick={handleCloseExeModal}
               >
                 Cancel
               </button>
@@ -907,7 +944,9 @@ function ExecutionAll() {
                 type="button"
                 className="btn btn-success"
                 onClick={saveStats}
-                // data-dismiss="modal"
+                data-dismiss="modal"
+
+                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater:!startDate ||!endDate}
               >
                 Save
               </button>

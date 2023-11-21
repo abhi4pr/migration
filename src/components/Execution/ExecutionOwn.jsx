@@ -27,6 +27,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -772,8 +773,14 @@ function ExecutionOwn() {
       </ThemeProvider>
 
       <div id="myModal1" className="modal fade" role="dialog">
-        <div className="modal-dialog" style={{ marginLeft: "25%" }}>
-          <div className="modal-content" style={{ width: "150%" }}>
+        <div
+          className="modal-dialog"
+          style={{ marginLeft: "25%", height: "40%", marginTop: "-5%" }}
+        >
+          <div
+            className="modal-content"
+            style={{ width: "150%", height: "200%" }}
+          >
             <div className="modal-header">
               <h4 className="modal-title">Page Name :- {rowData.page_name}</h4>
               <button type="button" className="close" data-dismiss="modal">
@@ -781,82 +788,8 @@ function ExecutionOwn() {
               </button>
             </div>
             <div className="modal-body">
-              <div className="row">
-                <div className="col-md-6 my-3">
-                  <TextField
-                    label="Reach"
-                    type="number"
-                    value={reach}
-                    // fieldGrid={4}
-                    onChange={(e) => {
-                      e.target.value > 0
-                        ? setReachValidation(true)
-                        : setReachValidation(false),
-                        setReach(e.target.value);
-                    }}
-                    error={!reachValidation}
-                    helperText={
-                      !reachValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-                <div className="col-md-6 my-3 ">
-                  <TextField
-                    label="Impressions"
-                    type="number"
-                    value={impression}
-                    onChange={(e) => {
-                      e.target.value > 0
-                        ? setImpressionValidation(true)
-                        : setImpressionValidation(false),
-                        setImpression(e.target.value);
-                    }}
-                    error={!impressionValidation}
-                    helperText={
-                      !impressionValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6 my-3">
-                  <TextField
-                    label="Engagement"
-                    type="number"
-                    value={engagement}
-                    // fieldGrid={4}
-                    onChange={(e) => {
-                      e.target.value > 0
-                        ? setEngagementValidation(true)
-                        : setEndDateIsValid(false),
-                        setEngagement(e.target.value);
-                    }}
-                    error={!engagementValidation}
-                    helperText={
-                      !engagementValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-                <div className="col-md-6 my-3">
-                  <TextField
-                    label="Story View"
-                    type="number"
-                    value={storyView}
-                    // fieldGrid={4}
-                    onChange={(e) => {
-                      e.target.value > 0
-                        ? setStoryViewValidation(true)
-                        : setStoryViewValidation(false),
-                        setStoryView(e.target.value);
-                    }}
-                    error={!storyViewValidation}
-                    helperText={
-                      !storyViewValidation ? "Please enter a valid Count" : ""
-                    }
-                  />
-                </div>
-              </div>
               <Autocomplete
+                className="my-3"
                 disablePortal
                 id="combo-box-demo"
                 options={dropdownStaticData}
@@ -870,13 +803,14 @@ function ExecutionOwn() {
                     : setStateForIsValid(false);
                   value == "Daily" ? setStartDate(dayjs()) : setStartDate("");
                   value == "Daily" ? setEndDate(dayjs()) : setEndDate("");
+                  handleSaveButtonValidation()
                 }}
                 value={statesFor}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Stats for"
+                    label="Stats for *"
                     error={!stateForIsValid}
                     helperText={
                       !stateForIsValid ? "Please select an option" : ""
@@ -890,26 +824,28 @@ function ExecutionOwn() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       className="my-3"
-                      label="Start Date"
+                      label="Start Date *"
                       format="DD/MM/YY"
                       value={startDate}
                       onChange={(newValue) => {
                         handleStartDateChange(newValue);
                         statesFor == "Daily" ? setEndDate(newValue) : "";
+                        handleSaveButtonValidation()
                       }}
                     />
                   </LocalizationProvider>
                 )}
-              {statesFor !== "Quarterly" &&
-                statesFor !== null &&
+
+              {statesFor !== null &&
+                statesFor !== "Quarterly" &&
                 stateForIsNotQuater && (
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       className="my-3 mx-3"
-                      label="End Date"
+                      label="End Date *"
                       format="DD/MM/YY"
                       value={endDate}
-                      onChange={(newValue) => handleEndDateChange(newValue)}
+                      onChange={(newValue) => {handleSaveButtonValidation(),handleEndDateChange(newValue)}}
                     />
                   </LocalizationProvider>
                 )}
@@ -924,13 +860,14 @@ function ExecutionOwn() {
                     value?.length > 0
                       ? setQuaterIsValid(true)
                       : setQuaterIsValid(false);
+                      handleSaveButtonValidation()
                   }}
                   value={quater}
                   sx={{ width: 300 }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Quarter"
+                      label="Quarter *"
                       error={!quaterIsValid}
                       helperText={
                         !quaterIsValid ? "Please select an option" : ""
@@ -939,6 +876,87 @@ function ExecutionOwn() {
                   )}
                 />
               )}
+              <div className="row">
+                <div className="col-md-6">
+                  <TextField
+                    label="Reach *"
+                    type="number"
+                    value={reach}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setReachValidation(true)
+                        : setReachValidation(false),
+                        setReach(e.target.value);
+                        handleSaveButtonValidation()
+                    }}
+                    error={!reachValidation}
+                    helperText={
+                      !reachValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+                <div className="col-md-6">
+                  <TextField
+                    label="Impressions *"
+                    type="number"
+                    value={impression}
+                    // fieldGrid={4}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setImpressionValidation(true)
+                        : setImpressionValidation(false),
+                        setImpression(e.target.value);
+                        handleSaveButtonValidation()
+                    }}
+                    error={!impressionValidation}
+                    helperText={
+                      !impressionValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 my-3">
+                  <TextField
+                    label="Engagement *"
+                    type="number"
+                    value={engagement}
+                    // fieldGrid={4}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setEngagementValidation(true)
+                        : setEndDateIsValid(false),
+                        setEngagement(e.target.value);
+                        handleSaveButtonValidation()
+                    }}
+                    error={!engagementValidation}
+                    helperText={
+                      !engagementValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+                <div className="col-md-6 my-3">
+                  <TextField
+                    label="Story View *"
+                    type="number"
+                    value={storyView}
+                    // fieldGrid={4}
+                    onChange={(e) => {
+                      e.target.value > 0
+                        ? setStoryViewValidation(true)
+                        : setStoryViewValidation(false),
+                        setStoryView(e.target.value);
+                        handleSaveButtonValidation()
+                    }}
+                    error={!storyViewValidation}
+                    helperText={
+                      !storyViewValidation ? "Please enter a valid Count" : ""
+                    }
+                  />
+                </div>
+              </div>
+
               <OutlinedInput
                 // variant="outlined"
                 type="file"
@@ -946,7 +964,7 @@ function ExecutionOwn() {
                 inputProps={{
                   accept: ".pdf, .doc, .docx, .mp4, .avi, .png, .jpeg",
                 }}
-                sx={{ width: "50%", ml: 1 }}
+                sx={{ width: "42%" }}
                 onChange={(event) => handleFileChange(event)}
               />
             </div>
@@ -963,6 +981,7 @@ function ExecutionOwn() {
                 className="btn btn-success"
                 onClick={saveStats}
                 data-dismiss="modal"
+                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater:!startDate ||!endDate}
               >
                 Save
               </button>
