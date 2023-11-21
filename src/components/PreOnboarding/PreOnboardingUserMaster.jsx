@@ -183,6 +183,8 @@ const PreOnboardingUserMaster = () => {
   const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
   const [nickName, setNickName] = useState("");
+  const [getProfile, setGetProfile] = useState("");
+  const [getNickName, setGetNickName] = useState("");
 
   const profileSingleData = () => {
     axios
@@ -191,6 +193,8 @@ const PreOnboardingUserMaster = () => {
         const fetchedData = res.data.profileflag;
         profileimage = res.data.image_url;
         nicknames = res.data.nick_name;
+        setGetProfile(profileimage);
+        setGetNickName(nicknames);
         setConditonValue(fetchedData);
       });
   };
@@ -758,28 +762,20 @@ const PreOnboardingUserMaster = () => {
     setSelectedImage(file);
   };
 
-  const handleSubmitProfile = () => {
+  const handleSubmitProfile = async () => {
     const formData = new FormData();
     formData.append("user_id", id);
     formData.append("image", selectedImage);
     formData.append("nick_name", nickName);
     formData.append("profileflag", 1);
 
-    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
+    await axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    // profileSingleData();
-    axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
-      .then((res) => {
-        const fetchedData = res.data.profileflag;
-        profileimage = res.data.image_url;
-        nicknames = res.data.nick_name;
-        // setConditonValue(fetchedData);
-      });
     setShowModal(false);
+    profileSingleData();
   };
 
   return (
@@ -952,11 +948,11 @@ const PreOnboardingUserMaster = () => {
                 <div className="user_name">
                   <h3>
                     <span>Welcome back,</span>
-                    {nicknames}
+                    {getNickName}
                   </h3>
                 </div>
                 <div className="user_img">
-                  <img src={profileimage} alt="user" />
+                  <img src={getProfile} alt="user" />
                 </div>
                 <div className="user_logout">
                   <a href="#" onClick={handleLogOut}>
@@ -2186,9 +2182,9 @@ const PreOnboardingUserMaster = () => {
                         </div>
                       </div>
                       <div className="ml-auto mr-auto text-center">
-                        <button className="btn btn_pill btn_cmn btn_white">
+                        {/* <button className="btn btn_pill btn_cmn btn_white">
                           Submit
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   </div>
