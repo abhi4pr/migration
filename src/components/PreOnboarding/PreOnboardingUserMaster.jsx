@@ -7,7 +7,6 @@ import "./onboardcss/onboard_animate.min.css";
 import profilepic from "../../assets/imgs/user/naruto.png";
 import welcomeImage from "../../assets/imgs/other/welcome.png";
 import Select from "react-select";
-import { AiOutlineReload } from "react-icons/ai";
 import { useGlobalContext } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
@@ -41,6 +40,9 @@ import imageTest30 from "../../assets/img/product/Avtar30.png";
 
 var profileimage;
 var nicknames;
+import Modal from "react-modal";
+import ExtendJoining from "./ExtendJoining";
+import PreOboardingDocumentsUser from "./PreOboardingDocumentsUser";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -193,11 +195,11 @@ const PreOnboardingUserMaster = () => {
       });
   };
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
-      getUsersData(res.data.data);
-      const userSitting = res.data.data.map((user) => user.sitting_id);
-      setAllUsersSittings(userSitting);
-    });
+    // axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    //   getUsersData(res.data.data);
+    //   const userSitting = res.data.data.map((user) => user.sitting_id);
+    //   setAllUsersSittings(userSitting);
+    // });
 
     profileSingleData();
   }, []);
@@ -247,6 +249,16 @@ const PreOnboardingUserMaster = () => {
         <p> {items[0].description}</p>
       </div>
     ));
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openReactModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeReactModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleCheckboxChange = (e) => {
@@ -597,98 +609,81 @@ const PreOnboardingUserMaster = () => {
   }, [tempLanguage]);
 
   const handleLogOut = () => {
-    sessionStorage.clear("toekn");
+    sessionStorage.clear("token");
     navigate("/login");
   };
 
-  const calculateProgressPercentage = () => {
-    const filledFields = [
-      username,
-      email,
-      loginId,
-      password,
-      contact,
-      personalContact,
-      personalEmail,
-      joiningDate,
-      speakingLanguage,
-      gender,
-      nationality,
-      dateOfBirth,
-      FatherName,
-      motherName,
-      hobbies,
-      bloodGroup,
-      maritialStatus,
-      dateOfMarraige,
-      spouseName,
-      permanentAddress,
-      permanentCity,
-      permanentState,
-      permanentPincode,
-      currentAddress,
-      currentCity,
-      currentState,
-      currentPincode,
-    ];
-    // const fileFields = [];
-    // const filledFieldsCount = filledFields?.filter(
-    //   (value) => value !== null && value?.trim() !== ""
-    // ).length;
-    const filledFieldsCount = filledFields?.filter(
-      (value) => value !== null
+  const calculateProgressPercentage = (fieldsArray, excludeValues) => {
+    const valuesToExclude = Array.isArray(excludeValues)
+      ? excludeValues
+      : [excludeValues];
+
+    const filledFieldsCount = fieldsArray?.filter(
+      (val) => !valuesToExclude.includes(val)
     ).length;
-    const totalFields = filledFields.length;
+
+    const totalFields = fieldsArray?.length;
     const percentage = (filledFieldsCount / totalFields) * 100;
     return Math.ceil(percentage);
   };
 
-  const handleJoiningExtend = (e) => {
-    e.preventDefault();
+  const filledFields = [
+    username,
+    email,
+    personalEmail,
+    loginId,
+    password,
+    contact,
+    personalContact,
+    personalEmail,
+    FatherName,
+    motherName,
+    hobbies,
+    gender,
+    joiningDate,
+    speakingLanguage,
+    nationality,
+    dateOfBirth,
+    bloodGroup,
+    maritialStatus,
+    dateOfMarraige,
+    spouseName,
+    permanentAddress,
+    permanentCity,
+    permanentState,
+    permanentPincode,
+    currentAddress,
+    currentCity,
+    currentState,
+    currentPincode,
+    emergencyContact,
+    guardianName,
+    relationToGuardian,
+    guardianAddress,
+  ];
 
-    const formData = new FormData();
-    formData.append("user_id", id);
-    formData.append("joining_date_extend", joingingExtendDate);
-    formData.append("joining_date_extend_status", "Requested");
-    formData.append("joining_date_extend_reason", joiningExtendReason);
-    formData.append("joining_extend_document", joingingExtendDocument);
+  const filledDocuments = [
+    XMarksheetValidation,
+    XIIMarksheetValidation,
+    underGraduationDocValidation,
+    uidValidation,
+    panUploadValidation,
+    PassportValidation,
+    experienceDocValidation,
+    previousOfferLetterValidation,
+    previousRelievingLetterValidation,
+    passbookChequeValidation,
+  ];
 
-    axios
-      .put(`http://34.93.135.33:8080/api/update_user`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then(() => toastAlert("Extend Date Requested Successfully"));
+  const formFieldProgressPercentage = calculateProgressPercentage(
+    filledFields,
+    ["", null]
+  );
 
-    axios
-      .post("http://34.93.135.33:8080/api/add_send_user_mail", {
-        email: "lalit@creativefuel.io",
-        subject: "User Pre Onboarding Extend Date",
-        text: joiningExtendReason,
-        attachment: "",
-        login_id: loginId,
-        name: username,
-        password: password,
-      })
-      .then((res) => {
-        console.log("Email sent successfully:", res.data);
-      })
-      .catch((error) => {
-        console.log("Failed to send email:", error);
-      });
-    whatsappApi
-      .callWhatsAPI("CF_Extend_request_new", "9826116769", username, [
-        username,
-        joingingExtendDate.split("-").reverse().join("-"),
-      ])
-      .then(() => {
-        setJoiningExtendDate("");
-        setJoiningExtendReason("");
-        setJoiningExtendDocument(null);
-      })
-      .then(() => gettingData());
-  };
+  const documentFieldProgressPercentage = calculateProgressPercentage(
+    filledDocuments,
+    ["Reject", "Pending", null]
+  );
 
   function daysUntil(isoDateString) {
     const oneDay = 24 * 60 * 60 * 1000; // milliseconds in one day
@@ -805,7 +800,7 @@ const PreOnboardingUserMaster = () => {
               >
                 {/* p-100 is percentage of document procedure */}
                 <div
-                  className={`progress-circle progressing p-${progressPercentage}`}
+                  className={`progress-circle progressing p-${formFieldProgressPercentage}`}
                 >
                   <div className="progress-circle-border">
                     <div className="left-half-circle" />
@@ -816,6 +811,7 @@ const PreOnboardingUserMaster = () => {
                   </div>
                 </div>
                 <h2>Form</h2>
+                <h3>{formFieldProgressPercentage}%</h3>
               </div>
 
               <div
@@ -824,7 +820,9 @@ const PreOnboardingUserMaster = () => {
                 }`}
                 onClick={() => setActiveTab(2)}
               >
-                <div className={`progress-circle progressing p-${"100"}`}>
+                <div
+                  className={`progress-circle progressing p-${documentFieldProgressPercentage}`}
+                >
                   <div className="progress-circle-border">
                     <div className="left-half-circle" />
                     <div className="right-half-circle" />
@@ -834,7 +832,9 @@ const PreOnboardingUserMaster = () => {
                   </div>
                 </div>
                 <h2>Documents</h2>
+                <h3>{documentFieldProgressPercentage}%</h3>
               </div>
+
               <div
                 className={`sidebar_itembox ${
                   activeTab == 3 ? "sidebar_item_active" : ""
@@ -852,6 +852,25 @@ const PreOnboardingUserMaster = () => {
                 </div>
                 <h2>Policy</h2>
               </div>
+
+              <div
+                className={`sidebar_itembox ${
+                  activeTab == 7 ? "sidebar_item_active" : ""
+                }`}
+                onClick={() => setActiveTab(7)}
+              >
+                <div className="progress-circle progressing p-26">
+                  <div className="progress-circle-border">
+                    <div className="left-half-circle" />
+                    <div className="right-half-circle" />
+                  </div>
+                  <div className="progress-circle-content">
+                    <i className="bi bi-book" />
+                  </div>
+                </div>
+                <h2>Letter</h2>
+              </div>
+
               <div
                 className={`sidebar_itembox ${
                   activeTab == 4 ? "sidebar_item_active" : ""
@@ -875,7 +894,10 @@ const PreOnboardingUserMaster = () => {
           <div className="page_area">
             <div className="topnavbar">
               <div className="navbar_menu">
-                <ul className="nav">
+                <h3>
+                  <span>{daysLeftCount}</span> days left to Join
+                </h3>
+                {/* <ul className="nav">
                   <li className="nav-item" onClick={() => setActiveTab(0)}>
                     <a
                       className={`nav-link ${activeTab == 0 ? "active" : ""}`}
@@ -924,7 +946,7 @@ const PreOnboardingUserMaster = () => {
                       Extend Joining
                     </a>
                   </li>
-                </ul>
+                </ul> */}
               </div>
               <div className="user_box">
                 <div className="user_name">
@@ -973,6 +995,32 @@ const PreOnboardingUserMaster = () => {
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                           <div className="board_form">
                             <h2>On-Boarding Form</h2>
+
+                            <h3>
+                              Your Current Joning Date is:{" "}
+                              <span>{joiningDate}</span>
+                              <button
+                                className="btn btn-primary"
+                                onClick={openReactModal}
+                              >
+                                Extend
+                              </button>
+                              <Modal
+                                isOpen={isModalOpen}
+                                onRequestClose={closeReactModal}
+                                contentLabel="Modal"
+                                appElement={document.getElementById("root")}
+                              >
+                                <ExtendJoining
+                                  gettingData={gettingData}
+                                  id={id}
+                                  loginId={loginId}
+                                  username={username}
+                                  password={password}
+                                  closeModal={closeReactModal}
+                                />
+                              </Modal>
+                            </h3>
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
@@ -987,7 +1035,7 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Official Email"
@@ -1004,7 +1052,7 @@ const PreOnboardingUserMaster = () => {
                                   *Please enter valid email
                                 </p>
                               )}
-                            </div>
+                            </div> */}
 
                             <div className="form-group">
                               <TextField
@@ -1022,7 +1070,7 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="official Contact"
@@ -1041,7 +1089,7 @@ const PreOnboardingUserMaster = () => {
                                     *Please enter valid number
                                   </p>
                                 )}
-                            </div>
+                            </div> */}
 
                             <div className="form-group">
                               <TextField
@@ -1212,7 +1260,15 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Age"
+                              value={age}
+                            />
+                          </div> */}
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Login ID"
@@ -1230,9 +1286,9 @@ const PreOnboardingUserMaster = () => {
                                   <i className="bi bi-shuffle"></i>
                                 </button>
                               </div>
-                            </div>
+                            </div> */}
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Password"
@@ -1252,9 +1308,9 @@ const PreOnboardingUserMaster = () => {
                                   <i className="bi bi-shuffle"></i>
                                 </button>
                               </div>
-                            </div>
+                            </div> */}
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Joining Date"
@@ -1263,7 +1319,7 @@ const PreOnboardingUserMaster = () => {
                                 value={joiningDate}
                                 onChange={(e) => setJoiningDate(e.target.value)}
                               />
-                            </div>
+                            </div> */}
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
@@ -2238,7 +2294,7 @@ const PreOnboardingUserMaster = () => {
                           <div className="form-group ml-auto mr-auto text-center">
                             <button
                               className="btn btn_pill btn_cmn btn_white"
-                              onClick={handleJoiningExtend}
+                              // onClick={handleJoiningExtend}
                             >
                               Request
                             </button>
@@ -2248,6 +2304,8 @@ const PreOnboardingUserMaster = () => {
                     </div>
                   </form>
                 )}
+
+                {activeTab == 7 && <PreOboardingDocumentsUser />}
               </div>
             </div>
           </div>
