@@ -1153,13 +1153,7 @@ const SalaryWFH = () => {
               <div>Refrence No :{rowDataModal?.reference_no}</div>
               <div>
                 ScreenShot :
-                <img
-                  src={`${"http://34.93.135.33:8080/api/user_images/"}${
-                    rowDataModal?.screenshot
-                  }`}
-                  alt="Snap"
-                />
-                {console.log()}
+                <img src={rowDataModal?.screenshot} alt="Snap" />
               </div>
             </div>
             <div className="modal-footer">
