@@ -3,6 +3,7 @@ import { Page } from "@react-pdf/renderer";
 import axios from "axios";
 import { useState } from "react";
 import classes from "./forgetPassword.module.css"
+import SendIcon from '@mui/icons-material/Send';
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ export default function ForgetPassword() {
 
   return (
     <div className={classes.background}>
-      <div
+      <div    
         style={{
           display: "grid",
           alignItems: "center",
@@ -47,18 +48,19 @@ export default function ForgetPassword() {
           }}
           // className="login100-form d-flex  validate-form p-l-55 p-r-55 p-t-178 "
           className={classes.form}
+       
         >
-          <Page className={"d-flex flex-column justify-content-center align-items-center  p-5 border-radius-3 "}>
+          <div className={`d-flex flex-column justify-content-center align-items-center  p-5 border-radius-3 ${classes.formCh} `}>
             <TextField
               label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               variant="outlined"
             />
-            <Button type="submit" variant="contained" className="mt-3">
-              Submit
+            <Button  type="submit"  className="mt-3">
+              <SendIcon variant="contained"/>
             </Button>
-          </Page>
+          </div>
         </form>
       </div>
     </div>

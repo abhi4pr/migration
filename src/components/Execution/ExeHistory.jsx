@@ -83,11 +83,25 @@ const apiCall=()=>{
       field: "start_date",
       headerName: "Start Date",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {new Date(params.row.start_date).toISOString().substr(8, 2)}/
+            {new Date(params.row.start_date).toISOString().substr(5, 2)}/
+            {new Date(params.row.start_date).toISOString().substr(2, 2)}
+          </div>)}
     },
     {
       field: "end_date",
       headerName: "End Date",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {new Date(params.row.end_date).toISOString().substr(8, 2)}/
+            {new Date(params.row.end_date).toISOString().substr(5, 2)}/
+            {new Date(params.row.end_date).toISOString().substr(2, 2)}
+          </div>)}
     },
     {
       field: "creation_date",
@@ -139,7 +153,7 @@ const apiCall=()=>{
       <div style={{ width: "80%", margin: "0 0 0 10%" }}>
         <UserNav />
         <FormContainer
-          mainTitle="Execution History"
+          mainTitle="Stats History"
           link="/ip-master"
           buttonAccess={buttonAccess}
         />
