@@ -390,15 +390,15 @@ const Attendence = () => {
               <h3>
                 {data?.atdGenerated == 1 ? (
                   <span>
-                    <i class="bi bi-check2-circle" />
+                    <i className="bi bi-check2-circle" />
                   </span>
                 ) : currentMonthNumber - 4 - index < 0 ? (
                   <span>
-                    <i class="bi bi-clock-history" />
+                    <i className="bi bi-clock-history" />
                   </span>
                 ) : (
                   <span>
-                    <i class="bi bi-hourglass-top" />
+                    <i className="bi bi-hourglass-top" />
                   </span>
                 )}
                 {data.atdGenerated == 1

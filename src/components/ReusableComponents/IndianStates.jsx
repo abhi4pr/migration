@@ -40,7 +40,7 @@ const states = [
   "Ladakh",
 ];
 
-const IndianStates = ({ onChange }) => {
+const IndianStates = ({ onChange, newValue }) => {
   const [selectedState, setSelectedState] = useState(null);
 
   const options = states.map((state) => ({
@@ -52,13 +52,15 @@ const IndianStates = ({ onChange }) => {
     setSelectedState(selectedState);
     onChange(selectedState);
   };
+
   return (
     <>
       <label className="form-label">States and UT</label>
       <Select
         className=""
         options={options}
-        value={selectedState}
+        value={options.find((option)=> option.value==newValue)}
+        label={newValue}
         onChange={handleChange}
         isClearable
         isSearchable
