@@ -11,6 +11,7 @@ import MyTemplate4 from "../WFH/SalaryGeneration/Template4";
 import MyTemplate5 from "../WFH/SalaryGeneration/Template5";
 import { set } from "date-fns";
 import CheckableTag from "antd/es/tag/CheckableTag";
+import { generatePDF } from "../WFH/SalaryGeneration/pdfGenerator";
 
 const AccountsOverviewWFH = () => {
   const [search, setSearch] = useState("");
@@ -143,7 +144,7 @@ const AccountsOverviewWFH = () => {
           >
             Pay
           </button>
-          <PDFDownloadLink
+          {/* <PDFDownloadLink
             document={templateMap[row?.invoice_template_no]}
             fileName={row?.user_name + " " + row?.month + " " + row?.year}
             style={{
@@ -158,7 +159,18 @@ const AccountsOverviewWFH = () => {
             >
               <CloudDownloadIcon />
             </button>
-          </PDFDownloadLink>
+          </PDFDownloadLink> */}
+
+          {row?.invoice_template_no !== "0" && (
+            <button
+              className="btn btn-outline-primary btn-sm"
+              title="Download Invoice"
+              type="button"
+              onClick={() => generatePDF(row)}
+            >
+              <CloudDownloadIcon />
+            </button>
+          )}
         </>
       ),
     },

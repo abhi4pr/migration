@@ -336,6 +336,13 @@ const SidebarLinks = () => {
                 </Link>
               )}
 
+              <Link
+                className="collapse-item"
+                to="/admin/preonboarding-documents-overview"
+              >
+                Documents
+              </Link>
+
               {/* {contextData &&
                 contextData[20] &&
                 contextData[20].insert_value === 1 && (

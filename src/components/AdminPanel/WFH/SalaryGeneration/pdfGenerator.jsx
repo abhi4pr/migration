@@ -8,7 +8,7 @@ const templates = {
 };
 
 export const generatePDF = async (rowData) => {
-  const TemplateComponent = templates[rowData.invoice_template_no];
+  const TemplateComponent = templates[rowData?.invoice_template_no];
 
   if (!TemplateComponent) {
     console.error(
@@ -18,7 +18,7 @@ export const generatePDF = async (rowData) => {
     return;
   }
 
-  const signatureImageUrl = `http://34.93.135.33:8080/uploads/${rowData.digital_signature_image}`;
+  const signatureImageUrl = `http://34.93.135.33:8080/uploads/${rowData?.digital_signature_image}`;
 
   const dataWithImage = {
     ...rowData,

@@ -235,30 +235,30 @@ const UserMaster = () => {
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !username ||
-      !gender ||
-      !designation ||
-      !department ||
-      !reportL1 ||
-      !roles ||
-      !personalEmail ||
-      // !speakingLanguage ||
-      !dateOfBirth ||
-      !maritialStatus ||
-      !joiningDate ||
-      !jobType ||
-      !status ||
-      !sitting ||
-      !personalContact ||
-      !loginId ||
-      !password ||
-      !dateOfBirth ||
-      !gender
-    ) {
-      setError("Please select All required Fields");
-      return;
-    }
+    // if (
+    //   !username ||
+    //   !gender ||
+    //   !designation ||
+    //   !department ||
+    //   !reportL1 ||
+    //   !roles ||
+    //   !personalEmail ||
+    //   // !speakingLanguage ||
+    //   !dateOfBirth ||
+    //   !maritialStatus ||
+    //   !joiningDate ||
+    //   !jobType ||
+    //   !status ||
+    //   !sitting ||
+    //   !personalContact ||
+    //   !loginId ||
+    //   !password ||
+    //   !dateOfBirth ||
+    //   !gender
+    // ) {
+    //   setError("Please select All required Fields");
+    //   return;
+    // }
 
     const formData = new FormData();
     // const formDataa = new FormData();
@@ -878,9 +878,10 @@ const UserMaster = () => {
         />
       </div>
 
-      <div style={{display:"flex",justifyContent:"flex-end"}}>
-        <button className="btn btn-primary"
-          onClick={()=> setActiveAccordionIndex((prev) => prev+1)}
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
         >
           <ArrowForwardIosIcon />
         </button>
@@ -1058,7 +1059,6 @@ const UserMaster = () => {
           <ArrowForwardIosIcon />
         </button>
       </div>
-
     </>
   );
 
@@ -1186,35 +1186,35 @@ const UserMaster = () => {
         {!isValidUID && (
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
-      <div
-        style={{
-          display:"flex",
-          marginBottom:"10px",
-          // justifyContent:"space-between"
-          // marginRight:"10px"
-        }}
-      >
-        <button
-          className="btn btn-primary"
-          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        <div
+          style={{
+            display: "flex",
+            marginBottom: "10px",
+            // justifyContent:"space-between"
+            // marginRight:"10px"
+          }}
         >
-          <ArrowBackIosIcon />
-        </button>
-        <div className="d-flex mb-2" style={{marginLeft:"20px"}}>
           <button
-            type="button"
-            className="btn btn-outline-primary me-2"
-            onClick={addMore}
+            className="btn btn-primary"
+            onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
           >
-            Add More
+            <ArrowBackIosIcon />
           </button>
-          {documents.length > 0 && (
-            <button className="btn btn-outline-primary" onClick={reomveField}>
-              Remove Field
+          <div className="d-flex mb-2" style={{ marginLeft: "20px" }}>
+            <button
+              type="button"
+              className="btn btn-outline-primary me-2"
+              onClick={addMore}
+            >
+              Add More
             </button>
-          )}
+            {documents.length > 0 && (
+              <button className="btn btn-outline-primary" onClick={reomveField}>
+                Remove Field
+              </button>
+            )}
+          </div>
         </div>
-       </div>
       </div>
     </>
   );
@@ -1476,7 +1476,6 @@ const UserMaster = () => {
           <ArrowForwardIosIcon />
         </button>
       </div>
-      
     </>
   );
 
