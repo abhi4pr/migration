@@ -24,11 +24,6 @@ import {
 } from "@react-pdf/renderer";
 import { Text, StyleSheet } from "@react-pdf/renderer";
 import { Button } from "@mui/material";
-import MyTemplate1 from "./Template";
-import MyTemplate2 from "./Template2";
-import MyTemplate3 from "./Template3";
-import MyTemplate4 from "./Template4";
-import MyTemplate5 from "./Template5";
 
 import { generatePDF } from "./pdfGenerator";
 
@@ -457,116 +452,6 @@ const SalaryWFH = () => {
 
   //--------------------------------------------------------------------------------------------------------------------
 
-  const pdfTemplate = () => (
-    <Document>
-      <Page size="A1" style={styles.page}>
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <Text style={{ fontSize: 25 }}>
-            Department:{" "}
-            {departmentdata.find((user) => user.dept_id === department)
-              ?.dept_name || ""}
-          </Text>
-          <Text style={{ fontSize: 25 }}>Month: {month}</Text>
-          <Text style={{ fontSize: 25 }}>Year: {year}</Text>
-        </View>
-
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCell}>S.NO</Text>
-            <Text style={[styles.tableCell, { width: "30%" }]}>
-              Employee Name
-            </Text>
-            <Text style={styles.tableCell}>Deparmtent</Text>
-            <Text style={styles.tableCell}>Designation</Text>
-            <Text style={styles.tableCell}>DOJ</Text>
-            <Text style={styles.tableCell}>Work Days</Text>
-            <Text style={styles.tableCell}>Month</Text>
-            <Text style={styles.tableCell}>Salary</Text>
-            <Text style={styles.tableCell}>Absent</Text>
-            <Text style={styles.tableCell}>Present</Text>
-            <Text style={styles.tableCell}>Total Salary</Text>
-            <Text style={styles.tableCell}>Bonus</Text>
-            <Text style={styles.tableCell}>Deductions</Text>
-            <Text style={styles.tableCell}>Net Salary</Text>
-            <Text style={styles.tableCell}>TDS</Text>
-            <Text style={styles.tableCell}>To Pay</Text>
-          </View>
-        </View>
-
-        {filterData?.map((item, index) => (
-          <View key={index} style={styles.tableRow}>
-            <Text style={styles.tableCell}>{index + 1}</Text>
-            <Text style={[styles.tableCell, { width: "30%" }]}>
-              {item.user_name}
-            </Text>
-            <Text style={styles.tableCell}>{item.dept_name}</Text>
-            <Text style={styles.tableCell}>{item.designation_name}</Text>
-            <Text style={styles.tableCell}>
-              {item.joining_date.split("T")[0].split("-").reverse().join("-")}
-            </Text>
-            <Text style={styles.tableCell}>30</Text>
-            <Text style={styles.tableCell}>{item.month}</Text>
-            <Text style={styles.tableCell}>{item.salary}</Text>
-            <Text style={styles.tableCell}>{item.noOfabsent}</Text>
-            <Text style={styles.tableCell}>{30 - item.noOfabsent}</Text>
-            <Text style={styles.tableCell}>{item.total_salary}</Text>
-            <Text style={styles.tableCell}>{item.bonus}</Text>
-            <Text style={styles.tableCell}>{item.salary_deduction}</Text>
-            <Text style={styles.tableCell}>{item.net_salary}</Text>
-            <Text style={styles.tableCell}>{item.tds_deduction}</Text>
-            <Text style={styles.tableCell}>{item.toPay}</Text>
-          </View>
-        ))}
-
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCell}>Total</Text>
-            <Text style={styles.tableCell}></Text>
-            <Text style={styles.tableCell}></Text>
-            <Text style={styles.tableCell}></Text>
-            <Text style={styles.tableCell}></Text>
-            <Text style={styles.tableCell}></Text>
-            <Text style={styles.tableCell}>
-              {filterData
-                ?.map((item) => Number(item.total_salary))
-                .reduce((a, b) => a + b, 0)}
-            </Text>
-            <Text style={styles.tableCell}>
-              {filterData
-                ?.map((item) => Number(item.bonus))
-                .reduce((a, b) => a + b, 0)}
-            </Text>
-            <Text style={styles.tableCell}>
-              {filterData
-                ?.map((item) => Number(item.net_salary))
-                .reduce((a, b) => a + b, 0)}
-            </Text>
-            <Text style={styles.tableCell}>
-              {filterData
-                ?.map((item) => Number(item.tds_deduction))
-                .reduce((a, b) => a + b, 0)}
-            </Text>
-            <Text style={styles.tableCell}>
-              {filterData
-                ?.map((item) => Number(item.toPay))
-                .reduce((a, b) => a + b, 0)}
-            </Text>
-          </View>
-        </View>
-      </Page>
-    </Document>
-  );
-
-  const templateMap = {
-    1: <MyTemplate1 rowData={rowData} />,
-    2: <MyTemplate2 rowData={rowData} />,
-    3: <MyTemplate3 rowData={rowData} />,
-    4: <MyTemplate4 rowData={rowData} />,
-    5: <MyTemplate5 rowData={rowData} />,
-  };
-
-  const selectedTemplatevalue = templateMap[selectedTemplate];
-
   const columns = [
     {
       name: "S.No",
@@ -661,7 +546,7 @@ const SalaryWFH = () => {
       name: "Action",
       cell: (row) => (
         <>
-          {row?.invoice_template_no !== "0" && (
+          {/* {row?.invoice_template_no !== "0" && (
             <PDFDownloadLink
               document={templateMap[row?.invoice_template_no]}
               fileName={row?.user_name + " " + row?.month + " " + row?.year}
@@ -678,7 +563,7 @@ const SalaryWFH = () => {
                 <CloudDownloadIcon />
               </button>
             </PDFDownloadLink>
-          )}
+          )} */}
           {!row?.invoice_template_no ? (
             <button
               type="button"

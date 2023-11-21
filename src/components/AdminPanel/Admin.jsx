@@ -66,6 +66,8 @@ import UserWiseDashboard from "./User/UserWIseDashboard/UserWiseDashboard";
 import SalaryWFH from "./WFH/SalaryGeneration/SalaryWFH";
 import UserHierarchy from "./User/UserHierarchy";
 import UserSingle from "./User/UserSingle";
+import DashboardWFHUser from "./WFH/DashboardWFHUser";
+import DashboardWFHCardDetails from "./WFH/DashboardWFHCardDetails";
 import LeadApp from "../LeadManagement/LeadApp";
 import LeadManagement from "../LeadManagement/LeadManagement";
 import EditLead from "../LeadManagement/EditLead";
@@ -128,6 +130,9 @@ import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
 import CocHistory from "./AdminPreOnboarding/CocHistory";
+import PreonboardingDocuments from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocuments";
+import PreonboardingDocumentOverview from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentOverview";
+import PreonboardingDocumentsUpdate from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentsUpdate";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -257,6 +262,15 @@ const Admin = () => {
                   />
 
                   <Route path="/wfh-single-user" element={<WFHSingleUser />} />
+                  <Route
+                    path="/wfh-user-dashboard"
+                    element={<DashboardWFHUser />}
+                  />
+
+                  <Route
+                    path="/wfh-dashboard-overview/:id"
+                    element={<DashboardWFHCardDetails />}
+                  />
 
                   {contextData &&
                     contextData[1] &&
@@ -431,7 +445,7 @@ const Admin = () => {
                   />
                   <Route
                     path="/pre-onboard-coc-master"
-                    element={<CocMaster/>}
+                    element={<CocMaster />}
                   />
                   <Route
                     path="/pre-onboard-coc-overview"
@@ -456,6 +470,18 @@ const Admin = () => {
                   <Route
                     path="/preOnboard-user-details-profile/:id"
                     element={<PreOnboardUserDetailsProfile />}
+                  />
+                  <Route
+                    path="/preonboarding-documents"
+                    element={<PreonboardingDocuments />}
+                  />
+                  <Route
+                    path="/preonboarding-documents-overview"
+                    element={<PreonboardingDocumentOverview />}
+                  />
+                  <Route
+                    path="/preonboarding-documents-update/:id"
+                    element={<PreonboardingDocumentsUpdate />}
                   />
                   <Route
                     path="/annoucement-post"
@@ -545,7 +571,10 @@ const Admin = () => {
                   <Route path="/execution" element={<OverviewIndex />} />
                   <Route path="/exeexecution/all" element={<ExecutionAll />} />
                   <Route path="/exeexecution/own" element={<ExecutionOwn />} />
-                  <Route path="/exeexecution/other" element={<ExecutionOther />} />
+                  <Route
+                    path="/exeexecution/other"
+                    element={<ExecutionOther />}
+                  />
                   <Route
                     path="/exeexecution/pending"
                     element={

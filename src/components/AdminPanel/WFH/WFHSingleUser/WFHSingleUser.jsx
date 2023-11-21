@@ -13,6 +13,7 @@ import image3 from "../SalaryGeneration/images/i3.png";
 import image4 from "../SalaryGeneration/images/i4.png";
 import image5 from "../SalaryGeneration/images/image5.png";
 import * as XLSX from "xlsx";
+import { generatePDF } from "../SalaryGeneration/pdfGenerator";
 import {
   Document,
   Image,
@@ -504,7 +505,7 @@ const WFHSingleUser = () => {
       name: "Action",
       cell: (row) => (
         <>
-          {row?.invoice_template_no !== "0" && (
+          {/* {row?.invoice_template_no !== "0" && (
             <PDFDownloadLink
               document={templateMap[row?.invoice_template_no]}
               fileName={row?.user_name + " " + row?.month + " " + row?.year}
@@ -521,7 +522,7 @@ const WFHSingleUser = () => {
                 <CloudDownloadIcon />
               </button>
             </PDFDownloadLink>
-          )}
+          )} */}
           {!row?.invoice_template_no && (
             <button
               type="button"
@@ -556,6 +557,17 @@ const WFHSingleUser = () => {
           )}
           {row.sendToFinance == 1 && row.status_ == 0 && (
             <button className="btn btn-danger ml-2">Pending</button>
+          )}
+
+          {row?.invoice_template_no !== "0" && (
+            <button
+              className="btn btn-outline-primary btn-sm"
+              title="Download Invoice"
+              type="button"
+              onClick={() => generatePDF(row)}
+            >
+              <CloudDownloadIcon />
+            </button>
           )}
         </>
       ),
