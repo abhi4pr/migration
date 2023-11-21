@@ -313,6 +313,10 @@ const UserUpdate = () => {
           bank_name,
           ifsc_code,
           account_no,
+          permanent_city,
+          permanent_address,
+          permanent_state,
+          permanent_pin_code
         } = fetchedData;
         setPanNo(pan_no);
         setUidNo(uid_no);
@@ -367,6 +371,10 @@ const UserUpdate = () => {
         setBankName(bank_name);
         setIFSC(ifsc_code);
         setBankAccountNumber(account_no);
+        setCity(permanent_city)
+        setAddress(permanent_address);
+        setState(permanent_state);
+        setPincode(permanent_pin_code)
         // set;
       })
       .then(() => {});
@@ -1480,6 +1488,7 @@ const UserUpdate = () => {
       <div className="form-group col-6">
         <IndianStates
           onChange={(option) => setState(option ? option.value : null)}
+          newValue={state}
         />
       </div>
       <FieldContainer
