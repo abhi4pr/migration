@@ -6,12 +6,11 @@ import {
   Checkbox,
   OutlinedInput,
   Paper,
-  SvgIcon,
   TextField,
   Typography,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import { createTheme,  ThemeProvider } from "@mui/material/styles";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import CopyAllOutlinedIcon from "@mui/icons-material/CopyAllOutlined";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
@@ -22,28 +21,24 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import CircularWithValueLabel from "../InstaApi.jsx/CircularWithValueLabel";
-import { useCallback } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { toast } from "react-toastify";
+
 import dayjs from "dayjs";
-import { set } from "date-fns";
-import { Navigate, useNavigate } from "react-router-dom";
+
+import {  useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+
+import { useGlobalContext } from "../../Context/Context";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function ExecutionAll() {
+  const {toastAlert}=useGlobalContext()
   const [rows, setRows] = useState([]);
   const [pagemode, setPagemode] = useState(1);
   const [alldata, setAlldata] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
+
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [copiedData, setCopiedData] = useState("");
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -60,7 +55,7 @@ function ExecutionAll() {
   const [stateForIsNotQuater, setStateForIsNotQuater] = useState(false);
   const [quater, setQuater] = useState("");
   const [quaterIsValid, setQuaterIsValid] = useState(false);
-  const [startDateIsValid, setStartDateIsValid] = useState(false);
+
   const [endDateIsValid, setEndDateIsValid] = useState(false);
   const [reachValidation, setReachValidation] = useState(true);
   const [impressionValidation, setImpressionValidation] = useState(true);
@@ -95,9 +90,9 @@ function ExecutionAll() {
 
   const dropdownStaticData = [
     "Daily",
-    "weekly",
-    "fortnight",
-    "monthly",
+    "Weekly",
+    "Fortnight",
+    "Monthly",
     "Quarterly",
   ];
 
@@ -245,24 +240,32 @@ function ExecutionAll() {
 
   const handleStartDateChange = (newValue) => {
     const date = new Date(newValue.$d);
-    const isoDate = date.toISOString(); // This will be in UTC
 
-    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+    // Adjusting for the local time zone offset
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
 
-    // If you want to display the date with the original offset (+00:00)
-    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+    // Getting ISO string after adjustment
+    const isoDate = date.toISOString();
+
+    console.log(isoDate);
+    console.log(isoDate.replace("Z", "+00:00"));
 
     setStartDate(newValue);
   };
 
   const handleEndDateChange = (newValue) => {
     const date = new Date(newValue.$d);
-    const isoDate = date.toISOString(); // This will be in UTC
 
-    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+    // Adjusting for the local time zone offset
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
 
-    // If you want to display the date with the original offset (+00:00)
-    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+    // Getting ISO string after adjustment
+    const isoDate = date.toISOString();
+
+    console.log(isoDate);
+    console.log(isoDate.replace("Z", "+00:00"));
 
     setEndDate(newValue);
   };
@@ -428,6 +431,8 @@ function ExecutionAll() {
   };
 
   const saveStats = async (e) => {
+    e.preventDefault();
+    console.log("save stats")
     const formData = new FormData();
     formData.append("p_id", rowData.p_id);
     formData.append("reach", reach);
@@ -439,27 +444,8 @@ function ExecutionAll() {
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
     formData.append("stats_for", statesFor);
-    e.preventDefault();
 
-    if (statesFor === "Quarterly") {
-      statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
-      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
-      impression <= 0
-        ? setImpressionValidation(false)
-        : setImpressionValidation(true);
-      engagement <= 0
-        ? setEngagementValidation(false)
-        : setEngagementValidation(true);
-      storyView <= 0
-        ? setStoryViewValidation(false)
-        : setStoryViewValidation(true);
-
-      console.log(quater, "<------quater");
-      // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
-
-      if (!stateForIsValid || !quaterIsValid) {
-        return;
-      } else {
+   
         axios
           .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
             headers: {
@@ -478,55 +464,10 @@ function ExecutionAll() {
             setDemoFile();
             setRowData({});
 
-            toast("Form Submitted success");
+            // toast("Form Submitted success");
+            toastAlert("Form Submitted success");
           });
-      }
-    }
-
-    if (statesFor !== "Quarterly") {
-      statesFor === "" || statesFor == null
-        ? setStateForIsValid(false)
-        : setStateForIsValid(true);
-      startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
-      endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
-      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
-      impression <= 0
-        ? setImpressionValidation(false)
-        : setImpressionValidation(true);
-      engagement <= 0
-        ? setEngagementValidation(false)
-        : setEngagementValidation(true);
-      storyView <= 0
-        ? setStoryViewValidation(false)
-        : setStoryViewValidation(true);
-
-      if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
-        return;
-      } else {
-        axios
-          .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            setQuater("");
-            setStatesFor(null);
-            setStartDate(null);
-            setEndDate(null);
-            setReach(0);
-            setImpression(0);
-            setEngagement(0);
-            setStoryView(0);
-            setDemoFile();
-            setRowData({});
-
-            console.log(res);
-            console.log(res.data);
-            toast("Form Submitted success");
-          });
-      }
-    }
+    
   };
 
   function CustomColumnMenu(props) {
@@ -941,12 +882,11 @@ function ExecutionAll() {
                 Cancel
               </button>
               <button
+                onClick={saveStats}
                 type="button"
                 className="btn btn-success"
-                onClick={saveStats}
                 data-dismiss="modal"
-
-                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater:!startDate ||!endDate}
+                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater : !startDate || !endDate}
               >
                 Save
               </button>

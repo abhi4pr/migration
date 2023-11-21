@@ -28,11 +28,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
+import { useGlobalContext } from "../../Context/Context";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function ExecutionOther() {
+  const {toastAlert}=useGlobalContext()
   const [rows, setRows] = useState([]);
   const [pagemode, setPagemode] = useState(1);
   const [alldata, setAlldata] = useState([]);
@@ -68,11 +70,12 @@ function ExecutionOther() {
 
   const navigate = useNavigate();
 
+
   const dropdownStaticData = [
     "Daily",
-    "weekly",
-    "fortnight",
-    "monthly",
+    "Weekly",
+    "Fortnight",
+    "Monthly",
     "Quarterly",
   ];
   const QuarterStaticData = ["Quater 1", "Quater 2", "Quater 3", "Quater 4"];
@@ -226,24 +229,32 @@ function ExecutionOther() {
 
   const handleStartDateChange = (newValue) => {
     const date = new Date(newValue.$d);
-    const isoDate = date.toISOString(); // This will be in UTC
 
-    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+    // Adjusting for the local time zone offset
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
 
-    // If you want to display the date with the original offset (+00:00)
-    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+    // Getting ISO string after adjustment
+    const isoDate = date.toISOString();
+
+    console.log(isoDate);
+    console.log(isoDate.replace("Z", "+00:00"));
 
     setStartDate(newValue);
   };
 
   const handleEndDateChange = (newValue) => {
     const date = new Date(newValue.$d);
-    const isoDate = date.toISOString(); // This will be in UTC
 
-    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+    // Adjusting for the local time zone offset
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
 
-    // If you want to display the date with the original offset (+00:00)
-    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+    // Getting ISO string after adjustment
+    const isoDate = date.toISOString();
+
+    console.log(isoDate);
+    console.log(isoDate.replace("Z", "+00:00"));
 
     setEndDate(newValue);
   };
@@ -366,57 +377,7 @@ function ExecutionOther() {
           headerName: "Subscribers",
           // width: 150,
         },
-    // pagemode == 1 || pagemode == 2
-    //   ? (
-    //     {
-    //       field: "reach",
-    //       headerName: "Reach",
-    //     }
-    //     )
-    //   : pagemode == 3
-    //   ? {
-    //       field: "post",
-    //       headerName: "Post",
-    //       // width: 150,
-    //     }
-    //   : pagemode == 4
-    //   ? ({
-    //       field: "post",
-    //       headerName: "Post",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "repost",
-    //       headerName: "Repost",
-    //       // width: 150,
-    //     })
-    //   : ({
-    //       field: "shorts",
-    //       headerName: "Shorts",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "logo_Integration",
-    //       headerName: "Logo Integration",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "brand_Integration",
-    //       headerName: "Brand Integration",
-    //       // width: 150,
-    //     }),
-    //     {
-    //       field: "impression",
-    //       headerName: "Impression",
-    //     },
-    //     {
-    //       field: "engagement",
-    //       headerName: "Engagement",
-    //     },
-    //     {
-    //       field: "story_view",
-    //       headerName: "Story view",
-    //     },
+  
     contextData && {
       headerName: "Update",
       renderCell: (params) => {
@@ -456,6 +417,8 @@ function ExecutionOther() {
   };
 
   const saveStats = async (e) => {
+    e.preventDefault();
+    console.log("save stats")
     const formData = new FormData();
     formData.append("p_id", rowData.p_id);
     formData.append("reach", reach);
@@ -467,33 +430,8 @@ function ExecutionOther() {
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
     formData.append("stats_for", statesFor);
-    e.preventDefault();
 
-    if (statesFor === "Quarterly") {
-      statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
-      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
-      impression <= 0
-        ? setImpressionValidation(false)
-        : setImpressionValidation(true);
-      engagement <= 0
-        ? setEngagementValidation(false)
-        : setEngagementValidation(true);
-      storyView <= 0
-        ? setStoryViewValidation(false)
-        : setStoryViewValidation(true);
-      console.log(quater, "<------quater");
-      // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
-
-      if (!stateForIsValid || !quaterIsValid) {
-        console.log(
-          "quaterly error",
-          stateForIsValid,
-          "<----state",
-          quaterIsValid,
-          "<----quater"
-        );
-        return;
-      } else {
+   
         axios
           .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
             headers: {
@@ -501,64 +439,21 @@ function ExecutionOther() {
             },
           })
           .then((res) => {
-            console.log(res);
-            console.log(res.data);
+            setQuater("");
+            setStatesFor(null);
+            setStartDate(null);
+            setEndDate(null);
+            setReach(0);
+            setImpression(0);
+            setEngagement(0);
+            setStoryView(0);
+            setDemoFile();
+            setRowData({});
 
-            toast("Form Submitted success");
+            // toast("Form Submitted success");
+            toastAlert("Form Submitted success");
           });
-      }
-    }
-
-    if (statesFor !== "Quarterly") {
-      console.log(
-        "daily error",
-        stateForIsValid,
-        "<----state",
-        startDateIsValid,
-        "<----quater"
-      );
-      statesFor === "" || statesFor == null
-        ? setStateForIsValid(false)
-        : setStateForIsValid(true);
-      startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
-      endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
-      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
-      impression <= 0
-        ? setImpressionValidation(false)
-        : setImpressionValidation(true);
-      engagement <= 0
-        ? setEngagementValidation(false)
-        : setEngagementValidation(true);
-      storyView <= 0
-        ? setStoryViewValidation(false)
-        : setStoryViewValidation(true);
-
-      if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
-        console.log(
-          "!quaterly error",
-          stateForIsValid,
-          "<----state",
-          startDateIsValid,
-          "<----startDate",
-          endDateIsValid,
-          "<----endDate"
-        );
-        return;
-      } else {
-        axios
-          .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            console.log(res.data);
-
-            toast("Form Submitted success");
-          });
-      }
-    }
+    
   };
 
   function CustomColumnMenu(props) {
@@ -981,7 +876,7 @@ function ExecutionOther() {
                 onClick={saveStats}
                 data-dismiss="modal"
 
-                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater:!startDate ||!endDate}
+                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater : !startDate || !endDate}
               >
                 Save
               </button>
