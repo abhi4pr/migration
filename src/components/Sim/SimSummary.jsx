@@ -80,7 +80,7 @@ const SimSummary = () => {
                           title="Delete"
                           onClick={(e) => handleDelete(e, sum)}
                         >
-                          <i class="bi bi-trash3"></i>
+                          <i className="bi bi-trash3"></i>
                         </button>
                       </div>
                       <div className="summary_cardbody">

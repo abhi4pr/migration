@@ -33,6 +33,8 @@ import imageTest30 from "../../../assets/img/product/Avtar30.png";
 import Select from "react-select";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 import IndianStates from "../../ReusableComponents/IndianStates";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -338,10 +340,10 @@ const UserMaster = () => {
                 password: password,
               })
               .then((res) => {
-                console.log("Email sent successfully:", res.data);
+                // console.log("Email sent successfully:", res.data);
               })
               .catch((error) => {
-                console.log("Failed to send email:", error);
+                // console.log("Failed to send email:", error);
               });
 
             whatsappApi.callWhatsAPI(
@@ -381,10 +383,10 @@ const UserMaster = () => {
               password: password,
             })
             .then((res) => {
-              console.log("Email sent successfully:", res.data);
+              // console.log("Email sent successfully:", res.data);
             })
             .catch((error) => {
-              console.log("Failed to send email:", error);
+              // console.log("Failed to send email:", error);
             });
 
           whatsappApi.callWhatsAPI(
@@ -397,7 +399,7 @@ const UserMaster = () => {
           setIsFormSubmitted(true);
         }
       } catch (error) {
-        console.log("Failed to submit form", error);
+        // console.log("Failed to submit form", error);
       }
     } else {
       if (contact.length !== 10) {
@@ -543,7 +545,7 @@ const UserMaster = () => {
       const blob = new Blob([response.data], { type: "image/jpeg" });
       setSelectedImage(blob);
     } catch (error) {
-      console.error("Error loading image:", error);
+      // console.error("Error loading image:", error);
     }
   };
 
@@ -876,9 +878,14 @@ const UserMaster = () => {
         />
       </div>
 
-      <button className="btn btn-primary" onClick={() => handleSubmit()}>
-        submit
-      </button>
+      <div style={{display:"flex",justifyContent:"flex-end"}}>
+        <button className="btn btn-primary"
+          onClick={()=> setActiveAccordionIndex((prev) => prev+1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+      </div>
+
       {/* <FieldContainer
         label="Seat Number"
         Tag="select"
@@ -1036,9 +1043,22 @@ const UserMaster = () => {
         onChange={(e) => setIFSC(e.target.value.toUpperCase())}
         required={false}
       />
-      <button className="btn btn-primary" onClick={() => handleSubmit()}>
-        Submit
-      </button>
+
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+      </div>
+
     </>
   );
 
@@ -1166,7 +1186,21 @@ const UserMaster = () => {
         {!isValidUID && (
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
-        <div className="d-flex mb-2">
+      <div
+        style={{
+          display:"flex",
+          marginBottom:"10px",
+          // justifyContent:"space-between"
+          // marginRight:"10px"
+        }}
+      >
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+        <div className="d-flex mb-2" style={{marginLeft:"20px"}}>
           <button
             type="button"
             className="btn btn-outline-primary me-2"
@@ -1180,6 +1214,7 @@ const UserMaster = () => {
             </button>
           )}
         </div>
+       </div>
       </div>
     </>
   );
@@ -1426,9 +1461,22 @@ const UserMaster = () => {
         onChange={(e) => setPincode(e.target.value)}
         required={false}
       />
-      <button className="btn btn-primary" onClick={() => handleSubmit()}>
-        Submit
-      </button>
+
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+      </div>
+      
     </>
   );
 

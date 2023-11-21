@@ -135,10 +135,10 @@ const BrandOverview = () => {
                     ))}
                   </FieldContainer>
                   <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-                    <div class="form-group">
-                      <label class="form-label">Search</label>
+                    <div className="form-group">
+                      <label className="form-label">Search</label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -171,7 +171,7 @@ const BrandOverview = () => {
                                   className="btn btn-sm btn-outline-primary"
                                   title="Edit"
                                 >
-                                  <i class="bi bi-pencil"></i>
+                                  <i className="bi bi-pencil"></i>
                                 </button>
                               </Link>
                               {/* <Link to={`/brand-view/${detail.logo_id}`}>
@@ -179,7 +179,7 @@ const BrandOverview = () => {
                                 className="btn btn-sm btn-outline-primary"
                                 title="View"
                               >
-                                <i class="bi bi-eye"></i>
+                                <i className="bi bi-eye"></i>
                               </button>
                             </Link> */}
                               <button
@@ -187,45 +187,45 @@ const BrandOverview = () => {
                                 title="Delete"
                                 onClick={() => deleteBrand(detail.brand_name)}
                               >
-                                <i class="bi bi-trash3"></i>
+                                <i className="bi bi-trash3"></i>
                               </button>
                             </div>
                           </div>
                           <div className="summary_cardbody">
                             <Link to={`/brand-view/${detail.logo_id}`}>
-                              <div class="summary_cardrow flex-column">
-                                <div class="summary_box text-center ml-auto mr-auto">
+                              <div className="summary_cardrow flex-column">
+                                <div className="summary_box text-center ml-auto mr-auto">
                                   <img
                                     src={detail.logo_image}
                                     width="80px"
                                     height="80px"
                                   />
                                 </div>
-                                <div class="summary_box col">
+                                <div className="summary_box col">
                                   <h4>
                                     <span>Type</span>
                                     {detail.image_type}
                                   </h4>
                                 </div>
-                                <div class="summary_box col">
+                                <div className="summary_box col">
                                   <h4>
                                     <span>Category</span>
                                     {detail.cat_name}
                                   </h4>
                                 </div>
-                                <div class="summary_box col">
+                                <div className="summary_box col">
                                   <h4>
                                     <span>Date</span>
                                     {detail.created_at.split("T")[0]}
                                   </h4>
                                 </div>
-                                <div class="summary_box col">
+                                <div className="summary_box col">
                                   <h4>
                                     <span>Image count</span>
                                     {getBrandCount(detail.brand_name)}
                                   </h4>
                                 </div>
-                                <div class="summary_box col">
+                                <div className="summary_box col">
                                   <h4>
                                     <span>Uploaded by</span>
                                     {detail.user_name}

@@ -52,7 +52,7 @@ const DashboardWFHUser = () => {
                       <h2 className="d-flex">
                         <span className="mr-3">{item.user_count} </span>
                         <Link to={`/admin/salary-dashboard/${item.dept_id}`}>
-                          <i class="bi bi-ui-checks-grid" />
+                          <i className="bi bi-ui-checks-grid" />
                         </Link>
                       </h2>
                     </div>

@@ -9,6 +9,8 @@ import Select from "react-select";
 import jwtDecode from "jwt-decode";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 import IndianStates from "../../ReusableComponents/IndianStates";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -219,7 +221,7 @@ const UserUpdate = () => {
         getRoleData(res.data.data);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
 
     axios
@@ -347,7 +349,7 @@ const UserUpdate = () => {
         setSalary(salary);
         // console.log("SpokenLanguages", SpokenLanguages.split(","));
         setTempLanguage(SpokenLanguages.split(","));
-        console.log(SpokenLanguages);
+        // console.log(SpokenLanguages);
         setGender(Gender);
         setNationality(Nationality);
         setDateOfBirth(DOB.split("T")?.[0]);
@@ -391,7 +393,7 @@ const UserUpdate = () => {
     formData.append("job_type", jobType);
     formData.append("personal_number", personalContact);
     formData.append("Personal_email", personalEmail);
-    console.log(reportL1, "report here");
+    // console.log(reportL1, "report here");
     formData.append("report_L1", Number(reportL1));
     formData.append("report_L2", Number(reportL2));
     formData.append("report_L3", Number(reportL3));
@@ -447,16 +449,16 @@ const UserUpdate = () => {
             email: email,
             subject: "User Registration",
             text: "A new user has been registered.",
-            attachment: selectedImage,
+            // attachment: selectedImage,
             login_id: loginId,
             name: username,
             password: password,
           })
           .then((res) => {
-            console.log("Email sent successfully:", res.data);
+            // console.log("Email sent successfully:", res.data);
           })
           .catch((error) => {
-            console.log("Failed to send email:", error);
+            // console.log("Failed to send email:", error);
           });
 
         whatsappApi.callWhatsAPI(
@@ -958,9 +960,15 @@ const UserUpdate = () => {
           required={false}
         />
       </div>
-      <button className="btn btn-primary" onClick={() => handleSubmit()}>
-        submit
-      </button>
+      
+      <div style={{display:"flex",justifyContent:"flex-end"}}>
+        <button className="btn btn-primary"
+          onClick={()=> setActiveAccordionIndex((prev) => prev+1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+      </div>
+
     </>
   );
 
@@ -1112,9 +1120,21 @@ const UserUpdate = () => {
         // onChange={handleDateChange}
       /> */}
 
-      <button className="btn btn-primary" onClick={() => handleSubmit()}>
-        submit
-      </button>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+    </div>
+
     </>
   );
 
@@ -1158,7 +1178,7 @@ const UserUpdate = () => {
           <label>&nbsp;</label>
           {uidImage && (
             <a href={uidImage} download>
-              <i class="bi bi-cloud-arrow-down"></i> UID Download{" "}
+              <i className="bi bi-cloud-arrow-down"></i> UID Download{" "}
             </a>
           )}
         </div>
@@ -1191,7 +1211,7 @@ const UserUpdate = () => {
           <label>&nbsp;</label>
           {panImage && (
             <a href={panImage} download>
-              <i class="bi bi-cloud-arrow-down"></i> PAN Download{" "}
+              <i className="bi bi-cloud-arrow-down"></i> PAN Download{" "}
             </a>
           )}
         </div>
@@ -1227,7 +1247,7 @@ const UserUpdate = () => {
           <label>&nbsp;</label>
           {highestQualificationImage && (
             <a href={highestQualificationImage} download>
-              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              <i className="bi bi-cloud-arrow-down"></i> Highest QualificationImage
               Download{" "}
             </a>
           )}
@@ -1245,7 +1265,7 @@ const UserUpdate = () => {
           <label>&nbsp;</label>
           {otherImage && (
             <a href={otherImage} download>
-              <i class="bi bi-cloud-arrow-down"></i> Highest QualificationImage
+              <i className="bi bi-cloud-arrow-down"></i> Highest QualificationImage
               Download{" "}
             </a>
           )}
@@ -1255,6 +1275,22 @@ const UserUpdate = () => {
       {!isValidUID && (
         <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
       )}
+
+      <div
+        style={{
+          display:"flex",
+          marginBottom:"10px",
+          // justifyContent:"space-between"
+          // marginRight:"10px"
+        }}
+      >
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+      </div>
 
       {otherDocuments && (
         <div>
@@ -1453,9 +1489,21 @@ const UserUpdate = () => {
         required={false}
       />
 
-      <button className="btn btn-primary" onClick={() => handleSubmit()}>
-        submit
-      </button>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+      </div>
+
     </>
   );
 

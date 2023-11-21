@@ -1151,7 +1151,7 @@ const PreOnboardingUserMaster = () => {
                                   onClick={generatePassword}
                                   type="button"
                                 >
-                                  <i class="bi bi-shuffle"></i>
+                                  <i className="bi bi-shuffle"></i>
                                 </button>
                               </div>
                             </div>
@@ -1306,7 +1306,7 @@ const PreOnboardingUserMaster = () => {
                           </div>
 
                           <div className="board_form form_checkbox">
-                            <label class="cstm_check">
+                            <label className="cstm_check">
                               Same as Current Addresss
                               <input
                                 className="form-control"
@@ -1314,7 +1314,7 @@ const PreOnboardingUserMaster = () => {
                                 checked={sameAsCurrent}
                                 onChange={handleCheckboxChange}
                               />
-                              <span class="checkmark"></span>
+                              <span className="checkmark"></span>
                             </label>
                           </div>
 
