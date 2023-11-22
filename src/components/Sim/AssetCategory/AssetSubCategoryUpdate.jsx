@@ -28,9 +28,8 @@ const AssetSubCategoryUpdate = () => {
         axios.get(`http://34.93.135.33:8080/api/get_single_asset_sub_category/${id}`)
             .then((res) => {
                 const response = res.data;
-                console.log(response[0] , "lalit is here")
-                // const {sub_category_name ,description } = response
-                selectedCat(response[0].category_id);
+                console.log(response[0], "lalit is here")
+                setSelectedCat(response[0].category_id); 
                 setSubCategoryName(response[0].sub_category_name);
                 setDescription(response[0].description);
             })
@@ -49,7 +48,7 @@ const AssetSubCategoryUpdate = () => {
             
             const response = await axios.put("http://34.93.135.33:8080/api/update_asset_sub_category", {
                 category_id: selectedCat,
-                sub_category_id:id,
+                sub_category_id: id,
                 sub_category_name: subCategoryName,
                 description: description,
                 created_by: loginUserId,
@@ -70,8 +69,8 @@ const AssetSubCategoryUpdate = () => {
             <UserNav />
             <div style={{ width: "80%", margin: "40px 0 0 10%" }}>
                 <FormContainer
-                    mainTitle="Asset"
-                    title="Category Update"
+                    mainTitle="Asset Sub Category"
+                    title="Sub Category Update"
                     handleSubmit={handleSubmit}
                     buttonAccess={false}
                 >

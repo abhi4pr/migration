@@ -62,8 +62,8 @@ const AssetSubCategoryMaster = () => {
       <UserNav />
       <div style={{ width: "80%", margin: "40px 0 0 10%" }}>
         <FormContainer
-          mainTitle="Asset"
-          title="Sub Category"
+          mainTitle="Sub Category"
+          title="create SubCategory "
           handleSubmit={handleSubmit}
           buttonAccess={false}
         >
