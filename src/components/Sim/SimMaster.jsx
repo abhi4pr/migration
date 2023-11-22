@@ -1,9 +1,7 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import FormContainer from "../AdminPanel/FormContainer";
-import FieldContainer from "../AdminPanel/FieldContainer";
 import { useGlobalContext } from "../../Context/Context";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -19,6 +17,7 @@ const SimMaster = () => {
   const [assetsCategory, setAssetsCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [vendorName, setVendorName] = useState("");
+  const [invoiceCopy, setInvoiceCopy] = useState("");
   const [inWarranty, setInWarranty] = useState("");
   const [warrantyDate, setWarrantyDate] = useState("");
   const [dateOfPurchase, setDateOfPurchase] = useState("");
@@ -26,6 +25,12 @@ const SimMaster = () => {
   const [selfAuditUnit, setSelfAuditUnit] = useState("");
   const [hrselfAuditPeriod, setHrSelfAuditPeriod] = useState("");
   const [hrselfAuditUnit, setHrSelfAuditUnit] = useState("");
+
+  const [assetsImg1, setAssetsImg1] = useState(null);
+  const [assetsImg2, setAssetsImg2] = useState(null);
+  const [assetsImg3, setAssetsImg3] = useState(null);
+  const [assetsImg4, setAssetsImg4] = useState(null);
+
   const [assetsValue, setAssetsValue] = useState("");
   const [assetsCurrentValue, setAssetsCurrentValue] = useState("");
 
@@ -37,31 +42,39 @@ const SimMaster = () => {
   const loginUserId = decodedToken.id;
 
   const inWarrantyOption = ["No", "Yes"];
-
-  useEffect(() => {}, []);
+  const assetsCat = ["jio", "Air"];
+  const subCat = ["Charger", "Laptop"];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("assetsName", assetsName);
-    formData.append("assetsID", assetsID);
-    formData.append("assetsCategory", assetsCategory);
-    formData.append("subCategory", subCategory);
-    formData.append("vendorName", vendorName);
-    formData.append("inWarranty", inWarranty);
-    formData.append("warrantyDate", warrantyDate);
-    formData.append("dateOfPurchase", dateOfPurchase);
-    formData.append("selfAuditPeriod", selfAuditPeriod);
-    formData.append("selfAuditUnit", selfAuditUnit);
-    formData.append("hrselfAuditPeriod", hrselfAuditPeriod);
-    formData.append("hrselfAuditUnit", hrselfAuditUnit);
-    formData.append("assetsValue", assetsValue);
-    formData.append("assetsCurrentValue", assetsCurrentValue);
-    formData.append("remark", remark);
-    formData.append("created_by", loginUserId);
-    formData.append("status", "Available");
+    try {
+      const formData = new FormData();
+      formData.append("assetsName", assetsName);
+      formData.append("assetsID", assetsID);
+      formData.append("assetsOtherID", assetsOtherID);
+      formData.append("warrantyDate", warrantyDate);
+      formData.append("inWarranty", inWarranty);
+      formData.append("dateOfPurchase", dateOfPurchase);
+      formData.append("assetsCategory", assetsCategory);
+      formData.append("subCategory", subCategory);
+      formData.append("vendorName", vendorName);
+      formData.append("invoiceCopy", invoiceCopy);
+      formData.append("selfAuditPeriod", selfAuditPeriod);
+      formData.append("selfAuditUnit", selfAuditUnit);
+      formData.append("hrselfAuditPeriod", hrselfAuditPeriod);
+      formData.append("hrselfAuditUnit", hrselfAuditUnit);
 
-    if (isValidcontact == true) {
+      formData.append("assetsImg1", assetsImg1);
+      formData.append("assetsImg2", assetsImg2);
+      formData.append("assetsImg3", assetsImg3);
+      formData.append("assetsImg4", assetsImg4);
+
+      formData.append("assetsValue", assetsValue);
+      formData.append("assetsCurrentValue", assetsCurrentValue);
+      formData.append("remark", remark);
+      formData.append("created_by", loginUserId);
+      formData.append("status", "Available");
+
       axios.post("http://34.93.135.33:8080/api/add_sim", formData, {});
       setAssetsName("");
       setVendorName("");
@@ -74,8 +87,9 @@ const SimMaster = () => {
 
       toastAlert("Form Submitted success");
       setIsFormSubmitted(true);
-    } else {
-      alert("Enter Sim Number in Proper Format");
+    } catch {
+      console.error("Error:", error);
+      toastAlert("Form submission failed. Please try again.");
     }
   };
 
@@ -85,242 +99,241 @@ const SimMaster = () => {
   return (
     <div style={{ width: "80%", margin: "0 0 0 10%" }}>
       <UserNav />
-      <FormContainer
-        mainTitle="Assets"
-        title="Assets Register"
-        handleSubmit={handleSubmit}
-      >
-        <TextField
-          id="outlined-basic"
-          label="Assets Name"
-          type="text"
-          value={assetsName}
-          onChange={(e) => setAssetsName(e.target.value)}
-        />
+      <div className="form-heading">
+        <div className="form_heading_title">
+          <h2>Assets Registration</h2>
+        </div>
+      </div>
+      <form mainTitle="Assets" title="Assets Register" onSubmit={handleSubmit}>
+        <div className="formarea">
+          <div className="row spacing_lg">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <TextField
+                id="outlined-basic"
+                label="Assets Name"
+                type="text"
+                value={assetsName}
+                onChange={(e) => setAssetsName(e.target.value)}
+              />
 
-        <TextField
-          id="outlined-basic"
-          label="Assets ID"
-          fieldGrid={3}
-          type="number"
-          value={assetsID}
-          required={false}
-          onChange={(e) => setAssetsID(e.target.value)}
-        />
-        <TextField
-          id="outlined-basic"
-          label="Assets Other ID"
-          fieldGrid={3}
-          type="number"
-          value={assetsOtherID}
-          required={false}
-          onChange={(e) => setAssetsOtherID(e.target.value)}
-        />
+              <TextField
+                id="outlined-basic"
+                label="Assets ID"
+                type="number"
+                value={assetsID}
+                onChange={(e) => setAssetsID(e.target.value)}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Assets Other ID"
+                type="number"
+                value={assetsOtherID}
+                onChange={(e) => setAssetsOtherID(e.target.value)}
+              />
 
-        <Autocomplete
-          disablePortal
-          sx={{ width: 600 }}
-          id="combo-box-demo"
-          options={inWarrantyOption}
-          value={inWarranty}
-          onChange={(e, newvalue) => setInWarranty(newvalue)}
-          defaultValue={inWarrantyOption[0]}
-          renderInput={(params) => (
-            <TextField {...params} label="In Warranty" />
-          )}
-        />
+              <Autocomplete
+                disablePortal
+                sx={{ width: 600 }}
+                id="combo-box-demo"
+                options={inWarrantyOption}
+                value={inWarranty}
+                onChange={(e, newvalue) => setInWarranty(newvalue)}
+                defaultValue={inWarrantyOption[0]}
+                renderInput={(params) => (
+                  <TextField {...params} label="In Warranty" />
+                )}
+              />
 
-        {inWarranty == "Yes" && (
-          <div className="form-group">
-            <TextField
-              id="outlined-basic"
-              label="Warranty Date"
-              type="date"
-              value={warrantyDate}
-              required={false}
-              onChange={(e) => setWarrantyDate(e.target.value)}
-            />
+              {inWarranty == "Yes" && (
+                <div className="form-group">
+                  <TextField
+                    id="outlined-basic"
+                    InputLabelProps={{ shrink: true }}
+                    label="Warranty Date"
+                    type="date"
+                    value={warrantyDate}
+                    onChange={(e) => setWarrantyDate(e.target.value)}
+                  />
+                </div>
+              )}
+
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="Date of Purchase"
+                  type="date"
+                  value={dateOfPurchase}
+                  onChange={(e) => setDateOfPurchase(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={assetsCat}
+                  value={assetsCategory}
+                  onChange={(e, newvalue) => setAssetsCategory(newvalue)}
+                  defaultValue={assetsCat[0]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Assets Category" />
+                  )}
+                />
+              </div>
+
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={subCat}
+                  value={subCategory}
+                  onChange={(e, newvalue) => setSubCategory(newvalue)}
+                  defaultValue={subCat[0]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Sub Category" />
+                  )}
+                />
+              </div>
+
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={subCat}
+                  value={vendorName}
+                  onCanPlay={(e, newvalue) => setVendorName(newvalue)}
+                  defaultValue={subCat[0]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Vendor Name" />
+                  )}
+                />
+              </div>
+
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="Invoice Copy"
+                  type="file"
+                  onChange={(e) => setInvoiceCopy(e.target.files[0])}
+                />
+              </div>
+
+              <h5>User Audit</h5>
+              <hr />
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Self Audit Period"
+                  type="text"
+                  value={selfAuditPeriod}
+                  onChange={(e) => setSelfAuditPeriod(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Self Audit Unit"
+                  type="number"
+                  value={selfAuditUnit}
+                  onChange={(e) => setSelfAuditUnit(e.target.value)}
+                />
+              </div>
+              <hr />
+              <h5>HR Audit</h5>
+              <hr />
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="HR Self Audit Period"
+                  type="text"
+                  value={hrselfAuditPeriod}
+                  onChange={(e) => setHrSelfAuditPeriod(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="HR Self Audit Unit"
+                  type="number"
+                  value={hrselfAuditUnit}
+                  onChange={(e) => setHrSelfAuditUnit(e.target.value)}
+                />
+              </div>
+              <hr />
+              <h5>Assets Image</h5>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="IMG 1"
+                  type="file"
+                  onChange={(e) => setAssetsImg1(e.target.files[0])}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="IMG 2"
+                  type="file"
+                  onChange={(e) => setAssetsImg2(e.target.files[0])}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="IMG 3"
+                  type="file"
+                  onChange={(e) => setAssetsImg3(e.target.files[0])}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="IMG 4"
+                  type="file"
+                  onChange={(e) => setAssetsImg4(e.target.files[0])}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Assets Value"
+                  type="number"
+                  value={assetsValue}
+                  onChange={(e) => setAssetsValue(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Assets Current Value"
+                  type="number"
+                  value={assetsCurrentValue}
+                  onChange={(e) => setAssetsCurrentValue(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Remark"
+                  Tag="textarea"
+                  rows="3"
+                  value={remark}
+                  onChange={(e) => setRemark(e.target.value)}
+                />
+              </div>
+              <button className="btn btn-primary" type="submit">
+                Submit
+              </button>
+            </div>
           </div>
-        )}
-
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Date of Purchase"
-            type="date"
-            value={dateOfPurchase}
-            required={false}
-            onChange={(e) => setDateOfPurchase(e.target.value)}
-          />
         </div>
-
-        <div className="form-group">
-          <FieldContainer
-            label="Assets Category"
-            Tag="select"
-            value={assetsCategory}
-            onChange={(e) => setAssetsCategory(e.target.value)}
-          >
-            <option value="Jio">Jio</option>
-            <option value="Airtel">Airtel</option>
-            <option value="Vodafone Idea (VI)">Vodafone Idea (VI)</option>
-            <option value="BSNL">BSNL</option>
-          </FieldContainer>
-        </div>
-
-        <div className="form-group">
-          <FieldContainer
-            label="Sub Category"
-            Tag="select"
-            value={subCategory}
-            onChange={(e) => setSubCategory(e.target.value)}
-          >
-            <option value="Prepaid">Prepaid</option>
-            <option value="Postpaid">Postpaid</option>
-          </FieldContainer>
-        </div>
-
-        <div className="form-group">
-          <FieldContainer
-            label="Vendor Name"
-            Tag="select"
-            value={vendorName}
-            onChange={(e) => setVendorName(e.target.value)}
-          >
-            <option value="Physical Sim">Physical Sim</option>
-            <option value="E-Sim">E-Sim</option>
-          </FieldContainer>
-        </div>
-
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Invoice Copy"
-            type="file"
-            required={false}
-            onChange={(e) => setDateOfPurchase(e.target.files[0])}
-          />
-        </div>
-
-        <h5>User Audit</h5>
-        <hr />
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Self Audit Period"
-            type="text"
-            required={false}
-            value={selfAuditPeriod}
-            onChange={(e) => setSelfAuditPeriod(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Self Audit Unit"
-            type="number"
-            required={false}
-            value={selfAuditUnit}
-            onChange={(e) => setSelfAuditUnit(e.target.value)}
-          />
-        </div>
-        <hr />
-        <h5>HR Audit</h5>
-        <hr />
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="HR Self Audit Period"
-            type="text"
-            required={false}
-            value={hrselfAuditPeriod}
-            onChange={(e) => setHrSelfAuditPeriod(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="HR Self Audit Unit"
-            type="number"
-            required={false}
-            value={hrselfAuditUnit}
-            onChange={(e) => setHrSelfAuditUnit(e.target.value)}
-          />
-        </div>
-        <hr />
-        <h5>Assets Image</h5>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="IMG 1"
-            type="file"
-            fieldGrid={3}
-            required={false}
-            onChange={(e) => setDateOfPurchase(e.target.files[0])}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="IMG 2"
-            fieldGrid={3}
-            type="file"
-            required={false}
-            onChange={(e) => setDateOfPurchase(e.target.files[0])}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="IMG 3"
-            fieldGrid={3}
-            type="file"
-            required={false}
-            onChange={(e) => setDateOfPurchase(e.target.files[0])}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="IMG 4"
-            fieldGrid={3}
-            type="file"
-            required={false}
-            onChange={(e) => setDateOfPurchase(e.target.files[0])}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Assets Value"
-            type="number"
-            required={false}
-            value={assetsValue}
-            onChange={(e) => setAssetsValue(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Assets Current Value"
-            type="number"
-            required={false}
-            value={assetsCurrentValue}
-            onChange={(e) => setAssetsCurrentValue(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            id="outlined-basic"
-            label="Remark"
-            Tag="textarea"
-            rows="3"
-            value={remark}
-            required={false}
-            onChange={(e) => setRemark(e.target.value)}
-          />
-        </div>
-      </FormContainer>
+      </form>
     </div>
   );
 };

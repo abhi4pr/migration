@@ -9,6 +9,7 @@ const url = "http://34.93.135.33:8080/api/";
 const ExtendJoining = ({
   gettingData,
   id,
+  currentJoiningDate,
   loginId,
   username,
   password,
@@ -20,24 +21,16 @@ const ExtendJoining = ({
   const [joiningExtendReason, setJoiningExtendReason] = useState("");
   const [joingingExtendDocument, setJoiningExtendDocument] = useState(null);
 
-  const today = new Date();
-  const maxDate = new Date();
-  maxDate.setDate(today.getDate() + 30);
-
-  const formatDate = (date) => {
-    let month = "" + (date.getMonth() + 1),
-      day = "" + date.getDate(),
-      year = date.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
+  const calculateMaxDate = (dateStr) => {
+    const parts = dateStr.split("-");
+    const inputDate = new Date(parts[2], parts[1] - 1, parts[0]);
+    inputDate.setDate(inputDate.getDate() + 30);
+    return `${inputDate.getFullYear()}-${(inputDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${inputDate.getDate().toString().padStart(2, "0")}`;
   };
 
-  const minDate = formatDate(today);
-  const maxDateFormatted = formatDate(maxDate);
-
+  const maxDateFormatted = calculateMaxDate(currentJoiningDate);
   const handleJoiningExtend = async (e) => {
     e.preventDefault();
 
@@ -109,7 +102,7 @@ const ExtendJoining = ({
                       shrink: true,
                     }}
                     inputProps={{
-                      min: minDate,
+                      // min: minDate,
                       max: maxDateFormatted,
                     }}
                   />
