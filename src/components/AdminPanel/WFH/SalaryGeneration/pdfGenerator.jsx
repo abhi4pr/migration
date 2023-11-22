@@ -18,6 +18,7 @@ export const generatePDF = async (rowData) => {
     return;
   }
 
+  console.log(rowData?.digital_signature_image, "image herere");
   const signatureImageUrl = `http://34.93.135.33:8080/uploads/${rowData?.digital_signature_image}`;
 
   const dataWithImage = {
