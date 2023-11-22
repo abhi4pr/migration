@@ -39,6 +39,9 @@ import ExeHistory from "./components/Execution/ExeHistory";
 import AssetSubCategoryMaster from "./components/Sim/AssetCategory/AssetSubCategoryMaster";
 import AssetSubCategoryOverview from "./components/Sim/AssetCategory/AssetSubCategoryOverview";
 import AssetSubCategoryUpdate from "./components/Sim/AssetCategory/AssetSubCategoryUpdate";
+import VenderOverView from "./components/Sim/Vender/VenderOverView";
+import VenderMaster from "./components/Sim/Vender/VenderMaster";
+import VendorUpdate from "./components/Sim/Vender/VendorUpdate";
 
 function App() {
   return (
@@ -97,17 +100,31 @@ function App() {
             element={<AssetCategoryUpdate />}
           />
           {/* Asset sub cat */}
-           <Route
+          <Route
             path="/asset/subCategory"
             element={<AssetSubCategoryMaster />}
           />
-            <Route
+          <Route
             path="/asset/subCategory/overview"
             element={<AssetSubCategoryOverview />}
           />
-              <Route
+          <Route
             path="/asset/subcategory-update/:id"
             element={<AssetSubCategoryUpdate />}
+          />
+          {/* vender pages */}
+
+          <Route
+            path="/venderOverView"
+            element={<VenderOverView />}
+          />
+             <Route
+            path="/vendorMaster"
+            element={<VenderMaster />}
+          />
+            <Route
+            path="/vendorUpdate/:id"
+            element={<VendorUpdate />}
           />
 
           <Route path="/ip-overview" element={<IpOverview />} />
@@ -123,7 +140,7 @@ function App() {
           <Route path="/brand-update/:id" element={<BrandUpdate />} />
           <Route path="/brand-view/:id" element={<BrandView />} />
 
-{/* Execution history */}
+          {/* Execution history */}
           <Route path="/exe-history/:id" element={<ExeHistory />} />
 
         </Routes>

@@ -1,92 +1,105 @@
 import { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
-import axios from "axios";
-import { Link } from "react-router-dom";
-// import { FaEdit } from "react-icons/fa";
-import DeleteButton from "../../AdminPanel/DeleteButton";
-import { useGlobalContext } from "../../../Context/Context";
-import FormContainer from "../../AdminPanel/FormContainer";
 import UserNav from "../../Pantry/UserPanel/UserNav";
+import FormContainer from "../../AdminPanel/FormContainer";
+import { Link } from "react-router-dom";
+import DataTable from "react-data-table-component";
+import { useGlobalContext } from "../../../Context/Context";
+import axios from "axios";
 import { FaEdit } from "react-icons/fa";
+import DeleteButton from "../../AdminPanel/DeleteButton";
 
-const AssetSubCategoryOverview = () => {
+const VenderOverView = () => {
   const { toastAlert } = useGlobalContext();
+  const [filterData, setFilterData] = useState([]);
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
-  const [filterData, setFilterData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const result = data.filter((d) => {
+      return d.vendor_name.toLowerCase().match(search.toLowerCase());
+    });
+    setFilterData(result);
+  }, [search]);
 
   const getData = async () => {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_asset_sub_category"
+        "http://34.93.135.33:8080/api/get_all_vendor"
       );
       setFilterData(response.data);
       setData(response.data);
-      console.log(response.data, "<------------sub cat");
+      console.log(response.data, "jgdfuigjdf");
     } catch (error) {
       toastAlert("Data not submitted", error.message);
       return null;
     }
   };
-  useEffect(() => {
-    const result = data.filter((d) => {
-      return d.sub_category_name.toLowerCase().match(search.toLowerCase());
-    });
-    setFilterData(result);
-  }, [search]);
 
-  useEffect(() => {
-    getData();
-  }, []);
   const columns = [
     {
       name: "S.No",
       cell: (row, index) => <>{index + 1}</>,
-      width: "10%",
+      width: "6%",
       sortable: true,
     },
-   
     {
-      name: "Sub Category Name",
-      selector: (row) => row.sub_category_name,
+      name: "Vender Name",
+      selector: (row) => row.vendor_name,
       sortable: true,
-      width: "23%",
+      width: "14%",
     },
     {
-      name: "Category Name",
-      selector: (row) => row.category_name,
+      name: "Vender Contect",
+      selector: (row) => row.vendor_contact_no,
       sortable: true,
-      width: "23%",
+      width: "20%",
+    },
+    {
+      name: " Email",
+      selector: (row) => row.vendor_email_id,
+      sortable: true,
+      width: "18%",
+    },
+    {
+      name: " Address",
+      selector: (row) => row.vendor_address,
+      sortable: true,
+      width: "12%",
     },
     {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
-      width: "23%",
+      width: "15%",
     },
     {
       name: "Action",
-      width: "23%",
+      width: "15%",
 
       cell: (row) => (
         <>
-          <Link to={`/asset/subcategory-update/${row.sub_category_id}`}>
+          <Link to={`/vendorUpdate/${row.vendor_id}`}>
             <button
               title="Edit"
               className="btn btn-outline-primary btn-sm user-button"
             >
-              <FaEdit />
+              <FaEdit />{" "}
             </button>
           </Link>
           <DeleteButton
-            endpoint="delete_asset_sub_category"
-            id={row.sub_category_id}
+            endpoint="delete_vendor"
+            id={row.vendor_id}
             getData={getData}
           />
         </>
       ),
     },
   ];
+
   return (
     <>
       <div>
@@ -96,8 +109,8 @@ const AssetSubCategoryOverview = () => {
             <div className="action_heading">
               <div className="action_title">
                 <FormContainer
-                  mainTitle="Asset Sub Category"
-                  link="/asset/subCategory"
+                  mainTitle="Vendor Master"
+                  link="/vendorMaster"
                   submitButton={false}
                 />
               </div>
@@ -106,7 +119,7 @@ const AssetSubCategoryOverview = () => {
                   type="button"
                   className="btn btn-outline-primary btn-sm"
                 >
-                  <Link to="/asset/subCategory">Add</Link>
+                  <Link to="/vendorMaster">Add</Link>
                 </button>
               </div>
             </div>
@@ -114,7 +127,7 @@ const AssetSubCategoryOverview = () => {
               <div className="card mb-4">
                 <div className="data_tbl table-responsive">
                   <DataTable
-                    title="Sub Category Overview "
+                    title="Vender Overview"
                     columns={columns}
                     data={filterData}
                     fixedHeader
@@ -145,4 +158,4 @@ const AssetSubCategoryOverview = () => {
   );
 };
 
-export default AssetSubCategoryOverview;
+export default VenderOverView;

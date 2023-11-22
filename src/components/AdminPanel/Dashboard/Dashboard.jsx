@@ -178,8 +178,8 @@ function Dashboard() {
               </div>
             </div>
           </div>
-                    {/* asset  sub_Category*/}
-                    <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+          {/* asset  sub_Category*/}
+          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
             <div className="d_infocard card shadow">
               <div
                 className="card-body"
@@ -197,7 +197,25 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          
+          {/* vender curd*/}
+          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+            <div className="d_infocard card shadow">
+              <div
+                className="card-body"
+                onClick={() => navigate("/venderOverView")}
+              >
+                <div className="d_infocard_txt">
+                  <h3> Vender</h3>
+                  <h2> Vendor</h2>
+                </div>
+                <div className="d_infocard_icon">
+                  <span>
+                    <BsFillSimFill />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {contextData &&
             contextData[12] &&
