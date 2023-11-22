@@ -352,8 +352,11 @@ const UserUpdate = () => {
         setReleavingDate(releaving_date?.split("T")?.[0]);
         setSalary(salary);
         // console.log("SpokenLanguages", SpokenLanguages.split(","));
-        setTempLanguage(SpokenLanguages.split(","));
-        // console.log(SpokenLanguages);
+        let lang  = SpokenLanguages.split(",");
+        let modifiedLang = lang
+        .filter(item => item.trim() !== '') 
+        .map(item => ({ value: item, label: item }));
+        setTempLanguage(modifiedLang);
         setGender(Gender);
         setNationality(Nationality);
         setDateOfBirth(DOB.split("T")?.[0]);
@@ -482,7 +485,7 @@ const UserUpdate = () => {
           "User Password Update by Admin",
           contact,
           username,
-          [loginId, password, "http://jarviscloud.in/"]
+          [loginId, password, "http://jarvis.work/"]
         );
       }
 

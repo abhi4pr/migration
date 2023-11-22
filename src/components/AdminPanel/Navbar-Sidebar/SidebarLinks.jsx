@@ -335,6 +335,14 @@ const SidebarLinks = () => {
                   Coc Overview
                 </Link>
               )}
+              {contextData && contextData[18]?.view_value == 1 && (
+                <Link
+                  className="collapse-item"
+                  to="/admin/pre-onboard-user-login-history"
+                >
+                  Login History
+                </Link>
+              )}
 
               <Link
                 className="collapse-item"
