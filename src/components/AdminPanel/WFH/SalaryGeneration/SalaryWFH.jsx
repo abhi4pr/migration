@@ -450,6 +450,108 @@ const SalaryWFH = () => {
     toastAlert("Sent To Finance");
   }
 
+  const pdfTemplate = () => (
+    <Document>
+      <Page size="A1" style={styles.page}>
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+          <Text style={{ fontSize: 25 }}>
+            Department:{" "}
+            {departmentdata.find((user) => user.dept_id === department)
+              ?.dept_name || ""}
+          </Text>
+          <Text style={{ fontSize: 25 }}>Month: {month}</Text>
+          <Text style={{ fontSize: 25 }}>Year: {year}</Text>
+        </View>
+
+        <View style={styles.table}>
+          <View style={[styles.tableRow, styles.tableHeader]}>
+            <Text style={styles.tableCell}>S.NO</Text>
+            <Text style={[styles.tableCell, { width: "30%" }]}>
+              Employee Name
+            </Text>
+            <Text style={styles.tableCell}>Deparmtent</Text>
+            <Text style={styles.tableCell}>Designation</Text>
+            <Text style={styles.tableCell}>DOJ</Text>
+            <Text style={styles.tableCell}>Work Days</Text>
+            <Text style={styles.tableCell}>Month</Text>
+            <Text style={styles.tableCell}>Salary</Text>
+            <Text style={styles.tableCell}>Absent</Text>
+            <Text style={styles.tableCell}>Present</Text>
+            <Text style={styles.tableCell}>Total Salary</Text>
+            <Text style={styles.tableCell}>Bonus</Text>
+            <Text style={styles.tableCell}>Deductions</Text>
+            <Text style={styles.tableCell}>Net Salary</Text>
+            <Text style={styles.tableCell}>TDS</Text>
+            <Text style={styles.tableCell}>To Pay</Text>
+          </View>
+        </View>
+
+        {filterData?.map((item, index) => (
+          <View key={index} style={styles.tableRow}>
+            <Text style={styles.tableCell}>{index + 1}</Text>
+            <Text style={[styles.tableCell, { width: "30%" }]}>
+              {item.user_name}
+            </Text>
+            <Text style={styles.tableCell}>{item.dept_name}</Text>
+            <Text style={styles.tableCell}>{item.designation_name}</Text>
+            <Text style={styles.tableCell}>
+              {item.joining_date.split("T")[0].split("-").reverse().join("-")}
+            </Text>
+            <Text style={styles.tableCell}>30</Text>
+            <Text style={styles.tableCell}>{item.month}</Text>
+            <Text style={styles.tableCell}>{item.salary}</Text>
+            <Text style={styles.tableCell}>{item.noOfabsent}</Text>
+            <Text style={styles.tableCell}>{30 - item.noOfabsent}</Text>
+            <Text style={styles.tableCell}>{item.total_salary}</Text>
+            <Text style={styles.tableCell}>{item.bonus}</Text>
+            <Text style={styles.tableCell}>{item.salary_deduction}</Text>
+            <Text style={styles.tableCell}>{item.net_salary}</Text>
+            <Text style={styles.tableCell}>{item.tds_deduction}</Text>
+            <Text style={styles.tableCell}>{item.toPay}</Text>
+          </View>
+        ))}
+
+        <View style={styles.table}>
+          <View style={[styles.tableRow, styles.tableHeader]}>
+            <Text style={styles.tableCell}>Total</Text>
+            <Text style={styles.tableCell}></Text>
+            <Text style={styles.tableCell}></Text>
+            <Text style={styles.tableCell}></Text>
+            <Text style={styles.tableCell}></Text>
+            <Text style={styles.tableCell}></Text>
+            <Text style={styles.tableCell}>
+              {filterData
+                ?.map((item) => Number(item.total_salary))
+                .reduce((a, b) => a + b, 0)}
+            </Text>
+            <Text style={styles.tableCell}>
+              {filterData
+                ?.map((item) => Number(item.bonus))
+                .reduce((a, b) => a + b, 0)}
+            </Text>
+            <Text style={styles.tableCell}>
+              {filterData
+                ?.map((item) => Number(item.net_salary))
+                .reduce((a, b) => a + b, 0)}
+            </Text>
+            <Text style={styles.tableCell}>
+              {filterData
+                ?.map((item) => Number(item.tds_deduction))
+                .reduce((a, b) => a + b, 0)}
+            </Text>
+            <Text style={styles.tableCell}>
+              {filterData
+                ?.map((item) => Number(item.toPay))
+                .reduce((a, b) => a + b, 0)}
+            </Text>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+
+  const selectedTemplatevalue = 1;
+
   //--------------------------------------------------------------------------------------------------------------------
 
   const columns = [
@@ -602,7 +704,7 @@ const SalaryWFH = () => {
             <button className="btn btn-danger ml-2">Pending</button>
           )}
 
-          {row?.invoice_template_no !== "0" && (
+          {row?.invoice_template_no !== "0" && row?.digital_signature_image && (
             <button
               className="btn btn-outline-primary btn-sm"
               title="Download Invoice"
@@ -736,7 +838,7 @@ const SalaryWFH = () => {
 
           <h6>
             <span style={{ color: "green" }}>
-              Active : {activeusers.length}
+              Active : {activeusers?.length}
             </span>
           </h6>
         </div>
@@ -823,7 +925,7 @@ const SalaryWFH = () => {
                   <ul>
                     <li>
                       <span>Active Mark :</span>
-                      {activeusers.length}
+                      {activeusers?.length}
                     </li>
                     <li
                       className="color_primary"
