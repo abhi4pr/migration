@@ -323,11 +323,14 @@ const WFHSingleUser = () => {
       attendence_id: row.attendence_id,
     });
 
-    axios.post(`http://34.93.135.33:8080/api/add_attendance`, {
-      attendence_id: row.attendence_id,
-      sendToFinance: 1,
-    });
-    handleSubmit();
+    axios
+      .put(`http://34.93.135.33:8080/api/update_salary`, {
+        attendence_id: row.attendence_id,
+        sendToFinance: 1,
+      })
+      .then(() => {
+        handleSubmit();
+      });
     toastAlert("Sent To Finance");
   }
 

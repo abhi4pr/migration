@@ -130,6 +130,7 @@ import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
 import CocHistory from "./AdminPreOnboarding/CocHistory";
+import LoginHistory from "./AdminPreOnboarding/LoginHistory";
 import PreonboardingDocuments from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocuments";
 import PreonboardingDocumentOverview from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentOverview";
 import PreonboardingDocumentsUpdate from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentsUpdate";
@@ -274,6 +275,18 @@ const Admin = () => {
                     element={<DashboardWFHCardDetails />}
                   />
 
+<<<<<<< HEAD
+=======
+                  {/* <Route
+                    path="/wfh-user-dashboard"
+                    element={<DashboardWFHUser />}
+                  />
+                  <Route
+                    path="/wfh-dashboard-overview/:id"
+                    element={<DashboardWFHCardDetails />}
+                  /> */}
+
+>>>>>>> 560c8799830f7633004a182f92fe7a83d9ccdd51
                   {contextData &&
                     contextData[1] &&
                     contextData[1].view_value === 1 && (
@@ -460,6 +473,10 @@ const Admin = () => {
                   <Route
                     path="/pre-onboard-coc-history/:id"
                     element={<CocHistory />}
+                  />
+                  <Route
+                    path="/pre-onboard-user-login-history"
+                    element={<LoginHistory />}
                   />
                   <Route
                     path="/only-pre-onboard-user-data"

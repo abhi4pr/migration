@@ -43,12 +43,11 @@ var nicknames;
 import Modal from "react-modal";
 import ExtendJoining from "./ExtendJoining";
 import PreOboardingDocumentsUser from "./PreOboardingDocumentsUser";
+import { AutoComplete } from "antd";
+import IndianStates from "../ReusableComponents/IndianStates";
+import IndianStatesMui from "../ReusableComponents/IndianStatesMui";
 
-const colourOptions = [
-  { value: "English", label: "English" },
-  { value: "Hindi", label: "Hindi" },
-  { value: "Other", label: "Other" },
-];
+const LanguageList = ["English", "Hindi", "Other"];
 
 const bloodGroupData = [
   "A+ (A Positive)",
@@ -91,8 +90,8 @@ const PreOnboardingUserMaster = () => {
   const [isContactTouched, setisContactTouched] = useState(false);
   const [isContactTouched1, setisContactTouched1] = useState(false);
 
-  const [tempLanguage, setTempLanguage] = useState([]);
-  const [speakingLanguage, setSpeakingLanguage] = useState("");
+  const [backendSpeakingLanguage, setBackendSpeakingLanguage] = useState("");
+  const [speakingLanguage, setSpeakingLanguage] = useState([]);
 
   const [joiningDate, setJoiningDate] = useState("");
   const [daysLeftToJoining, setDaysLeftToJoining] = useState("");
@@ -347,7 +346,7 @@ const PreOnboardingUserMaster = () => {
         {
           Nationality && setNationality(Nationality);
         }
-        setSpeakingLanguage(SpokenLanguages);
+        setBackendSpeakingLanguage(SpokenLanguages);
         setLoginId(user_login_id);
         setPassword(user_login_password);
         setJoiningDate(
@@ -424,7 +423,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("user_email_id", email);
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
-    formData.append("user_contact_no", contact);
+    formData.append("user_contact_no", Number(contact));
     formData.append("personal_number", personalContact);
     formData.append("Personal_email", personalEmail);
     formData.append("emergency_contact", Number(emergencyContact));
@@ -458,8 +457,14 @@ const PreOnboardingUserMaster = () => {
     formData.append("bankPassBook_Cheque_validate", passbookChequeValidation);
     // document verification close----------->
 
-    formData.append("joining_date", joiningDate);
-    formData.append("SpokenLanguages", speakingLanguage);
+    formData.append(
+      "joining_date",
+      joiningDate?.split("-").reverse().join("-")
+    );
+    formData.append(
+      "SpokenLanguages",
+      speakingLanguage?.map((lang) => lang).join(", ")
+    );
     formData.append("Gender", gender);
     formData.append("Nationality", nationality);
     formData.append("DOB", dateOfBirth);
@@ -603,14 +608,21 @@ const PreOnboardingUserMaster = () => {
     }
   }
 
-  function handleLanguageSelect(selectedOption) {
-    setTempLanguage(selectedOption);
-  }
+  // function handleLanguageSelect(selectedOption) {
+  //   setTempLanguage(selectedOption);
+  // }
+
+  // useEffect(() => {
+  //   const test = tempLanguage?.map((option) => option.value).join();
+  //   setSpeakingLanguage(test);
+  // }, [tempLanguage]);
 
   useEffect(() => {
-    const test = tempLanguage?.map((option) => option.value).join();
-    setSpeakingLanguage(test);
-  }, [tempLanguage]);
+    // Set the initial value for selectedLanguages
+    setSpeakingLanguage(
+      backendSpeakingLanguage ? backendSpeakingLanguage.split(",") : []
+    );
+  }, [backendSpeakingLanguage]);
 
   const handleLogOut = () => {
     sessionStorage.clear("token");
@@ -633,25 +645,21 @@ const PreOnboardingUserMaster = () => {
 
   const filledFields = [
     username,
-    email,
     personalEmail,
-    loginId,
-    password,
-    contact,
     personalContact,
-    personalEmail,
     FatherName,
+    gender,
     motherName,
     hobbies,
-    gender,
-    joiningDate,
-    speakingLanguage,
-    nationality,
-    dateOfBirth,
     bloodGroup,
     maritialStatus,
-    dateOfMarraige,
-    spouseName,
+    speakingLanguage,
+    dateOfBirth,
+    nationality,
+    emergencyContact,
+    guardianName,
+    relationToGuardian,
+    guardianAddress,
     permanentAddress,
     permanentCity,
     permanentState,
@@ -660,10 +668,7 @@ const PreOnboardingUserMaster = () => {
     currentCity,
     currentState,
     currentPincode,
-    emergencyContact,
-    guardianName,
-    relationToGuardian,
-    guardianAddress,
+    // joiningDate,
   ];
 
   const filledDocuments = [
@@ -690,20 +695,16 @@ const PreOnboardingUserMaster = () => {
   );
 
   function daysUntil(isoDateString) {
-    const oneDay = 24 * 60 * 60 * 1000; // milliseconds in one day
+    const oneDay = 24 * 60 * 60 * 1000;
     const currentDate = new Date();
     const futureDate = new Date(isoDateString);
 
-    // Calculate the difference in milliseconds
     const diffInTime = futureDate.getTime() - currentDate.getTime();
 
-    // Convert the difference in time to days
     return Math.ceil(diffInTime / oneDay);
   }
 
   const daysLeftCount = daysUntil(daysLeftToJoining);
-
-  const progressPercentage = calculateProgressPercentage();
 
   const images = [
     imageTest1,
@@ -1123,26 +1124,13 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
                             <div className="form-group form_select">
-                              {/* <Select
-                              className=""
-                              options={genderData.map((option) => ({
-                                value: `${option}`,
-                                label: `${option}`,
-                              }))}
-                              value={{
-                                value: gender,
-                                label: `${gender}`,
-                              }}
-                              onChange={(e) => {
-                                setGender(e.value);
-                              }}
-                              required
-                            /> */}
                               <Autocomplete
                                 disablePortal
                                 id="combo-box-demo"
                                 options={genderData}
-                                defaultValue={genderData[0]}
+                                // defaultValue={genderData[0]}
+                                value={gender}
+                                onChange={(e, newValue) => setGender(newValue)}
                                 renderInput={(params) => (
                                   <TextField {...params} label="Gender" />
                                 )}
@@ -1181,31 +1169,23 @@ const PreOnboardingUserMaster = () => {
                                 onChange={(e) => setHobbies(e.target.value)}
                               />
                             </div>
+
                             <div className="form-group form_select">
                               <Autocomplete
                                 disablePortal
                                 id="combo-box-demo"
                                 options={bloodGroupData}
+                                value={bloodGroup}
+                                onChange={(event, newValue) => {
+                                  setBloodGroup(newValue);
+                                }}
                                 renderInput={(params) => (
                                   <TextField {...params} label="Blood Group" />
                                 )}
                               />
                             </div>
 
-                            <div className="form-group">
-                              <Autocomplete
-                                disablePortal
-                                id="combo-box-demo"
-                                options={maritialStatusData}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    label="Maritial Status"
-                                  />
-                                )}
-                              />
-                            </div>
-                            {maritialStatus === "Married" && (
+                            {maritialStatus === "Married  " && (
                               <div className="form-group">
                                 <TextField
                                   id="outlined-basic"
@@ -1234,16 +1214,36 @@ const PreOnboardingUserMaster = () => {
                               </div>
                             )}
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <Select
                                 isMulti
                                 name="languages"
-                                options={colourOptions}
+                                options={LanguageList}
                                 className="basic-multi-select"
                                 classNamePrefix={tempLanguage}
                                 onChange={handleLanguageSelect}
                               />
+                            </div> */}
+
+                            <div className="form-group">
+                              <Autocomplete
+                                multiple
+                                id="multi-select-autocomplete"
+                                options={LanguageList} // Use correct array for options
+                                value={speakingLanguage}
+                                onChange={(event, newValue) =>
+                                  setSpeakingLanguage(newValue)
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    label="Speaking Languages"
+                                    placeholder="Select languages"
+                                  />
+                                )}
+                              />
                             </div>
+                            {/* {console.log(tempLanguage)} */}
 
                             <div className="form-group Muiform_date">
                               <TextField
@@ -1414,18 +1414,16 @@ const PreOnboardingUserMaster = () => {
                                 onChange={(e) => setcurrentCity(e.target.value)}
                               />
                             </div>
+
                             <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="State"
-                                variant="outlined"
-                                type="text"
-                                value={currentState}
-                                onChange={(e) =>
-                                  setcurrentState(e.target.value)
+                              <IndianStatesMui
+                                newValue={currentState}
+                                onChange={(option) =>
+                                  setcurrentState(option ? option : null)
                                 }
                               />
                             </div>
+
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
@@ -1488,21 +1486,16 @@ const PreOnboardingUserMaster = () => {
                                 }
                               />
                             </div>
+
                             <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="State"
-                                variant="outlined"
-                                type="text"
-                                // className="form-control"
-                                // name="State"
-                                // placeholder="State"
-                                value={permanentState}
-                                onChange={(e) =>
-                                  setPermanentState(e.target.value)
+                              <IndianStatesMui
+                                newValue={permanentState}
+                                onChange={(option) =>
+                                  setPermanentState(option ? option : null)
                                 }
                               />
                             </div>
+
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"

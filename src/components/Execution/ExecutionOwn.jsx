@@ -21,18 +21,20 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 import CircularWithValueLabel from "../InstaApi.jsx/CircularWithValueLabel";
-import { useCallback } from "react";
+
 import { toast } from "react-toastify";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
+import { useGlobalContext } from "../../Context/Context";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 function ExecutionOwn() {
+  const {toastAlert}=useGlobalContext()
   const [rows, setRows] = useState([]);
   const [pagemode, setPagemode] = useState(1);
   const [alldata, setAlldata] = useState([]);
@@ -68,11 +70,24 @@ function ExecutionOwn() {
 
   const navigate = useNavigate();
 
+  const handleCloseExeModal=()=>{
+    setQuater("");
+    setStatesFor(null);
+    setStartDate(null);
+    setEndDate(null);
+    setReach(0);
+    setImpression(0);
+    setEngagement(0);
+    setStoryView(0);
+    setDemoFile();
+    setRowData({});
+  }
+
   const dropdownStaticData = [
     "Daily",
-    "weekly",
-    "fortnight",
-    "monthly",
+    "Weekly",
+    "Fortnight",
+    "Monthly",
     "Quarterly",
   ];
 
@@ -195,7 +210,6 @@ function ExecutionOwn() {
     converttoclipboard(copydata);
   };
 
-  const showlimiteddata = () => {};
   const copyAllRows = () => {
     let copydata = [];
     let Followerscount = 0;
@@ -223,30 +237,37 @@ function ExecutionOwn() {
     setRows(ftrdata);
     setPagemode(id);
   };
-
+  
   const handleStartDateChange = (newValue) => {
-    const date = new Date(newValue.$d);
-    const isoDate = date.toISOString(); // This will be in UTC
+  const date = new Date(newValue.$d);
 
-    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+  // Adjusting for the local time zone offset
+  const offset = date.getTimezoneOffset();
+  date.setMinutes(date.getMinutes() - offset);
 
-    // If you want to display the date with the original offset (+00:00)
-    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+  // Getting ISO string after adjustment
+  const isoDate = date.toISOString();
 
-    setStartDate(newValue);
-  };
+  console.log(isoDate);
+  console.log(isoDate.replace("Z", "+00:00"));
 
-  const handleEndDateChange = (newValue) => {
-    const date = new Date(newValue.$d);
-    const isoDate = date.toISOString(); // This will be in UTC
+  setStartDate(newValue);
+};
+const handleEndDateChange = (newValue) => {
+  const date = new Date(newValue.$d);
 
-    console.log(isoDate); // Outputs: 2023-10-20T08:27:54.738Z
+  // Adjusting for the local time zone offset
+  const offset = date.getTimezoneOffset();
+  date.setMinutes(date.getMinutes() - offset);
 
-    // If you want to display the date with the original offset (+00:00)
-    console.log(isoDate.replace("Z", "+00:00")); // Outputs: 2023-10-20T08:27:54.738+00:00
+  // Getting ISO string after adjustment
+  const isoDate = date.toISOString();
 
-    setEndDate(newValue);
-  };
+  console.log(isoDate);
+  console.log(isoDate.replace("Z", "+00:00"));
+
+  setEndDate(newValue);
+};
 
   const handleHistoryRowClick = (row) => {
     console.log(row.p_id);
@@ -366,62 +387,7 @@ function ExecutionOwn() {
           headerName: "Subscribers",
           // width: 150,
         },
-    // pagemode == 1 || pagemode == 2
-    //   ? (
-    //     {
-    //       field: "reach",
-    //       headerName: "Reach",
-    //     }
-    //     )
-    //   : pagemode == 3
-    //   ? {
-    //       field: "post",
-    //       headerName: "Post",
-    //       // width: 150,
-    //     }
-    //   : pagemode == 4
-    //   ? ({
-    //       field: "post",
-    //       headerName: "Post",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "repost",
-    //       headerName: "Repost",
-    //       // width: 150,
-    //     })
-    //   : ({
-    //       field: "shorts",
-    //       headerName: "Shorts",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "logo_Integration",
-    //       headerName: "Logo Integration",
-    //       // width: 150,
-    //     },
-    //     {
-    //       field: "brand_Integration",
-    //       headerName: "Brand Integration",
-    //       // width: 150,
-    //     }),
-    //     {
-    //       field: "impression",
-    //       headerName: "Impression",
-    //     },
-    //     {
-    //       field: "engagement",
-    //       headerName: "Engagement",
-    //     },
-    //     {
-    //       field: "story_view",
-    //       headerName: "Story view",
-    //     },
-    // {
-    //   field: "page_health",
-    //   headerName: "Page Health",
-    //   type: "number",
-    // },
+   
     contextData && {
       headerName: "Update",
       renderCell: (params) => {
@@ -461,6 +427,8 @@ function ExecutionOwn() {
   };
 
   const saveStats = async (e) => {
+    e.preventDefault();
+    console.log("save stats")
     const formData = new FormData();
     formData.append("p_id", rowData.p_id);
     formData.append("reach", reach);
@@ -473,33 +441,7 @@ function ExecutionOwn() {
     formData.append("end_date", endDate);
     formData.append("stats_for", statesFor);
 
-    e.preventDefault();
-
-    if (statesFor === "Quarterly") {
-      statesFor === "" ? setStateForIsValid(false) : setStateForIsValid(true);
-      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
-      impression <= 0
-        ? setImpressionValidation(false)
-        : setImpressionValidation(true);
-      engagement <= 0
-        ? setEngagementValidation(false)
-        : setEngagementValidation(true);
-      storyView <= 0
-        ? setStoryViewValidation(false)
-        : setStoryViewValidation(true);
-      console.log(quater, "<------quater");
-      // quater== "" || null ? setQuaterIsValid(false):setQuaterIsValid(true);
-
-      if (!stateForIsValid || !quaterIsValid) {
-        console.log(
-          "quaterly error",
-          stateForIsValid,
-          "<----state",
-          quaterIsValid,
-          "<----quater"
-        );
-        return;
-      } else {
+   
         axios
           .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
             headers: {
@@ -507,59 +449,23 @@ function ExecutionOwn() {
             },
           })
           .then((res) => {
-            console.log(res);
-            console.log(res.data);
+            setQuater("");
+            setStatesFor(null);
+            setStartDate(null);
+            setEndDate(null);
+            setReach(0);
+            setImpression(0);
+            setEngagement(0);
+            setStoryView(0);
+            setDemoFile();
+            setRowData({});
 
-            toast("Form Submitted success");
+            // toast("Form Submitted success");
+            toastAlert("Form Submitted success");
           });
-      }
-    }
-
-    if (statesFor !== "Quarterly") {
-      statesFor === "" || statesFor == null
-        ? setStateForIsValid(false)
-        : setStateForIsValid(true);
-      startDate === "" ? setStartDateIsValid(false) : setStartDateIsValid(true);
-      endDate === "" ? setEndDateIsValid(false) : setEndDateIsValid(true);
-      reach <= 0 ? setReachValidation(false) : setReachValidation(true);
-      impression <= 0
-        ? setImpressionValidation(false)
-        : setImpressionValidation(true);
-      engagement <= 0
-        ? setEngagementValidation(false)
-        : setEngagementValidation(true);
-      storyView <= 0
-        ? setStoryViewValidation(false)
-        : setStoryViewValidation(true);
-
-      if (!stateForIsValid || !startDateIsValid || !endDateIsValid) {
-        console.log(
-          "!quaterly error",
-          stateForIsValid,
-          "<----state",
-          startDateIsValid,
-          "<----startDate",
-          endDateIsValid,
-          "<----endDate"
-        );
-        return;
-      } else {
-        axios
-          .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            console.log(res.data);
-
-            toast("Form Submitted success");
-          });
-      }
-    }
-    // setIsFormSubmitted(true);
+    
   };
+
 
   function CustomColumnMenu(props) {
     return (
@@ -576,10 +482,7 @@ function ExecutionOwn() {
     setSelectedOptions(value);
     console.log(value);
   };
-  const handleoptions = (option, props) => {
-    console.log(option, "*****");
-    console.log(props);
-  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -783,7 +686,7 @@ function ExecutionOwn() {
           >
             <div className="modal-header">
               <h4 className="modal-title">Page Name :- {rowData.page_name}</h4>
-              <button type="button" className="close" data-dismiss="modal">
+              <button type="button" className="close" onClick={handleCloseExeModal} data-dismiss="modal">
                 &times;
               </button>
             </div>
@@ -803,7 +706,6 @@ function ExecutionOwn() {
                     : setStateForIsValid(false);
                   value == "Daily" ? setStartDate(dayjs()) : setStartDate("");
                   value == "Daily" ? setEndDate(dayjs()) : setEndDate("");
-                  handleSaveButtonValidation()
                 }}
                 value={statesFor}
                 sx={{ width: 300 }}
@@ -830,7 +732,7 @@ function ExecutionOwn() {
                       onChange={(newValue) => {
                         handleStartDateChange(newValue);
                         statesFor == "Daily" ? setEndDate(newValue) : "";
-                        handleSaveButtonValidation()
+                        
                       }}
                     />
                   </LocalizationProvider>
@@ -845,7 +747,7 @@ function ExecutionOwn() {
                       label="End Date *"
                       format="DD/MM/YY"
                       value={endDate}
-                      onChange={(newValue) => {handleSaveButtonValidation(),handleEndDateChange(newValue)}}
+                      onChange={(newValue) => {handleEndDateChange(newValue)}}
                     />
                   </LocalizationProvider>
                 )}
@@ -860,7 +762,7 @@ function ExecutionOwn() {
                     value?.length > 0
                       ? setQuaterIsValid(true)
                       : setQuaterIsValid(false);
-                      handleSaveButtonValidation()
+
                   }}
                   value={quater}
                   sx={{ width: 300 }}
@@ -887,7 +789,7 @@ function ExecutionOwn() {
                         ? setReachValidation(true)
                         : setReachValidation(false),
                         setReach(e.target.value);
-                        handleSaveButtonValidation()
+                        
                     }}
                     error={!reachValidation}
                     helperText={
@@ -973,15 +875,16 @@ function ExecutionOwn() {
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"
+                onClick={handleCloseExeModal}
               >
                 Cancel
               </button>
               <button
+                onClick={saveStats}
                 type="button"
                 className="btn btn-success"
-                onClick={saveStats}
                 data-dismiss="modal"
-                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater:!startDate ||!endDate}
+                disabled={!impression || !reach || !engagement || !statesFor || !storyView || statesFor=="Quarterly"? !quater : !startDate || !endDate}
               >
                 Save
               </button>
