@@ -7,10 +7,11 @@ import SendIcon from '@mui/icons-material/Send';
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
+  const [errMessage, setErrMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email);
+    // console.log(email);
     if (email.trim() === "") {
       alert("Please enter email");
       return;
@@ -20,12 +21,14 @@ export default function ForgetPassword() {
           user_email_id: email,
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.message === "Successfully Sent email.") {
-            alert("Email sent successfully");
+            // alert("Email sent successfully");
+            setErrMessage('Email sent successfully !')
             setEmail("");
           } else {
-            alert(res.data.message);
+            // alert(res.data.message);
+            setErrMessage('No such email found in database')
           }
         });
     }
@@ -48,9 +51,9 @@ export default function ForgetPassword() {
           }}
           // className="login100-form d-flex  validate-form p-l-55 p-r-55 p-t-178 "
           className={classes.form}
-       
-        >
+          >
           <div className={`d-flex flex-column justify-content-center align-items-center  p-5 border-radius-3 ${classes.formCh} `}>
+          <p style={{marginBottom:"30px"}}>Please fill associated email id to get your password</p>
             <TextField
               label="Email"
               value={email}
@@ -60,6 +63,7 @@ export default function ForgetPassword() {
             <Button  type="submit"  className="mt-3">
               <SendIcon variant="contained"/>
             </Button>
+            <p>{errMessage}</p>
           </div>
         </form>
       </div>

@@ -147,7 +147,7 @@ const AdminPreOnboarding = () => {
             "Preonboarding Register",
             JSON.stringify(personalContact),
             username,
-            [username, loginId, password, "http://jarviscloud.in/"]
+            [username, loginId, password, "http://jarvis.work/"]
           );
 
           axios

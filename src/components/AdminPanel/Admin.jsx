@@ -130,6 +130,7 @@ import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
 import CocHistory from "./AdminPreOnboarding/CocHistory";
+import LoginHistory from "./AdminPreOnboarding/LoginHistory";
 import PreonboardingDocuments from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocuments";
 import PreonboardingDocumentOverview from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentOverview";
 import PreonboardingDocumentsUpdate from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentsUpdate";
@@ -467,6 +468,10 @@ const Admin = () => {
                   <Route
                     path="/pre-onboard-coc-history/:id"
                     element={<CocHistory />}
+                  />
+                  <Route
+                    path="/pre-onboard-user-login-history"
+                    element={<LoginHistory />}
                   />
                   <Route
                     path="/only-pre-onboard-user-data"
