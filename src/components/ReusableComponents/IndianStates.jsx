@@ -1,49 +1,11 @@
 import React, { useState } from "react";
 import Select from "react-select";
-
-const states = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  // Union Territories
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Lakshadweep",
-  "Delhi",
-  "Puducherry",
-  "Ladakh",
-];
+import statesAndUTs from "./IndianStatesAndUTs";
 
 const IndianStates = ({ onChange, newValue }) => {
   const [selectedState, setSelectedState] = useState(null);
 
-  const options = states.map((state) => ({
+  const options = statesAndUTs.map((state) => ({
     value: state,
     label: state,
   }));
@@ -59,7 +21,7 @@ const IndianStates = ({ onChange, newValue }) => {
       <Select
         className=""
         options={options}
-        value={options.find((option)=> option.value==newValue)}
+        value={options.find((option) => option.value == newValue)}
         label={newValue}
         onChange={handleChange}
         isClearable

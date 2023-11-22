@@ -1489,8 +1489,8 @@ const UserUpdate = () => {
       />
       <div className="form-group col-6">
         <IndianStates
-          onChange={(option) => setState(option ? option.value : null)}
           newValue={state}
+          onChange={(option) => setState(option ? option.value : null)}
         />
       </div>
       <FieldContainer
