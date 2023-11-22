@@ -349,6 +349,7 @@ const PreOnboardingUserMaster = () => {
         setBackendSpeakingLanguage(SpokenLanguages);
         setLoginId(user_login_id);
         setPassword(user_login_password);
+
         setJoiningDate(
           joining_date?.split("T")[0].split("-").reverse().join("-")
         );
@@ -1014,6 +1015,7 @@ const PreOnboardingUserMaster = () => {
                                   loginId={loginId}
                                   username={username}
                                   password={password}
+                                  currentJoiningDate={joiningDate}
                                   closeModal={closeReactModal}
                                 />
                               </Modal>

@@ -17,7 +17,7 @@ const IndianStatesMui = ({ onChange, newValue }) => {
         options={statesAndUTs}
         value={selectedState}
         onChange={handleChange}
-        inputValue={newValue}
+        inputValue={newValue || ""}
         onInputChange={(event, newInputValue) => {
           setSelectedState(newInputValue);
         }}
