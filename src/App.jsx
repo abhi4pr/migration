@@ -36,6 +36,9 @@ import AssetCategoryOverview from "./components/Sim/AssetCategory/AssetCategoryO
 import AssetCategoryUpdate from "./components/Sim/AssetCategory/AssetCategoryUpdate";
 import ForgetPassword from "./Login/Forget/ForgetPassword";
 import ExeHistory from "./components/Execution/ExeHistory";
+import AssetSubCategoryMaster from "./components/Sim/AssetCategory/AssetSubCategoryMaster";
+import AssetSubCategoryOverview from "./components/Sim/AssetCategory/AssetSubCategoryOverview";
+import AssetSubCategoryUpdate from "./components/Sim/AssetCategory/AssetSubCategoryUpdate";
 
 function App() {
   return (
@@ -92,6 +95,19 @@ function App() {
           <Route
             path="/asset-category-update/:id"
             element={<AssetCategoryUpdate />}
+          />
+          {/* Asset sub cat */}
+           <Route
+            path="/asset/subCategory"
+            element={<AssetSubCategoryMaster />}
+          />
+            <Route
+            path="/asset/subCategory/overview"
+            element={<AssetSubCategoryOverview />}
+          />
+              <Route
+            path="/asset/subcategory-update/:id"
+            element={<AssetSubCategoryUpdate />}
           />
 
           <Route path="/ip-overview" element={<IpOverview />} />
