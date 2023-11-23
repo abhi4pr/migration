@@ -653,7 +653,6 @@ const PreOnboardingUserMaster = () => {
     motherName,
     hobbies,
     bloodGroup,
-    maritialStatus,
     speakingLanguage,
     dateOfBirth,
     nationality,
@@ -669,7 +668,7 @@ const PreOnboardingUserMaster = () => {
     currentCity,
     currentState,
     currentPincode,
-    // joiningDate,
+    joiningDate,
   ];
 
   const filledDocuments = [
