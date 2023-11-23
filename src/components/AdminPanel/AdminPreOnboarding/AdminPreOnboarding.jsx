@@ -11,11 +11,11 @@ import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 
 const onBoardStatus = 2;
 
-
 const AdminPreOnboarding = () => {
   const offerLetter = [
-    {label:"Yes",value:true},{label:"No",value:false}
-    ];
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+  ];
   const whatsappApi = WhatsappAPI();
   const genderData = ["Male", "Female", "Other"];
   const { toastAlert } = useGlobalContext();
@@ -170,7 +170,6 @@ const AdminPreOnboarding = () => {
           setUserName("");
           setRoles("");
           setEmail("");
-          setPersonalEmail("");
           setLoginId("");
           setContact("");
           setPersonalContact("");
@@ -182,14 +181,14 @@ const AdminPreOnboarding = () => {
           setPersonalContact("");
           setCity("");
           setSendLetter("");
-          setAnnexurePdf("")
+          setAnnexurePdf("");
           setPersonalEmail("");
           setJobType("");
           setReportL1("");
           setReportL2("");
           setReportL3("");
           setDesignation("");
-          setSendLetter("")
+          setSendLetter("");
           toastAlert("User Registerd");
           setIsFormSubmitted(true);
         }
@@ -209,7 +208,7 @@ const AdminPreOnboarding = () => {
   // Email Validation
   function handleEmailChange(e) {
     const newEmail = e.target.value;
-    setEmail(newEmail);
+    setPersonalEmail(newEmail);
 
     if (newEmail == "") {
       setValidEmail(false);
@@ -363,7 +362,7 @@ const AdminPreOnboarding = () => {
           type="email"
           fieldGrid={3}
           required={false}
-          value={email}
+          value={personalEmail}
           onChange={handleEmailChange}
         />
         {!validEmail && (
@@ -397,12 +396,11 @@ const AdminPreOnboarding = () => {
             }))}
             value={{
               value: sendLetter.value,
-              label: sendLetter.label || "" // Fallback to empty string if label is undefined
+              label: sendLetter.label || "", // Fallback to empty string if label is undefined
             }}
             onChange={(e) => {
               setSendLetter(e);
             }}
-            
             required
           />
         </div>
@@ -501,12 +499,12 @@ const AdminPreOnboarding = () => {
           />
         </div>
         <FieldContainer
-        label="Annexure pdf"
-        fieldGrid={3}
-        type="file"
-        onChange={(e) => setAnnexurePdf(e.target.files[0])}
-        required={false}
-      />
+          label="Annexure pdf"
+          fieldGrid={3}
+          type="file"
+          onChange={(e) => setAnnexurePdf(e.target.files[0])}
+          required={false}
+        />
       </FormContainer>
     </>
   );
