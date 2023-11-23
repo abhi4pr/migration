@@ -40,12 +40,30 @@ const LoginHistory = () => {
     setFilterData(result);
   }, [search]);
 
-  function getTime(timePortion){
-    const baseTime = new Date(`1970-01-01T${timePortion}Z`);
-    baseTime.setHours(baseTime.getHours() + 5);
-    baseTime.setMinutes(baseTime.getMinutes() + 30);
-    const resultTime = baseTime.toISOString().substr(11, 8);
-    return resultTime;
+  function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+  
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+  
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+    const formattedTimestamp = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
+    return formattedTimestamp;
+  }
+
+  function getDuration(seconds){
+    const days = Math.floor(seconds / (3600 * 24));
+    seconds -= days * 3600 * 24;
+    const hrs = Math.floor(seconds / 3600);
+    seconds -= hrs * 3600;
+    const mnts = Math.floor(seconds / 60);
+    seconds -= mnts * 60;
+    return `${days} days, ${hrs} hours, ${mnts} minutes, and ${seconds} seconds`;
   }
 
   const columns = [
@@ -66,14 +84,19 @@ const LoginHistory = () => {
       sortable: true,
     },
     {
-      name: "Date",
-      selector: (row) => row.login_date.split("T")[0],
+      name: "Login Date",
+      selector: (row) => formatTimestamp(row.login_date),
       sortable: true,
     },
     {
-      name: "Time",
-      selector: (row) => getTime(row.login_date.slice(11,19)),
-      width: "22%",
+      name: "Logout Date",
+      selector: (row) => formatTimestamp(row.log_out_date),
+      width: "15%",
+    },
+    {
+      name: "Duration",
+      selector: (row) => getDuration(row.duration),
+      width: "29%",
     },
   ];
 
