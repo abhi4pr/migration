@@ -625,7 +625,13 @@ const PreOnboardingUserMaster = () => {
     );
   }, [backendSpeakingLanguage]);
 
-  const handleLogOut = () => {
+  const handleLogOut = async() => {
+    e.preventDefault();
+                
+      await axios.post("http://34.93.135.33:8080/api/log_out",{
+        user_id: id
+      });
+
     sessionStorage.clear("token");
     navigate("/login");
   };

@@ -13,7 +13,8 @@ export default function ForgetPassword() {
     e.preventDefault();
     // console.log(email);
     if (email.trim() === "") {
-      alert("Please enter email");
+      // alert("Please enter email");
+      setErrMessage('Please enter Email !')
       return;
     } else {
       axios

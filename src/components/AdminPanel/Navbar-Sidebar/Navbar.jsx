@@ -3,17 +3,22 @@ import jwtDecode from "jwt-decode";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import imageTest1 from "../../../assets/img/product/Avtrar1.png";
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+
 const Navbar = () => {
+  const [count, setCount] = useState(0);
+  const [loginUserData, setLoginUserData] = useState([]);
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const userName = decodedToken.name;
   const loginUserId = decodedToken.id;
+
   const handleLogOut = () => {
     sessionStorage.clear("token");
     navigate("/login");
   };
-  const [loginUserData, setLoginUserData] = useState([]);
+
   useEffect(() => {
     axios
       .post("http://34.93.135.33:8080/api/login_user_data", {
@@ -21,6 +26,26 @@ const Navbar = () => {
       })
       .then((res) => setLoginUserData(res.data));
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await axios
+      .get("http://34.93.135.33:8080/api/get_first_time_login_users")
+      .then((res) => {
+        setCount(res.data.results.length);
+      });
+    };
+
+    fetchData();
+  }, []);
+
+  const NotificationsOff = async (e) => {
+    e.preventDefault();
+    await axios.put(`http://34.93.135.33:8080/api/update_notification/`,{
+      notify_hr: false
+    });
+  };
+
   return (
     <>
       {/* Topbar Start */}
@@ -61,6 +86,9 @@ const Navbar = () => {
                 </div>
               </form>
             </div>
+          </li>
+          <li onClick={NotificationsOff}>
+            <NotificationsActiveIcon /><span>{count}</span>
           </li>
           <li className="nav-item">
             <div className="theme-switch">
