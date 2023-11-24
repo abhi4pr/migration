@@ -129,6 +129,7 @@ import ExecutionOther from "../Execution/ExecutionOther";
 import CocUpdate from "./AdminPreOnboarding/CocUpdate";
 import CocMaster from "./AdminPreOnboarding/CocMaster";
 import CocOverview from "./AdminPreOnboarding/CocOverview";
+import NotificationHistory from "./AdminPreOnboarding/NotificationHistory";
 import CocHistory from "./AdminPreOnboarding/CocHistory";
 import LoginHistory from "./AdminPreOnboarding/LoginHistory";
 import PreonboardingDocuments from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocuments";
@@ -463,6 +464,10 @@ const Admin = () => {
                   <Route
                     path="/pre-onboard-coc-overview"
                     element={<CocOverview />}
+                  />
+                  <Route
+                    path="/pre-onboard-all-notifications"
+                    element={<NotificationHistory />}
                   />
                   <Route
                     path="/pre-onboard-coc-update/:id"

@@ -343,6 +343,14 @@ const SidebarLinks = () => {
                   Login History
                 </Link>
               )}
+              {contextData && contextData[18]?.view_value == 1 && (
+                <Link
+                  className="collapse-item"
+                  to="/admin/pre-onboard-all-notifications"
+                >
+                  All Notifications
+                </Link>
+              )}
 
               <Link
                 className="collapse-item"
