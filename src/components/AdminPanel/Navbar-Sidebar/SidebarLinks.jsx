@@ -555,6 +555,12 @@ const SidebarLinks = () => {
                           </Link>
                           <Link
                             className="collapse-item"
+                            to="/admin/planOverview"
+                          >
+                            Plan Overview
+                          </Link>
+                          <Link
+                            className="collapse-item"
                             to="/admin/checkPageFollowers"
                           >
                             Check Page Follower
