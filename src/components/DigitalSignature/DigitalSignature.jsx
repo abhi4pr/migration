@@ -3,7 +3,13 @@ import SignatureCanvas from "react-signature-canvas";
 import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
 
-const DigitalSignature = ({ userID, closeModal }) => {
+const DigitalSignature = ({
+  userID,
+  closeModal,
+  offetLetterAcceptanceDate,
+  offerLetterStatus,
+  gettingData,
+}) => {
   const { toastAlert } = useGlobalContext();
 
   const [signature, setSignature] = useState();
@@ -19,6 +25,17 @@ const DigitalSignature = ({ userID, closeModal }) => {
         const formData = new FormData();
         formData.append("user_id", userID);
         formData.append("digital_signature_image", blob);
+        {
+          offetLetterAcceptanceDate &&
+            formData.append(
+              "offer_later_acceptance_date",
+              offetLetterAcceptanceDate
+            );
+        }
+        {
+          offerLetterStatus &&
+            formData.append("offer_later_status", offerLetterStatus);
+        }
 
         axios
           .put(`http://34.93.135.33:8080/api/update_user`, formData, {
@@ -28,6 +45,7 @@ const DigitalSignature = ({ userID, closeModal }) => {
           })
           .then(() => {
             closeModal();
+            gettingData();
             toastAlert("Submitted");
           });
         signature.clear();

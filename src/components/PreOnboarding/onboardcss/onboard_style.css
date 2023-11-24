@@ -130,7 +130,7 @@ img {
 }
 
 .btn_primary:first-child:active,
-:not(.btn-check) + .btn_primary:active {
+:not(.btn-check)+.btn_primary:active {
   border-color: var(--primary-board);
   background-color: var(--primary-board);
   color: var(--text-white);
@@ -157,7 +157,7 @@ img {
 }
 
 .btn_white:first-child:active,
-:not(.btn-check) + .btn_white:active {
+:not(.btn-check)+.btn_white:active {
   border-color: var(--bg-white);
   background-color: var(--bg-white);
   color: var(--primary-board);
@@ -175,8 +175,7 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url(../../../assets/imgs/bg/auth-bg.png) var(--bg-board) center
-    no-repeat;
+  background: url(../../../assets/imgs/bg/auth-bg.png) var(--bg-board) center no-repeat;
   background-size: cover;
   padding: 40px 40px;
 }
@@ -185,20 +184,17 @@ img {
   width: 460px;
   border-radius: 15px;
   background: rgba(255, 255, 255, 0.07);
-  box-shadow: -22.366666793823242px 22.366666793823242px 22.366666793823242px
-      0px rgba(255, 255, 255, 0.07) inset,
-    22.366666793823242px -22.366666793823242px 22.366666793823242px 0px rgba(
-        194,
-        194,
-        194,
-        0.07
-      ) inset,
+  box-shadow: -22.366666793823242px 22.366666793823242px 22.366666793823242px 0px rgba(255, 255, 255, 0.07) inset,
+    22.366666793823242px -22.366666793823242px 22.366666793823242px 0px rgba(194,
+      194,
+      194,
+      0.07) inset,
     0px 0px 16px 0px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
 }
 
 .authbrand_spacing {
-  padding: 60px 80px;
+  padding: 40px 60px;
 }
 
 .authtext h1 {
@@ -223,22 +219,24 @@ img {
 .authlogo {
   text-align: center;
 }
+
 .authlogo img {
   margin: 0 auto;
 }
+
 .authlogo img {
-  width: 150px;
+  width: 130px;
 }
 
 .authform_area {
-  padding: 40px 80px;
+  padding: 40px 60px 16px;
   border-radius: 15px;
   background: #fff;
 }
 
 .authform_head {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 
 .authform_head h2 {
@@ -248,11 +246,19 @@ img {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
+}
+
+.authform_head p {
+  color: var(--gray);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 400;
+  padding: 0px 15px 8px;
 }
 
 .authform .form-group {
-  margin-bottom: 34px;
+  margin-bottom: 24px;
 }
 
 .authform input.form-control {
@@ -262,11 +268,12 @@ img {
   border-radius: 60px;
   background: var(--bg-board);
   color: var(--primary-board);
-  font-size: 15px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
   padding: 15px 20px;
+  height: 48px;
 }
 
 .authform input.form-control::placeholder {
@@ -286,6 +293,21 @@ img {
   margin: 0 auto;
   text-align: center;
   display: block;
+}
+
+.forgotPassword .link_btn {
+  padding: 0;
+  margin: 0 auto;
+  display: block;
+  font-size: 14px;
+  color: var(--primary-board);
+}
+
+.form-group.errorMessage {
+  text-align: center;
+  color: red;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 /* Dashboard Page CSS Start */
@@ -322,7 +344,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 30px 0px;
-  padding: 0px 30px;
+  padding: 0px 30px 30px;
 }
 
 .sidebar_itembox {
@@ -330,23 +352,33 @@ img {
   border: 4px solid rgba(255, 255, 255, 0.2);
   background: rgba(217, 217, 217, 0.1);
   backdrop-filter: blur(15.933333396911621px);
-  padding: 20px 50px;
+  padding: 20px 40px;
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0px 30px;
+  gap: 0px 20px;
   transition: var(--transition);
 }
 
 .sidebar_itembox h2 {
   color: var(--primary-board);
   font-family: var(--font-recoleta);
-  font-family: "Recoleta-Medium";
   font-size: 20px;
   line-height: 30px;
   font-style: normal;
   font-weight: 500;
   transition: var(--transition);
+}
+
+.sidebar_itembox h3 {
+  color: var(--primary-board);
+  font-family: var(--font-recoleta);
+  font-size: 20px;
+  line-height: 30px;
+  font-style: normal;
+  font-weight: 500;
+  transition: var(--transition);
+  margin-left: auto;
 }
 
 .progress-circle,
@@ -1289,10 +1321,7 @@ img {
 .sidebar_item_active .progress-circle,
 .sidebar_item_active .progress-circle .progress-circle-border,
 .sidebar_item_active .progress-circle .progress-circle-border .left-half-circle,
-.sidebar_item_active
-  .progress-circle
-  .progress-circle-border
-  .right-half-circle {
+.sidebar_item_active .progress-circle .progress-circle-border .right-half-circle {
   height: 90px;
   width: 90px;
 }
@@ -1324,6 +1353,13 @@ img {
 
 .navbar_menu {
   margin-left: 15px;
+}
+
+.navbar_menu h3 {
+  font-family: var(--font-recoleta);
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 400;
 }
 
 .navbar_menu .nav {
@@ -1399,6 +1435,45 @@ img {
   cursor: pointer;
 }
 
+.user_logout .dropdown-toggle {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user_logout .dropdown-toggle::after {
+  display: none;
+}
+
+.user_logout .dropdown-menu {
+  /* transform: inherit !important; */
+  /* left: auto !important; */
+  /* right: -10px !important; */
+  border: 1px solid var(--white);
+  background: var(--white);
+  padding: 5px 10px;
+  top: 20px !important;
+}
+
+.user_logout .dropdown-item {
+  background-color: transparent;
+  color: var(--primary-board);
+  font-family: var(--font-recoleta);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.user_logout .dropdown-item:hover {
+  background-color: transparent;
+  color: var(--primary-board);
+}
+
 .dashboard_body {
   height: 100%;
   background-color: var(--primary-board);
@@ -1460,10 +1535,18 @@ img {
 
 .welcome_board_img {
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 0px 0px 10px;
 }
 
-.welcome_board_img img {
-  width: 320px;
+.imgone img {
+  width: 310px;
+}
+
+.imgtwo img {
+  width: 480px;
 }
 
 .board_form {
@@ -1562,6 +1645,53 @@ img {
 .spacing_lg .col-12 {
   padding-left: 30px;
   padding-right: 30px;
+}
+
+.docTable {
+  border-radius: 15px;
+  border: 1px solid #5c849d;
+  margin-bottom: 24px;
+}
+
+.docTable .table {
+  width: 100%;
+  margin-bottom: 0;
+  background-color: transparent;
+}
+
+.docTable .table thead tr th:nth-child(1) {
+  border-top-left-radius: 15px;
+}
+
+.docTable .table thead tr th:nth-last-child(1) {
+  border-top-right-radius: 15px;
+  border-right: none;
+}
+
+.docTable .table thead th {
+  background: var(--tertiary-board);
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 300;
+  padding: 15px 15px;
+  border: none;
+  border-right: 1px solid #5c849d;
+}
+
+.docTable .table tbody td {
+  vertical-align: middle;
+  background: transparent;
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 300;
+  padding: 15px 15px;
+  border: none;
+  border-right: 1px solid #5c849d;
+  border-top: 1px solid #5c849d;
+}
+
+.docTable .table tbody td:nth-last-child(1) {
+  border-right: none;
 }
 
 .doc_items_list {
@@ -1732,12 +1862,12 @@ img {
 }
 
 .board_form .MuiFormLabel-root {
-  background-color: transparent;
-  color: var(--white);
-  opacity: 40%;
+  background-color: var(--primary-board);
+  color: #647e8e;
+  opacity: 100%;
   margin: 0px 0px 0px 0px;
-  padding: 4px 0px 0px 0px;
-  font-size: 17px;
+  padding: 4px 10px 0px;
+  font-size: 16px;
   line-height: 18px;
   font-weight: 300;
 }
@@ -1745,10 +1875,10 @@ img {
 .board_form .MuiFormLabel-root.Mui-focused {
   background-color: var(--primary-board);
   margin: 3px 0px 0px 0px;
-  padding: 0px 10px 0px 10px;
+  padding: 0px 10px 0px;
   color: var(--white);
   opacity: 100%;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 18px;
   font-weight: 300;
 }
@@ -1783,10 +1913,7 @@ img {
   fill: var(--white) !important;
 }
 
-.board_form
-  label[data-shrink="false"]
-  + .MuiInputBase-formControl
-  .MuiInputBase-input {
+.board_form label[data-shrink="false"]+.MuiInputBase-formControl .MuiInputBase-input {
   color: transparent !important;
 }
 
@@ -1806,10 +1933,7 @@ img {
   height: 38px;
 }
 
-.board_form
-  .form-group
-  .input-group-append
-  button.btn.btn-outline-primary:hover {
+.board_form .form-group .input-group-append button.btn.btn-outline-primary:hover {
   border-color: transparent;
   color: var(--white);
   background-color: transparent;
@@ -1856,11 +1980,11 @@ img {
   border-radius: 6px;
 }
 
-.cstm_check:hover input ~ .checkmark {
+.cstm_check:hover input~.checkmark {
   background-color: transparent;
 }
 
-.cstm_check input:checked ~ .checkmark {
+.cstm_check input:checked~.checkmark {
   background-color: var(--white);
 }
 
@@ -1870,7 +1994,7 @@ img {
   display: none;
 }
 
-.cstm_check input:checked ~ .checkmark:after {
+.cstm_check input:checked~.checkmark:after {
   display: block;
 }
 
@@ -1888,16 +2012,20 @@ img {
 
 .warning_badges {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0px 8px;
+  gap: 6px 8px;
   position: relative;
   z-index: 10;
+  max-width: 180px;
+  margin: 0 auto;
 }
 
 .warning_badges h4 {
   display: flex;
   align-items: center;
+  justify-content: center;
   color: var(--white);
   font-size: 12px;
   line-height: 16px;
@@ -1906,6 +2034,7 @@ img {
   padding: 6px 14px 6px;
   gap: 0px 4px;
   border-radius: 40px;
+  width: 94px;
 }
 
 .warning_badges.reject h4 {
@@ -1930,22 +2059,99 @@ img {
 
 .warning_badges h5 {
   color: var(--white);
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 12px;
+  line-height: 16px;
   font-weight: 300;
 }
 
 .board_form h3 {
   color: var(--text-white);
   font-family: var(--font-recoleta);
-  font-size: 25px;
+  font-size: 20px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300;
   line-height: normal;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  display: flex;
 }
 
 .board_form h3 span {
   color: #f0b734;
   font-weight: 500;
+}
+
+.board_form h3 .extndBtn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  line-height: 18px;
+  padding: 5px 5px;
+  margin-left: auto;
+  color: #f0b734;
+}
+
+.ReactModal__Overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboardModal {
+  margin: 30px auto;
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background: var(--primary-board) !important;
+  border: 1px solid var(--primary-board) !important;
+  border-radius: 20px;
+  padding: 20px 20px;
+}
+
+.onboardModal form {
+  width: 100%;
+}
+
+.onboardModal .formarea {
+  padding: 20px 20px;
+}
+
+.onboardModal .doc_items_list {
+  margin-bottom: 30px;
+}
+
+/* Responsive Start Here */
+
+@media only screen and (max-width: 1599px) {}
+
+
+@media only screen and (max-width: 1399px) {}
+
+
+@media only screen and (max-width: 1199px) {}
+
+
+@media only screen and (max-width: 991px) {}
+
+
+@media only screen and (max-width: 767px) {
+  .authwrapper {
+    padding: 20px 20px;
+  }
+
+  .authbrand_spacing {
+    padding: 30px 30px;
+  }
+
+  .authlogo img {
+    width: 100px;
+  }
+
+  .authform_area {
+    padding: 20px 25px 1px;
+  }
 }

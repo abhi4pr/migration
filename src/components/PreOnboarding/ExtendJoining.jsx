@@ -88,7 +88,7 @@ const ExtendJoining = ({
       <form>
         <div className="formarea">
           <div className="row spacing_lg">
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
               <div className="board_form">
                 <div className="form-group">
                   <TextField
@@ -166,7 +166,7 @@ const ExtendJoining = ({
               </h1>
             )} */}
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-              <div className="form-group ml-auto mr-auto text-center">
+              <div className="form-group mb-0 ml-auto mr-auto text-center">
                 <button
                   className="btn btn_pill btn_cmn btn_white"
                   onClick={handleJoiningExtend}
