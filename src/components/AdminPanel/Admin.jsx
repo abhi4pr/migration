@@ -85,7 +85,7 @@ import InstaAPIHome from "../InstaApi.jsx/InstaAPIHome";
 import InstaPageDashboard from "../InstaApi.jsx/InstaPageDashboard";
 import InstaPostDashboard from "../InstaApi.jsx/InstaPostDashboard";
 import InstaPageDetail from "../InstaApi.jsx/InstaPageDetail";
-import ExecutionUpdate from "../Execution/ExecutionUpdate";
+// import ExecutionUpdate from "../Execution/ExecutionUpdate";
 import CronExpression from "../InstaApi.jsx/CronExpression";
 import InstaApiContext from "../InstaApi.jsx/InstaApiContext";
 import PreOnboardVerifyDetails from "./AdminPreOnboarding/PreOnboardVerifyDetails";
@@ -112,7 +112,7 @@ import CreaterDashboard from "./RegisterCampaign/CreaterDashboard";
 import BillingOverview from "./WFH/Billing/BillingOverview";
 import BillingMast from "./WFH/Billing/BillingMast";
 import BillingUpdate from "./WFH/Billing/BillingUpdate";
-import InterpretorPage from "../InstaApi.jsx/Interpretor/InterpretorPage";
+// import InterpretorPage from "../InstaApi.jsx/Interpretor/InterpretorPage";
 import InterpretorPostDashboard from "../InstaApi.jsx/Interpretor/InterpretorPostDashboard";
 import InterpretorPageDashboard from "../InstaApi.jsx/Interpretor/InterpretorPageDashboard";
 import AdminPageView from "../InstaApi.jsx/InstaAdmin/AdminPageView";
@@ -134,6 +134,8 @@ import LoginHistory from "./AdminPreOnboarding/LoginHistory";
 import PreonboardingDocuments from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocuments";
 import PreonboardingDocumentOverview from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentOverview";
 import PreonboardingDocumentsUpdate from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentsUpdate";
+import PlanOverview from "./RegisterCampaign/PlanOverview";
+import PhaseCreation from "./RegisterCampaign/PhaseCreation";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -531,6 +533,8 @@ const Admin = () => {
                     path="/createrdashboard"
                     element={<CreaterDashboard />}
                   />
+                  <Route path="/planOverview" element={<PlanOverview />} />
+                  <Route path="/phase" element={<PhaseCreation />} />
 
                   <Route
                     path="/checkPageFollowers"
@@ -546,6 +550,7 @@ const Admin = () => {
                   <Route path="/subcategory" element={<SubCategoryMaster />} />
 
                   <Route path="/contentcreater" element={<ContentCreater />} />
+                
                   {/* ----------------------lead source routes -----------------------------*/}
                   <Route
                     path="/exploreleads"
