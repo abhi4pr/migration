@@ -84,28 +84,27 @@ const Login = () => {
                     type={showPassword ? "password" : "text"}
                   />
                 </div>
-                <div className="text-right p-t-13 p-b-23">
-                  {isError !== "" && (
-                    <span className="mb-1 d-block" style={{ color: "red" }}>
-                      Invalid Login Id or Password
-                    </span>
-                  )}
-                </div>
-                <div className="form-group mb-0">
+                {isError !== "" && (
+                  <div className="form-group errorMessage">
+                    <span>Invalid Login Id or Password</span>
+                  </div>
+                )}
+                <div className="form-group">
                   <button className="btn btn-icon btn_primary" type="submit">
                     <i className="fas fa-arrow-right" />
                   </button>
                 </div>
-                <button
-                  className="btn mt-1"
-                  style={{ marginLeft: "140px", color: "#EF4F2B" }}
-                  type="submit"
-                  onClick={() => {
-                    navigate("/forget-password");
-                  }}
-                >
-                  Forget Password
-                </button>
+                <div className="forgotPassword form-group">
+                  <button
+                    className="btn link_btn"
+                    type="submit"
+                    onClick={() => {
+                      navigate("/forget-password");
+                    }}
+                  >
+                    Forget Password ?
+                  </button>
+                </div>
               </div>
             </form>
           </div>

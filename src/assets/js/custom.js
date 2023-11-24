@@ -1,3 +1,10 @@
+//Toggle Class
+$(document).on("click", ".dropdown", function (e) {
+  e.preventDefault();
+  $(this).closest(".dropdown-menu").toggleClass("show");
+  return false;
+});
+
 // Wow JS
 wow = new WOW({
   animateClass: "animated",

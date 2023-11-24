@@ -6,6 +6,7 @@ import "./onboardcss/onboard_responsive.css";
 import "./onboardcss/onboard_animate.min.css";
 import profilepic from "../../assets/imgs/user/naruto.png";
 import welcomeImage from "../../assets/imgs/other/welcome.png";
+import welcomeText from "../../assets/imgs/other/welcometext.gif";
 import Select from "react-select";
 import { useGlobalContext } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
@@ -42,10 +43,10 @@ var profileimage;
 var nicknames;
 import Modal from "react-modal";
 import ExtendJoining from "./ExtendJoining";
-import PreOboardingDocumentsUser from "./PreOboardingDocumentsUser";
 import { AutoComplete } from "antd";
 import IndianStates from "../ReusableComponents/IndianStates";
 import IndianStatesMui from "../ReusableComponents/IndianStatesMui";
+import LetterTab from "./LetterTab";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -285,6 +286,7 @@ const PreOnboardingUserMaster = () => {
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
+
         const {
           user_name,
           user_email_id,
@@ -962,9 +964,26 @@ const PreOnboardingUserMaster = () => {
                   <img src={getProfile} alt="user" />
                 </div>
                 <div className="user_logout">
-                  <a href="#" onClick={handleLogOut}>
-                    <i className="bi bi-power" />
-                  </a>
+                  <div className="dropdown">
+                    <a
+                      className="dropdown-toggle"
+                      id="onboarduserDropdown"
+                      role="button"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i className="bi bi-power" />
+                    </a>
+                    <div
+                      className="dropdown-menu dropdown-menu-right"
+                      aria-labelledby="onboarduserDropdown"
+                    >
+                      <a onClick={handleLogOut} className="dropdown-item">
+                        Logout
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -983,8 +1002,13 @@ const PreOnboardingUserMaster = () => {
                     >
                       Profile
                     </button> */}
-                    <div className="welcome_board_img">
-                      <img src={welcomeImage} alt="welcome" />
+                    <div class="welcome_board_img">
+                      <div class="imgone">
+                        <img src={welcomeImage} alt="welcome" />
+                      </div>
+                      <div class="imgtwo">
+                        <img src={welcomeText} alt="welcome" />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -998,17 +1022,17 @@ const PreOnboardingUserMaster = () => {
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                           <div className="board_form">
                             <h2>On-Boarding Form</h2>
-
                             <h3>
-                              Your Current Joning Date is:{" "}
+                              Your Current Joning Date is : &nbsp;
                               <span>{joiningDate}</span>
                               <button
-                                className="btn btn-primary"
+                                className="btn btn-primary extndBtn"
                                 onClick={openReactModal}
                               >
                                 Extend
                               </button>
                               <Modal
+                                className="onboardModal"
                                 isOpen={isModalOpen}
                                 onRequestClose={closeReactModal}
                                 contentLabel="Modal"
@@ -1541,6 +1565,75 @@ const PreOnboardingUserMaster = () => {
                   <div className="documentarea">
                     <div className="document_box">
                       <h2>Documents</h2>
+
+                      <div className="docTable table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Document Type</th>
+                              <th scope="col">Priority Days</th>
+                              <th scope="col">Time</th>
+                              <th scope="col">Upload</th>
+                              <th scope="col" className="text-center">
+                                Status
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td scope="row">10th Marksheet</td>
+                              <td>2 Days</td>
+                              <td>1 Day</td>
+                              <td>
+                                <i class="bi bi-cloud-arrow-up"></i> Upload
+                              </td>
+                              <td>
+                                <div className="docStatus">
+                                  <span className="warning_badges reject">
+                                    <h4>Rejected</h4>
+                                    <h5>
+                                      {
+                                        allUserData?.tenth_marksheet_validate_remark
+                                      }
+                                    </h5>
+                                  </span>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">10th Marksheet</td>
+                              <td>2 Days</td>
+                              <td>1 Day</td>
+                              <td>
+                                <i class="bi bi-cloud-arrow-up"></i> Upload
+                              </td>
+                              <td>
+                                <div className="docStatus">
+                                  <span className="warning_badges approve">
+                                    <h4>Accepted</h4>
+                                  </span>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="row">10th Marksheet</td>
+                              <td>2 Days</td>
+                              <td>1 Day</td>
+                              <td>
+                                <i class="bi bi-cloud-arrow-up"></i> Upload
+                              </td>
+                              <td>
+                                <div className="docStatus">
+                                  <span className="warning_badges pending">
+                                    <h4>Pending</h4>
+                                  </span>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
                       <ul className="doc_items_list">
                         <li className="doc_list_item">
                           <div
@@ -2301,7 +2394,12 @@ const PreOnboardingUserMaster = () => {
                   </form>
                 )}
 
-                {activeTab == 7 && <PreOboardingDocumentsUser />}
+                {activeTab == 7 && (
+                  <LetterTab
+                    allUserData={allUserData}
+                    gettingData={gettingData}
+                  />
+                )}
               </div>
             </div>
           </div>
