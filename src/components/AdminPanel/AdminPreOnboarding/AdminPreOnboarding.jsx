@@ -16,9 +16,18 @@ const AdminPreOnboarding = () => {
     { label: "Yes", value: true },
     { label: "No", value: false },
   ];
-  const whatsappApi = WhatsappAPI();
+
+  const jobTypeData = ["WFO", "WFH"];
+  const tdsApplicableData = ["Yes", "No"];
+
   const genderData = ["Male", "Female", "Other"];
+
+  const whatsappApi = WhatsappAPI();
   const { toastAlert } = useGlobalContext();
+
+  const token = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+  const loginUserId = decodedToken.id;
   const [username, setUserName] = useState("");
   const [jobType, setJobType] = useState("");
   const [roles, setRoles] = useState("");
@@ -32,8 +41,14 @@ const AdminPreOnboarding = () => {
   const [validEmail, setValidEmail] = useState(true);
   const [annexurePdf, setAnnexurePdf] = useState("");
 
+  //TDS fields
+  const [tdsApplicable, setTdsApplicable] = useState("No");
+  const [tdsPercentage, setTdsPercentage] = useState(0);
+  const [showTdsPercentage, setShowTdsPercentage] = useState(false);
+
   const [contact, setContact] = useState("");
   const [personalContact, setPersonalContact] = useState("");
+
   const [userCtc, setUserCtc] = useState("");
 
   const [isValidcontact, setValidContact] = useState(false);
@@ -67,10 +82,6 @@ const AdminPreOnboarding = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const token = sessionStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
-  const loginUserId = decodedToken.id;
-
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
 
@@ -103,6 +114,9 @@ const AdminPreOnboarding = () => {
     formData.append("ctc", userCtc);
     formData.append("offer_letter_send", sendLetter.value);
     formData.append("annexure_pdf", annexurePdf);
+
+    formData.append("tds_applicable", tdsApplicable);
+    formData.append("tds_per", tdsPercentage);
 
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
@@ -377,17 +391,84 @@ const AdminPreOnboarding = () => {
           onChange={(e) => setCity(e.target.value)}
         />
 
-        <FieldContainer
-          label=" CTC"
-          type="number"
-          fieldGrid={3}
-          required={false}
-          value={userCtc}
-          onChange={(e) => setUserCtc(e.target.value)}
-        />
         <div className="form-group col-3">
           <label className="form-label">
-            offer letter send <sup style={{ color: "red" }}>*</sup>
+            Job Type <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={jobTypeData.map((option) => ({
+              value: `${option}`,
+              label: `${option}`,
+            }))}
+            value={{
+              value: jobType,
+              label: `${jobType}`,
+            }}
+            onChange={(e) => {
+              setJobType(e.value);
+            }}
+            required
+          />
+        </div>
+        {jobType === "WFH" && (
+          <>
+            <FieldContainer
+              label="Salary"
+              type="number"
+              fieldGrid={3}
+              value={salary}
+              onChange={(e) => setSalary(e.target.value)}
+            />
+            <div className="form-group col-3">
+              <label className="form-label">
+                TDS Applicable<sup style={{ color: "red" }}>*</sup>
+              </label>
+              <Select
+                className=""
+                options={tdsApplicableData.map((option) => ({
+                  value: `${option}`,
+                  label: `${option}`,
+                }))}
+                value={{
+                  value: tdsApplicable,
+                  label: `${tdsApplicable}`,
+                }}
+                onChange={(e) => {
+                  const selectedValue = e.value;
+                  setTdsApplicable(e.value);
+                  setShowTdsPercentage(selectedValue === "Yes");
+                }}
+                required={false}
+              />
+            </div>
+            {showTdsPercentage && (
+              <FieldContainer
+                label="TDS Percentage"
+                fieldGrid={3}
+                type="number"
+                value={tdsPercentage}
+                onChange={(e) => setTdsPercentage(e.target.value)}
+                required={false}
+              />
+            )}
+          </>
+        )}
+
+        {jobType == "WFO" && (
+          <FieldContainer
+            label=" CTC"
+            type="number"
+            fieldGrid={3}
+            required={false}
+            value={userCtc}
+            onChange={(e) => setUserCtc(e.target.value)}
+          />
+        )}
+
+        <div className="form-group col-3">
+          <label className="form-label">
+            Letter send <sup style={{ color: "red" }}>*</sup>
           </label>
           <Select
             options={offerLetter.map((option) => ({
@@ -404,6 +485,17 @@ const AdminPreOnboarding = () => {
             required
           />
         </div>
+
+        {sendLetter.label == "Yes" && (
+          <FieldContainer
+            label="Annexure pdf"
+            fieldGrid={3}
+            type="file"
+            onChange={(e) => setAnnexurePdf(e.target.files[0])}
+            required={false}
+          />
+        )}
+
         <FieldContainer
           label="Personal Contact"
           type="number"
@@ -498,13 +590,6 @@ const AdminPreOnboarding = () => {
             required
           />
         </div>
-        <FieldContainer
-          label="Annexure pdf"
-          fieldGrid={3}
-          type="file"
-          onChange={(e) => setAnnexurePdf(e.target.files[0])}
-          required={false}
-        />
       </FormContainer>
     </>
   );

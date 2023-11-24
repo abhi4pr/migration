@@ -47,6 +47,7 @@ import { AutoComplete } from "antd";
 import IndianStates from "../ReusableComponents/IndianStates";
 import IndianStatesMui from "../ReusableComponents/IndianStatesMui";
 import LetterTab from "./LetterTab";
+import ContactNumber from "../ReusableComponents/ContactNumber";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -174,7 +175,7 @@ const PreOnboardingUserMaster = () => {
 
   //Guardian Fields
   const [guardianName, setGuardianName] = useState("");
-  const [guardianContact, setGuardianContact] = useState(null);
+  const [guardianContact, setGuardianContact] = useState("");
   const [relationToGuardian, setRelationToGuardian] = useState("");
   const [guardianAddress, setGuardianAddress] = useState("");
 
@@ -627,12 +628,12 @@ const PreOnboardingUserMaster = () => {
     );
   }, [backendSpeakingLanguage]);
 
-  const handleLogOut = async(e) => {
+  const handleLogOut = async (e) => {
     e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/log_out",{
-        user_id: id
-      });
+
+    await axios.post("http://34.93.135.33:8080/api/log_out", {
+      user_id: id,
+    });
 
     sessionStorage.clear("token");
     navigate("/login");
@@ -694,7 +695,7 @@ const PreOnboardingUserMaster = () => {
 
   const formFieldProgressPercentage = calculateProgressPercentage(
     filledFields,
-    ["", null]
+    ["", null, 0]
   );
 
   const documentFieldProgressPercentage = calculateProgressPercentage(
@@ -1119,7 +1120,7 @@ const PreOnboardingUserMaster = () => {
                                 )}
                             </div> */}
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Personal Contact"
@@ -1139,6 +1140,14 @@ const PreOnboardingUserMaster = () => {
                                     *Please enter valid number
                                   </p>
                                 )}
+                            </div> */}
+
+                            <div className="form-group">
+                              <ContactNumber
+                                label="Personal Contact"
+                                setParentComponentContact={setPersonalContact}
+                                parentComponentContact={personalContact}
+                              />
                             </div>
 
                             <div className="form-group">
@@ -1147,9 +1156,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Father Name"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="father name"
-                                // placeholder="Father Name"
                                 value={FatherName}
                                 onChange={(e) => setFatherName(e.target.value)}
                               />
@@ -1357,18 +1363,15 @@ const PreOnboardingUserMaster = () => {
                                 onChange={(e) => setNationality(e.target.value)}
                               />
                             </div>
+
                             <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
+                              <ContactNumber
                                 label="Emergency Contact"
-                                variant="outlined"
-                                type="number"
-                                value={emergencyContact}
-                                onChange={(e) =>
-                                  setEmergencyContact(e.target.value)
-                                }
+                                parentComponentContact={emergencyContact}
+                                setParentComponentContact={setEmergencyContact}
                               />
                             </div>
+
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
@@ -1381,7 +1384,7 @@ const PreOnboardingUserMaster = () => {
                                 }
                               />
                             </div>
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Guardian Contact"
@@ -1392,7 +1395,16 @@ const PreOnboardingUserMaster = () => {
                                   setGuardianContact(e.target.value)
                                 }
                               />
+                            </div> */}
+
+                            <div className="form-group">
+                              <ContactNumber
+                                label="Guardian Contact"
+                                parentComponentContact={guardianContact}
+                                setParentComponentContact={setGuardianContact}
+                              />
                             </div>
+
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
