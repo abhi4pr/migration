@@ -173,7 +173,7 @@ export default function ExeUPdate() {
         }
       )
       .then(() => {
-        navigate("/exeexecution/all");
+        navigate("/admin/exeexecution/all");
         toastAlert("Form Submitted success");
       });
   };
@@ -347,7 +347,7 @@ export default function ExeUPdate() {
   console.log(id);
   return (
     <div>
-      <div style={{ width: "80%", margin: "0 0 0 10%" }}>
+      <div style={{ width: "80%", margin: "0 0 0 0" }}>
         <UserNav />
         <FormContainer
           mainTitle="Stats History"
@@ -390,7 +390,7 @@ export default function ExeUPdate() {
              (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  className="my-3"
+                  className="my-1"
                   label="Start Date *"
                   format="DD/MM/YY"
                   value={startDate}
@@ -408,7 +408,7 @@ export default function ExeUPdate() {
             (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  className="my-3 mx-3"
+                  className="my-1 mx-3"
                   label="End Date *"
                   format="DD/MM/YY"
                   value={endDate}
@@ -422,7 +422,7 @@ export default function ExeUPdate() {
           // !stateForIsNotQuater && 
           (
             <Autocomplete
-              className="my-3"
+              className="my-1"
               disablePortal
               id="combo-box-demo"
               options={QuarterStaticData}
@@ -438,8 +438,8 @@ export default function ExeUPdate() {
                 <TextField
                   {...params}
                   label="Quater *"
-                  error={!quaterIsValid}
-                  helperText={!quaterIsValid ? "Please select an option" : ""}
+                  // error={!quaterIsValid}
+                  // helperText={!quaterIsValid ? "Please select an option" : ""}
                 />
               )}
             />
@@ -586,7 +586,7 @@ export default function ExeUPdate() {
             />
           </div>
         </div>
-        <div>
+        <div className="my-3">
           <TextField
             label="Profile Visit"
             type="number"
@@ -719,7 +719,7 @@ export default function ExeUPdate() {
           />
           <TextField
             style={{ width: "10%" }}
-            className="me-2 mt-3"
+            className="me-2 "
             type="number"
             value={city5Percentage}
             onChange={(e) => {
