@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import ModeCommentTwoToneIcon from "@mui/icons-material/ModeCommentTwoTone";
 import SendTwoToneIcon from "@mui/icons-material/SendTwoTone";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   Autocomplete,
@@ -30,6 +31,8 @@ import { Page } from "@react-pdf/renderer";
 import { Link } from "react-router-dom";
 
 export default function RegisteredCampaign() {
+  const navigate = useNavigate();
+const params = useParams()
   const [reload, setReload] = useState(false);
   const [contentTypeList, setContentTypeList] = useState([]);
   const [formData, setFormData] = useState({
@@ -347,6 +350,14 @@ export default function RegisteredCampaign() {
     }
   };
 
+  const handlePlan = (event)=>{
+  console.log(event);
+  const path=`/admin/planCreation/${event._id}`
+  navigate(path);
+
+  
+}
+
   const handleSubmit = () => {
     const validationErrors = validateForm(formData);
     console.log(validationErrors, "validationErrors");
@@ -575,11 +586,12 @@ export default function RegisteredCampaign() {
       renderCell: (params) => {
         return (
           <div className="d-flex text-center align-item-center justify-content-center">
-            <Link to="/admin/planCreation">
-            <Button type="button">
-              <SendTwoToneIcon />
+            {/* <Link to={`/admin/planCreation`}> */}
+            <Button type="button" onClick={()=>handlePlan(params.row)}>
+              <SendTwoToneIcon  />
+             
             </Button>
-            </Link>
+            {/* </Link> */}
           </div>
         );
       },
