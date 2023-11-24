@@ -141,7 +141,7 @@ function App() {
           <Route path="/brand-view/:id" element={<BrandView />} />
 
           {/* Execution history */}
-          <Route path="/exe-history/:id" element={<ExeHistory />} />
+          
 
 
         </Routes>

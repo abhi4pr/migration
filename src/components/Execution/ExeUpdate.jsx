@@ -164,7 +164,7 @@ export default function ExeUPdate() {
 
     axios
       .put(
-        `http://192.168.29.116:8080/api/edit_exe_ip_count_history`,
+        `http://34.93.135.33:8080/api/edit_exe_ip_count_history`,
         formData,
         {
           headers: {

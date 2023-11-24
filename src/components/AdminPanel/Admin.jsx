@@ -139,6 +139,7 @@ import PlanOverview from "./RegisterCampaign/PlanOverview";
 import PhaseCreation from "./RegisterCampaign/PhaseCreation";
 import PlanCreation from "./RegisterCampaign/PlanCreation";
 import ExeUPdate from "../Execution/ExeUPdate";
+import ExeHistory from "../Execution/ExeHistory";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -598,6 +599,7 @@ const Admin = () => {
                   {/*------------------------ Execution --------------------------------*/}
 
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
+                  <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />
                   <Route path="/exeexecution/all" element={<ExecutionAll />} />
                   <Route path="/exeexecution/own" element={<ExecutionOwn />} />
