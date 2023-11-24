@@ -29,17 +29,22 @@ const Navbar = () => {
       .then((res) => setLoginUserData(res.data));
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await axios
-      .get("http://34.93.135.33:8080/api/get_all_unreden_notifications")
-      .then((res) => {
-        setNotificationData(res.data.data)
-        setCount(res.data.data.length);
-      });
-    };
+  const fetchData = async () => {
+    await axios
+    .get("http://34.93.135.33:8080/api/get_all_unreden_notifications")
+    .then((res) => {
+      setNotificationData(res.data.data)
+      setCount(res.data.data.length);
+    });
+  };
 
+  useEffect(() => {
     fetchData();
+    
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, 60000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const NotificationsOff = async (_id) => {
@@ -48,6 +53,7 @@ const Navbar = () => {
       _id: _id,
       readen: true
     });
+    fetchData()
   };
 
   return (
