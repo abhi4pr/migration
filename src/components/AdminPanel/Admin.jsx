@@ -136,6 +136,7 @@ import PreonboardingDocumentOverview from "./AdminPreOnboarding/AdminPreDocument
 import PreonboardingDocumentsUpdate from "./AdminPreOnboarding/AdminPreDocuments/PreonboardingDocumentsUpdate";
 import PlanOverview from "./RegisterCampaign/PlanOverview";
 import PhaseCreation from "./RegisterCampaign/PhaseCreation";
+import PlanCreation from "./RegisterCampaign/PlanCreation";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -535,6 +536,8 @@ const Admin = () => {
                   />
                   <Route path="/planOverview" element={<PlanOverview />} />
                   <Route path="/phase" element={<PhaseCreation />} />
+                  <Route path="/planCreation" element={<PlanCreation />} />
+
 
                   <Route
                     path="/checkPageFollowers"
