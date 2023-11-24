@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import { set } from "date-fns";
 import DeleteHistoryConfirmation from "./DeleteHistoryConfirmation";
+import InsertPhotoTwoToneIcon from "@mui/icons-material/InsertPhotoTwoTone";
+import OndemandVideoTwoToneIcon from '@mui/icons-material/OndemandVideoTwoTone';
 
 export default function ExeHistory() {
   const id = useParams();
@@ -23,20 +25,20 @@ export default function ExeHistory() {
     setOpenDeleteHistoryConFirmation(false);
   };
 
-const apiCall=()=>{
-  axios
-  .get(`http://34.93.135.33:8080/api/get_exe_ip_count_history/${id.id}`)
-  .then((res) => {
-    const data = res.data.data.filter((e) => {
-     return e.isDeleted !== true;
-    });
-    console.log(data);
-    setData(data);
-  });
-}
+  const apiCall = () => {
+    axios
+      .get(`http://34.93.135.33:8080/api/get_exe_ip_count_history/${id.id}`)
+      .then((res) => {
+        const data = res.data.data.filter((e) => {
+          return e.isDeleted !== true;
+        });
+        console.log(data);
+        setData(data);
+      });
+  };
 
   useEffect(() => {
-    apiCall()
+    apiCall();
   }, []);
 
   const handleDeleteRowData = (data) => {
@@ -78,7 +80,140 @@ const apiCall=()=>{
       field: "stats_for",
       headerName: "Stats For",
       width: 150,
+    }, {
+      field: "quater",
+      headerName: "Quater",
+      width: 150,
+    }, {
+      field: "city1_name",
+      headerName: "City 1",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.city1_name ? (
+              <>
+                {params.row.city1_name} &nbsp;{" "} {params.row.percentage_city1_name}%
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    }, {
+      field: "city2_name",
+      headerName: "City 2",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.city2_name ? (
+              <>
+                {params.row.city2_name} &nbsp;{" "} {params.row.percentage_city2_name}%
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
+    {
+      field: "city3_name",
+      headerName: "City 3",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.city3_name ? (
+              <>
+                {params.row.city3_name} &nbsp;{" "} {params.row.percentage_city3_name}%
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      field: "city4_name",
+      headerName: "City 4",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.city4_name ? (
+              <>
+                {params.row.city4_name} &nbsp;{" "} {params.row.percentage_city4_name}%
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      field: "city5_name",
+      headerName: "City 5",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.city5_name ? (
+              <>
+                {params.row.city5_name} &nbsp;{" "} {params.row.percentage_city5_name}%
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      field:"male_percent",
+      headerName: "Male %",
+      width: 150,
+    },
+    {
+      field:"female_percent",
+      headerName:"Female %",
+      width: 150,
+    },
+    {
+      field:"Age_13_17_percent",
+      headerName:"Age 13-17 %",
+      width: 150,
+    },
+    {
+      field:"Age_18_24_percent",
+      headerName:"Age 18-24 %",
+      width: 150,
+    },
+    {
+      field:"Age_25_34_percent",
+      headerName:"Age 25-34 %",
+    },
+    {
+      field:"Age_35_44_percent",
+      headerName:"Age 35-44 %",
+    },
+    {
+      field:"Age_45_54_percent",
+      headerName:"Age 45-54 %",
+    },
+    {
+      field:"Age_55_64_percent",
+      headerName:"Age 55-64 %",
+    },
+    {
+      field:"Age_65_plus_percent",
+      headerName:"Age 65+ %",
+    }
+    ,
     {
       field: "start_date",
       headerName: "Start Date",
@@ -86,10 +221,18 @@ const apiCall=()=>{
       renderCell: (params) => {
         return (
           <div>
-            {new Date(params.row.start_date).toISOString().substr(8, 2)}/
-            {new Date(params.row.start_date).toISOString().substr(5, 2)}/
-            {new Date(params.row.start_date).toISOString().substr(2, 2)}
-          </div>)}
+            {params.row?.start_date ? (
+              <>
+                {new Date(params.row.start_date).toISOString().substr(8, 2)}/
+                {new Date(params.row.start_date).toISOString().substr(5, 2)}/
+                {new Date(params.row.start_date).toISOString().substr(2, 2)}
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      },
     },
     {
       field: "end_date",
@@ -98,10 +241,18 @@ const apiCall=()=>{
       renderCell: (params) => {
         return (
           <div>
-            {new Date(params.row.end_date).toISOString().substr(8, 2)}/
-            {new Date(params.row.end_date).toISOString().substr(5, 2)}/
-            {new Date(params.row.end_date).toISOString().substr(2, 2)}
-          </div>)}
+            {params.row.end_date ? (
+              <>
+                {new Date(params.row.end_date).toISOString().substr(8, 2)}/
+                {new Date(params.row.end_date).toISOString().substr(5, 2)}/
+                {new Date(params.row.end_date).toISOString().substr(2, 2)}
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      },
     },
     {
       field: "creation_date",
@@ -120,12 +271,57 @@ const apiCall=()=>{
     {
       field: "media",
       headerName: "Media",
-      width: 150,
+      width: 180,
       renderCell: (params) => {
         return (
-          <Button href={params.row.media} variant="contained" color="primary">
-            Download
-          </Button>
+          <>
+            {params.row.reach_impression_upload_image_url && (
+              <a
+                key="reach"
+                href={params.row.reach_impression_upload_image_url}
+                title="Reach Impression Image"
+                download
+              >
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+            {params.row.engagement_upload_image_url && (
+              <a
+                key="engagement"
+                href={params.row.engagement_upload_image_url}
+                title="Engagement Image"
+                download
+              >
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+
+            {params.row.story_view_upload_image_url && (
+              <a
+                key="storyImg"
+                href={params.row.story_view_upload_image_url}
+                title="Story View Image"
+                download
+              >
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+            {params.row.story_view_upload_video_url && (
+              <a key="storyVdo" href={params.row.story_view_upload_video_url} title="Story view Video" download>
+                <OndemandVideoTwoToneIcon  variant="contained" color="primary" />
+              </a>
+            )}
+            {params.row.city_image_upload_url && (
+              <a key="cityImg" href={params.row.city_image_upload_url} title="City Image" download>
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+            {params.row.Age_upload_url && (
+              <a key="cityVdo" href={params.row.Age_upload_url} title="Age Img" download>
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+          </>
         );
       },
     },

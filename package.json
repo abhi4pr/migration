@@ -23,6 +23,7 @@
     "antd": "^5.9.0",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
+    "country-state-city": "^3.2.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
     "file-saver": "^2.0.5",
