@@ -27,6 +27,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { set } from "date-fns";
 import { Page } from "@react-pdf/renderer";
+import { Link } from "react-router-dom";
 
 export default function RegisteredCampaign() {
   const [reload, setReload] = useState(false);
@@ -563,6 +564,22 @@ export default function RegisteredCampaign() {
             <Button type="button" onClick={() => handleOpen(params)}>
               <SendTwoToneIcon />
             </Button>
+          </div>
+        );
+      },
+      width: 200,
+    },
+    {
+      field: "plan_creation",
+      headerName: "Plan Creation",
+      renderCell: (params) => {
+        return (
+          <div className="d-flex text-center align-item-center justify-content-center">
+            <Link to="/admin/planCreation">
+            <Button type="button">
+              <SendTwoToneIcon />
+            </Button>
+            </Link>
           </div>
         );
       },
