@@ -5,6 +5,7 @@ import { useState } from "react";
 import classes from "./forgetPassword.module.css";
 import SendIcon from "@mui/icons-material/Send";
 import loginlogo from "../../assets/img/logo/logo_login1.png";
+import { Link } from "react-router-dom";
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
@@ -115,6 +116,9 @@ export default function ForgetPassword() {
                 <div className="form-group">
                   <button className="btn btn-icon btn_primary" type="submit">
                     <i className="fas fa-arrow-right" />
+                  </button>
+                  <button type="button" class="btn btn-warning btn-xs" style={{float:"right"}}>
+                    <Link to={`/login`}>Login</Link>
                   </button>
                 </div>
                 <div className="form-group errorMessage">

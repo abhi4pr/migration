@@ -472,8 +472,8 @@ const PreOnboardingUserMaster = () => {
     formData.append("Gender", gender);
     formData.append("Nationality", nationality);
     formData.append("DOB", dateOfBirth);
-    formData.append("FatherName", FatherName);
-    formData.append("MotherName", motherName);
+    formData.append("fatherName", FatherName);
+    formData.append("motherName", motherName);
     formData.append("Hobbies", hobbies);
     formData.append("BloodGroup", bloodGroup);
     formData.append("MartialStatus", maritialStatus);
