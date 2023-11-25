@@ -346,7 +346,7 @@ export default function ExeHistory() {
   return (
     <>
       {" "}
-      <div style={{ width: "80%", margin: "0 0 0 10%" }}>
+      <div style={{ width: "80%", margin: "0 0 0 0%" }}>
         <UserNav />
         <FormContainer
           mainTitle="Stats History"
