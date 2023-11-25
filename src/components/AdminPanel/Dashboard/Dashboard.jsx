@@ -145,8 +145,9 @@ function Dashboard() {
                   <div className="d_infocard card shadow">
                     <div className="card-body" onClick={handleSim}>
                       <div className="d_infocard_txt">
-                        <h3>Sim</h3>
-                        <h2>{AllSimData}</h2>
+                        <h3>Assets</h3>
+                        {/* <h2>{AllSimData}</h2> */}
+                        <h2>Assets</h2>
                       </div>
                       <div className="d_infocard_icon">
                         <span>
@@ -158,64 +159,6 @@ function Dashboard() {
                 </div>
               </>
             )}
-
-          {/* asset */}
-          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-            <div className="d_infocard card shadow">
-              <div
-                className="card-body"
-                onClick={() => navigate("/asset-category-master")}
-              >
-                <div className="d_infocard_txt">
-                  <h3>Asset category</h3>
-                  <h2>{AllSimData}</h2>
-                </div>
-                <div className="d_infocard_icon">
-                  <span>
-                    <BsFillSimFill />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* asset  sub_Category*/}
-          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-            <div className="d_infocard card shadow">
-              <div
-                className="card-body"
-                onClick={() => navigate("/asset/subCategory/overview")}
-              >
-                <div className="d_infocard_txt">
-                  <h3>Asset Sub category</h3>
-                  <h2>{AllSimData}</h2>
-                </div>
-                <div className="d_infocard_icon">
-                  <span>
-                    <BsFillSimFill />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* vender curd*/}
-          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-            <div className="d_infocard card shadow">
-              <div
-                className="card-body"
-                onClick={() => navigate("/venderOverView")}
-              >
-                <div className="d_infocard_txt">
-                  <h3> Vender</h3>
-                  <h2> Vendor</h2>
-                </div>
-                <div className="d_infocard_icon">
-                  <span>
-                    <BsFillSimFill />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {contextData &&
             contextData[12] &&

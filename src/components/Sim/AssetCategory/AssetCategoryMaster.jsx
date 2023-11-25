@@ -32,7 +32,7 @@ const AssetCategoryMaster = () => {
       setCategoryName("");
       setDescription("");
       if (response.status == 200) {
-        navigate("/asset-category-overview");
+        navigate("/asset/asset-category-overview");
       }
     } catch (error) {
       toastAlert(error.mesaage);
