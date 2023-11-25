@@ -564,9 +564,6 @@ function ExecutionAll() {
       width: 150,
       headerName: "History",
       renderCell: (params) => {
-        console.log( 
-        statsUpdateFlag.find(e => e.latestEntry?.p_id == params.row.p_id)
-        ,`p_id ${params.row.p_id}`)
         return (
           <button
             type="button"
