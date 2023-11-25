@@ -30,6 +30,7 @@ import { useGlobalContext } from "../../Context/Context";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { Country, City } from "country-state-city";
+import { param } from "jquery";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -119,8 +120,9 @@ function ExecutionAll() {
   const [country4Percentage, setCountry4Percentage] = useState(0);
   const [country5Percentage, setCountry5Percentage] = useState(0);
   const [countryImg, setCountryImg] = useState();
-
+  const [updatePercentage, setSetUpdatePercentage] = useState([]);
   const [totalPercentage, setTotalPercentage] = useState(0);
+  const [statsUpdateFlag, setSetStatsUpdateFlag] = useState([]);
 
   const handlePercentageChange = (value, setter) => {
     const newValue = parseFloat(value);
@@ -273,15 +275,29 @@ function ExecutionAll() {
         });
         setRows(tempdata);
 
-        // for(let i=0;i<tempdata.length;i++){
-        //     axios.post(`http://34.93.135.33:8080/api/get_percentage`,{
+        for (let i = 0; i < tempdata.length; i++) {
+          axios
+            .post(`http://34.93.135.33:8080/api/get_percentage`, {
+              p_id: tempdata[i].p_id,
+            })
+            .then((res) => {
+              if (res.status == 200) {
+                setSetUpdatePercentage((prev) => [...prev, res.data]);
+              }
+            });
+        }
 
-        //             p_id:tempdata[i].p_id
-
-        //     }).then((res)=>{
-        //         console.log(res.data);
-        //     })
-        // }
+        for (let i = 0; i < tempdata.length; i++) {
+          axios
+            .get(
+              `http://34.93.135.33:8080/api/get_stats_update_flag/${tempdata[i].p_id}`
+            )
+            .then((res) => {
+              if (res.status == 200) {
+                setSetStatsUpdateFlag((prev) => [...prev, res.data]);
+              }
+            });
+        }
       });
     if (userID && contextData == false) {
       axios
@@ -453,7 +469,6 @@ function ExecutionAll() {
           headerName: "Link",
           renderCell: (params) => {
             const date = params.row.page_link;
-
             return (
               <div style={{ color: "blue" }}>
                 <a href={date} target="blank">
@@ -497,13 +512,11 @@ function ExecutionAll() {
       ? {
           field: "follower_count",
           headerName: "Followers",
-          // width: 150,
         }
       : pagemode == 2
       ? ({
           field: "follower_count",
           headerName: "Followers",
-          // width: 150,
         },
         {
           field: "page_likes",
@@ -512,7 +525,6 @@ function ExecutionAll() {
       : {
           field: "subscribers",
           headerName: "Subscribers",
-          // width: 150,
         },
 
     contextData && {
@@ -526,6 +538,20 @@ function ExecutionAll() {
             className="btn btn-primary"
             data-toggle="modal"
             data-target="#myModal1"
+            disabled={
+              Math.round(
+                +updatePercentage.filter(
+                  (e) => e.latestEntry.p_id == params.row.p_id
+                )[0]?.totalPercentage
+              ) == 0 ||
+              Math.round(
+                updatePercentage.filter(
+                  (e) => e.latestEntry.p_id == params.row.p_id
+                )[0]?.totalPercentage
+              ) == 100
+                ? false
+                : true
+            }
             onClick={() => handleRowClick(params.row)}
           >
             Set Stats
@@ -538,11 +564,17 @@ function ExecutionAll() {
       width: 150,
       headerName: "History",
       renderCell: (params) => {
+        console.log( 
+        statsUpdateFlag.find(e => e.latestEntry?.p_id == params.row.p_id)
+        ,`p_id ${params.row.p_id}`)
         return (
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => handleHistoryRowClick(params.row)}
+            disabled={
+               ! statsUpdateFlag.find(e => e.latestEntry?.p_id == params.row.p_id)
+          }
           >
             See History
           </button>
@@ -568,9 +600,39 @@ function ExecutionAll() {
     {
       field: "Update percentage",
       width: 150,
-      headerName: "Stats Update",
-      renderCell: () => {
-        return "fgdfgfd";
+      headerName: "Stats Update %",
+      renderCell: (params) => {
+        const num =
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0].totalPercentage
+            : 0;
+        const a =
+          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? statsUpdateFlag.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry?.stats_update_flag
+            : false;
+        const res = a ? num : 0;
+        return Math.round(+res) + "%";
+      },
+    },
+    {
+      field: "statsupdateflag ",
+      width: 150,
+      headerName: "Stats Update Flag",
+      renderCell: (params) => {
+        const num =
+          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? statsUpdateFlag.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry?.stats_update_flag
+            : false;
+        return num ? "Yes" : "No";
       },
     },
   ];
@@ -798,6 +860,7 @@ function ExecutionAll() {
 
           <Stack direction="row" justifyContent="space-between" spacing={1}>
             <Button
+              className="col-lg-2"
               size="medium"
               variant="contained"
               onClick={() => handlefilter("Instagram", 1)}
