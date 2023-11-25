@@ -331,6 +331,9 @@ const PreOnboardingUserMaster = () => {
           gaurdian_number,
           relation_with_guardian,
           guardian_address,
+          designation_name,
+          user_report_to_id,
+          ctc
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);

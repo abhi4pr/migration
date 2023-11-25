@@ -36,6 +36,13 @@ const LetterTab = ({ allUserData, gettingData }) => {
 
   return (
     <>
+      <p>
+        Welcome {allUserData.user_name} to CreativeFuel As our new {allUserData.designation_name}, he/she brings valuable experience to our team. <br/>
+        Based at {allUserData.permanent_address}, {allUserData.user_name} officially joined us on {allUserData.joining_date} and reports to {allUserData.user_report_to_id}. <br/>
+        We're confident {allUserData.user_name} will seamlessly integrate into our collaborative work culture, contributing to our success. <br/>
+        The competitive compensation package, including a comprehensive salary {allUserData.ctc}, reflects his/her value. <br/>
+        {allUserData.user_name}'s digital signature symbolizes his/her commitment. Congratulations on accepting our offer—we look forward to achieving great milestones together!
+      </p>
       <button
         className="btn btn-primary"
         onClick={() => {
