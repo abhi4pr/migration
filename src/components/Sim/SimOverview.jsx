@@ -220,62 +220,60 @@ const SimOverview = () => {
       width: "5%",
       sortable: true,
     },
+    // {
+    //   name: "Mobile ",
+    //   cell: (row) => (
+    //     <Link to={`/sim-update/${row.sim_id}`}>{row.mobileNumber}</Link>
+    //   ),
+    //   sortable: true,
+    // },
     {
-      name: "Mobile Number",
-      cell: (row) => (
-        <Link to={`/sim-update/${row.sim_id}`}>{row.mobileNumber}</Link>
-      ),
+      name: "Assets Name",
+      selector: (row) => row.assetsName,
       sortable: true,
     },
     {
-      name: "Sim Number",
-      selector: (row) => row.sim_no,
+      name: "Asset ID",
+      selector: (row) => row.asset_id,
       sortable: true,
     },
     {
-      name: "Provider",
-      selector: (row) => row.provider,
+      name: "Category",
+      selector: (row) => row.category_name,
       sortable: true,
     },
     {
-      name: "Allocated To",
-      selector: (row) => row.allocated_username,
+      name: "sub category",
+      selector: (row) => row.sub_category_name,
       sortable: true,
     },
+
     {
-      name: "Sim Type",
-      selector: (row) => row.s_type,
+      name: "Value",
+      selector: (row) => row.assetsValue,
+      sortable: true,
     },
+
     {
       name: "Status",
       selector: (row) => row.status,
     },
     {
-      name: "Duration",
-      selector: (row) => row.date_difference + " days",
-    },
-    {
-      name: "Type",
-      selector: (row) => row.type,
-    },
-    {
-      name: "Designation",
-      selector: (row) => row.designation,
-    },
-    {
-      name: "Department",
-      selector: (row) => row.department_name,
-    },
-    {
-      name: "Remarks",
-      selector: (row) => row.Remarks,
-      sortable: true,
+      name: "img",
+      selector: (row) => (
+        <button className="btn btn-outline-success">
+          <i class="bi bi-images"></i>
+        </button>
+      ),
     },
 
     {
       name: "Action",
       cell: (row) => (
         <>
+          {/* <button className="btn btn-outline-success">
+            <i class="bi bi-images"></i>
+          </button> */}
           <Link to={`/sim-update/${row.sim_id}`}>
             <button
               title="Edit"
@@ -328,7 +326,7 @@ const SimOverview = () => {
         </>
       ),
       allowOverflow: true,
-      width: "22%",
+      width: "25%",
     },
   ];
 
@@ -352,8 +350,7 @@ const SimOverview = () => {
             <div className="action_heading">
               <div className="action_title">
                 <FormContainer
-                  mainTitle="Sim"
-                  // addNewButtonName="Add New SIM"
+                  mainTitle="Assets"
                   link="/sim-master"
                   // buttonAccess={true}
                   submitButton={false}
@@ -366,6 +363,34 @@ const SimOverview = () => {
                 >
                   <Link to="/sim-dashboard">Dashboard</Link>
                 </button>
+
+                {/* There is masters  */}
+
+                <Link to="/asset/asset-category-overview">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm"
+                  >
+                    Assets Category
+                  </button>
+                </Link>
+                <Link to="/asset/subCategory/overview">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm"
+                  >
+                    Assets SubCategory
+                  </button>
+                </Link>
+                <Link to="/venderOverView">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm"
+                  >
+                    Vendor
+                  </button>
+                </Link>
+
                 <button
                   type="button"
                   className={`btn ${
@@ -395,7 +420,7 @@ const SimOverview = () => {
                   } btn-sm`}
                   onClick={() => setSelectedStatus("")}
                 >
-                  Master
+                  All Assets
                 </button>
 
                 <Link to="/sim-allocation-overview">
@@ -403,7 +428,7 @@ const SimOverview = () => {
                     type="button"
                     className="btn btn-outline-primary btn-sm"
                   >
-                    Return SIM
+                    Return Assets
                   </button>
                 </Link>
                 <Link to="/sim-master">
@@ -411,7 +436,7 @@ const SimOverview = () => {
                     type="button"
                     className="btn btn-outline-primary btn-sm"
                   >
-                    Add New SIM
+                    Add Assets
                   </button>
                 </Link>
               </div>
@@ -419,60 +444,52 @@ const SimOverview = () => {
             <div className="card mb-4">
               <div className="card-body pb0 pb4">
                 <div className="row thm_form">
-                  <FieldContainer
-                    label="Sim Type"
-                    Tag="select"
-                    fieldGrid={3}
-                    value={simTypeFilter}
-                    onChange={(e) => setSimTypeFilter(e.target.value)}
-                  >
-                    <option value="">All</option>
-                    <option value="Physical Sim">Physical Sim</option>
-                    <option value="E-Sim">E-Sim</option>
-                  </FieldContainer>
-                  <FieldContainer
-                    label="Provider"
-                    Tag="select"
-                    fieldGrid={3}
-                    value={providerFilter}
-                    onChange={(e) => setProviderFilter(e.target.value)}
-                  >
-                    <option value="">All</option>
-                    <option value="Jio">Jio</option>
-                    <option value="Airtel">Airtel</option>
-                    <option value="Vodafone Idea (VI)">
-                      Vodafone Idea (VI)
-                    </option>
-                    <option value="BSNL">BSNL</option>
-                  </FieldContainer>
-                  <FieldContainer
-                    label="Department"
-                    Tag="select"
-                    fieldGrid={3}
-                    value={departmentFilter}
-                    onChange={(e) => setDepartmentFilter(e.target.value)}
-                  >
-                    <option value="">All</option>
-                    {departmentData.map((option) => (
-                      <option value={option.dept_id} key={option.dept_id}>
-                        {option.dept_name}
-                      </option>
-                    ))}
-                  </FieldContainer>
-                  <FieldContainer
-                    label="Designation"
-                    Tag="select"
-                    fieldGrid={3}
-                    value={designationFilter}
-                    onChange={(e) => setDesignationFilter(e.target.value)}
-                  >
-                    <option value="">All</option>
-                    {designationData.map((option) => (
-                      <option value={option.desi_id} key={option.desi_id}>
-                        {option.desi_name}
-                      </option>
-                    ))}
-                  </FieldContainer>
+                  <div className="form-group col-3">
+                    <label className="form-label">
+                      Department Name <sup style={{ color: "red" }}>*</sup>
+                    </label>
+                    <Select
+                      className=""
+                      options={departmentData.map((option) => ({
+                        value: option.dept_id,
+                        label: `${option.dept_name}`,
+                      }))}
+                      value={{
+                        value: departmentFilter,
+                        label:
+                          departmentData.find(
+                            (user) => user.dept_id === departmentFilter
+                          )?.dept_name || "",
+                      }}
+                      onChange={(e) => {
+                        setDepartmentFilter(e.value);
+                      }}
+                      required
+                    />
+                  </div>
+                  <div className="form-group col-3">
+                    <label className="form-label">
+                      Department Name <sup style={{ color: "red" }}>*</sup>
+                    </label>
+                    <Select
+                      className=""
+                      options={departmentData.map((option) => ({
+                        value: option.dept_id,
+                        label: `${option.dept_name}`,
+                      }))}
+                      value={{
+                        value: departmentFilter,
+                        label:
+                          departmentData.find(
+                            (user) => user.dept_id === departmentFilter
+                          )?.dept_name || "",
+                      }}
+                      onChange={(e) => {
+                        setDepartmentFilter(e.value);
+                      }}
+                      required
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -480,7 +497,7 @@ const SimOverview = () => {
               <div className="card mb-4">
                 <div className="data_tbl table-responsive">
                   <DataTable
-                    title="User Overview"
+                    title="Assets Overview"
                     columns={columns}
                     data={filterdata}
                     fixedHeader

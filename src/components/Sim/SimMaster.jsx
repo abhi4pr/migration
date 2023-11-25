@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useGlobalContext } from "../../Context/Context";
@@ -14,6 +14,8 @@ const SimMaster = () => {
   const [assetsOtherID, setAssetsOtherID] = useState("");
   const [isValidcontact, setValidContact] = useState(false);
   // const [isContactTouched, setisContactTouched] = useState(false);
+
+  const [assetType, setAssetType] = useState("");
   const [assetsCategory, setAssetsCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [vendorName, setVendorName] = useState("");
@@ -37,53 +39,87 @@ const SimMaster = () => {
   const [remark, setRemark] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
+  const [categoryData, setCategoryData] = useState([]);
+  const [subcategoryData, setSubCategoryData] = useState([]);
+  const [vendorData, setVendorData] = useState([]);
+
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
   const inWarrantyOption = ["No", "Yes"];
-  const assetsCat = ["jio", "Air"];
-  const subCat = ["Charger", "Laptop"];
+  const assettype = ["New", "Old"];
 
-  const handleSubmit = (e) => {
+  // All Category , subcategory and vendor api here
+  const getAllCategory = () => {
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_asset_category")
+      .then((res) => {
+        setCategoryData(res.data);
+      });
+  };
+  const getAllSubCategory = () => {
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_asset_sub_category")
+      .then((res) => {
+        setSubCategoryData(res.data);
+      });
+  };
+  const getAllVendor = () => {
+    axios.get("http://34.93.135.33:8080/api/get_all_vendor").then((res) => {
+      setVendorData(res.data);
+    });
+  };
+  useEffect(() => {
+    getAllCategory();
+    getAllSubCategory();
+    getAllVendor();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("assetsName", assetsName);
-      formData.append("assetsID", assetsID);
+      formData.append("sim_no", assetsID);
       formData.append("assetsOtherID", assetsOtherID);
+      formData.append("s_type", assetType);
       formData.append("warrantyDate", warrantyDate);
       formData.append("inWarranty", inWarranty);
       formData.append("dateOfPurchase", dateOfPurchase);
-      formData.append("assetsCategory", assetsCategory);
-      formData.append("subCategory", subCategory);
-      formData.append("vendorName", vendorName);
+      formData.append("category_id", assetsCategory.category_id);
+      formData.append("sub_category_id", subCategory.sub_category_id);
+      formData.append("vendor_id", vendorName.vendor_id);
       formData.append("invoiceCopy", invoiceCopy);
       formData.append("selfAuditPeriod", selfAuditPeriod);
       formData.append("selfAuditUnit", selfAuditUnit);
       formData.append("hrselfAuditPeriod", hrselfAuditPeriod);
       formData.append("hrselfAuditUnit", hrselfAuditUnit);
-
-      formData.append("assetsImg1", assetsImg1);
-      formData.append("assetsImg2", assetsImg2);
-      formData.append("assetsImg3", assetsImg3);
-      formData.append("assetsImg4", assetsImg4);
-
       formData.append("assetsValue", assetsValue);
       formData.append("assetsCurrentValue", assetsCurrentValue);
       formData.append("remark", remark);
       formData.append("created_by", loginUserId);
       formData.append("status", "Available");
 
-      axios.post("http://34.93.135.33:8080/api/add_sim", formData, {});
-      setAssetsName("");
-      setVendorName("");
-      setAssetsID("");
-      setAssetsCategory("");
-      setDepartment("");
-      setDesignation("");
-      setRemark("");
-      setRegister("");
+      //There is asssets post data api
+      const response = await axios.post(
+        "http://34.93.135.33:8080/api/add_sim",
+        formData
+      );
+
+      const responseSimID = await response.data.simv.sim_id;
+
+      const imageData = new FormData();
+      imageData.append("sim_id", responseSimID);
+      imageData.append("uploaded_by", 90);
+      imageData.append("img1", assetsImg1);
+      imageData.append("img2", assetsImg2);
+      imageData.append("img3", assetsImg3);
+      imageData.append("img4", assetsImg4);
+      await axios.post(
+        "http://34.93.135.33:8080/api/add_assets_images",
+        imageData
+      );
 
       toastAlert("Form Submitted success");
       setIsFormSubmitted(true);
@@ -93,6 +129,7 @@ const SimMaster = () => {
     }
   };
 
+  //Redirect to sim overview page
   if (isFormSubmitted) {
     return <Navigate to="/sim-overview" />;
   }
@@ -106,45 +143,61 @@ const SimMaster = () => {
       </div>
       <form mainTitle="Assets" title="Assets Register" onSubmit={handleSubmit}>
         <div className="formarea">
-          <div className="row spacing_lg">
+          <div className="row">
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group ">
+                <TextField
+                  id="outlined-basic"
+                  label="Assets Name"
+                  type="text"
+                  value={assetsName}
+                  onChange={(e) => setAssetsName(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Assets ID"
+                  type="number"
+                  value={assetsID}
+                  onChange={(e) => setAssetsID(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group">
+                <TextField
+                  id="outlined-basic"
+                  label="Assets Other ID"
+                  type="number"
+                  value={assetsOtherID}
+                  onChange={(e) => setAssetsOtherID(e.target.value)}
+                />
+              </div>
+            </div>
+
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-              <TextField
-                id="outlined-basic"
-                label="Assets Name"
-                type="text"
-                value={assetsName}
-                onChange={(e) => setAssetsName(e.target.value)}
-              />
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  // sx={{ width: 600 }}
+                  id="combo-box-demo"
+                  options={inWarrantyOption}
+                  value={inWarranty}
+                  onChange={(e, newvalue) => setInWarranty(newvalue)}
+                  defaultValue={inWarrantyOption[0]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="In Warranty" />
+                  )}
+                />
+              </div>
+            </div>
 
-              <TextField
-                id="outlined-basic"
-                label="Assets ID"
-                type="number"
-                value={assetsID}
-                onChange={(e) => setAssetsID(e.target.value)}
-              />
-              <TextField
-                id="outlined-basic"
-                label="Assets Other ID"
-                type="number"
-                value={assetsOtherID}
-                onChange={(e) => setAssetsOtherID(e.target.value)}
-              />
-
-              <Autocomplete
-                disablePortal
-                sx={{ width: 600 }}
-                id="combo-box-demo"
-                options={inWarrantyOption}
-                value={inWarranty}
-                onChange={(e, newvalue) => setInWarranty(newvalue)}
-                defaultValue={inWarrantyOption[0]}
-                renderInput={(params) => (
-                  <TextField {...params} label="In Warranty" />
-                )}
-              />
-
-              {inWarranty == "Yes" && (
+            {inWarranty == "Yes" && (
+              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                 <div className="form-group">
                   <TextField
                     id="outlined-basic"
@@ -155,8 +208,26 @@ const SimMaster = () => {
                     onChange={(e) => setWarrantyDate(e.target.value)}
                   />
                 </div>
-              )}
+              </div>
+            )}
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  // sx={{ width: 600 }}
+                  id="combo-box-demo"
+                  options={assettype}
+                  value={assetType}
+                  onChange={(e, newvalue) => setAssetType(newvalue)}
+                  // defaultValue={assetcondition[0]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Asset Type" />
+                  )}
+                />
+              </div>
+            </div>
 
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -167,49 +238,81 @@ const SimMaster = () => {
                   onChange={(e) => setDateOfPurchase(e.target.value)}
                 />
               </div>
+            </div>
 
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={assetsCat}
+                  // options={categoryData.map((cat) => cat.category_name)}
+                  options={categoryData.map((cat) => ({
+                    label: cat.category_name,
+                    value: cat.category_id,
+                  }))}
                   value={assetsCategory}
-                  onChange={(e, newvalue) => setAssetsCategory(newvalue)}
-                  defaultValue={assetsCat[0]}
+                  onChange={(e, newvalue) => {
+                    setAssetsCategory((pre) => ({
+                      label: newvalue.label,
+                      category_id: newvalue.value,
+                    }));
+                  }}
                   renderInput={(params) => (
                     <TextField {...params} label="Assets Category" />
                   )}
                 />
               </div>
+            </div>
 
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={subCat}
+                  options={subcategoryData.map((sub) => ({
+                    label: sub.sub_category_name,
+                    value: sub.sub_category_id,
+                  }))}
                   value={subCategory}
-                  onChange={(e, newvalue) => setSubCategory(newvalue)}
-                  defaultValue={subCat[0]}
+                  onChange={(e, newvalue) => {
+                    setSubCategory((pre) => ({
+                      label: newvalue.label,
+                      sub_category_id: newvalue.value,
+                    }));
+                  }}
+                  // defaultValue={subCat[0]}
                   renderInput={(params) => (
                     <TextField {...params} label="Sub Category" />
                   )}
                 />
               </div>
+            </div>
 
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={subCat}
+                  options={vendorData.map((vendor) => ({
+                    label: vendor.vendor_name,
+                    value: vendor.vendor_id,
+                  }))}
                   value={vendorName}
-                  onCanPlay={(e, newvalue) => setVendorName(newvalue)}
-                  defaultValue={subCat[0]}
+                  onChange={(e, newvalue) => {
+                    setVendorName((pre) => ({
+                      label: newvalue.label,
+                      vendor_id: newvalue.value,
+                    }));
+                  }}
+                  // defaultValue={categoryData[0]}
                   renderInput={(params) => (
                     <TextField {...params} label="Vendor Name" />
                   )}
                 />
               </div>
+            </div>
 
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -219,9 +322,11 @@ const SimMaster = () => {
                   onChange={(e) => setInvoiceCopy(e.target.files[0])}
                 />
               </div>
+            </div>
 
-              <h5>User Audit</h5>
-              <hr />
+            <h5>User Audit</h5>
+            <hr className="mb-2 mt-2" />
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -231,6 +336,8 @@ const SimMaster = () => {
                   onChange={(e) => setSelfAuditPeriod(e.target.value)}
                 />
               </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -240,9 +347,12 @@ const SimMaster = () => {
                   onChange={(e) => setSelfAuditUnit(e.target.value)}
                 />
               </div>
-              <hr />
-              <h5>HR Audit</h5>
-              <hr />
+            </div>
+            <hr className="mb-2" />
+            <h5>HR Audit</h5>
+            <hr className="mb-2 mt-2" />
+
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -252,6 +362,9 @@ const SimMaster = () => {
                   onChange={(e) => setHrSelfAuditPeriod(e.target.value)}
                 />
               </div>
+            </div>
+
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -261,8 +374,10 @@ const SimMaster = () => {
                   onChange={(e) => setHrSelfAuditUnit(e.target.value)}
                 />
               </div>
-              <hr />
-              <h5>Assets Image</h5>
+            </div>
+
+            <h5 className="mb-3">Assets Image</h5>
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -272,6 +387,8 @@ const SimMaster = () => {
                   onChange={(e) => setAssetsImg1(e.target.files[0])}
                 />
               </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -281,6 +398,8 @@ const SimMaster = () => {
                   onChange={(e) => setAssetsImg2(e.target.files[0])}
                 />
               </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -290,6 +409,8 @@ const SimMaster = () => {
                   onChange={(e) => setAssetsImg3(e.target.files[0])}
                 />
               </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -299,6 +420,8 @@ const SimMaster = () => {
                   onChange={(e) => setAssetsImg4(e.target.files[0])}
                 />
               </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -308,6 +431,8 @@ const SimMaster = () => {
                   onChange={(e) => setAssetsValue(e.target.value)}
                 />
               </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -317,6 +442,8 @@ const SimMaster = () => {
                   onChange={(e) => setAssetsCurrentValue(e.target.value)}
                 />
               </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -327,12 +454,11 @@ const SimMaster = () => {
                   onChange={(e) => setRemark(e.target.value)}
                 />
               </div>
-              <button className="btn btn-primary" type="submit">
-                Submit
-              </button>
             </div>
+            <button className="btn btn-primary">Submit</button>
           </div>
         </div>
+        {/* </div> */}
       </form>
     </div>
   );
