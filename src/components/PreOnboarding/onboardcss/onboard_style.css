@@ -1821,6 +1821,16 @@ img {
   margin: 0px 0px 8px;
 }
 
+.thm_textbx h5 {
+  color: var(--text-white);
+  font-family: var(--font-recoleta);
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px 0px 8px;
+}
+
 .thm_textbx p {
   color: var(--text-white);
   font-size: 18px;

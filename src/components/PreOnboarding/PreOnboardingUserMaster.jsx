@@ -187,6 +187,7 @@ const PreOnboardingUserMaster = () => {
   const [nickName, setNickName] = useState("");
   const [getProfile, setGetProfile] = useState("");
   const [getNickName, setGetNickName] = useState("");
+  const [loginUserData, setLoginUserData] = useState("");
 
   const profileSingleData = () => {
     axios
@@ -236,13 +237,13 @@ const PreOnboardingUserMaster = () => {
   // Step 2: Render the list
   const renderList = () => {
     return Object.entries(groupedData).map(([displaySequence, items]) => (
-      <div key={displaySequence}>
+      <div className="thm_textbx" key={displaySequence}>
         <h3>
           {displaySequence} {items[0].heading}
         </h3>
         <p> {items[0].heading_desc}</p>
         {items.map((item, index) => (
-          <div key={index}>
+          <div className="thm_textbx" key={index}>
             <h5>
               {item.sub_heading_sequence} {item.sub_heading}
             </h5>
@@ -256,6 +257,14 @@ const PreOnboardingUserMaster = () => {
       </div>
     ));
   };
+
+  useEffect(() => {
+    axios
+      .post("http://34.93.135.33:8080/api/login_user_data", {
+        user_id: id,
+      })
+      .then((res) => setLoginUserData(res.data));
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -335,7 +344,8 @@ const PreOnboardingUserMaster = () => {
           designation_name,
           user_report_to_id,
           ctc,
-          offer_letter_send
+          offer_letter_send,
+          offer_later_status
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
@@ -927,7 +937,7 @@ const PreOnboardingUserMaster = () => {
                   </h3>
                 </div>
                 <div className="user_img">
-                  <img src={getProfile} alt="user" />
+                  <img src={getProfile ? getProfile : imageTest1} alt="user" />
                 </div>
                 <div className="user_logout">
                   <div className="dropdown">
