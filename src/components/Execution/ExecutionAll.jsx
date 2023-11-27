@@ -277,7 +277,7 @@ function ExecutionAll() {
 
         for (let i = 0; i < tempdata.length; i++) {
           axios
-            .post(`http://34.93.135.33:8080/api/get_percentage`, {
+            .post(`http://192.168.29.69:8080/api/get_percentage`, {
               p_id: tempdata[i].p_id,
             })
             .then((res) => {
@@ -532,56 +532,38 @@ function ExecutionAll() {
       headerName: "Update",
       width: 130,
       renderCell: (params) => {
-        // console.log(
-        //   Math.round(
-        //     updatePercentage.filter(
-        //       (e) => e.latestEntry.p_id == params.row.p_id
-        //     )[0]?.totalPercentage
-        //   ) == 100,
-        //   `p_id ${params.row.p_id}`
-        // );
+        
+
+        const num =
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0].totalPercentage
+            : 0;
+
+        const a =
+          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? statsUpdateFlag.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry?.stats_update_flag
+            : false;
+        const res = a ? num : 0;
+        
         return (
           <button
             type="button"
             className="btn btn-primary"
             data-toggle="modal"
             data-target="#myModal1"
-            disabled={
-              statsUpdateFlag.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              ).length > 0
-                ? statsUpdateFlag.filter(
-                    (e) => e.latestEntry.p_id == params.row.p_id
-                  )[0]?.latestEntry?.stats_update_flag
-                   ||
-                  Math.round(
-                    +updatePercentage.filter(
-                      (e) => e.latestEntry.p_id == params.row.p_id
-                    )[0]?.totalPercentage)? Math.round(
-                    updatePercentage.filter(
-                      (e) => e.latestEntry.p_id == params.row.p_id
-                    )[0]?.totalPercentage
-                  ) == 100:true
-              :
-              Math.round(
-                +updatePercentage.filter(
-                  (e) => e.latestEntry.p_id == params.row.p_id
-                )[0]?.totalPercentage
-              )
-                ? Math.round(
-                    +updatePercentage.filter(
-                      (e) => e.latestEntry.p_id == params.row.p_id
-                    )[0]?.totalPercentage
-                  )
-                : 0 == 0 ||
-                  Math.round(
-                    updatePercentage.filter(
-                      (e) => e.latestEntry.p_id == params.row.p_id
-                    )[0]?.totalPercentage
-                  ) == 100
-                ? false
-                : true
-            }
+              disabled={
+                
+                  ( res ==0 ||
+                   res == 100
+                  ? false : true)
+                  
+              }
             onClick={() => handleRowClick(params.row)}
           >
             Set Stats
@@ -594,9 +576,6 @@ function ExecutionAll() {
       width: 150,
       headerName: "History",
       renderCell: (params) => {
-        console.log(  statsUpdateFlag.filter(
-          (e) => e.latestEntry?.p_id == params.row.p_id
-        ).length>0?statsUpdateFlag.filter(e=>e.latestEntry.p_id==params.row.p_id)[0].latestEntry.stats_update_flag:"",`p_id ${params.row.p_id}`)
         return (
           <button
             type="button"
@@ -605,7 +584,11 @@ function ExecutionAll() {
             disabled={
               statsUpdateFlag.filter(
                 (e) => e.latestEntry?.p_id == params.row.p_id
-              ).length>0?!statsUpdateFlag.filter(e=>e.latestEntry.p_id==params.row.p_id)[0].latestEntry.stats_update_flag:true
+              ).length > 0
+                ? !statsUpdateFlag.filter(
+                    (e) => e.latestEntry.p_id == params.row.p_id
+                  )[0].latestEntry.stats_update_flag
+                : true
             }
           >
             See History
@@ -626,7 +609,11 @@ function ExecutionAll() {
             disabled={
               statsUpdateFlag.filter(
                 (e) => e.latestEntry?.p_id == params.row.p_id
-              ).length>0?!statsUpdateFlag.filter(e=>e.latestEntry.p_id==params.row.p_id)[0].latestEntry.stats_update_flag:true
+              ).length > 0
+                ? !statsUpdateFlag.filter(
+                    (e) => e.latestEntry.p_id == params.row.p_id
+                  )[0].latestEntry.stats_update_flag
+                : true
             }
           >
             Update
