@@ -40,8 +40,8 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function ExeUPdate() {
-  const location=useLocation()
-  console.log(location.state)
+  const location = useLocation();
+
   const { toastAlert } = useGlobalContext();
   const [rows, setRows] = useState([]);
   const [pagemode, setPagemode] = useState(1);
@@ -112,7 +112,7 @@ export default function ExeUPdate() {
   const navigate = useNavigate();
   const saveStats = async (e) => {
     e.preventDefault();
-    console.log("save stats");
+
     const formData = new FormData();
     formData.append("_id", id.id);
     formData.append("reach", reach);
@@ -163,15 +163,11 @@ export default function ExeUPdate() {
     formData.append("country_image_upload", countryImg);
 
     axios
-      .put(
-        `http://34.93.135.33:8080/api/edit_exe_ip_count_history`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+      .put(`http://34.93.135.33:8080/api/edit_exe_ip_count_history`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then(() => {
         navigate("/admin/exeexecution/all");
         toastAlert("Form Submitted success");
@@ -180,13 +176,14 @@ export default function ExeUPdate() {
 
   const apiCall = () => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_exe_ip_count_history/${location.state}`)
+      .get(
+        `http://34.93.135.33:8080/api/get_exe_ip_count_history/${location.state}`
+      )
       .then((res) => {
         let data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
         });
         data = data[data.length - 1];
-        console.log((data.start_date)?.split("T")[0]);
         setReach(data.reach);
         setProfileVisit(data.profile_visit);
         setAge1Percentage(data.Age_13_17_percent);
@@ -204,8 +201,8 @@ export default function ExeUPdate() {
         setCity5(data.city5_name);
         setCityImg(data.city_image_upload_url);
         setEndDate(data.end_date);
-        setEndDate(dayjs(new Date((data.end_date)?.split("T")[0])));
-        setStartDate(dayjs(new Date((data.start_date)?.split("T")[0])));
+        setEndDate(dayjs(new Date(data.end_date?.split("T")[0])));
+        setStartDate(dayjs(new Date(data.start_date?.split("T")[0])));
         setEngagement(data.engagement);
         setEngagementImg(data.engagement_upload_image_url);
         setFemalePercentage(data.female_percent);
@@ -254,11 +251,7 @@ export default function ExeUPdate() {
     setCityList([
       ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
     ]);
-    console.log([
-      ...new Set(
-        City.getCitiesOfCountry("IN").map((city) => city.name.toLowerCase())
-      ),
-    ]);
+    
   }, []);
 
   const cityCopyValidation = (value) => {
@@ -285,11 +278,7 @@ export default function ExeUPdate() {
     const offset = date.getTimezoneOffset();
     date.setMinutes(date.getMinutes() - offset);
 
-    // Getting ISO string after adjustment
-    const isoDate = date.toISOString();
 
-    console.log(isoDate);
-    console.log(isoDate.replace("Z", "+00:00"));
 
     setEndDate(newValue);
   };
@@ -317,7 +306,7 @@ export default function ExeUPdate() {
       age5Percentage +
       +age6percentage +
       +age7Percentage;
-    console.log(sum);
+
     setTotalPercentage(sum);
   }, [
     age1Percentage,
@@ -336,17 +325,13 @@ export default function ExeUPdate() {
     const offset = date.getTimezoneOffset();
     date.setMinutes(date.getMinutes() - offset);
 
-    // Getting ISO string after adjustment
-    const isoDate = date.toISOString();
 
-    console.log(isoDate);
-    console.log(isoDate.replace("Z", "+00:00"));
 
     setStartDate(newValue);
   };
 
   const id = useParams();
-  console.log(id);
+
   return (
     <div>
       <div style={{ width: "80%", margin: "0 0 0 0" }}>
@@ -386,43 +371,38 @@ export default function ExeUPdate() {
               />
             )}
           />
-          {statesFor !== "Quarterly" &&
-            statesFor !== null &&
+          {statesFor !== "Quarterly" && statesFor !== null && (
             // stateForIsNotQuater &&
-             (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  className="my-1"
-                  label="Start Date *"
-                  format="DD/MM/YY"
-                  value={startDate}
-                  onChange={(newValue) => {
-                    handleStartDateChange(newValue);
-                    statesFor == "Daily" ? setEndDate(newValue) : "";
-                  }}
-                />
-              </LocalizationProvider>
-            )}  
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                className="my-1"
+                label="Start Date *"
+                format="DD/MM/YY"
+                value={startDate}
+                onChange={(newValue) => {
+                  handleStartDateChange(newValue);
+                  statesFor == "Daily" ? setEndDate(newValue) : "";
+                }}
+              />
+            </LocalizationProvider>
+          )}
 
-          {statesFor !== null &&
-            statesFor !== "Quarterly" &&
-            // stateForIsNotQuater && 
-            (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  className="my-1 mx-3"
-                  label="End Date *"
-                  format="DD/MM/YY"
-                  value={endDate}
-                  onChange={(newValue) => {
-                    handleEndDateChange(newValue);
-                  }}
-                />
-              </LocalizationProvider>
-            )} 
-          {statesFor == "Quarterly" && 
-          // !stateForIsNotQuater && 
-          (
+          {statesFor !== null && statesFor !== "Quarterly" && (
+            // stateForIsNotQuater &&
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                className="my-1 mx-3"
+                label="End Date *"
+                format="DD/MM/YY"
+                value={endDate}
+                onChange={(newValue) => {
+                  handleEndDateChange(newValue);
+                }}
+              />
+            </LocalizationProvider>
+          )}
+          {statesFor == "Quarterly" && (
+            // !stateForIsNotQuater &&
             <Autocomplete
               className="my-1"
               disablePortal
@@ -447,646 +427,722 @@ export default function ExeUPdate() {
             />
           )}
         </div>
-        <div className="row">
-          <div className="col-md-3 py-1 mb-2">
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              size="small"
-            >
-              Image
-              <VisuallyHiddenInput
-                onChange={(e) => {
-                  setReachandImpressionImg(e.target.files[0]);
-                }}
-                type="file"
-                accept="image/png, image/jpeg"
-              />
-            </Button>
-          </div>
-          <div className="col-md-3 py-1 mb-2"></div>
-          <div className="col-md-3 py-1 mb-2">
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              size="small"
-            >
-              Image
-              <VisuallyHiddenInput
-                onChange={(e) => {
-                  setEngagementImg(e.target.files[0]);
-                }}
-                type="file"
-                accept="image/png, image/jpeg"
-              />
-            </Button>
-          </div>
-          <div className="col-md-3 py-1 mb-2">
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              size="small"
-            >
-              image
-              <VisuallyHiddenInput
-                onChange={(e) => {
-                  setStoryViewImg(e.target.files[0]);
-                }}
-                type="file"
-                accept="image/png, image/jpeg"
-              />
-            </Button>
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              size="small"
-            >
-              video
-              <VisuallyHiddenInput
-                onChange={(e) => {
-                  setStoryViewVideo(e.target.files[0]);
-                }}
-                type="file"
-                accept=" video/mp4, video/avi"
-              />
-            </Button>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-3">
-            <TextField
-              label="Reach *"
-              type="number"
-              value={reach}
-              onChange={(e) => {
-                e.target.value > 0
-                  ? setReachValidation(true)
-                  : setReachValidation(false),
-                  setReach(e.target.value);
-              }}
-              error={!reachValidation}
-              helperText={!reachValidation ? "Please enter a valid Count" : ""}
-            />
-          </div>
-          <div className="col-md-3">
-            <TextField
-              label="Impressions *"
-              type="number"
-              value={impression}
-              // fieldGrid={4}
-              onChange={(e) => {
-                e.target.value > 0
-                  ? setImpressionValidation(true)
-                  : setImpressionValidation(false),
-                  setImpression(e.target.value);
-              }}
-              error={!impressionValidation}
-              helperText={
-                !impressionValidation ? "Please enter a valid Count" : ""
-              }
-            />
+        <div className="row ">
+          <div className="card">
+            <div className="card-body">
+              <div className="col-md-3 col-lg-12  my-2">
+                <TextField
+                  label="Reach *"
+                  type="number"
+                  value={reach}
+                  onChange={(e) => {
+                    e.target.value > 0
+                      ? setReachValidation(true)
+                      : setReachValidation(false),
+                      setReach(e.target.value);
+                  }}
+                  error={!reachValidation}
+                  helperText={
+                    !reachValidation ? "Please enter a valid Count" : ""
+                  }
+                />
+              </div>
+              <div className="col-md-3 col-lg-12 d-block my-2">
+                <TextField
+                  label="Impressions *"
+                  type="number"
+                  value={impression}
+                  // fieldGrid={4}
+                  onChange={(e) => {
+                    e.target.value > 0
+                      ? setImpressionValidation(true)
+                      : setImpressionValidation(false),
+                      setImpression(e.target.value);
+                  }}
+                  error={!impressionValidation}
+                  helperText={
+                    !impressionValidation ? "Please enter a valid Count" : ""
+                  }
+                />
+              </div>
+              <div className="col-md-3 col-lg-12 my-2">
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                >
+                  Image
+                  <VisuallyHiddenInput
+                    onChange={(e) => {
+                      setReachandImpressionImg(e.target.files[0]);
+                    }}
+                    type="file"
+                    accept="image/png, image/jpeg"
+                  />
+                </Button>
+              </div>
+
+              <div className="col-md-3 col-lg-12 d-block my-2">
+                <TextField
+                  label="Engagement *"
+                  type="number"
+                  value={engagement}
+                  // fieldGrid={4}
+                  onChange={(e) => {
+                    e.target.value > 0
+                      ? setEngagementValidation(true)
+                      : setEndDateIsValid(false),
+                      setEngagement(e.target.value);
+                  }}
+                  error={!engagementValidation}
+                  helperText={
+                    !engagementValidation ? "Please enter a valid Count" : ""
+                  }
+                />
+              </div>
+              <div className="col-md-3 py-1 mb-2">
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                >
+                  Image
+                  <VisuallyHiddenInput
+                    onChange={(e) => {
+                      setEngagementImg(e.target.files[0]);
+                    }}
+                    type="file"
+                    accept="image/png, image/jpeg"
+                  />
+                </Button>
+              </div>
+              <div className="col-md-3 col-lg-12 d-block my-2">
+                <TextField
+                  label="Story View *"
+                  type="number"
+                  value={storyView}
+                  // fieldGrid={4}
+                  onChange={(e) => {
+                    e.target.value > 0
+                      ? setStoryViewValidation(true)
+                      : setStoryViewValidation(false),
+                      setStoryView(e.target.value);
+                  }}
+                  error={!storyViewValidation}
+                  helperText={
+                    !storyViewValidation ? "Please enter a valid Count" : ""
+                  }
+                />
+              </div>
+              <div className="col-md-3 py-1 mb-2">
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                >
+                  image
+                  <VisuallyHiddenInput
+                    onChange={(e) => {
+                      setStoryViewImg(e.target.files[0]);
+                    }}
+                    type="file"
+                    accept="image/png, image/jpeg"
+                  />
+                </Button>
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                >
+                  video
+                  <VisuallyHiddenInput
+                    onChange={(e) => {
+                      setStoryViewVideo(e.target.files[0]);
+                    }}
+                    type="file"
+                    accept=" video/mp4, video/avi"
+                  />
+                </Button>
+              </div>
+              <div className="col-md-3 col-lg-12 d-block my-2">
+                <TextField
+                  label="Profile Visit"
+                  type="number"
+                  value={profileVisit}
+                  onChange={(e) => setProfileVisit(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="col-md-3 ">
-            <TextField
-              label="Engagement *"
-              type="number"
-              value={engagement}
-              // fieldGrid={4}
-              onChange={(e) => {
-                e.target.value > 0
-                  ? setEngagementValidation(true)
-                  : setEndDateIsValid(false),
-                  setEngagement(e.target.value);
-              }}
-              error={!engagementValidation}
-              helperText={
-                !engagementValidation ? "Please enter a valid Count" : ""
-              }
-            />
-          </div>
-          <div className="col-md-3 ">
-            <TextField
-              label="Story View *"
-              type="number"
-              value={storyView}
-              // fieldGrid={4}
-              onChange={(e) => {
-                e.target.value > 0
-                  ? setStoryViewValidation(true)
-                  : setStoryViewValidation(false),
-                  setStoryView(e.target.value);
-              }}
-              error={!storyViewValidation}
-              helperText={
-                !storyViewValidation ? "Please enter a valid Count" : ""
-              }
-            />
-          </div>
-        </div>
-        <div className="my-3">
-          <TextField
-            label="Profile Visit"
-            type="number"
-            value={profileVisit}
-            onChange={(e) => setProfileVisit(e.target.value)}
-          />
-        </div>
-        <label className="mt-3 h6">City</label>
-        <div className="d-flex">
-          <Autocomplete
-            id="combo-box-demo"
-            value={city1}
+          <div className="card">
+            <div className="card-body">
+              <label className="mt-3 h6">City</label>
+              <Autocomplete
+                id="combo-box-demo"
+                value={city1}
+                options={cityList.map((city) => city)}
+                onChange={(e, value) => {
+                  cityCopyValidation(value);
+                  setCity1(value);
+                }}
+                sx={{ width: 150 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="City 1" />
+                )}
+              />
+              <TextField
+                className="mb-2 "
+                type="number"
+                value={city1Percentage}
+                onChange={(e) => {
+                  setCity1Percentage(e.target.value);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">%</InputAdornment>
+                  ),
+                  inputProps: {
+                    min: 0,
+                    max: 100,
+                  },
+                }}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                value={city2}
+                options={cityList.map((city) => city)}
+                onChange={(e, value) => {
+                  setCity2(value);
+                  cityCopyValidation(value);
+                }}
+                sx={{ width: 150 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="City 2" />
+                )}
+              />
+              <TextField
+                className="mb-2"
+                value={city2Percentage}
+                onChange={(e) => {
+                  setCity2Percentage(e.target.value);
+                }}
+                type="number"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">%</InputAdornment>
+                  ),
+                  inputProps: {
+                    min: 0,
+                    max: 100,
+                  },
+                }}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                value={city3}
+                options={cityList.map((city) => city)}
+                onChange={(e, value) => {
+                  setCity3(value);
+                  cityCopyValidation(value);
+                }}
+                sx={{ width: 150 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="City 3" />
+                )}
+              />
+              <TextField
+                className="mb-2"
+                type="number"
+                value={city3Percentage}
+                onChange={(e) => {
+                  setCity3Percentage(e.target.value);
 
-            options={cityList.map((city) => city)}
-            onChange={(e, value) => {
-              cityCopyValidation(value);
-              setCity1(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => <TextField {...params} label="City 1" />}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            type="number"
-            value={city1Percentage}
-            onChange={(e) => {
-              setCity1Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            value={city2}
-            options={cityList.map((city) => city)}
-            onChange={(e, value) => {
-              setCity2(value);
-              cityCopyValidation(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => <TextField {...params} label="City 2" />}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            value={city2Percentage}
-            onChange={(e) => {
-              setCity2Percentage(e.target.value);
-            }}
-            type="number"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            value={city3}
-            options={cityList.map((city) => city)}
-            onChange={(e, value) => {
-              setCity3(value);
-              cityCopyValidation(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => <TextField {...params} label="City 3" />}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            type="number"
-            value={city3Percentage}
-            onChange={(e) => {
-              setCity3Percentage(e.target.value);
-              console.log(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            value={city4}
-            options={cityList.map((city) => city)}
-            onChange={(e, value) => {
-              setCity4(value);
-              cityCopyValidation(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => <TextField {...params} label="City 4" />}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            type="number"
-            value={city4Percentage}
-            onChange={(e) => {
-              setCity4Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            value={city5}
-            options={cityList.map((city) => city)}
-            onChange={(e, value) => {
-              setCity5(value);
-              cityCopyValidation(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => <TextField {...params} label="City 5" />}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-2 "
-            type="number"
-            value={city5Percentage}
-            onChange={(e) => {
-              setCity5Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-            size="small"
-            className="mt-4"
-            onChange={(e) => {
-              setCityImg(e.target.files[0]);
-            }}
-          >
-            Image
-            <VisuallyHiddenInput type="file" accept="image/png, image/jpeg" />
-          </Button>
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">%</InputAdornment>
+                  ),
+                  inputProps: {
+                    min: 0,
+                    max: 100,
+                  },
+                }}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                value={city4}
+                options={cityList.map((city) => city)}
+                onChange={(e, value) => {
+                  setCity4(value);
+                  cityCopyValidation(value);
+                }}
+                sx={{ width: 150 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="City 4" />
+                )}
+              />
+              <TextField
+                className="mb-2"
+                type="number"
+                value={city4Percentage}
+                onChange={(e) => {
+                  setCity4Percentage(e.target.value);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">%</InputAdornment>
+                  ),
+                  inputProps: {
+                    min: 0,
+                    max: 100,
+                  },
+                }}
+              />
+              <Autocomplete
+                id="combo-box-demo"
+                value={city5}
+                options={cityList.map((city) => city)}
+                onChange={(e, value) => {
+                  setCity5(value);
+                  cityCopyValidation(value);
+                }}
+                sx={{ width: 150 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="City 5" />
+                )}
+              />
+              <TextField
+                className="mb-2 "
+                type="number"
+                value={city5Percentage}
+                onChange={(e) => {
+                  setCity5Percentage(e.target.value);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">%</InputAdornment>
+                  ),
+                  inputProps: {
+                    min: 0,
+                    max: 100,
+                  },
+                }}
+              />
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                size="small"
+                className="mt-4"
+                onChange={(e) => {
+                  setCityImg(e.target.files[0]);
+                }}
+              >
+                Image
+                <VisuallyHiddenInput
+                  type="file"
+                  accept="image/png, image/jpeg"
+                />
+              </Button>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-body">
+              <label className="mt-3 h6">Country</label>
+              <div>
+                <Autocomplete
+                  id="combo-box-demo"
+                  value={country1}
+                  options={countryList.map((country) => country.name)}
+                  onChange={(e, value) => {
+                    countryCopyValidation(value);
+                    setCountry1(value);
+                  }}
+                  // sx={{ width: 250 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Country 1" />
+                  )}
+                />
+                <TextField
+                  // style={{ width: "10%" }}
+                  className="mb-2"
+                  type="number"
+                  value={country1Percentage}
+                  onChange={(e) => {
+                    setCountry1Percentage(e.target.value);
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputProps: {
+                      min: 0,
+                      max: 100,
+                    },
+                  }}
+                />
+                <Autocomplete
+                  disablePortal
+                  value={country2}
+                  onChange={(e, value) => {
+                    countryCopyValidation(value);
+                    setCountry2(value);
+                  }}
+                  id="combo-box-demo"
+                  options={countryList.map((country) => country.name)}
+                  // sx={{ width: 150 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Country 2" />
+                  )}
+                />
+                <TextField
+                  style={{ width: "10%" }}
+                  className="mb-2"
+                  value={country2Percentage}
+                  onChange={(e) => {
+                    setCountry2Percentage(e.target.value);
+                  }}
+                  type="number"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputProps: {
+                      min: 0,
+                      max: 100,
+                    },
+                  }}
+                />
+                <Autocomplete
+                  disablePortal
+                  value={country3}
+                  onChange={(e, value) => {
+                    setCountry3(value);
+                    countryCopyValidation(value);
+                  }}
+                  id="combo-box-demo"
+                  options={countryList.map((country) => country.name)}
+                  // sx={{ width: 150 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Country 3" />
+                  )}
+                />
+                <TextField
+                  style={{ width: "10%" }}
+                  className="mb-2"
+                  type="number"
+                  value={country3Percentage}
+                  onChange={(e) => {
+                    setCountry3Percentage(e.target.value);
+
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputProps: {
+                      min: 0,
+                      max: 100,
+                    },
+                  }}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={countryList.map((country) => country.name)}
+                  value={country4}
+                  onChange={(e, value) => {
+                    setCountry4(value);
+                    countryCopyValidation(value);
+                  }}
+                  // sx={{ width: 150 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Country 4" />
+                  )}
+                />
+                <TextField
+                  // style={{ width: "10%" }}
+                  className="mb-2"
+                  type="number"
+                  value={country4Percentage}
+                  onChange={(e) => {
+                    setCountry4Percentage(e.target.value);
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputProps: {
+                      min: 0,
+                      max: 100,
+                    },
+                  }}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={countryList.map((country) => country.name)}
+                  value={country5}
+                  onChange={(e, value) => {
+                    setCountry5(value);
+                    countryCopyValidation(value);
+                  }}
+                  // sx={{ width: 150 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Country 5" />
+                  )}
+                />
+                <TextField
+                  // style={{ width: "10%" }}
+                  className="me-2"
+                  type="number"
+                  value={country5Percentage}
+                  onChange={(e) => {
+                    setCountry5Percentage(e.target.value);
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputProps: {
+                      min: 0,
+                      max: 100,
+                    },
+                  }}
+                />
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                  className="mt-3 d-block"
+                  onChange={(e) => {
+                    setCountryImg(e.target.files[0]);
+                  }}
+                >
+                  Image
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept="image/png, image/jpeg"
+                  />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="card">
+              <div className="card-body">
+                <label className="h6 d-block">Age Group</label>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="13-17"
+                    type="number"
+                    className="mx-1"
+                    value={age1Percentage}
+                    onChange={(e) =>
+                      handlePercentageChange(e.target.value, setAge1Percentage)
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="18-24"
+                    type="number"
+                    className="mx-1"
+                    value={age2Percentage}
+                    onChange={(e) =>
+                      handlePercentageChange(e.target.value, setAge2Percentage)
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="25-34"
+                    type="number"
+                    className="mx-1"
+                    value={age3Percentage}
+                    onChange={(e) =>
+                      handlePercentageChange(e.target.value, setAge3Percentage)
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="35-44"
+                    type="number"
+                    className="mx-1"
+                    value={age4Percentage}
+                    onChange={(e) =>
+                      handlePercentageChange(e.target.value, setAge4Percentage)
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="45-54"
+                    type="number"
+                    className="mx-1"
+                    value={age5Percentage}
+                    onChange={(e) =>
+                      handlePercentageChange(e.target.value, setAge5Percentage)
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="55-64"
+                    type="number"
+                    className="mx-1"
+                    value={age6percentage}
+                    onChange={(e) => {
+                      setAge6Percentage(e.target.value);
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <div className="col-md-3 col-lg-12 my-2">
+                  <TextField
+                    label="65+"
+                    type="number"
+                    className="mx-1"
+                    value={age7Percentage}
+                    onChange={(e) => {
+                      setAge7Percentage(e.target.value);
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">%</InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0,
+                        max: 100,
+                      },
+                    }}
+                  />
+                </div>
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                  className="mt-4"
+                  onChange={(e) => {
+                    setAgeImg(e.target.files[0]);
+                  }}
+                >
+                  Image
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept="image/png, image/jpeg"
+                  />
+                </Button>
+              </div>
+              {totalPercentage < 98 && (
+                <span style={{ color: "red" }}>
+                  Total percentage must be at least 98%
+                </span>
+              )}
+              {totalPercentage > 100 && (
+                <span style={{ color: "red" }}>
+                  Total percentage cannot exceed 100%
+                </span>
+              )}
+            </div>
+            <div></div>
+            <label className="h6 d-block">Gender</label>
+            <TextField
+              label="Male"
+              type="number"
+              value={malePercentage}
+              onChange={(e) => {
+                setMalePercentage(e.target.value);
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                inputProps: {
+                  min: 0,
+                  max: 100,
+                },
+              }}
+            />
+            <TextField
+              label="Female"
+              type="number"
+              className="mx-3"
+              value={femalePercentage}
+              onChange={(e) => {
+                setFemalePercentage(e.target.value);
+              }}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                inputProps: {
+                  min: 0,
+                  max: 100,
+                },
+              }}
+            />
+          </div>
         </div>
-        <label className="mt-3 h6">Country</label>
-        <div className="d-flex">
-          <Autocomplete
-            id="combo-box-demo"
-            value={country1}
-            options={countryList.map((country) => country.name)}
-            onChange={(e, value) => {
-              countryCopyValidation(value);
-              setCountry1(value);
-            }}
-            sx={{ width: 250 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Country 1" />
-            )}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            type="number"
-            value={country1Percentage}
-            onChange={(e) => {
-              setCountry1Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            disablePortal
-            value={country2}
-            onChange={(e, value) => {
-              countryCopyValidation(value);
-              setCountry2(value);
-            }}
-            id="combo-box-demo"
-            options={countryList.map((country) => country.name)}
-            sx={{ width: 150 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Country 2" />
-            )}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            value={country2Percentage}
-            onChange={(e) => {
-              setCountry2Percentage(e.target.value);
-            }}
-            type="number"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            disablePortal
-            value={country3}
-            onChange={(e, value) => {
-              setCountry3(value);
-              countryCopyValidation(value);
-            }}
-            id="combo-box-demo"
-            options={countryList.map((country) => country.name)}
-            sx={{ width: 150 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Country 3" />
-            )}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            type="number"
-            value={country3Percentage}
-            onChange={(e) => {
-              setCountry3Percentage(e.target.value);
-              console.log(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={countryList.map((country) => country.name)}
-            value={country4}
-            onChange={(e, value) => {
-              setCountry4(value);
-              countryCopyValidation(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Country 4" />
-            )}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-1"
-            type="number"
-            value={country4Percentage}
-            onChange={(e) => {
-              setCountry4Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={countryList.map((country) => country.name)}
-            value={country5}
-            onChange={(e, value) => {
-              setCountry5(value);
-              countryCopyValidation(value);
-            }}
-            sx={{ width: 150 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Country 5" />
-            )}
-          />
-          <TextField
-            style={{ width: "10%" }}
-            className="me-2"
-            type="number"
-            value={country5Percentage}
-            onChange={(e) => {
-              setCountry5Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-            size="small"
-            className="mt-3"
-            onChange={(e) => {
-              setCountryImg(e.target.files[0]);
-            }}
-          >
-            Image
-            <VisuallyHiddenInput type="file" accept="image/png, image/jpeg" />
-          </Button>
-        </div>
-        <div>
-          <label className="h6 d-block">Gender</label>
-          <TextField
-            label="Male"
-            type="number"
-            value={malePercentage}
-            onChange={(e) => {
-              setMalePercentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="Female"
-            type="number"
-            className="mx-3"
-            value={femalePercentage}
-            onChange={(e) => {
-              setFemalePercentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-        </div>
-        <div>
-          <label className="h6 d-block">Age Group</label>
-          <TextField
-            label="13-17"
-            type="number"
-            className="mx-1"
-            value={age1Percentage}
-            onChange={(e) =>
-              handlePercentageChange(e.target.value, setAge1Percentage)
-            }
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="18-24"
-            type="number"
-            className="mx-1"
-            value={age2Percentage}
-            onChange={(e) =>
-              handlePercentageChange(e.target.value, setAge2Percentage)
-            }
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="25-34"
-            type="number"
-            className="mx-1"
-            value={age3Percentage}
-            onChange={(e) =>
-              handlePercentageChange(e.target.value, setAge3Percentage)
-            }
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="35-44"
-            type="number"
-            className="mx-1"
-            value={age4Percentage}
-            onChange={(e) =>
-              handlePercentageChange(e.target.value, setAge4Percentage)
-            }
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="45-54"
-            type="number"
-            className="mx-1"
-            value={age5Percentage}
-            onChange={(e) =>
-              handlePercentageChange(e.target.value, setAge5Percentage)
-            }
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="55-64"
-            type="number"
-            className="mx-1"
-            value={age6percentage}
-            onChange={(e) => {
-              setAge6Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <TextField
-            label="65+"
-            type="number"
-            className="mx-1"
-            value={age7Percentage}
-            onChange={(e) => {
-              setAge7Percentage(e.target.value);
-            }}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">%</InputAdornment>,
-              inputProps: {
-                min: 0,
-                max: 100,
-              },
-            }}
-          />
-          <Button
-            component="label"
-            variant="contained"
-            startIcon={<CloudUploadIcon />}
-            size="small"
-            className="mt-4"
-            onChange={(e) => {
-              setAgeImg(e.target.files[0]);
-            }}
-          >
-            Image
-            <VisuallyHiddenInput type="file" accept="image/png, image/jpeg" />
-          </Button>
-        </div>
-        {totalPercentage < 98 && (
-          <span style={{ color: "red" }}>
-            Total percentage must be at least 98%
-          </span>
-        )}
-        {totalPercentage > 100 && (
-          <span style={{ color: "red" }}>
-            Total percentage cannot exceed 100%
-          </span>
-        )}
       </div>
       <button
         onClick={saveStats}

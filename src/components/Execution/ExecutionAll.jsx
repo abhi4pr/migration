@@ -277,7 +277,7 @@ function ExecutionAll() {
 
         for (let i = 0; i < tempdata.length; i++) {
           axios
-            .post(`http://34.93.135.33:8080/api/get_percentage`, {
+            .post(`http://192.168.29.69:8080/api/get_percentage`, {
               p_id: tempdata[i].p_id,
             })
             .then((res) => {
@@ -532,26 +532,38 @@ function ExecutionAll() {
       headerName: "Update",
       width: 130,
       renderCell: (params) => {
+        
+
+        const num =
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0].totalPercentage
+            : 0;
+
+        const a =
+          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? statsUpdateFlag.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry?.stats_update_flag
+            : false;
+        const res = a ? num : 0;
+        
         return (
           <button
             type="button"
             className="btn btn-primary"
             data-toggle="modal"
             data-target="#myModal1"
-            disabled={
-              Math.round(
-                +updatePercentage.filter(
-                  (e) => e.latestEntry.p_id == params.row.p_id
-                )[0]?.totalPercentage
-              ) == 0 ||
-              Math.round(
-                updatePercentage.filter(
-                  (e) => e.latestEntry.p_id == params.row.p_id
-                )[0]?.totalPercentage
-              ) == 100
-                ? false
-                : true
-            }
+              disabled={
+                
+                  ( res ==0 ||
+                   res == 100
+                  ? false : true)
+                  
+              }
             onClick={() => handleRowClick(params.row)}
           >
             Set Stats
@@ -570,8 +582,14 @@ function ExecutionAll() {
             className="btn btn-primary"
             onClick={() => handleHistoryRowClick(params.row)}
             disabled={
-               ! statsUpdateFlag.find(e => e.latestEntry?.p_id == params.row.p_id)
-          }
+              statsUpdateFlag.filter(
+                (e) => e.latestEntry?.p_id == params.row.p_id
+              ).length > 0
+                ? !statsUpdateFlag.filter(
+                    (e) => e.latestEntry.p_id == params.row.p_id
+                  )[0].latestEntry.stats_update_flag
+                : true
+            }
           >
             See History
           </button>
@@ -588,6 +606,15 @@ function ExecutionAll() {
             type="button"
             className="btn btn-primary"
             onClick={() => handleUpdateRowClick(params.row)}
+            disabled={
+              statsUpdateFlag.filter(
+                (e) => e.latestEntry?.p_id == params.row.p_id
+              ).length > 0
+                ? !statsUpdateFlag.filter(
+                    (e) => e.latestEntry.p_id == params.row.p_id
+                  )[0].latestEntry.stats_update_flag
+                : true
+            }
           >
             Update
           </button>
