@@ -532,6 +532,14 @@ function ExecutionAll() {
       headerName: "Update",
       width: 130,
       renderCell: (params) => {
+        // console.log(
+        //   Math.round(
+        //     updatePercentage.filter(
+        //       (e) => e.latestEntry.p_id == params.row.p_id
+        //     )[0]?.totalPercentage
+        //   ) == 100,
+        //   `p_id ${params.row.p_id}`
+        // );
         return (
           <button
             type="button"
@@ -539,16 +547,38 @@ function ExecutionAll() {
             data-toggle="modal"
             data-target="#myModal1"
             disabled={
+              statsUpdateFlag.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              ).length > 0
+                ? statsUpdateFlag.filter(
+                    (e) => e.latestEntry.p_id == params.row.p_id
+                  )[0]?.latestEntry?.stats_update_flag
+                   ||
+                  Math.round(
+                    +updatePercentage.filter(
+                      (e) => e.latestEntry.p_id == params.row.p_id
+                    )[0]?.totalPercentage)? Math.round(
+                    updatePercentage.filter(
+                      (e) => e.latestEntry.p_id == params.row.p_id
+                    )[0]?.totalPercentage
+                  ) == 100:true
+              :
               Math.round(
                 +updatePercentage.filter(
                   (e) => e.latestEntry.p_id == params.row.p_id
                 )[0]?.totalPercentage
-              ) == 0 ||
-              Math.round(
-                updatePercentage.filter(
-                  (e) => e.latestEntry.p_id == params.row.p_id
-                )[0]?.totalPercentage
-              ) == 100
+              )
+                ? Math.round(
+                    +updatePercentage.filter(
+                      (e) => e.latestEntry.p_id == params.row.p_id
+                    )[0]?.totalPercentage
+                  )
+                : 0 == 0 ||
+                  Math.round(
+                    updatePercentage.filter(
+                      (e) => e.latestEntry.p_id == params.row.p_id
+                    )[0]?.totalPercentage
+                  ) == 100
                 ? false
                 : true
             }
@@ -564,14 +594,19 @@ function ExecutionAll() {
       width: 150,
       headerName: "History",
       renderCell: (params) => {
+        console.log(  statsUpdateFlag.filter(
+          (e) => e.latestEntry?.p_id == params.row.p_id
+        ).length>0?statsUpdateFlag.filter(e=>e.latestEntry.p_id==params.row.p_id)[0].latestEntry.stats_update_flag:"",`p_id ${params.row.p_id}`)
         return (
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => handleHistoryRowClick(params.row)}
             disabled={
-               ! statsUpdateFlag.find(e => e.latestEntry?.p_id == params.row.p_id)
-          }
+              statsUpdateFlag.filter(
+                (e) => e.latestEntry?.p_id == params.row.p_id
+              ).length>0?!statsUpdateFlag.filter(e=>e.latestEntry.p_id==params.row.p_id)[0].latestEntry.stats_update_flag:true
+            }
           >
             See History
           </button>
@@ -588,6 +623,11 @@ function ExecutionAll() {
             type="button"
             className="btn btn-primary"
             onClick={() => handleUpdateRowClick(params.row)}
+            disabled={
+              statsUpdateFlag.filter(
+                (e) => e.latestEntry?.p_id == params.row.p_id
+              ).length>0?!statsUpdateFlag.filter(e=>e.latestEntry.p_id==params.row.p_id)[0].latestEntry.stats_update_flag:true
+            }
           >
             Update
           </button>
