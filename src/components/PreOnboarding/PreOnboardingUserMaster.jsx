@@ -48,6 +48,7 @@ import IndianStates from "../ReusableComponents/IndianStates";
 import IndianStatesMui from "../ReusableComponents/IndianStatesMui";
 import LetterTab from "./LetterTab";
 import ContactNumber from "../ReusableComponents/ContactNumber";
+import DocumentTab from "./DocumentTab";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -186,6 +187,7 @@ const PreOnboardingUserMaster = () => {
   const [nickName, setNickName] = useState("");
   const [getProfile, setGetProfile] = useState("");
   const [getNickName, setGetNickName] = useState("");
+  const [loginUserData, setLoginUserData] = useState("");
 
   const profileSingleData = () => {
     axios
@@ -235,13 +237,13 @@ const PreOnboardingUserMaster = () => {
   // Step 2: Render the list
   const renderList = () => {
     return Object.entries(groupedData).map(([displaySequence, items]) => (
-      <div key={displaySequence}>
+      <div className="thm_textbx" key={displaySequence}>
         <h3>
           {displaySequence} {items[0].heading}
         </h3>
         <p> {items[0].heading_desc}</p>
         {items.map((item, index) => (
-          <div key={index}>
+          <div className="thm_textbx" key={index}>
             <h5>
               {item.sub_heading_sequence} {item.sub_heading}
             </h5>
@@ -255,6 +257,14 @@ const PreOnboardingUserMaster = () => {
       </div>
     ));
   };
+
+  useEffect(() => {
+    axios
+      .post("http://34.93.135.33:8080/api/login_user_data", {
+        user_id: id,
+      })
+      .then((res) => setLoginUserData(res.data));
+  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -333,7 +343,9 @@ const PreOnboardingUserMaster = () => {
           guardian_address,
           designation_name,
           user_report_to_id,
-          ctc
+          ctc,
+          offer_letter_send,
+          offer_later_status
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
@@ -915,46 +927,6 @@ const PreOnboardingUserMaster = () => {
                       Welcome
                     </a>
                   </li>
-                  <li className="nav-item" onClick={() => setActiveTab(1)}>
-                    <a
-                      className={`nav-link ${activeTab == 1 ? "active" : ""}`}
-                      href="#"
-                    >
-                      Form
-                    </a>
-                  </li>
-                  <li className="nav-item" onClick={() => setActiveTab(2)}>
-                    <a
-                      className={`nav-link ${activeTab == 2 ? "active" : ""}`}
-                      href="#"
-                    >
-                      Documents
-                    </a>
-                  </li>
-                  <li className="nav-item" onClick={() => setActiveTab(3)}>
-                    <a
-                      className={`nav-link ${activeTab == 3 ? "active" : ""}`}
-                      href="#"
-                    >
-                      Policy
-                    </a>
-                  </li>
-                  <li className="nav-item" onClick={() => setActiveTab(4)}>
-                    <a
-                      className={`nav-link ${activeTab == 4 ? "active" : ""}`}
-                      href="#"
-                    >
-                      FAQ
-                    </a>
-                  </li>
-                  <li className="nav-item" onClick={() => setActiveTab(5)}>
-                    <a
-                      className={`nav-link ${activeTab == 5 ? "active" : ""}`}
-                      href="#"
-                    >
-                      Extend Joining
-                    </a>
-                  </li>
                 </ul> */}
               </div>
               <div className="user_box">
@@ -965,7 +937,7 @@ const PreOnboardingUserMaster = () => {
                   </h3>
                 </div>
                 <div className="user_img">
-                  <img src={getProfile} alt="user" />
+                  <img src={getProfile ? getProfile : imageTest1} alt="user" />
                 </div>
                 <div className="user_logout">
                   <div className="dropdown">
@@ -1006,11 +978,11 @@ const PreOnboardingUserMaster = () => {
                     >
                       Profile
                     </button> */}
-                    <div class="welcome_board_img">
-                      <div class="imgone">
+                    <div className="welcome_board_img">
+                      <div className="imgone">
                         <img src={welcomeImage} alt="welcome" />
                       </div>
-                      <div class="imgtwo">
+                      <div className="imgtwo">
                         <img src={welcomeText} alt="welcome" />
                       </div>
                     </div>
@@ -1159,10 +1131,12 @@ const PreOnboardingUserMaster = () => {
                                 label="Father Name"
                                 variant="outlined"
                                 type="text"
+                                name="father Name"
                                 value={FatherName}
                                 onChange={(e) => setFatherName(e.target.value)}
                               />
                             </div>
+
                             <div className="form-group form_select">
                               <Autocomplete
                                 disablePortal
@@ -1576,13 +1550,13 @@ const PreOnboardingUserMaster = () => {
                 {/* Form Screen End */}
 
                 {/* Document Screen Start */}
-                {activeTab == 2 && (
+                {/* {activeTab == 2 && (
                   <div className="documentarea">
                     <div className="document_box">
                       <h2>Documents</h2>
 
                       <div className="docTable table-responsive">
-                        <table class="table">
+                        <table className="table">
                           <thead>
                             <tr>
                               <th scope="col">Document Type</th>
@@ -1600,7 +1574,7 @@ const PreOnboardingUserMaster = () => {
                               <td>2 Days</td>
                               <td>1 Day</td>
                               <td>
-                                <i class="bi bi-cloud-arrow-up"></i> Upload
+                                <i className="bi bi-cloud-arrow-up" /> Upload
                               </td>
                               <td>
                                 <div className="docStatus">
@@ -1620,7 +1594,7 @@ const PreOnboardingUserMaster = () => {
                               <td>2 Days</td>
                               <td>1 Day</td>
                               <td>
-                                <i class="bi bi-cloud-arrow-up"></i> Upload
+                                <i className="bi bi-cloud-arrow-up"></i> Upload
                               </td>
                               <td>
                                 <div className="docStatus">
@@ -1635,7 +1609,7 @@ const PreOnboardingUserMaster = () => {
                               <td>2 Days</td>
                               <td>1 Day</td>
                               <td>
-                                <i class="bi bi-cloud-arrow-up"></i> Upload
+                                <i className="bi bi-cloud-arrow-up"></i> Upload
                               </td>
                               <td>
                                 <div className="docStatus">
@@ -2137,7 +2111,8 @@ const PreOnboardingUserMaster = () => {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
+                {activeTab == 2 && <DocumentTab loginUserId={id} />}
                 {/* Document Screen End */}
 
                 {/* Policy Screen Start */}

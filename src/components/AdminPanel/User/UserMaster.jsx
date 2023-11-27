@@ -601,6 +601,8 @@ const UserMaster = () => {
     setTempLanguage(selectedOption);
   }
 
+  const isPersonalEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalEmail);
+
   const accordionButtons = ["General", "Personal", "Salary", "Documents"];
 
   const genralFields = (
@@ -780,6 +782,9 @@ const UserMaster = () => {
         value={personalEmail}
         onChange={(e) => setPersonalEmail(e.target.value)}
       />
+      {!isPersonalEmailValid && personalEmail && (
+        <p style={{ color: "red" }}>*Please enter valid email</p>
+      )}
       <FieldContainer
         label="Official Contact"
         type="number"
