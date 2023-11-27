@@ -333,7 +333,8 @@ const PreOnboardingUserMaster = () => {
           guardian_address,
           designation_name,
           user_report_to_id,
-          ctc
+          ctc,
+          offer_letter_send
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
