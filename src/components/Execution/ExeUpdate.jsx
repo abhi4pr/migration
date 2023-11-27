@@ -187,6 +187,8 @@ export default function ExeUPdate() {
         });
         data = data[data.length - 1];
         console.log((data.start_date)?.split("T")[0]);
+        setReach(data.reach);
+        setProfileVisit(data.profile_visit);
         setAge1Percentage(data.Age_13_17_percent);
         setAge2Percentage(data.Age_18_24_percent);
         setAge3Percentage(data.Age_25_34_percent);
@@ -211,9 +213,9 @@ export default function ExeUPdate() {
         setMalePercentage(data.male_percent);
         setCity1Percentage(data.percentage_city1_name);
         setCity2Percentage(data.percentage_city2_name);
-        setAge3Percentage(data.percentage_city3_name);
-        setAge4Percentage(data.percentage_city4_name);
-        setAge5Percentage(data.percentage_city5_name);
+        setCity3Percentage(data.percentage_city3_name);
+        setCity4Percentage(data.percentage_city4_name);
+        setCity5Percentage(data.percentage_city5_name);
         setQuater(data.quater);
         setReachandImpressionImg(data.reach_impression_upload_image_url);
         setStatesFor(data.stats_for);
