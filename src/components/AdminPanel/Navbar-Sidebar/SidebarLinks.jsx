@@ -276,6 +276,45 @@ const SidebarLinks = () => {
         </li>
       )}
 
+{/* {isAssetNotifierVisible && ( */}
+        <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseEight"
+            aria-expanded="true"
+            aria-controls="collapseEight"
+          >
+            <i className="bi bi-person-gear" />
+            <span>Asset Notifier</span>
+          </Link>
+          <div
+            id="collapseEight"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              {/* {contextData &&
+                contextData[5] &&
+                contextData[5].view_value === 1 && ( */}
+                  <Link className="collapse-item" to="/admin/self-audit">
+                  Self Audit
+                  </Link>
+                {/* )} */}
+
+              {/* {contextData &&
+                contextData[8] &&
+                contextData[8].view_value === 1 && ( */}
+                  <Link className="collapse-item" to="/pantry-user">
+                  Hr Audit
+                  </Link>
+                {/* )} */}
+            </div>
+          </div>
+        </li>
+      {/* )} */}
+
       {isOnboardingVisible && (
         <li className="nav-item">
           <Link
