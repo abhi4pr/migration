@@ -1,106 +1,131 @@
-import {
-  Paper,
-  TextField,
-  Grid,
-  Typography,
-  Autocomplete,
-} from "@mui/material";
+import { Paper, TextField, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CampaignDetailes from "./CampaignDetailes";
-// import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+
 const PhaseCreation = () => {
-  const options = ["Category 1", "Category 2", "Category 3", "Category 4", "Category 5", "Category 6", "Category 7"];
-  const Follower_Count = [
-    "100k",
-    "100k to 1000k ",
-    "1000k to 1M ",
-    "1M to 5M ",
+  const param = useParams();
+  const id = param.id;
+  const [allPageData, setAllPageData] = useState([]);
+  const [phaseData, setPhaseData] = useState("");
+  const [phaseDcripation, setPhaseDcripation] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  // console.log(endDate);
+  // const [phaseDetails, setPhaseDetails] = useState({
+  //   phaseData: "",
+  //   phaseDcripation: "",
+  //   startDate: null,
+  //   endDate: null
+  // });
+  // Handler for when the date changes
+
+  const getPageData = async () => {
+    const pageData = await axios.get(
+      `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
+    );
+    setAllPageData(pageData.data.body);
+  };
+  useEffect(() => {
+    getPageData();
+  }, []);
+  const columns = [
+    {
+      field: "S.NO",
+      headerName: "S.NO",
+      width: 90,
+      renderCell: (params) => {
+        const rowIndex = allPageData.indexOf(params.row);
+        return <div>{rowIndex + 1}</div>;
+      },
+    },
+    {
+      field: "page_name",
+      headerName: "Pages",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "follower_count",
+      headerName: "Follower Count",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "cat_name",
+      headerName: "Category Name",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "post_page",
+      headerName: "post / page",
+      width: 150,
+    },
+    {
+      field: "platform",
+      headerName: "vender",
+      width: 150,
+      editable: true,
+    },
   ];
-  const page_health = ["Active", "nonActive"];
+
   return (
     <>
-      <div>
-        <div className="form_heading_title">
-          <h2 className="form-heading">Phase Creation</h2>
-        </div>
+      <div className="form_heading_title">
+        <h2 className="form-heading">Phase Creation</h2>
       </div>
-      <>
-        <CampaignDetailes />
-      </>
-       <Paper sx={{ display: "flex", gap: "10" }}>
-        <Autocomplete
-          multiple
-          id="combo-box-demo"
-          options={options}
-          getOptionLabel={(option) => option}
-          // sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Category" />}
-        />
-        <Autocomplete
-          id="combo-box-demo"
-          options={Follower_Count}
-          getOptionLabel={(option) => option}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Follower Count" />
-          )}
-        />
-        <Autocomplete
-          id="combo-box-demo"
-          options={page_health}
-          getOptionLabel={(option) => option}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Page health" />
-          )}
+
+      <CampaignDetailes cid={id} />
+      <Typography variant="h6" sx={{ margin: "20px", fontWeight: "40px" }}>
+        Phase Details
+      </Typography>
+      <Paper sx={{ p: 2, m: 2, display: "flex" }}>
+        <TextField
+          label="Phase"
+          value={phaseData}
+          onChange={(e) => setPhaseData(e.target.value)}
+          sx={{ m: 2 }}
         />
         <TextField
-        label="Search"
-        variant="outlined"
-        // value={searchText}
-        // onChange={handleSearchChange}
-        style={{ margin: "10px" }}
+          label="Description"
+          value={phaseDcripation}
+          onChange={(e) => setPhaseDcripation(e.target.value)}
+          sx={{ m: 2 }}
+        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Start Date *"
+            format="DD/MM/YY"
+            fullWidth
+            value={startDate}
+            onChange={(e) => setStartDate(e)}
+            sx={{ m: 2 }}
+          />
+          <DatePicker
+            label="End Date *"
+            format="DD/MM/YY"
+            fullWidth
+            value={endDate}
+            onChange={(e) => setEndDate(e)}
+            sx={{ m: 2 }}
+          />
+        </LocalizationProvider>
+      </Paper>
+      <DataGrid
+        rows={allPageData}
+        columns={columns}
+        getRowId={(row) => row.p_id}
+        pageSizeOptions={[5]}
+        slots={{
+          toolbar: GridToolbar,
+        }}
       />
-      </Paper>
-     
-      <Grid item xs={12} sm={3}>
-        <Typography
-          variant="h6"
-          sx={{ marginLeft: "50px", fontWeight: "40px" }}
-        >
-          Phase Detailes
-        </Typography>
-      </Grid>
-      <Paper sx={{ p: 2, m: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={3}>
-            <TextField
-              disabled
-              label="Campaign"
-              defaultValue=" naughty World"
-            />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField label="Phase" defaultValue=" Trailer" />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField label="Description" defaultValue=" description" />
-          </Grid>
-        </Grid>
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          <Grid item xs={12} sm={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker label="Start Date *" format="DD/MM/YY" />
-            </LocalizationProvider>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker label="End Date *" format="DD/MM/YY" />
-            </LocalizationProvider>
-          </Grid>
-        </Grid>
-      </Paper>
     </>
   );
 };

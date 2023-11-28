@@ -542,7 +542,7 @@ const Admin = () => {
                     element={<CreaterDashboard />}
                   />
                   <Route path="/planOverview" element={<PlanOverview />} />
-                  <Route path="/phase" element={<PhaseCreation />} />
+                  <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
 
 
