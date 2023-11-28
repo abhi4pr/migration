@@ -16,6 +16,7 @@ const PhaseCreation = () => {
   const [phaseDcripation, setPhaseDcripation] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
   // console.log(endDate);
   // const [phaseDetails, setPhaseDetails] = useState({
   //   phaseData: "",
@@ -30,8 +31,12 @@ const PhaseCreation = () => {
       `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
     );
     setAllPageData(pageData.data.body);
+
+    const x=await axios.get(`http://34.93.135.33:8080/api/campaignplan/${id}`)
+    console.log(x)
   };
   useEffect(() => {
+
     getPageData();
   }, []);
   const columns = [
