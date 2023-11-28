@@ -277,7 +277,7 @@ function ExecutionAll() {
 
         for (let i = 0; i < tempdata.length; i++) {
           axios
-            .post(`http://192.168.29.69:8080/api/get_percentage`, {
+            .post(`http://34.93.135.33:8080/api/get_percentage`, {
               p_id: tempdata[i].p_id,
             })
             .then((res) => {
