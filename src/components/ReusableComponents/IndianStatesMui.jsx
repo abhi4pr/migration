@@ -4,29 +4,29 @@ import TextField from "@mui/material/TextField";
 import statesAndUTs from "./IndianStatesAndUTs";
 
 const IndianStatesMui = ({ onChange, newValue }) => {
-  const [selectedState, setSelectedState] = useState(null);
+  const [inputValue, setInputValue] = useState("");
 
   const handleChange = (event, value) => {
-    setSelectedState(value);
     onChange(value);
+  };
+
+  const handleInputChange = (event, newInputValue) => {
+    setInputValue(newInputValue);
   };
 
   return (
     <>
       <Autocomplete
         options={statesAndUTs}
-        value={selectedState}
+        value={newValue}
         onChange={handleChange}
-        inputValue={newValue || ""}
-        onInputChange={(event, newInputValue) => {
-          setSelectedState(newInputValue);
-        }}
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
         isOptionEqualToValue={(option, value) => option === value}
         renderInput={(params) => (
           <TextField {...params} label="State/UT" variant="outlined" required />
         )}
-        isClearable
-        isSearchable
+        clearOnEscape
       />
     </>
   );

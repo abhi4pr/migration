@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import WhatsappAPI from "../WhatsappAPI/WhatsappAPI";
-import Tour from 'reactour'
+import Tour from "reactour";
 
 import imageTest1 from "../../assets/img/product/Avtrar1.png";
 import imageTest2 from "../../assets/img/product/Avtrar2.png";
@@ -154,6 +154,10 @@ const PreOnboardingUserMaster = () => {
     setPreviousRelievingLetterValidation,
   ] = useState("Pending");
 
+  //Doucment Status
+  const [documentData, setDocumentData] = useState([]);
+  const [documentPercentage, setDocumentPercentage] = useState(0);
+
   //Permanent Address
   const [permanentAddress, setPermanentAddress] = useState("");
   const [permanentCity, setPermanentCity] = useState("");
@@ -183,7 +187,7 @@ const PreOnboardingUserMaster = () => {
   const [guardianAddress, setGuardianAddress] = useState("");
 
   const [showModal, setShowModal] = useState(true);
-  const [conditonValue, setConditonValue] = useState(0);
+  const [showImageSelector, setShowImageSelector] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
   const [nickName, setNickName] = useState("");
@@ -200,9 +204,12 @@ const PreOnboardingUserMaster = () => {
         nicknames = res.data.nick_name;
         setGetProfile(profileimage);
         setGetNickName(nicknames);
-        setConditonValue(fetchedData);
+        {
+          fetchedData !== 1 && setShowImageSelector(true);
+        }
       });
   };
+
   useEffect(() => {
     // axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
     //   getUsersData(res.data.data);
@@ -212,8 +219,8 @@ const PreOnboardingUserMaster = () => {
 
     profileSingleData();
   }, []);
+
   useEffect(() => {
-    // Function to fetch data
     const fetchCOCData = async () => {
       try {
         const response = await axios.get(
@@ -294,6 +301,32 @@ const PreOnboardingUserMaster = () => {
     }
   };
 
+  const getDocuments = async () => {
+    const response = await axios.post(
+      "http://34.93.135.33:8080/api/get_user_doc",
+      {
+        user_id: id,
+      }
+    );
+    setDocumentData(response.data.data);
+  };
+
+  useEffect(() => {
+    getDocuments();
+  }, []);
+
+  useEffect(() => {
+    const approveCount = documentData.filter(
+      (item) => item.status == "Approved"
+    ).length;
+
+    const documentPercentageTemp = Math.ceil(
+      (approveCount / documentData.length) * 100
+    );
+
+    setDocumentPercentage(documentPercentageTemp);
+  }, [getDocuments]);
+
   const gettingData = () => {
     axios
       .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
@@ -347,7 +380,7 @@ const PreOnboardingUserMaster = () => {
           user_report_to_id,
           ctc,
           offer_letter_send,
-          offer_later_status
+          offer_later_status,
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
@@ -697,27 +730,9 @@ const PreOnboardingUserMaster = () => {
     joiningDate,
   ];
 
-  const filledDocuments = [
-    XMarksheetValidation,
-    XIIMarksheetValidation,
-    underGraduationDocValidation,
-    uidValidation,
-    panUploadValidation,
-    PassportValidation,
-    experienceDocValidation,
-    previousOfferLetterValidation,
-    previousRelievingLetterValidation,
-    passbookChequeValidation,
-  ];
-
   const formFieldProgressPercentage = calculateProgressPercentage(
     filledFields,
     ["", null, 0]
-  );
-
-  const documentFieldProgressPercentage = calculateProgressPercentage(
-    filledDocuments,
-    ["Reject", "Pending", null]
   );
 
   function daysUntil(isoDateString) {
@@ -758,15 +773,6 @@ const PreOnboardingUserMaster = () => {
     imageTest29,
     imageTest30,
   ];
-  const openModal = () => {
-    setShowModal(true);
-    setConditonValue(0);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setConditonValue(1);
-  };
 
   const handleImageClick = async (image) => {
     try {
@@ -807,7 +813,7 @@ const PreOnboardingUserMaster = () => {
 
   const steps = [
     {
-      selector: ".document_tab_name",
+      selector: ".sidebar_itembox",
       content: "From here you can see your documents",
     },
     {
@@ -821,7 +827,7 @@ const PreOnboardingUserMaster = () => {
     {
       selector: ".user_logout",
       content: "From here you can logout",
-    }
+    },
   ];
 
   useEffect(() => {
@@ -872,7 +878,7 @@ const PreOnboardingUserMaster = () => {
                 onClick={() => setActiveTab(2)}
               >
                 <div
-                  className={`progress-circle progressing p-${documentFieldProgressPercentage}`}
+                  className={`progress-circle progressing p-${documentPercentage}`}
                 >
                   <div className="progress-circle-border">
                     <div className="left-half-circle" />
@@ -883,7 +889,7 @@ const PreOnboardingUserMaster = () => {
                   </div>
                 </div>
                 <h2 className="document_tab_name">Documents</h2>
-                <h3>{documentFieldProgressPercentage}%</h3>
+                <h3>{documentPercentage}%</h3>
               </div>
 
               <div
@@ -948,16 +954,6 @@ const PreOnboardingUserMaster = () => {
                 <h3>
                   <span>{daysLeftCount}</span> days left to Join
                 </h3>
-                {/* <ul className="nav">
-                  <li className="nav-item" onClick={() => setActiveTab(0)}>
-                    <a
-                      className={`nav-link ${activeTab == 0 ? "active" : ""}`}
-                      href="#"
-                    >
-                      Welcome
-                    </a>
-                  </li>
-                </ul> */}
               </div>
               <div className="user_box">
                 <div className="user_name">
@@ -1033,6 +1029,7 @@ const PreOnboardingUserMaster = () => {
                               <span>{joiningDate}</span>
                               <button
                                 className="btn btn-primary extndBtn"
+                                type="button"
                                 onClick={openReactModal}
                               >
                                 Extend
@@ -1094,58 +1091,12 @@ const PreOnboardingUserMaster = () => {
                                 label="Personal Email"
                                 variant="outlined"
                                 type="email"
-                                // className="form-control"
-                                // name="Personal Email"
-                                // placeholder="Personal Email"
                                 value={personalEmail}
                                 onChange={(e) =>
                                   setPersonalEmail(e.target.value)
                                 }
                               />
                             </div>
-
-                            {/* <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="official Contact"
-                                variant="outlined"
-                                type="text"
-                                // className="form-control"
-                                // name="official Contact"
-                                // placeholder="official Contact"
-                                value={contact}
-                                onChange={handleContactChange}
-                                onBlur={handleContentBlur}
-                              />
-                              {(isContactTouched || contact?.length >= 10) &&
-                                !isValidcontact && (
-                                  <p className="validation_message error">
-                                    *Please enter valid number
-                                  </p>
-                                )}
-                            </div> */}
-
-                            {/* <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="Personal Contact"
-                                variant="outlined"
-                                type="text"
-                                // className="form-control"
-                                // name="Personal Contact"
-                                // placeholder="Personal Contact"
-                                value={personalContact}
-                                onChange={handlePersonalContactChange}
-                                onBlur={handleContentBlur}
-                              />
-                              {(isContactTouched1 ||
-                                personalContact?.length >= 10) &&
-                                !isValidcontact1 && (
-                                  <p className="validation_message error">
-                                    *Please enter valid number
-                                  </p>
-                                )}
-                            </div> */}
 
                             <div className="form-group">
                               <ContactNumber
@@ -1287,7 +1238,6 @@ const PreOnboardingUserMaster = () => {
                                 )}
                               />
                             </div>
-                            {/* {console.log(tempLanguage)} */}
 
                             <div className="form-group Muiform_date">
                               <TextField
@@ -1512,9 +1462,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Permanent Address"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="complete address"
-                                // placeholder="Complete Address"
                                 value={permanentAddress}
                                 onChange={(e) =>
                                   setPermanentAddress(e.target.value)
@@ -1527,9 +1474,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Permanent City"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="City"
-                                // placeholder="Ctiy"
                                 value={permanentCity}
                                 onChange={(e) =>
                                   setPermanentCity(e.target.value)
@@ -1541,7 +1485,7 @@ const PreOnboardingUserMaster = () => {
                               <IndianStatesMui
                                 newValue={permanentState}
                                 onChange={(option) =>
-                                  setPermanentState(option ? option : null)
+                                  setPermanentState(option ? option : "")
                                 }
                               />
                             </div>
@@ -1552,9 +1496,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Pincode"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="pincode"
-                                // placeholder="Pincode"
                                 value={permanentPincode}
                                 onChange={(e) =>
                                   setPermanentPincode(e.target.value)
@@ -1567,9 +1508,10 @@ const PreOnboardingUserMaster = () => {
                           <div className="form-group ml-auto mr-auto text-center">
                             <button
                               className="btn btn_pill btn_cmn btn_white"
-                              onClick={() => setActiveTab(2)}
+                              onClick={handleSubmit}
+                              type="button"
                             >
-                              Next
+                              submit
                             </button>
                           </div>
                         </div>
@@ -1702,433 +1644,6 @@ const PreOnboardingUserMaster = () => {
                             </div>
                           )}
                         </li>
-
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              XIIMarksheet
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>12th Marksheet</p>
-                            <input
-                              type="file"
-                              value=""
-                              // name=""
-                              onChange={(e) => {
-                                setXIIMarksheet(e.target.files[0]);
-                                setXIIMarksheetValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setXIIMarksheet(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.twelveth_marksheet_validate ==
-                            "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {
-                                  allUserData?.twelveth_marksheet_validate_remark
-                                }
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.twelveth_marksheet_validate ==
-                            "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.twelveth_marksheet_validate ==
-                            "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              underGraduationDoc
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>Under Graduation</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setUnderGraduationDoc(e.target.files[0]);
-                                setUnderGraduationDocValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setUnderGraduationDoc(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.UG_Marksheet_validate == "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {allUserData?.UG_Marksheet_validate_remark}
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.UG_Marksheet_validate == "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.UG_Marksheet_validate == "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              uid ? "doc_item doc_item_active" : "doc_item"
-                            }
-                          >
-                            <p>UID</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setUID(e.target.files[0]);
-                                setUIDValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setUID(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.uid_validate == "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>{allUserData?.uid_validate_remark}</h5>
-                            </div>
-                          )}
-                          {allUserData?.uid_validate == "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.uid_validate == "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              panUpload
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>Pan Card</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setPanUpload(e.target.files[0]);
-                                setPanUploadValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setPanUpload(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.pan_validate == "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>{allUserData?.pan_remark}</h5>
-                            </div>
-                          )}
-                          {allUserData?.pan_validate == "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.pan_validate == "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              Passport ? "doc_item doc_item_active" : "doc_item"
-                            }
-                          >
-                            <p>Passport</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setPassport(e.target.files[0]);
-                                setPassportValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setPassport(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.passport_validate == "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>{allUserData?.passport_validate_remark}</h5>
-                            </div>
-                          )}
-                          {allUserData?.passport_validate == "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.passport_validate == "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              previousOfferLetter
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>Previous Company’s Offer Letter</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setPreviousOfferLetter(e.target.files[0]);
-                                setPreviousOfferLetterValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setPreviousOfferLetter(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.pre_off_letter_validate == "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {allUserData?.pre_off_letter_validate_remark}
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.pre_off_letter_validate ==
-                            "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.pre_off_letter_validate ==
-                            "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              previousRelievingLetter
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>Previous Company’s Relieving Letter</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setPreviousRelievingLetter(e.target.files[0]);
-                                setPreviousRelievingLetterValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setPreviousRelievingLetter(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.pre_relieving_letter_validate ==
-                            "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {allUserData?.pre_expe_letter_validate_remark}
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.pre_relieving_letter_validate ==
-                            "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.pre_relieving_letter_validate ==
-                            "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              experienceDoc
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>Previous Company’s Experience Letter Letter</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setExperienceDoc(e.target.files[0]);
-                                setExperienceDocValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setExperienceDoc(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.pre_expe_letter_validate ==
-                            "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {allUserData?.pre_expe_letter_validate_remark}
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.pre_expe_letter_validate ==
-                            "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.pre_expe_letter_validate ==
-                            "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              passbookCheque
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>
-                              Bank Passbook/Cancelled Cheque ( For Account
-                              Registration )
-                            </p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setPassbookCheque(e.target.files[0]);
-                                setPassbookChequeValidation("Pending");
-                              }}
-                            />
-
-                            <span
-                              className="delete"
-                              onClick={() => setPassbookCheque(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.bankPassBook_Cheque_validate ==
-                            "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {
-                                  allUserData?.bankPassBook_Cheque_validate_remark
-                                }
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.bankPassBook_Cheque_validate ==
-                            "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.bankPassBook_Cheque_validate ==
-                            "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
                       </ul>
                       <div className="ml-auto mr-auto text-center">
                         <button
@@ -2142,7 +1657,14 @@ const PreOnboardingUserMaster = () => {
                     </div>
                   </div>
                 )} */}
-                {activeTab == 2 && <DocumentTab loginUserId={id} />}
+
+                {activeTab == 2 && (
+                  <DocumentTab
+                    documentData={documentData}
+                    setDocumentData={setDocumentData}
+                    getDocuments={getDocuments}
+                  />
+                )}
                 {/* Document Screen End */}
 
                 {/* Policy Screen Start */}
@@ -2464,9 +1986,10 @@ const PreOnboardingUserMaster = () => {
       </div>
 
       {/* Profile picture modal */}
-      {conditonValue === 0 ? (
+
+      {showImageSelector && (
         <div
-          className={`modal ${showModal ? "show" : ""}`}
+          className={`modal profileSetModal ${showModal ? "show" : ""}`}
           tabIndex={-1}
           role="dialog"
           style={{ display: showModal ? "block" : "none" }}
@@ -2476,63 +1999,47 @@ const PreOnboardingUserMaster = () => {
               <div className="modal-body">
                 <div>
                   {selectedImage && (
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                      <img
-                        src={imagePreview}
-                        alt="Selected"
-                        style={{
-                          width: "150px",
-                          height: "80px",
-                          marginBottom: "10px",
-                          borderRadius: "50%",
-                        }}
-                      />
+                    <div className="showImg">
+                      <img src={imagePreview} alt="Selected" />
                     </div>
                   )}
 
-                  <div>
+                  <div className="chooseImg">
                     <h5>Choose Image:</h5>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        flexWrap: "wrap",
-                      }}
-                    >
+                    <div className="chooseImgItem">
                       {images.map((image) => (
                         <img
                           key={image}
                           src={image}
                           // alt={imageName}
-                          style={{
-                            width: "80px",
-                            height: "80px",
-                            margin: "5px",
-                            cursor: "pointer",
-                            borderRadius: "50%",
-                          }}
                           onClick={() => handleImageClick(image)}
                         />
                       ))}
                     </div>
                   </div>
 
-                  <div>
-                    <h5 className="mt-1">Upload Image :</h5>
-                    <input
-                      className="form-control"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      required={false}
-                    />
-                    <h5>Nick Name :</h5>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={nickName}
-                      onChange={(e) => setNickName(e.target.value)}
-                    />
+                  <div className="formImg">
+                    <div className="row">
+                      <div className="col-md-6 col-sm-12">
+                        <h5>Upload Image :</h5>
+                        <input
+                          className="form-control"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          required={false}
+                        />
+                      </div>
+                      <div className="col-md-6 col-sm-12">
+                        <h5>Nick Name :</h5>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={nickName}
+                          onChange={(e) => setNickName(e.target.value)}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="alert_text">
@@ -2548,7 +2055,7 @@ const PreOnboardingUserMaster = () => {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };

@@ -36,60 +36,87 @@ const LetterTab = ({ allUserData, gettingData }) => {
 
   return (
     <>
-      {allUserData.offer_letter_send == true ?
-      <div className="thm_textbx">
-        <p>
-        Welcome {allUserData.user_name} to CreativeFuel As our new {allUserData.designation_name}, he/she brings valuable experience to our team. <br/>
-        Based at {allUserData.permanent_address}, {allUserData.user_name} officially joined us on {allUserData.joining_date} and reports to {allUserData.user_report_to_id}. <br/>
-        We're confident {allUserData.user_name} will seamlessly integrate into our collaborative work culture, contributing to our success. <br/>
-        The competitive compensation package, including a comprehensive salary {allUserData.ctc}, reflects his/her value. <br/>
-        {allUserData.user_name}'s digital signature symbolizes his/her commitment. Congratulations on accepting our offer—we look forward to achieving great milestones together!
-      </p>
-      </div> : ''}
-      <div className="letterAction">
-      {allUserData.offer_later_status == false ? 
-      <div className="letterStatus">
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            setIsModalOpen(true), setReasonField(false);
-          }}
-        >
-          Accept
-        </button>
-        <button className="btn btn-danger" onClick={() => setReasonField(true)}>
-          Reject
-        </button>
-      </div> : '' }
+      <div className="letterBoard">
+        {allUserData.offer_letter_send == true ? (
+          <div className="thm_textbx">
+            <p>
+              Welcome {allUserData.user_name} to CreativeFuel As our new{" "}
+              {allUserData.designation_name}, he/she brings valuable experience
+              to our team. <br />
+              Based at {allUserData.permanent_address}, {allUserData.user_name}{" "}
+              officially joined us on {allUserData.joining_date} and reports to{" "}
+              {allUserData.user_report_to_id}. <br />
+              We're confident {allUserData.user_name} will seamlessly integrate
+              into our collaborative work culture, contributing to our success.{" "}
+              <br />
+              The competitive compensation package, including a comprehensive
+              salary {allUserData.ctc}, reflects his/her value. <br />
+              {allUserData.user_name}'s digital signature symbolizes his/her
+              commitment. Congratulations on accepting our offer—we look forward
+              to achieving great milestones together!
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="letterAction">
+          {allUserData.offer_later_status == false ? (
+            <div className="letterStatus">
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setIsModalOpen(true), setReasonField(false);
+                }}
+              >
+                Accept
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setReasonField(true)}
+              >
+                Reject
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
 
-      {allUserData.offer_letter_send == true ? 
-        <FcDownload
-          onClick={() =>
-            window.open(
-              allUserData.offer_later_pdf_url,
-              "_blank",
-              "noopener,noreferrer"
-            )
-          }
-        /> : ''
-      }
+          {allUserData.offer_letter_send == true ? (
+            <span className="btn btn-outline-primary">
+              <FcDownload
+                onClick={() =>
+                  window.open(
+                    allUserData.offer_later_pdf_url,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+              />
+              Download
+            </span>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
 
       {reasonField && (
         <>
-          <div className="form-group">
-            <TextField
-              id="outlined-basic"
-              label="Reason"
-              variant="outlined"
-              type="text"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-            />
+          <div className="rejectReason board_form">
+            <div className="form-group">
+              <TextField
+                id="outlined-basic"
+                label="Reason"
+                variant="outlined"
+                type="text"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+              />
+            </div>
+            <button className="btn btn-primary" onClick={() => handleReject()}>
+              Submit
+            </button>
           </div>
-          <button className="btn btn-primary" onClick={() => handleReject()}>
-            Submit
-          </button>
         </>
       )}
 

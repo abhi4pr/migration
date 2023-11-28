@@ -197,6 +197,7 @@ const SalaryDashboard = () => {
                           Date: {d[0]?.month} {d[0]?.year}
                         </h6>
                         <h6>Department : {d[0]?.dept_name}</h6>
+                        {console.log(d)}
                       </div>
                     </div>
                   </div>
