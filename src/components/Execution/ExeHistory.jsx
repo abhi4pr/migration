@@ -60,21 +60,109 @@ export default function ExeHistory() {
       field: "reach",
       headerName: "Reach",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.reach ? (
+              <>
+                {params.row.reach}  {params.row.percentage_reach}%&nbsp;
+               
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
     {
       field: "impression",
       headerName: "Impression",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.impression ? (
+              <>
+                {params.row.impression}  {params.row.percentage_impression}%&nbsp;
+                {params.row.reach_impression_upload_image_url && (
+              <a
+                key="reach"
+                href={params.row.reach_impression_upload_image_url}
+                title="Reach Impression Image"
+                download
+              >
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
     {
       field: "engagement",
       headerName: "Engagement",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.engagement ? (
+              <>
+                {params.row.engagement}  {params.row.percentage_engagement}%&nbsp;
+                {params.row.engagement_upload_image_url && (
+              <a
+                key="engagement"
+                href={params.row.engagement_upload_image_url}
+                title="Engagement Image"
+                download
+              >
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
     {
       field: "story_view",
       headerName: "Story View",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.story_view ? (
+              <>
+                {params.row.story_view}  {params.row.percentage_story_view}%&nbsp;
+                {params.row.story_view_upload_image_url && (
+              <a
+                key="storyImg"
+                href={params.row.story_view_upload_image_url}
+                title="Story View Image"
+                download
+              >
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+            {params.row.story_view_upload_video_url && (
+              <a key="storyVdo" href={params.row.story_view_upload_video_url} title="Story view Video" download>
+                <OndemandVideoTwoToneIcon  variant="contained" color="primary" />
+              </a>
+            )}
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
     {
       field: "stats_for",
@@ -94,6 +182,12 @@ export default function ExeHistory() {
             {params.row?.city1_name ? (
               <>
                 {params.row.city1_name} &nbsp;{" "} {params.row.percentage_city1_name}%
+                {params.row.city_image_upload_url && (
+              <a key="cityImg" href={params.row.city_image_upload_url} title="City Image" download>
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+           
               </>
             ) : (
               ""
@@ -187,6 +281,24 @@ export default function ExeHistory() {
       field:"Age_13_17_percent",
       headerName:"Age 13-17 %",
       width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.Age_13_17_percent ? (
+              <>
+                {params.row.Age_13_17_percent}  &nbsp;{" "}
+                {params.row.Age_upload_url && (
+              <a key="cityVdo" href={params.row.Age_upload_url} title="Age Img" download>
+                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
+              </a>
+            )}
+              </>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
     {
       field:"Age_18_24_percent",
@@ -265,63 +377,6 @@ export default function ExeHistory() {
             {new Date(params.row.creation_date).toISOString().substr(5, 2)}/
             {new Date(params.row.creation_date).toISOString().substr(2, 2)}
           </div>
-        );
-      },
-    },
-    {
-      field: "media",
-      headerName: "Media",
-      width: 180,
-      renderCell: (params) => {
-        return (
-          <>
-            {params.row.reach_impression_upload_image_url && (
-              <a
-                key="reach"
-                href={params.row.reach_impression_upload_image_url}
-                title="Reach Impression Image"
-                download
-              >
-                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
-              </a>
-            )}
-            {params.row.engagement_upload_image_url && (
-              <a
-                key="engagement"
-                href={params.row.engagement_upload_image_url}
-                title="Engagement Image"
-                download
-              >
-                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
-              </a>
-            )}
-
-            {params.row.story_view_upload_image_url && (
-              <a
-                key="storyImg"
-                href={params.row.story_view_upload_image_url}
-                title="Story View Image"
-                download
-              >
-                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
-              </a>
-            )}
-            {params.row.story_view_upload_video_url && (
-              <a key="storyVdo" href={params.row.story_view_upload_video_url} title="Story view Video" download>
-                <OndemandVideoTwoToneIcon  variant="contained" color="primary" />
-              </a>
-            )}
-            {params.row.city_image_upload_url && (
-              <a key="cityImg" href={params.row.city_image_upload_url} title="City Image" download>
-                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
-              </a>
-            )}
-            {params.row.Age_upload_url && (
-              <a key="cityVdo" href={params.row.Age_upload_url} title="Age Img" download>
-                <InsertPhotoTwoToneIcon variant="contained" color="primary" />
-              </a>
-            )}
-          </>
         );
       },
     },

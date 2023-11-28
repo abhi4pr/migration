@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { set } from "date-fns";
+import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -72,7 +73,7 @@ export default function ExeUPdate() {
   const [reachandImpressionImg, setReachandImpressionImg] = useState();
   const [engagementImg, setEngagementImg] = useState();
   const [storyViewImg, setStoryViewImg] = useState();
-  const [storyViewVideo, setStoryViewVideo] = useState();
+  const [storyViewVideo, setStoryViewVideo] = useState(null);
   const [city1, setCity1] = useState(null);
   const [city2, setCity2] = useState(null);
   const [city3, setCity3] = useState(null);
@@ -83,7 +84,7 @@ export default function ExeUPdate() {
   const [city3Percentage, setCity3Percentage] = useState(0);
   const [city4Percentage, setCity4Percentage] = useState(0);
   const [city5Percentage, setCity5Percentage] = useState(0);
-  const [cityImg, setCityImg] = useState();
+  const [cityImg, setCityImg] = useState(null);
   const [malePercentage, setMalePercentage] = useState(0);
   const [femalePercentage, setFemalePercentage] = useState(0);
   const [age1Percentage, setAge1Percentage] = useState(0);
@@ -108,6 +109,14 @@ export default function ExeUPdate() {
   const [country4Percentage, setCountry4Percentage] = useState(0);
   const [country5Percentage, setCountry5Percentage] = useState(0);
   const [countryImg, setCountryImg] = useState();
+  const [reachAndImpressionimgSrc, setReachAndImpressionimgSrc] =
+    useState(null);
+  const [engagementImgSrc, setEngagementImgSrc] = useState(null);
+  const [storyViewImgSrc, setStoryViewImgSrc] = useState(null);
+  const [storyViewVideoSrc, setStoryViewVideoSrc] = useState(null);
+  const [countryImgSrc, setCountryImgSrc] = useState(null);
+  const [cityImgSrc, setCityImgSrc] = useState(null);
+  const [ageImgSrc, setAgeImgSrc] = useState(null);
 
   const navigate = useNavigate();
   const saveStats = async (e) => {
@@ -194,17 +203,20 @@ export default function ExeUPdate() {
         setAge6Percentage(data.Age_55_64_percent);
         setAge7Percentage(data.Age_65_plus_percent);
         setAgeImg(data.Age_upload_url);
+        setAgeImgSrc(data.Age_upload_url);
         setCity1(data.city1_name);
         setCity2(data.city2_name);
         setCity3(data.city3_name);
         setCity4(data.city4_name);
         setCity5(data.city5_name);
         setCityImg(data.city_image_upload_url);
+        setCityImgSrc(data.city_image_upload_url);
         setEndDate(data.end_date);
         setEndDate(dayjs(new Date(data.end_date?.split("T")[0])));
         setStartDate(dayjs(new Date(data.start_date?.split("T")[0])));
         setEngagement(data.engagement);
         setEngagementImg(data.engagement_upload_image_url);
+        setEngagementImgSrc(data.engagement_upload_image_url);
         setFemalePercentage(data.female_percent);
         setImpression(data.impression);
         setMalePercentage(data.male_percent);
@@ -215,10 +227,13 @@ export default function ExeUPdate() {
         setCity5Percentage(data.percentage_city5_name);
         setQuater(data.quater);
         setReachandImpressionImg(data.reach_impression_upload_image_url);
+        setReachAndImpressionimgSrc(data.reach_impression_upload_image_url);
         setStatesFor(data.stats_for);
         setStoryView(data.story_view);
         setStoryViewImg(data.story_view_upload_image_url);
         setStoryViewVideo(data.story_view_upload_video_url);
+        setStoryViewVideoSrc(data.story_view_upload_video_url);
+        setStoryViewImgSrc(data.story_view_upload_image_url);
         setCountry1(data.country1_name);
         setCountry2(data.country2_name);
         setCountry3(data.country3_name);
@@ -230,6 +245,7 @@ export default function ExeUPdate() {
         setCountry4Percentage(data.percentage_country4_name);
         setCountry5Percentage(data.percentage_country5_name);
         setCountryImg(data.country_image_upload_url);
+        setCountryImgSrc(data.country_image_upload_url);
       });
   };
 
@@ -251,7 +267,6 @@ export default function ExeUPdate() {
     setCityList([
       ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
     ]);
-    
   }, []);
 
   const cityCopyValidation = (value) => {
@@ -277,8 +292,6 @@ export default function ExeUPdate() {
     // Adjusting for the local time zone offset
     const offset = date.getTimezoneOffset();
     date.setMinutes(date.getMinutes() - offset);
-
-
 
     setEndDate(newValue);
   };
@@ -324,8 +337,6 @@ export default function ExeUPdate() {
     // Adjusting for the local time zone offset
     const offset = date.getTimezoneOffset();
     date.setMinutes(date.getMinutes() - offset);
-
-
 
     setStartDate(newValue);
   };
@@ -465,22 +476,45 @@ export default function ExeUPdate() {
                   }
                 />
               </div>
-              <div className="col-md-3 col-lg-12 my-2">
+              <div className="col-md-3 py-1 mb-2  ">
                 <Button
                   component="label"
                   variant="contained"
                   startIcon={<CloudUploadIcon />}
                   size="small"
+                  title="Reach & Impression"
                 >
                   Image
                   <VisuallyHiddenInput
                     onChange={(e) => {
-                      setReachandImpressionImg(e.target.files[0]);
+                      const uploadedFile = e.target.files[0];
+                      if (uploadedFile) {
+                        const imageUrl = URL.createObjectURL(uploadedFile);
+                        setReachAndImpressionimgSrc(imageUrl);
+                        setReachandImpressionImg(uploadedFile);
+                      }
                     }}
                     type="file"
                     accept="image/png, image/jpeg"
                   />
                 </Button>
+
+                {reachAndImpressionimgSrc && (
+                  <div className="d-flex">
+                    <img
+                      style={{ width: "50px", height: "50px" }}
+                      src={reachAndImpressionimgSrc}
+                      className="mt-1"
+                      alt="Uploaded"
+                    />{" "}
+                    <Button
+                      size="small"
+                      onClick={() => setReachAndImpressionimgSrc(null)}
+                    >
+                      <CloseTwoToneIcon />
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div className="col-md-3 col-lg-12 d-block my-2">
@@ -511,12 +545,33 @@ export default function ExeUPdate() {
                   Image
                   <VisuallyHiddenInput
                     onChange={(e) => {
-                      setEngagementImg(e.target.files[0]);
+                      const uploadedFile = e.target.files[0];
+                      if (uploadedFile) {
+                        const imageUrl = URL.createObjectURL(uploadedFile);
+                        setEngagementImgSrc(imageUrl);
+                        setEngagementImg(uploadedFile);
+                      }
                     }}
                     type="file"
                     accept="image/png, image/jpeg"
                   />
                 </Button>
+                {engagementImgSrc && (
+                  <div className="d-flex">
+                    <img
+                      style={{ width: "50px", height: "50px" }}
+                      src={engagementImgSrc}
+                      className="mt-1"
+                      alt="Uploaded"
+                    />{" "}
+                    <Button
+                      size="small"
+                      onClick={() => setEngagementImgSrc(null)}
+                    >
+                      <CloseTwoToneIcon />
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className="col-md-3 col-lg-12 d-block my-2">
                 <TextField
@@ -536,8 +591,9 @@ export default function ExeUPdate() {
                   }
                 />
               </div>
-              <div className="col-md-3 py-1 mb-2">
+              <div className="col-md-3 col-lg-12 py-1 mb-2">
                 <Button
+                  className="me-1"
                   component="label"
                   variant="contained"
                   startIcon={<CloudUploadIcon />}
@@ -546,7 +602,12 @@ export default function ExeUPdate() {
                   image
                   <VisuallyHiddenInput
                     onChange={(e) => {
-                      setStoryViewImg(e.target.files[0]);
+                      const uploadedFile = e.target.files[0];
+                      if (uploadedFile) {
+                        const imageUrl = URL.createObjectURL(uploadedFile);
+                        setStoryViewImgSrc(imageUrl);
+                        setStoryViewImg(uploadedFile);
+                      }
                     }}
                     type="file"
                     accept="image/png, image/jpeg"
@@ -558,15 +619,61 @@ export default function ExeUPdate() {
                   startIcon={<CloudUploadIcon />}
                   size="small"
                 >
-                  video
+                  Video
                   <VisuallyHiddenInput
                     onChange={(e) => {
-                      setStoryViewVideo(e.target.files[0]);
+                      const uploadedFile = e.target.files[0];
+                      if (uploadedFile) {
+                        const videoUrl = URL.createObjectURL(uploadedFile);
+                        setStoryViewVideoSrc(videoUrl); // Set the video URL in state for preview
+                        setStoryViewVideo(uploadedFile); // Set the uploaded video in state
+                      }
                     }}
                     type="file"
-                    accept=" video/mp4, video/avi"
+                    accept="video/mp4,video/avi"
                   />
                 </Button>
+                <div>
+                  {storyViewImgSrc && (
+                    <div className="d-flex">
+                      <img
+                        style={{ height: "50px", width: "50px" }}
+                        src={storyViewImgSrc}
+                        className="mt-1"
+                        alt="Uploaded"
+                      />{" "}
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          setStoryViewImgSrc(null);
+                          setStoryViewImg(null);
+                        }}
+                      >
+                        <CloseTwoToneIcon />
+                      </Button>
+                    </div>
+                  )}
+                  {storyViewVideoSrc && (
+                    <div className="d-flex align-items-center">
+                      <video
+                        style={{ height: "50px", width: "50px" }}
+                        src={storyViewVideoSrc}
+                        // controls
+                        className="mt-1"
+                        alt="Uploaded Video"
+                      />
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          setStoryViewVideoSrc(null);
+                          setStoryViewVideo(null);
+                        }}
+                      >
+                        <CloseTwoToneIcon />
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="col-md-3 col-lg-12 d-block my-2">
                 <TextField
@@ -661,7 +768,6 @@ export default function ExeUPdate() {
                 value={city3Percentage}
                 onChange={(e) => {
                   setCity3Percentage(e.target.value);
-
                 }}
                 InputProps={{
                   endAdornment: (
@@ -733,22 +839,49 @@ export default function ExeUPdate() {
                   },
                 }}
               />
-              <Button
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-                size="small"
-                className="mt-4"
-                onChange={(e) => {
-                  setCityImg(e.target.files[0]);
-                }}
-              >
-                Image
-                <VisuallyHiddenInput
-                  type="file"
-                  accept="image/png, image/jpeg"
-                />
-              </Button>
+              <div>
+                <Button
+                  component="label"
+                  variant="contained"
+                  startIcon={<CloudUploadIcon />}
+                  size="small"
+                  className="mt-4"
+                  onChange={(e) => {
+                    const uploadedFile = e.target.files[0];
+                    if (uploadedFile) {
+                      const imageUrl = URL.createObjectURL(uploadedFile);
+                      setCityImgSrc(imageUrl);
+                      setCityImg(uploadedFile);
+                    }
+                  }}
+                >
+                  Image
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept="image/png, image/jpeg"
+                  />
+                </Button>
+
+                {cityImgSrc && (
+                  <div className="d-flex align-items-center">
+                    <img
+                      style={{ height: "50px", width: "50px" }}
+                      src={cityImgSrc}
+                      className="mt-1"
+                      alt="Image Uploaded"
+                    />
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        setCityImgSrc(null);
+                        setCityImg(null);
+                      }}
+                    >
+                      <CloseTwoToneIcon />
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -840,7 +973,6 @@ export default function ExeUPdate() {
                   value={country3Percentage}
                   onChange={(e) => {
                     setCountry3Percentage(e.target.value);
-
                   }}
                   InputProps={{
                     endAdornment: (
@@ -916,22 +1048,48 @@ export default function ExeUPdate() {
                     },
                   }}
                 />
-                <Button
-                  component="label"
-                  variant="contained"
-                  startIcon={<CloudUploadIcon />}
-                  size="small"
-                  className="mt-3 d-block"
-                  onChange={(e) => {
-                    setCountryImg(e.target.files[0]);
-                  }}
-                >
-                  Image
-                  <VisuallyHiddenInput
-                    type="file"
-                    accept="image/png, image/jpeg"
-                  />
-                </Button>
+                <div>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
+                    size="small"
+                    className="mt-3"
+                    onChange={(e) => {
+                      const uploadedFile = e.target.files[0];
+                      if (uploadedFile) {
+                        const imageUrl = URL.createObjectURL(uploadedFile);
+                        setCountryImgSrc(imageUrl);
+                        setCountryImg(uploadedFile);
+                      }
+                    }}
+                  >
+                    Image
+                    <VisuallyHiddenInput
+                      type="file"
+                      accept="image/png, image/jpeg"
+                    />
+                  </Button>
+                  {countryImgSrc && (
+                    <div className="d-flex align-items-center">
+                      <img
+                        style={{ height: "50px", width: "50px" }}
+                        src={countryImgSrc}
+                        className="mt-1"
+                        alt="Country Image Uploaded"
+                      />
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          setCountryImg(null);
+                          setCountryImgSrc(null);
+                        }}
+                      >
+                        <CloseTwoToneIcon />
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -1087,7 +1245,12 @@ export default function ExeUPdate() {
                   size="small"
                   className="mt-4"
                   onChange={(e) => {
-                    setAgeImg(e.target.files[0]);
+                    const uploadedFile = e.target.files[0];
+                    if (uploadedFile) {
+                      const imageUrl = URL.createObjectURL(uploadedFile);
+                      setAgeImgSrc(imageUrl);
+                      setAgeImg(uploadedFile);
+                    }
                   }}
                 >
                   Image
@@ -1096,6 +1259,26 @@ export default function ExeUPdate() {
                     accept="image/png, image/jpeg"
                   />
                 </Button>
+
+                {ageImgSrc && (
+                  <div className="d-flex align-items-center">
+                    <img
+                      style={{ height: "50px", width: "50px" }}
+                      src={ageImgSrc}
+                      className="mt-1"
+                      alt="Age Image Uploaded"
+                    />
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        setAgeImgSrc(null);
+                        setAgeImg(null);
+                      }}
+                    >
+                      <CloseTwoToneIcon />
+                    </Button>
+                  </div>
+                )}
               </div>
               {totalPercentage < 98 && (
                 <span style={{ color: "red" }}>

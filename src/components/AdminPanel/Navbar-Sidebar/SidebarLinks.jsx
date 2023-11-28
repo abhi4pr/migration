@@ -67,7 +67,7 @@ const SidebarLinks = () => {
   const isLeadManagementVisible = [22].some(
     (index) => contextData[index]?.view_value === 1
   );
-  const isExecutionVisible = [24, 31, 32].some(
+  const isExecutionVisible = [24, 31, 32,34].some(
     (index) => contextData[index]?.view_value === 1
   );
   const isInstaApiVisible = [25].some(
@@ -467,13 +467,13 @@ const SidebarLinks = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white collapse-inner">
-              {contextData &&
+              {/* {contextData &&
                 contextData[24] &&
                 contextData[24].view_value === 1 &&
-                ""}
+                ""} */}
               {contextData &&
-                contextData[24] &&
-                contextData[24].view_value === 1 && (
+                contextData[34] &&
+                contextData[34].view_value === 1 && (
                   <li className="nav-item">
                     <a
                       className="nav-link collapsed"
