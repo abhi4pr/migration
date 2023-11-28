@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import WhatsappAPI from "../WhatsappAPI/WhatsappAPI";
+import Tour from 'reactour'
 
 import imageTest1 from "../../assets/img/product/Avtrar1.png";
 import imageTest2 from "../../assets/img/product/Avtrar2.png";
@@ -68,6 +69,7 @@ const maritialStatusData = ["Single", "Married"]; //,"Divorced","Widowed","Separ
 const genderData = ["Male", "Female", "Other"];
 
 const PreOnboardingUserMaster = () => {
+  const [isTourOpen, setIsTourOpen] = useState(true);
   const whatsappApi = WhatsappAPI();
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
@@ -803,9 +805,37 @@ const PreOnboardingUserMaster = () => {
     profileSingleData();
   };
 
+  const steps = [
+    {
+      selector: ".document_tab_name",
+      content: "From here you can see your documents",
+    },
+    {
+      selector: ".policy_tab_name",
+      content: "From here you can see our policies",
+    },
+    {
+      selector: ".letter_tab_name",
+      content: "From here you can see your offer letter",
+    },
+    {
+      selector: ".user_logout",
+      content: "From here you can logout",
+    }
+  ];
+
+  useEffect(() => {
+    setIsTourOpen(true);
+  }, []);
+
   return (
     <>
       {/* Dashboard Section Start */}
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => setIsTourOpen(false)}
+      />
       <section className="section">
         <div className="page_wrapper">
           <div className="sidebar_wrapper">
@@ -852,7 +882,7 @@ const PreOnboardingUserMaster = () => {
                     <i className="bi bi-file-earmark-text" />
                   </div>
                 </div>
-                <h2>Documents</h2>
+                <h2 className="document_tab_name">Documents</h2>
                 <h3>{documentFieldProgressPercentage}%</h3>
               </div>
 
@@ -871,7 +901,7 @@ const PreOnboardingUserMaster = () => {
                     <i className="bi bi-book" />
                   </div>
                 </div>
-                <h2>Policy</h2>
+                <h2 className="policy_tab_name">Policy</h2>
               </div>
 
               <div
@@ -889,7 +919,7 @@ const PreOnboardingUserMaster = () => {
                     <i className="bi bi-book" />
                   </div>
                 </div>
-                <h2>Letter</h2>
+                <h2 className="letter_tab_name">Letter</h2>
               </div>
 
               <div
