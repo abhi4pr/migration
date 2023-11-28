@@ -1,31 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
 
-const DocumentTab = ({ loginUserId }) => {
+const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
   const { toastAlert } = useGlobalContext();
-  const [documentData, setDocumentData] = useState([]);
-
-  const getDocuments = async () => {
-    const response = await axios.post(
-      "http://34.93.135.33:8080/api/get_user_doc",
-      {
-        user_id: loginUserId,
-      }
-    );
-    setDocumentData(response.data.data);
-  };
-
-  console.log(documentData);
-
-  useEffect(() => {
-    getDocuments();
-  }, []);
 
   const updateDocumentData = (documentId, key, value) => {
     setDocumentData((prevDocumentData) =>
       prevDocumentData.map((doc) =>
-        doc.document._id === documentId ? { ...doc, [key]: value } : doc
+        doc._id === documentId ? { ...doc, [key]: value } : doc
       )
     );
   };
@@ -35,17 +18,13 @@ const DocumentTab = ({ loginUserId }) => {
     updateDocumentData(documentId, "status", "Pending");
   };
 
-  //   console.log(documentData);
-
   const handleSubmit = async () => {
     try {
       for (const document of documentData) {
         if (document.file) {
-          console.log(document);
           let formData = new FormData();
           formData.append("doc_image", document.file);
-          formData.append("doc_id", document._id);
-          formData.append("user_id", document.user_id);
+          formData.append("_id", document._id);
           formData.append("status", document.status);
           const response = await axios.put(
             "http://34.93.135.33:8080/api/update_user_doc",
@@ -56,11 +35,12 @@ const DocumentTab = ({ loginUserId }) => {
               },
             }
           );
-          toastAlert("Documents Updated");
         } else {
           console.log(`No file uploaded for document ${document._id}`);
         }
       }
+      toastAlert("Documents Updated");
+      getDocuments();
     } catch (error) {
       console.error("Error submitting documents", error);
     }
@@ -92,19 +72,27 @@ const DocumentTab = ({ loginUserId }) => {
                     <td>{item.document.period} days</td>
                     <td>1 Day</td>
                     <td>
-                      <i className="bi bi-cloud-arrow-up" /> Upload
-                      <input
-                        type="file"
-                        onChange={(e) =>
-                          handleFileUpload(e.target.files[0], item._id)
-                        }
-                      />
+                      <div className="uploadDocBtn">
+                        <span>
+                          <i className="bi bi-cloud-arrow-up" /> Upload
+                        </span>
+                        {/* <span className="color_success">
+                          <i className="bi bi-check" /> Done
+                        </span> */}
+                        <input
+                          type="file"
+                          onChange={(e) =>
+                            handleFileUpload(e.target.files[0], item._id)
+                          }
+                        />
+                      </div>
                     </td>
                     <td>
                       <div className="docStatus">
                         <span className="warning_badges reject">
-                          <h4>Rejected</h4>
-                          {/* <h5>{allUserData?.tenth_marksheet_validate_remark}</h5> */}
+                          <h4>
+                            {item.status !== "" ? item.status : "Not Uploaded"}
+                          </h4>
                         </span>
                       </div>
                     </td>
