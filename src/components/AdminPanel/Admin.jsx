@@ -140,6 +140,7 @@ import PhaseCreation from "./RegisterCampaign/PhaseCreation";
 import PlanCreation from "./RegisterCampaign/PlanCreation";
 import ExeUPdate from "../Execution/ExeUPdate";
 import ExeHistory from "../Execution/ExeHistory";
+import { SelfAudit } from "./AssetNotifier/SelfAudit";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -376,6 +377,21 @@ const Admin = () => {
                         />
                       </>
                     )}
+                    {/* {contextData &&
+                    contextData[5] &&
+                    contextData[5].view_value === 1 && ( */}
+                      <>
+                        <Route
+                          path="/self-audit"
+                          element={<SelfAudit />}
+                        />
+                        {/* <Route
+                          path="/product-overview"
+                          element={<ProductOverview />}
+                        /> */}
+                       
+                      </>
+                    {/* )} */}
                   {contextData &&
                     contextData[6] &&
                     contextData[6].view_value === 1 && (
@@ -542,7 +558,7 @@ const Admin = () => {
                     element={<CreaterDashboard />}
                   />
                   <Route path="/planOverview" element={<PlanOverview />} />
-                  <Route path="/phase" element={<PhaseCreation />} />
+                  <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
 
 

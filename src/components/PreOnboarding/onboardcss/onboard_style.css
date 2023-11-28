@@ -130,7 +130,7 @@ img {
 }
 
 .btn_primary:first-child:active,
-:not(.btn-check)+.btn_primary:active {
+:not(.btn-check) + .btn_primary:active {
   border-color: var(--primary-board);
   background-color: var(--primary-board);
   color: var(--text-white);
@@ -157,7 +157,7 @@ img {
 }
 
 .btn_white:first-child:active,
-:not(.btn-check)+.btn_white:active {
+:not(.btn-check) + .btn_white:active {
   border-color: var(--bg-white);
   background-color: var(--bg-white);
   color: var(--primary-board);
@@ -175,7 +175,8 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url(../../../assets/imgs/bg/auth-bg.png) var(--bg-board) center no-repeat;
+  background: url(../../../assets/imgs/bg/auth-bg.png) var(--bg-board) center
+    no-repeat;
   background-size: cover;
   padding: 40px 40px;
 }
@@ -184,11 +185,14 @@ img {
   width: 460px;
   border-radius: 15px;
   background: rgba(255, 255, 255, 0.07);
-  box-shadow: -22.366666793823242px 22.366666793823242px 22.366666793823242px 0px rgba(255, 255, 255, 0.07) inset,
-    22.366666793823242px -22.366666793823242px 22.366666793823242px 0px rgba(194,
-      194,
-      194,
-      0.07) inset,
+  box-shadow: -22.366666793823242px 22.366666793823242px 22.366666793823242px
+      0px rgba(255, 255, 255, 0.07) inset,
+    22.366666793823242px -22.366666793823242px 22.366666793823242px 0px rgba(
+        194,
+        194,
+        194,
+        0.07
+      ) inset,
     0px 0px 16px 0px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
 }
@@ -1321,7 +1325,10 @@ img {
 .sidebar_item_active .progress-circle,
 .sidebar_item_active .progress-circle .progress-circle-border,
 .sidebar_item_active .progress-circle .progress-circle-border .left-half-circle,
-.sidebar_item_active .progress-circle .progress-circle-border .right-half-circle {
+.sidebar_item_active
+  .progress-circle
+  .progress-circle-border
+  .right-half-circle {
   height: 90px;
   width: 90px;
 }
@@ -1841,6 +1848,10 @@ img {
   font-weight: 400;
 }
 
+.thm_textbx .thm_textbx {
+  margin: 0px 0px 20px;
+}
+
 .board_form .MuiFormControl-root {
   width: 100%;
 }
@@ -1923,7 +1934,10 @@ img {
   fill: var(--white) !important;
 }
 
-.board_form label[data-shrink="false"]+.MuiInputBase-formControl .MuiInputBase-input {
+.board_form
+  label[data-shrink="false"]
+  + .MuiInputBase-formControl
+  .MuiInputBase-input {
   color: transparent !important;
 }
 
@@ -1943,7 +1957,10 @@ img {
   height: 38px;
 }
 
-.board_form .form-group .input-group-append button.btn.btn-outline-primary:hover {
+.board_form
+  .form-group
+  .input-group-append
+  button.btn.btn-outline-primary:hover {
   border-color: transparent;
   color: var(--white);
   background-color: transparent;
@@ -1990,11 +2007,11 @@ img {
   border-radius: 6px;
 }
 
-.cstm_check:hover input~.checkmark {
+.cstm_check:hover input ~ .checkmark {
   background-color: transparent;
 }
 
-.cstm_check input:checked~.checkmark {
+.cstm_check input:checked ~ .checkmark {
   background-color: var(--white);
 }
 
@@ -2004,7 +2021,7 @@ img {
   display: none;
 }
 
-.cstm_check input:checked~.checkmark:after {
+.cstm_check input:checked ~ .checkmark:after {
   display: block;
 }
 
@@ -2134,19 +2151,169 @@ img {
   margin-bottom: 30px;
 }
 
+.letterBoard {
+  border: 1px solid #5c849d;
+  background: var(--tertiary-board);
+  border-radius: 30px;
+  padding: 40px 40px;
+}
+
+.letterBoard .thm_textbx {
+  margin: 0px 0px 20px;
+  text-align: center;
+}
+
+.letterAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px 10px;
+}
+
+.letterStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px 10px;
+}
+
+.letterAction .btn {
+  font-size: 15px;
+  line-height: 22px;
+  border-radius: 30px;
+  padding: 10px 25px;
+  min-width: 140px;
+}
+
+.letterAction .btn.btn-outline-primary {
+  border-color: var(--white);
+  color: var(--white);
+}
+
+.letterAction .btn.btn-outline-primary:hover {
+  background-color: var(--primary-board);
+}
+
+.letterAction .btn.btn-outline-primary svg g {
+  fill: #fff !important;
+}
+
+.uploadDocBtn {
+  position: relative;
+}
+
+.uploadDocBtn span {
+  position: relative;
+}
+
+.uploadDocBtn input[type="file"] {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.MuiChip-root.MuiChip-filled {
+  background: var(--tertiary-board);
+  color: var(--white);
+}
+
+.profileSetModal .modal-content {
+  margin-top: 0%;
+  border-radius: 20px;
+}
+
+.showImg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showImg img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 2px solid var(--primary-board);
+  margin-bottom: 20px;
+}
+
+.chooseImg {
+  margin: 0px 0px 16px;
+}
+
+.chooseImg h5,
+.formImg h5 {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
+  color: var(--dark);
+  margin: 0px 0px 10px;
+}
+
+.chooseImgItem {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 10px;
+}
+
+.chooseImgItem img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 100%;
+  border: 1px solid #ddd;
+}
+
+.formImg .form-control {
+  margin: 0px 0px 16px;
+}
+
+.profileSetModal .alert_text {
+  text-align: center;
+  padding: 0;
+}
+
+.profileSetModal .modal-body {
+  padding: 30px 30px;
+}
+
+.rejectReason {
+  margin: 30px 0px 0px;
+  display: flex;
+  align-items: center;
+  gap: 10px 10px;
+}
+
+.rejectReason .form-group {
+  width: 100%;
+}
+
+.rejectReason button.btn.btn-primary {
+  min-width: 130px;
+  font-size: 19px;
+  padding: 14px 15px;
+  min-height: 60px;
+  position: relative;
+  top: -15px;
+}
 /* Responsive Start Here */
 
-@media only screen and (max-width: 1599px) {}
+@media only screen and (max-width: 1599px) {
+}
 
+@media only screen and (max-width: 1399px) {
+}
 
-@media only screen and (max-width: 1399px) {}
+@media only screen and (max-width: 1199px) {
+}
 
-
-@media only screen and (max-width: 1199px) {}
-
-
-@media only screen and (max-width: 991px) {}
-
+@media only screen and (max-width: 991px) {
+}
 
 @media only screen and (max-width: 767px) {
   .authwrapper {

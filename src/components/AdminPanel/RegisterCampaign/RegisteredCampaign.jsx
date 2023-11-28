@@ -357,6 +357,13 @@ const params = useParams()
 
   
 }
+const handlePhase = (event)=>{
+  console.log(event);
+  const path=`/admin/phase/${event._id}`
+  navigate(path);
+
+  
+}
 
   const handleSubmit = () => {
     const validationErrors = validateForm(formData);
@@ -588,6 +595,23 @@ const params = useParams()
           <div className="d-flex text-center align-item-center justify-content-center">
             {/* <Link to={`/admin/planCreation`}> */}
             <Button type="button" onClick={()=>handlePlan(params.row)}>
+              <SendTwoToneIcon  />
+             
+            </Button>
+            {/* </Link> */}
+          </div>
+        );
+      },
+      width: 200,
+    },
+    {
+      field: "phase_creation",
+      headerName: "phase creation",
+      renderCell: (params) => {
+        return (
+          <div className="d-flex text-center align-item-center justify-content-center">
+            {/* <Link to={`/admin/planCreation`}> */}
+            <Button type="button" onClick={()=>handlePhase(params.row)}>
               <SendTwoToneIcon  />
              
             </Button>

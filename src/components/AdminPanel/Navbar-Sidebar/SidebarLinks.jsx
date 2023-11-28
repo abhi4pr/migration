@@ -67,7 +67,7 @@ const SidebarLinks = () => {
   const isLeadManagementVisible = [22].some(
     (index) => contextData[index]?.view_value === 1
   );
-  const isExecutionVisible = [24, 31, 32].some(
+  const isExecutionVisible = [24, 31, 32,34].some(
     (index) => contextData[index]?.view_value === 1
   );
   const isInstaApiVisible = [25].some(
@@ -276,6 +276,45 @@ const SidebarLinks = () => {
         </li>
       )}
 
+{/* {isAssetNotifierVisible && ( */}
+        <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseEight"
+            aria-expanded="true"
+            aria-controls="collapseEight"
+          >
+            <i className="bi bi-person-gear" />
+            <span>Asset Notifier</span>
+          </Link>
+          <div
+            id="collapseEight"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              {/* {contextData &&
+                contextData[5] &&
+                contextData[5].view_value === 1 && ( */}
+                  <Link className="collapse-item" to="/admin/self-audit">
+                  Self Audit
+                  </Link>
+                {/* )} */}
+
+              {/* {contextData &&
+                contextData[8] &&
+                contextData[8].view_value === 1 && ( */}
+                  <Link className="collapse-item" to="/pantry-user">
+                  Hr Audit
+                  </Link>
+                {/* )} */}
+            </div>
+          </div>
+        </li>
+      {/* )} */}
+
       {isOnboardingVisible && (
         <li className="nav-item">
           <Link
@@ -428,13 +467,13 @@ const SidebarLinks = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white collapse-inner">
-              {contextData &&
+              {/* {contextData &&
                 contextData[24] &&
                 contextData[24].view_value === 1 &&
-                ""}
+                ""} */}
               {contextData &&
-                contextData[24] &&
-                contextData[24].view_value === 1 && (
+                contextData[34] &&
+                contextData[34].view_value === 1 && (
                   <li className="nav-item">
                     <a
                       className="nav-link collapsed"
@@ -567,6 +606,12 @@ const SidebarLinks = () => {
                           >
                             Plan Overview
                           </Link>
+                          {/* <Link
+                            className="collapse-item"
+                            to="/admin/phase"
+                          >
+                           PhaseCreation
+                          </Link> */}
                           <Link
                             className="collapse-item"
                             to="/admin/checkPageFollowers"

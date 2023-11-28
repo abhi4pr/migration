@@ -31,6 +31,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { Country, City } from "country-state-city";
 import { param } from "jquery";
+import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import { set } from "date-fns";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -90,21 +92,21 @@ function ExecutionAll() {
   const [city3, setCity3] = useState();
   const [city4, setCity4] = useState();
   const [city5, setCity5] = useState();
-  const [city1Percentage, setCity1Percentage] = useState(0);
-  const [city2Percentage, setCity2Percentage] = useState(0);
-  const [city3Percentage, setCity3Percentage] = useState(0);
-  const [city4Percentage, setCity4Percentage] = useState(0);
-  const [city5Percentage, setCity5Percentage] = useState(0);
+  const [city1Percentage, setCity1Percentage] = useState();
+  const [city2Percentage, setCity2Percentage] = useState();
+  const [city3Percentage, setCity3Percentage] = useState();
+  const [city4Percentage, setCity4Percentage] = useState();
+  const [city5Percentage, setCity5Percentage] = useState();
   const [cityImg, setCityImg] = useState();
-  const [malePercentage, setMalePercentage] = useState(0);
-  const [femalePercentage, setFemalePercentage] = useState(0);
-  const [age1Percentage, setAge1Percentage] = useState(0);
-  const [age2Percentage, setAge2Percentage] = useState(0);
-  const [age3Percentage, setAge3Percentage] = useState(0);
-  const [age4Percentage, setAge4Percentage] = useState(0);
-  const [age5Percentage, setAge5Percentage] = useState(0);
-  const [age6percentage, setAge6Percentage] = useState(0);
-  const [age7Percentage, setAge7Percentage] = useState(0);
+  const [malePercentage, setMalePercentage] = useState();
+  const [femalePercentage, setFemalePercentage] = useState();
+  const [age1Percentage, setAge1Percentage] = useState();
+  const [age2Percentage, setAge2Percentage] = useState();
+  const [age3Percentage, setAge3Percentage] = useState();
+  const [age4Percentage, setAge4Percentage] = useState();
+  const [age5Percentage, setAge5Percentage] = useState();
+  const [age6percentage, setAge6Percentage] = useState();
+  const [age7Percentage, setAge7Percentage] = useState();
   const [ageImg, setAgeImg] = useState("");
   const [profileVisit, setProfileVisit] = useState(0);
   const [countryList, setCountryList] = useState([]);
@@ -114,15 +116,24 @@ function ExecutionAll() {
   const [country3, setCountry3] = useState();
   const [country4, setCountry4] = useState();
   const [country5, setCountry5] = useState();
-  const [country1Percentage, setCountry1Percentage] = useState(0);
-  const [country2Percentage, setCountry2Percentage] = useState(0);
-  const [country3Percentage, setCountry3Percentage] = useState(0);
-  const [country4Percentage, setCountry4Percentage] = useState(0);
-  const [country5Percentage, setCountry5Percentage] = useState(0);
+  const [country1Percentage, setCountry1Percentage] = useState();
+  const [country2Percentage, setCountry2Percentage] = useState();
+  const [country3Percentage, setCountry3Percentage] = useState();
+  const [country4Percentage, setCountry4Percentage] = useState();
+  const [country5Percentage, setCountry5Percentage] = useState();
   const [countryImg, setCountryImg] = useState();
   const [updatePercentage, setSetUpdatePercentage] = useState([]);
   const [totalPercentage, setTotalPercentage] = useState(0);
   const [statsUpdateFlag, setSetStatsUpdateFlag] = useState([]);
+  const [profileVisitError, setProfileVisitError] = useState(false);
+  const [reachAndImpressionimgSrc, setReachAndImpressionimgSrc] =
+    useState(null);
+  const [engagementImgSrc, setEngagementImgSrc] = useState(null);
+  const [storyViewImgSrc, setStoryViewImgSrc] = useState(null);
+  const [storyViewVideoSrc, setStoryViewVideoSrc] = useState(null);
+  const [countryImgSrc, setCountryImgSrc] = useState(null);
+  const [cityImgSrc, setCityImgSrc] = useState(null);
+  const [ageImgSrc, setAgeImgSrc] = useState(null);
 
   const handlePercentageChange = (value, setter) => {
     const newValue = parseFloat(value);
@@ -160,8 +171,10 @@ function ExecutionAll() {
 
   const cityCopyValidation = (value) => {
     setTimeout(() => {
-      let tempCityList = cityList;
+      let tempCityList = [...cityList];
+
       tempCityList = tempCityList.filter((city) => !value.includes(city));
+
       setCityList(tempCityList);
     }, 400);
   };
@@ -197,20 +210,20 @@ function ExecutionAll() {
     setCity3();
     setCity4();
     setCity5();
-    setCity1Percentage(0);
-    setCity2Percentage(0);
-    setCity3Percentage(0);
-    setCity4Percentage(0);
-    setCity5Percentage(0);
+    setCity1Percentage("");
+    setCity2Percentage("");
+    setCity3Percentage("");
+    setCity4Percentage("");
+    setCity5Percentage("");
     setMalePercentage(0);
     setFemalePercentage(0);
-    setAge1Percentage(0);
-    setAge2Percentage(0);
-    setAge3Percentage(0);
-    setAge4Percentage(0);
-    setAge5Percentage(0);
-    setAge6Percentage(0);
-    setAge7Percentage(0);
+    setAge1Percentage("");
+    setAge2Percentage("");
+    setAge3Percentage("");
+    setAge4Percentage("");
+    setAge5Percentage("");
+    setAge6Percentage("");
+    setAge7Percentage("");
     setAgeImg();
     setCityImg();
     setReachandImpressionImg();
@@ -223,12 +236,19 @@ function ExecutionAll() {
     setCountry3();
     setCountry4();
     setCountry5();
-    setCountry1Percentage(0);
-    setCountry2Percentage(0);
-    setCountry3Percentage(0);
-    setCountry4Percentage(0);
-    setCountry5Percentage(0);
+    setCountry1Percentage("");
+    setCountry2Percentage("");
+    setCountry3Percentage("");
+    setCountry4Percentage("");
+    setCountry5Percentage("");
     setCountryImg();
+    setCityImgSrc(null);
+    setCountryImgSrc(null);
+    setAgeImgSrc(null);
+    setReachAndImpressionimgSrc(null);
+    setEngagementImgSrc(null);
+    setStoryViewImgSrc(null);
+    setStoryViewVideoSrc(null);
   };
 
   const dropdownStaticData = [
@@ -254,7 +274,7 @@ function ExecutionAll() {
     },
   });
 
-  useEffect(() => {
+  const callDataForLoad = () => {
     const formData = new URLSearchParams();
     formData.append("loggedin_user_id", 36);
 
@@ -299,6 +319,10 @@ function ExecutionAll() {
             });
         }
       });
+  };
+
+  useEffect(() => {
+    callDataForLoad();
     if (userID && contextData == false) {
       axios
         .get(
@@ -532,8 +556,6 @@ function ExecutionAll() {
       headerName: "Update",
       width: 130,
       renderCell: (params) => {
-        
-
         const num =
           updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
             .length > 0
@@ -550,20 +572,14 @@ function ExecutionAll() {
               )[0]?.latestEntry?.stats_update_flag
             : false;
         const res = a ? num : 0;
-        
+
         return (
           <button
             type="button"
             className="btn btn-primary"
             data-toggle="modal"
             data-target="#myModal1"
-              disabled={
-                
-                  ( res ==0 ||
-                   res == 100
-                  ? false : true)
-                  
-              }
+            disabled={res == 0 || res == 100 ? false : true}
             onClick={() => handleRowClick(params.row)}
           >
             Set Stats
@@ -724,6 +740,7 @@ function ExecutionAll() {
         },
       })
       .then(() => {
+        callDataForLoad();
         setQuater("");
         setStatesFor(null);
         setStartDate(null);
@@ -738,20 +755,20 @@ function ExecutionAll() {
         setCity3();
         setCity4();
         setCity5();
-        setCity1Percentage(0);
-        setCity2Percentage(0);
-        setCity3Percentage(0);
-        setCity4Percentage(0);
-        setCity5Percentage(0);
-        setMalePercentage(0);
-        setFemalePercentage(0);
-        setAge1Percentage(0);
-        setAge2Percentage(0);
-        setAge3Percentage(0);
-        setAge4Percentage(0);
-        setAge5Percentage(0);
-        setAge6Percentage(0);
-        setAge7Percentage(0);
+        setCity1Percentage("");
+        setCity2Percentage("");
+        setCity3Percentage("");
+        setCity4Percentage("");
+        setCity5Percentage("");
+        setMalePercentage("");
+        setFemalePercentage("");
+        setAge1Percentage("");
+        setAge2Percentage("");
+        setAge3Percentage("");
+        setAge4Percentage("");
+        setAge5Percentage("");
+        setAge6Percentage("");
+        setAge7Percentage("");
         setAgeImg("");
         setCityImg("");
         setReachandImpressionImg("");
@@ -764,12 +781,19 @@ function ExecutionAll() {
         setCountry3();
         setCountry4();
         setCountry5();
-        setCountry1Percentage(0);
-        setCountry2Percentage(0);
-        setCountry3Percentage(0);
-        setCountry4Percentage(0);
-        setCountry5Percentage(0);
+        setCountry1Percentage("");
+        setCountry2Percentage("");
+        setCountry3Percentage("");
+        setCountry4Percentage("");
+        setCountry5Percentage("");
         setCountryImg();
+        setCityImgSrc(null);
+        setCountryImgSrc(null);
+        setAgeImgSrc(null);
+        setReachAndImpressionimgSrc(null);
+        setEngagementImgSrc(null);
+        setStoryViewImgSrc(null);
+        setStoryViewVideoSrc(null);
 
         toastAlert("Form Submitted success");
       });
@@ -780,7 +804,6 @@ function ExecutionAll() {
       <GridColumnMenu
         {...props}
         slots={{
-          // Hide `columnMenuColumnsItem`
           columnMenuColumnsItem: null,
         }}
       />
@@ -1104,18 +1127,24 @@ function ExecutionAll() {
                   <div>
                     <div className="col-md-3 col-lg-12 d-block my-2">
                       <TextField
-                        label="Reach "
+                        label="Reach"
                         type="number"
                         value={reach}
                         onChange={(e) => {
-                          e.target.value > 0
-                            ? setReachValidation(true)
-                            : setReachValidation(false),
-                            setReach(e.target.value);
+                          const enteredValue = e.target.value;
+                          if (enteredValue >= 0) {
+                            setReachValidation(true);
+                            setReach(enteredValue);
+                          } else {
+                            setReachValidation(false);
+                            // You might choose to handle negative values in a specific way, such as setting reach to 0 or showing an error message.
+                            // For example, you can set reach to 0:
+                            // setReach(0);
+                          }
                         }}
                         error={!reachValidation}
                         helperText={
-                          !reachValidation ? "Please enter a valid Count" : ""
+                          !reachValidation ? "Please enter a valid count" : ""
                         }
                       />
                     </div>
@@ -1124,22 +1153,24 @@ function ExecutionAll() {
                         label="Impressions *"
                         type="number"
                         value={impression}
-                        // fieldGrid={4}
                         onChange={(e) => {
-                          e.target.value > 0
-                            ? setImpressionValidation(true)
-                            : setImpressionValidation(false),
-                            setImpression(e.target.value);
+                          const enteredValue = e.target.value;
+                          if (enteredValue >= 0) {
+                            setImpressionValidation(true);
+                            setImpression(enteredValue);
+                          } else {
+                            setImpressionValidation(false);
+                          }
                         }}
                         error={!impressionValidation}
                         helperText={
                           !impressionValidation
-                            ? "Please enter a valid Count"
+                            ? "Please enter a valid count"
                             : ""
                         }
                       />
                     </div>
-                    <div className="col-md-3 py-1 mb-2">
+                    <div className="col-md-3 py-1 mb-2  ">
                       <Button
                         component="label"
                         variant="contained"
@@ -1150,29 +1181,53 @@ function ExecutionAll() {
                         Image
                         <VisuallyHiddenInput
                           onChange={(e) => {
-                            setReachandImpressionImg(e.target.files[0]);
+                            const uploadedFile = e.target.files[0];
+                            if (uploadedFile) {
+                              const imageUrl =
+                                URL.createObjectURL(uploadedFile);
+                              setReachAndImpressionimgSrc(imageUrl);
+                              setReachandImpressionImg(uploadedFile);
+                            }
                           }}
                           type="file"
                           accept="image/png, image/jpeg"
                         />
                       </Button>
+
+                      {reachAndImpressionimgSrc && (
+                        <div className="d-flex">
+                          <img
+                            src={reachAndImpressionimgSrc}
+                            className="mt-1"
+                            alt="Uploaded"
+                          />{" "}
+                          <Button
+                            size="small"
+                            onClick={() => setReachAndImpressionimgSrc(null)}
+                          >
+                            <CloseTwoToneIcon />
+                          </Button>
+                        </div>
+                      )}
                     </div>
                     <div className="col-md-3 col-lg-12 my-2">
                       <TextField
                         label="Engagement *"
                         type="number"
                         value={engagement}
-                        // fieldGrid={4}
                         onChange={(e) => {
-                          e.target.value > 0
-                            ? setEngagementValidation(true)
-                            : setEndDateIsValid(false),
-                            setEngagement(e.target.value);
+                          const enteredValue = e.target.value;
+                          if (enteredValue >= 0) {
+                            setEngagementValidation(true);
+                            setEngagement(enteredValue);
+                          } else {
+                            setEngagementValidation(false);
+                          }
                         }}
                         error={!engagementValidation}
                         helperText={
                           !engagementValidation
-                            ? "Please enter a valid Count"
+                            ? "Please enter a valid count"
                             : ""
                         }
                       />
@@ -1187,29 +1242,52 @@ function ExecutionAll() {
                         Image
                         <VisuallyHiddenInput
                           onChange={(e) => {
-                            setEngagementImg(e.target.files[0]);
+                            const uploadedFile = e.target.files[0];
+                            if (uploadedFile) {
+                              const imageUrl =
+                                URL.createObjectURL(uploadedFile);
+                              setEngagementImgSrc(imageUrl);
+                              setEngagementImg(uploadedFile);
+                            }
                           }}
                           type="file"
                           accept="image/png, image/jpeg"
                         />
                       </Button>
+                      {engagementImgSrc && (
+                        <div className="d-flex">
+                          <img
+                            src={engagementImgSrc}
+                            className="mt-1"
+                            alt="Uploaded"
+                          />{" "}
+                          <Button
+                            size="small"
+                            onClick={() => setEngagementImgSrc(null)}
+                          >
+                            <CloseTwoToneIcon />
+                          </Button>
+                        </div>
+                      )}
                     </div>
                     <div className="col-md-3 col-lg-12  my-2">
                       <TextField
                         label="Story View *"
                         type="number"
                         value={storyView}
-                        // fieldGrid={4}
                         onChange={(e) => {
-                          e.target.value > 0
-                            ? setStoryViewValidation(true)
-                            : setStoryViewValidation(false),
-                            setStoryView(e.target.value);
+                          const enteredValue = e.target.value;
+                          if (enteredValue >= 0) {
+                            setStoryViewValidation(true);
+                            setStoryView(enteredValue);
+                          } else {
+                            setStoryViewValidation(false);
+                          }
                         }}
                         error={!storyViewValidation}
                         helperText={
                           !storyViewValidation
-                            ? "Please enter a valid Count"
+                            ? "Please enter a valid count"
                             : ""
                         }
                       />
@@ -1225,7 +1303,13 @@ function ExecutionAll() {
                         image
                         <VisuallyHiddenInput
                           onChange={(e) => {
-                            setStoryViewImg(e.target.files[0]);
+                            const uploadedFile = e.target.files[0];
+                            if (uploadedFile) {
+                              const imageUrl =
+                                URL.createObjectURL(uploadedFile);
+                              setStoryViewImgSrc(imageUrl);
+                              setStoryViewImg(uploadedFile);
+                            }
                           }}
                           type="file"
                           accept="image/png, image/jpeg"
@@ -1237,22 +1321,80 @@ function ExecutionAll() {
                         startIcon={<CloudUploadIcon />}
                         size="small"
                       >
-                        video
+                        Video
                         <VisuallyHiddenInput
                           onChange={(e) => {
-                            setStoryViewVideo(e.target.files[0]);
+                            const uploadedFile = e.target.files[0];
+                            if (uploadedFile) {
+                              const videoUrl =
+                                URL.createObjectURL(uploadedFile);
+                              setStoryViewVideoSrc(videoUrl); // Set the video URL in state for preview
+                              setStoryViewVideo(uploadedFile); // Set the uploaded video in state
+                            }
                           }}
                           type="file"
-                          accept=" video/mp4, video/avi"
+                          accept="video/mp4,video/avi"
                         />
                       </Button>
+                      <div>
+                        {storyViewImgSrc && (
+                          <div className="d-flex">
+                            <img
+                              style={{ height: "auto", width: "25%" }}
+                              src={storyViewImgSrc}
+                              className="mt-1"
+                              alt="Uploaded"
+                            />{" "}
+                            <Button
+                              size="small"
+                              onClick={() => setStoryViewImgSrc(null)}
+                            >
+                              <CloseTwoToneIcon />
+                            </Button>
+                          </div>
+                        )}
+                        {storyViewVideoSrc && (
+                          <div className="d-flex align-items-center">
+                            <video
+                              style={{ height: "auto", width: "25%" }}
+                              src={storyViewVideoSrc}
+                              // controls
+                              className="mt-1"
+                              alt="Uploaded Video"
+                            />
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                setStoryViewImgSrc(null);
+                                setStoryViewVideo(null);
+                              }}
+                            >
+                              <CloseTwoToneIcon />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="col-md-3 col-lg-12 my-2">
                       <TextField
                         label="Profile Visit"
                         type="number"
                         value={profileVisit}
-                        onChange={(e) => setProfileVisit(e.target.value)}
+                        onChange={(e) => {
+                          const enteredValue = e.target.value;
+                          if (enteredValue >= 0 || enteredValue === "") {
+                            setProfileVisit(enteredValue);
+                            setProfileVisitError(false); // Reset error state
+                          } else {
+                            setProfileVisitError(true); // Set error state for negative values
+                          }
+                        }}
+                        error={profileVisitError}
+                        helperText={
+                          profileVisitError
+                            ? "Please enter a non-negative number"
+                            : ""
+                        }
                       />
                     </div>
                     {/* </div> */}
@@ -1378,7 +1520,6 @@ function ExecutionAll() {
                       }}
                     />
                     <Autocomplete
-                      // className="mt-3"
                       id="combo-box-demo"
                       value={city5}
                       options={cityList.map((city) => city)}
@@ -1391,7 +1532,6 @@ function ExecutionAll() {
                       )}
                     />
                     <TextField
-                      // className="me-2 mt-3"
                       type="number"
                       value={city5Percentage}
                       onChange={(e) => {
@@ -1415,7 +1555,12 @@ function ExecutionAll() {
                         size="small"
                         className="mt-4"
                         onChange={(e) => {
-                          setCityImg(e.target.files[0]);
+                          const uploadedFile = e.target.files[0];
+                          if (uploadedFile) {
+                            const imageUrl = URL.createObjectURL(uploadedFile);
+                            setCityImgSrc(imageUrl);
+                            setCityImg(uploadedFile);
+                          }
                         }}
                       >
                         Image
@@ -1424,6 +1569,26 @@ function ExecutionAll() {
                           accept="image/png, image/jpeg"
                         />
                       </Button>
+
+                      {cityImgSrc && (
+                        <div className="d-flex align-items-center">
+                          <img
+                            style={{ height: "auto", width: "25%" }}
+                            src={cityImgSrc}
+                            className="mt-1"
+                            alt="Image Uploaded"
+                          />
+                          <Button
+                            size="small"
+                            onClick={() => {
+                              setCityImgSrc(null);
+                              setCityImg(null);
+                            }}
+                          >
+                            <CloseTwoToneIcon />
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1588,7 +1753,12 @@ function ExecutionAll() {
                         size="small"
                         className="mt-3"
                         onChange={(e) => {
-                          setCountryImg(e.target.files[0]);
+                          const uploadedFile = e.target.files[0];
+                          if (uploadedFile) {
+                            const imageUrl = URL.createObjectURL(uploadedFile);
+                            setCountryImgSrc(imageUrl);
+                            setCountryImg(uploadedFile);
+                          }
                         }}
                       >
                         Image
@@ -1597,6 +1767,25 @@ function ExecutionAll() {
                           accept="image/png, image/jpeg"
                         />
                       </Button>
+                      {countryImgSrc && (
+                        <div className="d-flex align-items-center">
+                          <img
+                            style={{ height: "auto", width: "25%" }}
+                            src={countryImgSrc}
+                            className="mt-1"
+                            alt="Country Image Uploaded"
+                          />
+                          <Button
+                            size="small"
+                            onClick={() => {
+                              setCountryImg(null);
+                              setCountryImgSrc(null);
+                            }}
+                          >
+                            <CloseTwoToneIcon />
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1752,7 +1941,12 @@ function ExecutionAll() {
                         size="small"
                         className="mt-4"
                         onChange={(e) => {
-                          setAgeImg(e.target.files[0]);
+                          const uploadedFile = e.target.files[0];
+                          if (uploadedFile) {
+                            const imageUrl = URL.createObjectURL(uploadedFile);
+                            setAgeImgSrc(imageUrl);
+                            setAgeImg(uploadedFile);
+                          }
                         }}
                       >
                         Image
@@ -1762,6 +1956,25 @@ function ExecutionAll() {
                         />
                       </Button>
 
+                      {ageImgSrc && (
+                        <div className="d-flex align-items-center">
+                          <img
+                            style={{ height: "auto", width: "25%" }}
+                            src={ageImgSrc}
+                            className="mt-1"
+                            alt="Age Image Uploaded"
+                          />
+                          <Button
+                            size="small"
+                            onClick={() => {
+                              setAgeImgSrc(null);
+                              setAgeImg(null);
+                            }}
+                          >
+                            <CloseTwoToneIcon />
+                          </Button>
+                        </div>
+                      )}
                       {totalPercentage < 98 && (
                         <span style={{ color: "red" }}>
                           Total percentage must be at least 98%
