@@ -11,7 +11,9 @@ import jwtDecode from "jwt-decode";
 import * as XLSX from "xlsx";
 import Select from "react-select";
 import Modal from "react-modal";
+import { useGlobalContext } from "../../Context/Context";
 const SimOverview = () => {
+  const { toastAlert } = useGlobalContext();
   const [search, setSearch] = useState("");
   const [ImageModalOpen, setImageModalOpen] = useState(false);
 
@@ -39,7 +41,7 @@ const SimOverview = () => {
     []
   );
 
-  const [showAssetsImage , setShowAssetImages] = useState([])
+  const [showAssetsImage, setShowAssetImages] = useState([]);
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const userID = decodedToken.id;
@@ -166,7 +168,7 @@ const SimOverview = () => {
         submitted_at: dateString,
       });
 
-      axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
+      axios.post("http://192.168.29.116:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         sim_id: Number(simAllocationTransferData[0].sim_id),
         // dept_id: Number(modalSelectedUserData[0].dept_id),
@@ -180,13 +182,12 @@ const SimOverview = () => {
 
   function handleSimAllocation() {
     if (selectedUserTransfer !== "") {
-      axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
+      axios.post("http://192.168.29.116:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         status: "Allocated",
         sim_id: Number(modalData.sim_id),
-        category_id:Number(modalData.category_id),
-        sub_category_id:Number(modalData.sub_category_id),
-        // dept_id: Number(modalSelectedUserData[0].dept_id),
+        category_id: Number(modalData.category_id),
+        sub_category_id: Number(modalData.sub_category_id),
         created_by: userID,
       });
 
@@ -202,6 +203,7 @@ const SimOverview = () => {
         type: modalData.type,
         remark: modalData.Remarks,
       });
+      toastAlert("Asset Allocated Successfully");
       setSelectedUserTransfer("");
     } else {
       alert("Please select user first");
@@ -216,13 +218,6 @@ const SimOverview = () => {
       width: "5%",
       sortable: true,
     },
-    // {
-    //   name: "Mobile ",
-    //   cell: (row) => (
-    //     <Link to={`/sim-update/${row.sim_id}`}>{row.mobileNumber}</Link>
-    //   ),
-    //   sortable: true,
-    // },
     {
       name: "Assets Name",
       selector: (row) => row.assetsName,
@@ -240,7 +235,7 @@ const SimOverview = () => {
     },
     {
       name: "Duration",
-      selector: (row) => row.date_difference + ""+"days",
+      selector: (row) => row.date_difference + "" + "days",
       sortable: true,
     },
     {
@@ -350,13 +345,14 @@ const SimOverview = () => {
   };
 
   const handleImageClick = (row) => {
-    axios.post(`http://34.93.135.33:8080/api/get_single_assets_image`, {
-      sim_id: row,
-    })
-    .then((res) => {
-      // console.log(res.data.data, "new one");
-      setShowAssetImages(res.data.data)
-    });
+    axios
+      .post(`http://34.93.135.33:8080/api/get_single_assets_image`, {
+        sim_id: row,
+      })
+      .then((res) => {
+        // console.log(res.data.data, "new one");
+        setShowAssetImages(res.data.data);
+      });
     setImageModalOpen(true);
   };
   const handleCloseImageModal = () => {
@@ -367,11 +363,11 @@ const SimOverview = () => {
       const categoryMatch = !category || d.category_id === category;
       const subcategoryMatch =
         !subcategory || d.sub_category_id === subcategory;
-      const assettypeMatch = !assetsType || d.s_type === assetsType
-      return categoryMatch && subcategoryMatch && assettypeMatch
+      const assettypeMatch = !assetsType || d.s_type === assetsType;
+      return categoryMatch && subcategoryMatch && assettypeMatch;
     });
     setFilterData(result);
-  }, [category, subcategory , assetsType]);
+  }, [category, subcategory, assetsType]);
 
   return (
     <>
@@ -639,7 +635,7 @@ const SimOverview = () => {
                     <li>
                       <span>Sim Type: </span>
                       {modalData.s_type}
-                    </li> 
+                    </li>
                   </ul>
                 </div>
                 {/* <div className="modal_formbx row thm_form">
@@ -864,73 +860,81 @@ const SimOverview = () => {
             >
               X
             </button>
-          </div>               
-        </div> 
+          </div>
+        </div>
 
-{showAssetsImage.length > 0 && (
-        <div className="summary_cards flex-row row">
-        <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                  <div className="summary_card">
-                    <div className="summary_cardtitle">
-                    </div>
-                    <div className="summary_cardbody">
-                      <div className="summary_cardrow flex-column">
-                        <div className="summary_box text-center ml-auto mr-auto">
-                        </div>
-                        <div className="summary_box col">
-                          <img src={showAssetsImage[0]?.img1_url} width="80px" height="80px"/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                  <div className="summary_card">
-                    <div className="summary_cardtitle">
-                    </div>
-                    <div className="summary_cardbody">
-                      <div className="summary_cardrow flex-column">
-                        <div className="summary_box text-center ml-auto mr-auto">
-                        </div>
-                        <div className="summary_box col">
-                          <img src={showAssetsImage[0]?.img2_url} width="80px" height="80px"/>
-                        </div>
-                      </div>
+        {showAssetsImage.length > 0 && (
+          <div className="summary_cards flex-row row">
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+              <div className="summary_card">
+                <div className="summary_cardtitle"></div>
+                <div className="summary_cardbody">
+                  <div className="summary_cardrow flex-column">
+                    <div className="summary_box text-center ml-auto mr-auto"></div>
+                    <div className="summary_box col">
+                      <img
+                        src={showAssetsImage[0]?.img1_url}
+                        width="80px"
+                        height="80px"
+                      />
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                  <div className="summary_card">
-                    <div className="summary_cardtitle">
-                    </div>
-                    <div className="summary_cardbody">
-                      <div className="summary_cardrow flex-column">
-                        <div className="summary_box text-center ml-auto mr-auto">
-                        </div>
-                        <div className="summary_box col">
-                          <img src={showAssetsImage[0]?.img3_url} width="80px" height="80px"/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                  <div className="summary_card">
-                    <div className="summary_cardtitle">
-                    </div>
-                    <div className="summary_cardbody">
-                      <div className="summary_cardrow flex-column">
-                        <div className="summary_box text-center ml-auto mr-auto">
-                        </div>
-                        <div className="summary_box col">
-                          <img src={showAssetsImage[0]?.img4_url} width="80px" height="80px"/>
-                        </div>
-                      </div>
+              </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+              <div className="summary_card">
+                <div className="summary_cardtitle"></div>
+                <div className="summary_cardbody">
+                  <div className="summary_cardrow flex-column">
+                    <div className="summary_box text-center ml-auto mr-auto"></div>
+                    <div className="summary_box col">
+                      <img
+                        src={showAssetsImage[0]?.img2_url}
+                        width="80px"
+                        height="80px"
+                      />
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+              <div className="summary_card">
+                <div className="summary_cardtitle"></div>
+                <div className="summary_cardbody">
+                  <div className="summary_cardrow flex-column">
+                    <div className="summary_box text-center ml-auto mr-auto"></div>
+                    <div className="summary_box col">
+                      <img
+                        src={showAssetsImage[0]?.img3_url}
+                        width="80px"
+                        height="80px"
+                      />
+                    </div>
+                  </div>
                 </div>
-                )}
+              </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+              <div className="summary_card">
+                <div className="summary_cardtitle"></div>
+                <div className="summary_cardbody">
+                  <div className="summary_cardrow flex-column">
+                    <div className="summary_box text-center ml-auto mr-auto"></div>
+                    <div className="summary_box col">
+                      <img
+                        src={showAssetsImage[0]?.img4_url}
+                        width="80px"
+                        height="80px"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </Modal>
     </>
   );

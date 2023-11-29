@@ -8,7 +8,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 
 const SimUpdate = () => {
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, toastError } = useGlobalContext();
   const [assetsName, setAssetsName] = useState("");
   const [assetsID, setAssetsID] = useState("");
   const [assetsOtherID, setAssetsOtherID] = useState("");
@@ -18,7 +18,6 @@ const SimUpdate = () => {
   const [assetType, setAssetType] = useState(null);
   const [assetsCategory, setAssetsCategory] = useState(null);
   const [subCategory, setSubCategory] = useState("");
-  // console.log(subCategory , "Asset")
   const [vendorName, setVendorName] = useState("");
   const [invoiceCopy, setInvoiceCopy] = useState("");
   const [inWarranty, setInWarranty] = useState("");
@@ -81,51 +80,49 @@ const SimUpdate = () => {
         //if (fetchedData.length > 0) {
 
         const {
-          asset_id,
-          asset_type,
+          sim_no,
+          s_type,
           assetsName,
           assetsOtherID,
           category_id,
-          status,
           sub_category_id,
           vendor_id,
           inWarranty,
           warrantyDate,
           selfAuditPeriod,
           selfAuditUnit,
+          hrAuditPeriod,
+          hrAuditUnit,
           assetsValue,
           assetsCurrentValue,
-          category_name,
-          sub_category_name,
-          vendor_name,
           dateOfPurchase,
         } = fetchedData;
         setAssetsName(assetsName);
-        setAssetsID(asset_id);
+        setAssetsID(sim_no);
         setAssetsOtherID(assetsOtherID);
-        setAssetType(asset_type);
+        setAssetType(s_type);
         setAssetsCategory(category_id);
         setSubCategory(sub_category_id);
         setVendorName(vendor_id);
-
         setInWarranty(inWarranty);
-        setWarrantyDate();
-        setDateOfPurchase();
+        setWarrantyDate(warrantyDate.split("T")?.[0]);
+        setDateOfPurchase(dateOfPurchase.split("T")?.[0]);
         setSelfAuditPeriod(selfAuditPeriod);
         setSelfAuditUnit(selfAuditUnit);
-        setHrSelfAuditPeriod();
-        setHrSelfAuditUnit();
+        setHrSelfAuditPeriod(hrAuditPeriod);
+        setHrSelfAuditUnit(hrAuditUnit);
         setAssetsValue(assetsValue);
         setAssetsCurrentValue(assetsCurrentValue);
         setRemark;
-        //}
         setSimData(fetchedData);
       });
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+
+    formData.append("id", id);
     formData.append("assetsName", assetsName);
     formData.append("sim_no", assetsID);
     formData.append("assetsOtherID", assetsOtherID);
@@ -134,8 +131,8 @@ const SimUpdate = () => {
     formData.append("inWarranty", inWarranty);
     formData.append("dateOfPurchase", dateOfPurchase);
     formData.append("category_id", assetsCategory);
-    formData.append("sub_category_id", subCategory.sub_category_id);
-    formData.append("vendor_id", vendorName.vendor_id);
+    formData.append("sub_category_id", subCategory);
+    formData.append("vendor_id", vendorName);
     formData.append("invoiceCopy", invoiceCopy);
     formData.append("selfAuditPeriod", selfAuditPeriod);
     formData.append("selfAuditUnit", selfAuditUnit);
@@ -147,28 +144,23 @@ const SimUpdate = () => {
     formData.append("created_by", loginUserId);
     formData.append("status", "Available");
 
-    axios.put(
-      "http://34.93.135.33:8080/api/update_simsfsfsdf",
-      formData
-      // id: simId,
-      // mobilenumber: mobileNumber,
-      // sim_no: simNumber,
-      // provider: provider,
-      // status: status,
-      // dept_id: Number(department),
-      // desi_id: Number(designation),
-      // s_type: simType,
-      // type: type,
-      // remark: remark,
-      // createdBy: loginUserId,
-      // register: register,
-    );
+    try {
+      const response = await axios.put(
+        "http://34.93.135.33:8080/api/update_sim",
+        formData
+      );
 
-    toastAlert("Form Submitted success");
-    setIsFormSubmitted(true);
+      if (response.status === 200) {
+        toastAlert("Form Submitted successfully");
+        setIsFormSubmitted(true);
+      } else {
+        toastError("Form submission failed. Please try again later.");
+      }
+    } catch (error) {
+      toastError("Form submission failed. Please try again later.");
+    }
   };
 
-  // console.log(categoryData?.filter(e => e.category_id == assetsCategory)[0]?.category_name)
   if (isFormSubmitted) {
     return <Navigate to="/sim-overview" />;
   }
@@ -199,7 +191,7 @@ const SimUpdate = () => {
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
-                  label="Assets ID"
+                  label="Assets ID *"
                   type="number"
                   value={assetsID}
                   onChange={(e) => setAssetsID(e.target.value)}
@@ -281,26 +273,26 @@ const SimUpdate = () => {
 
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group form_select">
-                ` <Autocomplete
+                `{" "}
+                <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   options={categoryData?.map((cat) => ({
                     label: cat?.category_name,
                     value: cat?.category_id,
                   }))}
-                
-                  value={categoryData?.find((cat) => cat.category_id === assetsCategory)?.category_name || ""}
+                  value={
+                    categoryData?.find(
+                      (cat) => cat.category_id === assetsCategory
+                    )?.category_name || ""
+                  }
                   onChange={(e, newValue) => {
                     setAssetsCategory(newValue.value);
-                    // console.log(newValue.value)
                   }}
-                  // getOptionLabel={(option) => option} // This is the key change
                   renderInput={(params) => (
-                    <TextField {...params} label="Assets Category" />
+                    <TextField {...params} label="Assets Category *" />
                   )}
                 />
-
-
                 `
               </div>
             </div>
@@ -310,31 +302,21 @@ const SimUpdate = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={subcategoryData.map((sub) => ({
-                    label: sub.sub_category_name,
-                    value: sub.sub_category_id,
+                  options={subcategoryData?.map((sub) => ({
+                    label: sub?.sub_category_name,
+                    value: sub?.sub_category_id,
                   }))}
-                  value={subCategory}
-                  // value={
-                  //   subCategory
-                  //     ? {
-                  //         label:
-                  //           subcategoryData.find(
-                  //             (d) => d.sub_category_id === subCategory
-                  //           )?.sub_category_name || "",
-                  //         value: subCategory,
-                  //       }
-                  //     : null
-                  // }
+                  // value={subCategory}
+                  value={
+                    subcategoryData?.find(
+                      (sub) => sub.sub_category_id === subCategory
+                    )?.sub_category_name || ""
+                  }
                   onChange={(e, newvalue) => {
-                    setSubCategory((pre) => ({
-                      label: newvalue.label,
-                      sub_category_id: newvalue.value,
-                    }));
+                    setSubCategory(newvalue.value);
                   }}
-                  // defaultValue={subCat[0]}
                   renderInput={(params) => (
-                    <TextField {...params} label="Sub Category" />
+                    <TextField {...params} label="Sub Category *" />
                   )}
                 />
               </div>
@@ -349,26 +331,16 @@ const SimUpdate = () => {
                     label: vendor.vendor_name,
                     value: vendor.vendor_id,
                   }))}
-                  // value={vendorName}
                   value={
-                    vendorName
-                      ? {
-                        label:
-                          vendorData.find((d) => d.vendor_id === vendorName)
-                            ?.vendor_name || "",
-                        value: vendorName,
-                      }
-                      : null
+                    vendorData?.find(
+                      (vendor) => vendor.vendor_id === vendorName
+                    )?.vendor_name || ""
                   }
                   onChange={(e, newvalue) => {
-                    setVendorName((pre) => ({
-                      label: newvalue.label,
-                      vendor_id: newvalue.value,
-                    }));
+                    setVendorName(newvalue.value);
                   }}
-                  // defaultValue={categoryData[0]}
                   renderInput={(params) => (
-                    <TextField {...params} label="Vendor Name" />
+                    <TextField {...params} label="Vendor Name *" />
                   )}
                 />
               </div>
@@ -393,7 +365,7 @@ const SimUpdate = () => {
                 <TextField
                   id="outlined-basic"
                   label="Self Audit Period"
-                  type="text"
+                  type="number"
                   value={selfAuditPeriod}
                   onChange={(e) => setSelfAuditPeriod(e.target.value)}
                 />
@@ -419,7 +391,7 @@ const SimUpdate = () => {
                 <TextField
                   id="outlined-basic"
                   label="HR Self Audit Period"
-                  type="text"
+                  type="number"
                   value={hrselfAuditPeriod}
                   onChange={(e) => setHrSelfAuditPeriod(e.target.value)}
                 />

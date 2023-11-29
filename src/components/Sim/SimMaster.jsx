@@ -8,17 +8,25 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 
 const SimMaster = () => {
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, toastError } = useGlobalContext();
   const [assetsName, setAssetsName] = useState("");
+
   const [assetsID, setAssetsID] = useState("");
+  const [assetsIDError, setAssetsIDError] = useState(""); // Define the error state
+
   const [assetsOtherID, setAssetsOtherID] = useState("");
   const [isValidcontact, setValidContact] = useState(false);
-  // const [isContactTouched, setisContactTouched] = useState(false);
-
   const [assetType, setAssetType] = useState("");
+
   const [assetsCategory, setAssetsCategory] = useState("");
+  const [assetsCategoryError, setAssetsCategoryError] = useState("");
+
   const [subCategory, setSubCategory] = useState("");
+  const [subcategoryError, setSubCategoryError] = useState("");
+
   const [vendorName, setVendorName] = useState("");
+  const [vendorNameError, setVendorNameError] = useState("");
+
   const [invoiceCopy, setInvoiceCopy] = useState("");
   const [inWarranty, setInWarranty] = useState("");
   const [warrantyDate, setWarrantyDate] = useState("");
@@ -47,7 +55,7 @@ const SimMaster = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const [imageType , setImageType] = useState("")
+  const [imageType, setImageType] = useState("");
   const inWarrantyOption = ["No", "Yes"];
   const IMGType = ["HR", "User"];
   const assettype = ["New", "Old"];
@@ -80,13 +88,24 @@ const SimMaster = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (assetsID === "") {
+      setAssetsIDError("Assets ID is required");
+    }
+    if (!assetsCategory || !assetsCategory.category_id) {
+      setAssetsCategoryError("Assets Category is required");
+    }
+    if (!subCategory || !subCategory.sub_category_id) {
+      setSubCategoryError("Assets SubCategory is required");
+    }
+    if (!vendorName || vendorName.vendor_id) {
+      setVendorNameError("Vendor Name is required");
+    }
     try {
       const formData = new FormData();
       formData.append("assetsName", assetsName);
       formData.append("sim_no", assetsID);
       formData.append("assetsOtherID", assetsOtherID);
       formData.append("s_type", assetType);
-      // console.log(assetType , "assettype hai")
       formData.append("warrantyDate", warrantyDate);
       formData.append("inWarranty", inWarranty);
       formData.append("dateOfPurchase", dateOfPurchase);
@@ -115,7 +134,6 @@ const SimMaster = () => {
       const imageData = new FormData();
       imageData.append("sim_id", responseSimID);
       imageData.append("uploaded_by", 90);
-
       imageData.append("type", imageType);
       imageData.append("img1", assetsImg1);
       imageData.append("img2", assetsImg2);
@@ -129,8 +147,13 @@ const SimMaster = () => {
       toastAlert("Form Submitted success");
       setIsFormSubmitted(true);
     } catch {
-      // console.error("Error:", error);
-      toastAlert("Form submission failed. Please try again.");
+      toastError("Form submission failed. Please try again.");
+    }
+  };
+  const handleAssetsIDChange = (e) => {
+    setAssetsID(e.target.value);
+    if (assetsIDError) {
+      setAssetsIDError("");
     }
   };
 
@@ -165,10 +188,13 @@ const SimMaster = () => {
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
-                  label="Assets ID"
+                  label="Assets ID *"
                   type="number"
                   value={assetsID}
-                  onChange={(e) => setAssetsID(e.target.value)}
+                  // onChange={(e) => setAssetsID(e.target.value)}
+                  onChange={handleAssetsIDChange}
+                  error={!!assetsIDError}
+                  helperText={assetsIDError}
                 />
               </div>
             </div>
@@ -250,7 +276,6 @@ const SimMaster = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  // options={categoryData.map((cat) => cat.category_name)}
                   options={categoryData.map((cat) => ({
                     label: cat.category_name,
                     value: cat.category_id,
@@ -261,9 +286,17 @@ const SimMaster = () => {
                       label: newvalue.label,
                       category_id: newvalue.value,
                     }));
+                    if (assetsCategoryError) {
+                      setAssetsCategoryError("");
+                    }
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Assets Category" />
+                    <TextField
+                      {...params}
+                      label="Assets Category *"
+                      error={!!assetsCategoryError}
+                      helperText={assetsCategoryError}
+                    />
                   )}
                 />
               </div>
@@ -284,10 +317,17 @@ const SimMaster = () => {
                       label: newvalue.label,
                       sub_category_id: newvalue.value,
                     }));
+                    if (subcategoryError) {
+                      setSubCategoryError("");
+                    }
                   }}
-                  // defaultValue={subCat[0]}
                   renderInput={(params) => (
-                    <TextField {...params} label="Sub Category" />
+                    <TextField
+                      {...params}
+                      label="Sub Category *"
+                      error={!!subcategoryError}
+                      helperText={subcategoryError}
+                    />
                   )}
                 />
               </div>
@@ -308,10 +348,18 @@ const SimMaster = () => {
                       label: newvalue.label,
                       vendor_id: newvalue.value,
                     }));
+                    if (vendorNameError) {
+                      setVendorNameError("");
+                    }
                   }}
                   // defaultValue={categoryData[0]}
                   renderInput={(params) => (
-                    <TextField {...params} label="Vendor Name" />
+                    <TextField
+                      {...params}
+                      label="Vendor Name *"
+                      error={!!vendorNameError}
+                      helperText={vendorNameError}
+                    />
                   )}
                 />
               </div>

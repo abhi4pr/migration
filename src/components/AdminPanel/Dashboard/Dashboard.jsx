@@ -14,6 +14,8 @@ function Dashboard() {
   const [IntellectualProperty, getIntellectualProperty] = useState([]);
   const [contextData, setDatas] = useState([]);
   const [loginUserData, setLoginUserData] = useState([]);
+  const [accountsPendingPaymentsCount, setAccountsPendingPaymentsCount] =
+    useState([]);
 
   const navigate = useNavigate();
 
@@ -58,7 +60,14 @@ function Dashboard() {
     axios.get("http://34.93.135.33:8080/api/alldataofipregis").then((res) => {
       getIntellectualProperty(res.data);
     });
+    axios.get("http://34.93.135.33:8080/api/get_finances").then((res) => {
+      const response = res?.data;
+      setAccountsPendingPaymentsCount(
+        response?.filter((item) => item?.status_ == 0)
+      );
+    });
   }, []);
+  console.log(accountsPendingPaymentsCount);
   const AllSimData = allsimData.length;
   const AllLogoBrandData = logoBrandData.length;
   const AllIntellectualProperty = IntellectualProperty.length;
@@ -232,7 +241,7 @@ function Dashboard() {
                 >
                   <div className="d_infocard_txt">
                     <h3>Pending WFH Payments</h3>
-                    <h2>{AllIntellectualProperty}</h2>
+                    <h2>{accountsPendingPaymentsCount?.length}</h2>
                   </div>
                   <div className="d_infocard_icon">
                     <span>

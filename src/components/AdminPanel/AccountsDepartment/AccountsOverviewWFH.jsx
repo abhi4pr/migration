@@ -12,8 +12,12 @@ import MyTemplate5 from "../WFH/SalaryGeneration/Template5";
 import { set } from "date-fns";
 import CheckableTag from "antd/es/tag/CheckableTag";
 import { generatePDF } from "../WFH/SalaryGeneration/pdfGenerator";
+import { useGlobalContext } from "../../../Context/Context";
 
 const AccountsOverviewWFH = () => {
+  const { toastAlert } = useGlobalContext();
+  const [showModal, setShowModal] = useState(false);
+
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -27,14 +31,23 @@ const AccountsOverviewWFH = () => {
   const [salaryStatusToggle, setSalaryStatusToggle] = useState(0);
 
   const [isloading, setIsLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      axios.get(`http://34.93.135.33:8080/api/get_finances`).then((res) => {
+        const response = res.data;
+        setData(response);
+        setFilterData(
+          response.filter((item) => item.status_ == salaryStatusToggle)
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_finances`).then((res) => {
-      const response = res.data;
-      setData(response);
-      setFilterData(
-        response.filter((item) => item.status_ == salaryStatusToggle)
-      );
-    });
+    getData();
   }, []);
 
   useEffect(() => {
@@ -49,12 +62,14 @@ const AccountsOverviewWFH = () => {
   }, [search]);
 
   const handlePay = (row) => {
+    setShowModal(true);
     setId(row.id);
     setAmount("");
     setDate("");
   };
 
-  function handlePayOut() {
+  function handlePayOut(e) {
+    e.preventDefault();
     const formData = new FormData();
     formData.append("id", id);
     formData.append("amount", amount);
@@ -63,11 +78,18 @@ const AccountsOverviewWFH = () => {
     formData.append("reference_no", refrenceNumber);
     formData.append("pay_date", date);
 
-    axios.put(`http://34.93.135.33:8080/api/edit_finance`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    axios
+      .put(`http://34.93.135.33:8080/api/edit_finance`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        setRefrenceNumber("");
+        setAmount("");
+        toastAlert("Paid");
+        setShowModal(false);
+      });
   }
 
   const handleInvoice = (data) => {
@@ -175,6 +197,13 @@ const AccountsOverviewWFH = () => {
       ),
     },
   ];
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
     <>
       <div className="action_heading">
@@ -279,88 +308,91 @@ const AccountsOverviewWFH = () => {
         </div>
       )}
 
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
-                Pay
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="form-group">
-                  <label className="col-form-label">Amount</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="recipient-name"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
-                  <label className="col-form-label">Date</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="recipient-name"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                  />
-                  <label className="col-form-label">Snapshot</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="recipient-name"
-                    onChange={(e) => setScreenshot(e.target.files[0])}
-                  />
+      {showModal && (
+        <div
+          className={`modal fade ${showModal ? "show" : ""}`}
+          tabIndex={-1}
+          role="dialog"
+          style={{ display: showModal ? "block" : "none" }}
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">
+                  Pay
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <form onSubmit={handlePayOut}>
+                <div className="modal-body">
+                  <div className="form-group">
+                    <label className="col-form-label">Amount</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="recipient-name"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                    <label className="col-form-label">Date</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="recipient-name"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      min={`${new Date().getFullYear()}-${String(
+                        new Date().getMonth() + 1
+                      ).padStart(2, "0")}-01`}
+                    />
+                    <label className="col-form-label">Snapshot</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="recipient-name"
+                      onChange={(e) => setScreenshot(e.target.files[0])}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="col-form-label">RefrenceNumber</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="recipient-name"
+                      value={refrenceNumber}
+                      onChange={(e) => setRefrenceNumber(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="col-form-label">RefrenceNumber</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="recipient-name"
-                    value={refrenceNumber}
-                    onChange={(e) => setRefrenceNumber(e.target.value)}
-                  />
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={closeModal}
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    // onClick={handlePayOut}
+                  >
+                    Pay
+                  </button>
                 </div>
               </form>
             </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-dismiss="modal"
-                onClick={handlePayOut}
-              >
-                Send message
-              </button>
-            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
