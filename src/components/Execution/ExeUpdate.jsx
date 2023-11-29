@@ -27,6 +27,7 @@ import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { set } from "date-fns";
 import CloseTwoToneIcon from "@mui/icons-material/CloseTwoTone";
+import jwtDecode from "jwt-decode";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -41,6 +42,9 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function ExeUPdate() {
+  const storedToken = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(storedToken);
+  const userID = decodedToken.id;
   const location = useLocation();
 
   const { toastAlert } = useGlobalContext();
@@ -70,7 +74,7 @@ export default function ExeUPdate() {
   const [impressionValidation, setImpressionValidation] = useState(true);
   const [engagementValidation, setEngagementValidation] = useState(true);
   const [storyViewValidation, setStoryViewValidation] = useState(true);
-  const [reachandImpressionImg, setReachandImpressionImg] = useState();
+  const [impressionImg, setImpressionImg] = useState();
   const [engagementImg, setEngagementImg] = useState();
   const [storyViewImg, setStoryViewImg] = useState();
   const [storyViewVideo, setStoryViewVideo] = useState(null);
@@ -109,7 +113,7 @@ export default function ExeUPdate() {
   const [country4Percentage, setCountry4Percentage] = useState(0);
   const [country5Percentage, setCountry5Percentage] = useState(0);
   const [countryImg, setCountryImg] = useState();
-  const [reachAndImpressionimgSrc, setReachAndImpressionimgSrc] =
+  const [impressionimgSrc, setImpressionimgSrc] =
     useState(null);
   const [engagementImgSrc, setEngagementImgSrc] = useState(null);
   const [storyViewImgSrc, setStoryViewImgSrc] = useState(null);
@@ -117,6 +121,8 @@ export default function ExeUPdate() {
   const [countryImgSrc, setCountryImgSrc] = useState(null);
   const [cityImgSrc, setCityImgSrc] = useState(null);
   const [ageImgSrc, setAgeImgSrc] = useState(null);
+  const [reachImgSrc, setReachImgSrc] = useState(null);
+  const [reachImg, setReachImg] = useState(null);
 
   const navigate = useNavigate();
   const saveStats = async (e) => {
@@ -133,7 +139,8 @@ export default function ExeUPdate() {
     formData.append("start_date", startDate);
     formData.append("end_date", endDate);
     formData.append("stats_for", statesFor);
-    formData.append("reach_impression_upload_image", reachandImpressionImg);
+    formData.append("impression_upload_image", impressionImg);
+    formData.append("reach_upload_image", reachImg);
     formData.append("engagement_upload_image", engagementImg);
     formData.append("story_view_upload_image", storyViewImg);
     formData.append("story_view_upload_video", storyViewVideo);
@@ -170,6 +177,8 @@ export default function ExeUPdate() {
     formData.append("percentage_country4_name", country4Percentage);
     formData.append("percentage_country5_name", country5Percentage);
     formData.append("country_image_upload", countryImg);
+    formData.append("user_id", userID);
+
 
     axios
       .put(`http://34.93.135.33:8080/api/edit_exe_ip_count_history`, formData, {
@@ -226,8 +235,8 @@ export default function ExeUPdate() {
         setCity4Percentage(data.percentage_city4_name);
         setCity5Percentage(data.percentage_city5_name);
         setQuater(data.quater);
-        setReachandImpressionImg(data.reach_impression_upload_image_url);
-        setReachAndImpressionimgSrc(data.reach_impression_upload_image_url);
+        impressionImg(data.impression_upload_image_url);
+        impressionimgSrc(data.impression_upload_image_url);
         setStatesFor(data.stats_for);
         setStoryView(data.story_view);
         setStoryViewImg(data.story_view_upload_image_url);
@@ -246,6 +255,10 @@ export default function ExeUPdate() {
         setCountry5Percentage(data.percentage_country5_name);
         setCountryImg(data.country_image_upload_url);
         setCountryImgSrc(data.country_image_upload_url);
+        setReachImg(data.reach_upload_image_url);
+        setReachImgSrc(data.reach_upload_image_url);
+        setImpressionImg(data.impression_upload_image_url);
+        setImpressionimgSrc(data.impression_upload_image_url);
       });
   };
 
@@ -457,6 +470,50 @@ export default function ExeUPdate() {
                     !reachValidation ? "Please enter a valid Count" : ""
                   }
                 />
+                 <div className="col-md-3 py-1 mb-2  ">
+                        <Button
+                          component="label"
+                          variant="contained"
+                          startIcon={<CloudUploadIcon />}
+                          size="small"
+                          title="Reach"
+                        >
+                          Image
+                          <VisuallyHiddenInput
+                            onChange={(e) => {
+                              const uploadedFile = e.target.files[0];
+                              if (uploadedFile) {
+                                const imageUrl =
+                                  URL.createObjectURL(uploadedFile);
+                                setReachImgSrc(imageUrl);
+                                setReachImg(uploadedFile);
+                              }
+                            }}
+                            type="file"
+                            accept="image/png, image/jpeg"
+                          />
+                        </Button>
+
+                        {reachImgSrc && (
+                          <div className="d-flex">
+                            <img
+                            style={{ width: "50px", height: "50px" }}
+                              src={reachImgSrc}
+                              className="mt-1"
+                              alt="Uploaded"
+                            />{" "}
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                setReachImgSrc(null);
+                                setReachImg(null);
+                              }}
+                            >
+                              <CloseTwoToneIcon />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
               </div>
               <div className="col-md-3 col-lg-12 d-block my-2">
                 <TextField
@@ -482,7 +539,7 @@ export default function ExeUPdate() {
                   variant="contained"
                   startIcon={<CloudUploadIcon />}
                   size="small"
-                  title="Reach & Impression"
+                  title="Impression"
                 >
                   Image
                   <VisuallyHiddenInput
@@ -490,8 +547,8 @@ export default function ExeUPdate() {
                       const uploadedFile = e.target.files[0];
                       if (uploadedFile) {
                         const imageUrl = URL.createObjectURL(uploadedFile);
-                        setReachAndImpressionimgSrc(imageUrl);
-                        setReachandImpressionImg(uploadedFile);
+                        setImpressionimgSrc(imageUrl);
+                        setImpressionImg(uploadedFile);
                       }
                     }}
                     type="file"
@@ -499,17 +556,17 @@ export default function ExeUPdate() {
                   />
                 </Button>
 
-                {reachAndImpressionimgSrc && (
+                {impressionimgSrc && (
                   <div className="d-flex">
                     <img
                       style={{ width: "50px", height: "50px" }}
-                      src={reachAndImpressionimgSrc}
+                      src={impressionimgSrc}
                       className="mt-1"
                       alt="Uploaded"
                     />{" "}
                     <Button
                       size="small"
-                      onClick={() => setReachAndImpressionimgSrc(null)}
+                      onClick={() =>{ setImpressionimgSrc(null);setImpressionImg(null);}}
                     >
                       <CloseTwoToneIcon />
                     </Button>
@@ -566,7 +623,7 @@ export default function ExeUPdate() {
                     />{" "}
                     <Button
                       size="small"
-                      onClick={() => setEngagementImgSrc(null)}
+                      onClick={() =>{ setEngagementImgSrc(null); setEngagementImg(null)}}
                     >
                       <CloseTwoToneIcon />
                     </Button>

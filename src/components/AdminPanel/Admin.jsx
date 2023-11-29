@@ -141,6 +141,7 @@ import PlanCreation from "./RegisterCampaign/PlanCreation";
 import ExeUPdate from "../Execution/ExeUPdate";
 import ExeHistory from "../Execution/ExeHistory";
 import { SelfAudit } from "./AssetNotifier/SelfAudit";
+import StatsAllPagesDetail from "../Execution/StatsAllPagesDetail";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -618,6 +619,7 @@ const Admin = () => {
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />
                   <Route path="/exeexecution/all" element={<ExecutionAll />} />
+                  <Route path="/exeexecution/allpagesdetail" element={<StatsAllPagesDetail />} />
                   <Route path="/exeexecution/own" element={<ExecutionOwn />} />
                   <Route
                     path="/exeexecution/other"
