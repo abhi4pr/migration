@@ -126,13 +126,13 @@ const typeData = ["Hr", "User"];
       selector: (row) =>row.dateOfPurchase ? formatDate(row.dateOfPurchase) : ""
     },
     {
-        name: "img",
+        name: "Action",
         selector: (row) => (
           <button
             className="btn btn-outline-success"
             onClick={() => handleImageClick(row)}
           >
-            Verify``
+            Verify
           </button>
         ),
       },
