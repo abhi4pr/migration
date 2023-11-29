@@ -299,16 +299,16 @@ const SidebarLinks = () => {
                 contextData[5] &&
                 contextData[5].view_value === 1 && ( */}
                   <Link className="collapse-item" to="/admin/self-audit">
-                  Self Audit
+                  Audit asset
                   </Link>
                 {/* )} */}
 
               {/* {contextData &&
                 contextData[8] &&
                 contextData[8].view_value === 1 && ( */}
-                  <Link className="collapse-item" to="/pantry-user">
+                  {/* <Link className="collapse-item" to="/admin/hr-audit">
                   Hr Audit
-                  </Link>
+                  </Link> */}
                 {/* )} */}
             </div>
           </div>
