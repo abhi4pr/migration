@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 let commInfo = [];
 // eslint-disable-next-line react/prop-types
-const CampaignDetailes = ({ cid }) => {
+const CampaignDetailes = ({ cid,getCampaign }) => {
   const [campaignData, setCampaignData] = useState({});
   const [brandData, setBrandData] = useState([]);
   const [cmpName, setCmpName] = useState({});
@@ -14,6 +14,7 @@ const CampaignDetailes = ({ cid }) => {
       .get(`http://34.93.135.33:8080/api/register_campaign/${cid}`)
       .then((res) => {
         setCampaignData(res.data.data);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -33,6 +34,7 @@ const CampaignDetailes = ({ cid }) => {
       (camp) => camp.exeCmpId == campaignData.exeCmpId
     );
     setCmpName(mycamp);
+    getCampaign(mycamp)
   };
   useEffect(() => {
     getData();

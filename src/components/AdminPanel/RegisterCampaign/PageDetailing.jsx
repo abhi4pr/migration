@@ -4,18 +4,32 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useEffect } from "react";
 import { TextField } from "@mui/material";
+import axios from "axios";
 
-const PageDetaling = ({ pages }) => {
+const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId }) => {
+  console.log(searchedpages,search,campaignName)
     const [allPages,setAllPages]=useState([])
     const [postpage,setPostPage]=useState(0)
     useEffect(()=>{
+      if(search==false){
+
         if(pages?.length>0){
             const addPost=pages.map(page=>{
                 return {...page,postPerPage:0}
             })
             setAllPages([...addPost])
         }
-    },[pages])
+      }else{
+        if(searchedpages?.length>0){
+          console.log("first")
+            const addPost=searchedpages.map(page=>{
+                return {...page,postPerPage:0}
+            })
+            setAllPages([...addPost])
+        }
+        
+      }
+    },[pages,search,searchedpages])
   const columns = [
     {
       field: "S.NO",
@@ -97,6 +111,24 @@ const PageDetaling = ({ pages }) => {
     setPostPage(Number(e.target.value))
   }
 
+  const submitPlan=async (e)=>{
+    const planName=campaignName+"plan"
+    const data={
+      planName,
+      campaignName,
+      campaignId,
+      pages:allPages,
+
+    }
+    try {
+      
+      const result=await axios.post('http://localhost:8080/api/campaignplan',data)
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
   console.log(allPages);
   return (
     <>
@@ -111,6 +143,7 @@ const PageDetaling = ({ pages }) => {
           pageSizeOptions={[5]}
         />
       </Box>
+      <button onClick={submitPlan}>submit</button>
     </>
   );
 };
