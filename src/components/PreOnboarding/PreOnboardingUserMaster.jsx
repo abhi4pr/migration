@@ -814,7 +814,8 @@ const PreOnboardingUserMaster = () => {
   const steps = [
     {
       selector: ".sidebar_itembox",
-      content: "From here you can see your documents",
+      content:
+        "Complete the form by entering your personal details, including name, contact information, address, and any other required information.",
     },
     {
       selector: ".policy_tab_name",
