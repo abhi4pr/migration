@@ -173,9 +173,9 @@ const UserOverview = () => {
   const handleDelete = (userId) => {
     axios
       .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
-      .then((response) => {
-        console.log("User deleted successfully", response);
+      .then(() => {
         getData();
+        toastAlert("User Deleted Successfully");
       });
   };
 
