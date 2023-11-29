@@ -1,4 +1,4 @@
-import { Paper, TextField, Typography } from "@mui/material";
+import { Paper, TextField, Typography, Button } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CampaignDetailes from "./CampaignDetailes";
@@ -11,29 +11,19 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 const PhaseCreation = () => {
   const param = useParams();
   const id = param.id;
+  console.log(id);
   const [allPageData, setAllPageData] = useState([]);
   const [phaseData, setPhaseData] = useState("");
   const [phaseDcripation, setPhaseDcripation] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
-  // console.log(endDate);
-  // const [phaseDetails, setPhaseDetails] = useState({
-  //   phaseData: "",
-  //   phaseDcripation: "",
-  //   startDate: null,
-  //   endDate: null
-  // });
-  // Handler for when the date changes
-
+console.log(allPageData);
   const getPageData = async () => {
     const pageData = await axios.get(
-      `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
+      `http://34.93.135.33:8080/api/campaignplan/${id}`
     );
-    setAllPageData(pageData.data.body);
-
-    const x=await axios.get(`http://34.93.135.33:8080/api/campaignplan/${id}`)
-    console.log(x)
+    console.log(pageData.data.data);
+    setAllPageData(pageData.data.data);
   };
   useEffect(() => {
 
@@ -68,7 +58,7 @@ const PhaseCreation = () => {
       editable: true,
     },
     {
-      field: "post_page",
+      field: "postPerPage",
       headerName: "post / page",
       width: 150,
     },
@@ -131,6 +121,9 @@ const PhaseCreation = () => {
           toolbar: GridToolbar,
         }}
       />
+      <Button variant="contained" onClick={""}>
+        Contained
+      </Button>
     </>
   );
 };

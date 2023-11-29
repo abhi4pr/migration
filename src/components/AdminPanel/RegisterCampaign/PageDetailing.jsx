@@ -36,7 +36,7 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
       headerName: "S.NO",
       width: 90,
       renderCell: (params) => {
-        const rowIndex = pages.indexOf(params.row);
+        const rowIndex = allPages.indexOf(params.row);
         return <div>{rowIndex + 1}</div>;
       },
     },
@@ -132,9 +132,9 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
   console.log(allPages);
   return (
     <>
-        <div>
+        <Box sx={{pt:2,pb:2}}>
         <TextField id="outlined-basic" label="Post/pages" variant="outlined" onChange={handlePost} />
-        </div>
+        </Box>
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={allPages || []}

@@ -64,7 +64,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
   return (
     <>
       {/* Non editable campaigning detailes */}
-      <Paper >
+      <Paper sx={{p:3}}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <label> Brand Name</label>
