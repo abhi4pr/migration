@@ -1,63 +1,36 @@
-import React, { useEffect, useState } from "react";
-import FormContainer from "../AdminPanel/FormContainer";
-import UserNav from "../Pantry/UserPanel/UserNav";
-import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Button } from "@mui/material";
+import React, { useEffect } from "react";
+import UserNav from "../Pantry/UserPanel/UserNav";
+import FormContainer from "../AdminPanel/FormContainer";
+import { DataGrid } from "@mui/x-data-grid";
+import { useState } from "react";
 import { set } from "date-fns";
-import DeleteHistoryConfirmation from "./DeleteHistoryConfirmation";
+import { Button } from "antd";
 import InsertPhotoTwoToneIcon from "@mui/icons-material/InsertPhotoTwoTone";
 import OndemandVideoTwoToneIcon from "@mui/icons-material/OndemandVideoTwoTone";
 
-export default function ExeHistory() {
-  const id = useParams();
-  const [buttonAccess, setButtonAccess] = useState(false);
-  const [data, setData] = useState([]);
-  const [rowData, setRowData] = useState([]);
-  const [openDeleteHistoryConFirmation, setOpenDeleteHistoryConFirmation] =
-    useState(false);
+export default function StatsAllPagesDetail() {
+  const [allPagesDetail, setAllPagesDetail] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-
-  const handleClickOpenDeleteHistoryConFirmation = () => {
-    setOpenDeleteHistoryConFirmation(true);
-  };
-  const handleCloseDeleteHistoryConFirmation = () => {
-    setOpenDeleteHistoryConFirmation(false);
-  };
-
-  const apiCall = () => {
-    axios
-      .get(`http://34.93.135.33:8080/api/get_exe_ip_count_history/${id.id}`)
-      .then((res) => {
-        const data = res.data.data.filter((e) => {
-          return e.isDeleted !== true;
-        });
-        console.log(data);
-        setData(data);
-      });
-  };
-
   useEffect(() => {
-    apiCall();
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios
+      .get("http://34.93.135.33:8080/api/get_distinct_count_history")
+      .then((res) => {
+        console.log(res.data);
+        setAllPagesDetail(res.data.data);
+      });
+      axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       console.log(res.data.data);
       setAllUsers(res.data.data);
     });
   }, []);
-
-  const handleDeleteRowData = (data) => {
-    setRowData(data);
-    handleClickOpenDeleteHistoryConFirmation();
-    // console.log(data);
-  };
 
   const columns = [
     {
       field: "S.No",
       headerName: "S.No",
       renderCell: (params) => {
-        const rowIndex = data.indexOf(params.row);
+        const rowIndex = allPagesDetail.indexOf(params.row);
         return <div>{rowIndex + 1}</div>;
       },
     },
@@ -88,82 +61,77 @@ export default function ExeHistory() {
         return (
           <div>
             {params.row?.user_id ? (
-              <>
-                {
-                  allUsers.filter((e) => e.user_id == params.row.user_id)[0]
-                    .user_name
-                }
-              </>
+              <>{allUsers.filter((e) => e.user_id == params.row.user_id)[0]?.user_name}</>
             ) : (
               ""
             )}
           </div>
         );
-      },
+      }
     },
     {
-      field: "reach",
-      headerName: "Reach",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <div>
-            {params.row?.reach ? (
-              <>
-                {params.row.reach} {params.row.percentage_reach}%&nbsp;
-                {params.row.reach_upload_image_url && (
-                  <a
-                    key="reach"
-                    href={params.row.reach_upload_image_url}
-                    title="Reach Impression Image"
-                    download
-                  >
-                    <InsertPhotoTwoToneIcon
-                      variant="contained"
-                      color="primary"
-                    />
-                  </a>
-                )}
-              </>
-            ) : (
-              ""
-            )}
-          </div>
-        );
+        field: "reach",
+        headerName: "Reach",
+        width: 150,
+        renderCell: (params) => {
+          return (
+            <div>
+              {params.row?.reach ? (
+                <>
+                  {params.row.reach} {params.row.percentage_reach}%&nbsp;
+                  {params.row.reach_upload_image_url && (
+                    <a
+                      key="reach"
+                      href={params.row.reach_upload_image_url}
+                      title="Reach Impression Image"
+                      download
+                    >
+                      <InsertPhotoTwoToneIcon
+                        variant="contained"
+                        color="primary"
+                      />
+                    </a>
+                  )}
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          );
+        },
       },
-    },
-    {
-      field: "impression",
-      headerName: "Impression",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <div>
-            {params.row?.impression ? (
-              <>
-                {params.row.impression} {params.row.percentage_impression}
-                %&nbsp;
-                {params.row.impression_upload_image_url && (
-                  <a
-                    key="reach"
-                    href={params.row.impression_upload_image_url}
-                    title="Reach Impression Image"
-                    download
-                  >
-                    <InsertPhotoTwoToneIcon
-                      variant="contained"
-                      color="primary"
-                    />
-                  </a>
-                )}
-              </>
-            ) : (
-              ""
-            )}
-          </div>
-        );
+      {
+        field: "impression",
+        headerName: "Impression",
+        width: 150,
+        renderCell: (params) => {
+          return (
+            <div>
+              {params.row?.impression ? (
+                <>
+                  {params.row.impression} {params.row.percentage_impression}
+                  %&nbsp;
+                  {params.row.impression_upload_image_url && (
+                    <a
+                      key="reach"
+                      href={params.row.impression_upload_image_url}
+                      title="Reach Impression Image"
+                      download
+                    >
+                      <InsertPhotoTwoToneIcon
+                        variant="contained"
+                        color="primary"
+                      />
+                    </a>
+                  )}
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          );
+        },
       },
-    },
     {
       field: "engagement",
       headerName: "Engagement",
@@ -446,33 +414,25 @@ export default function ExeHistory() {
       },
     },
     {
-      field: "story_view_date",
-      headerName: "Story View Date",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <div>
-            {params.row?.story_view_date ? (
-              <>
-                {new Date(params.row.story_view_date)
-                  .toISOString()
-                  .substr(8, 2)}
-                /
-                {new Date(params.row.story_view_date)
-                  .toISOString()
-                  .substr(5, 2)}
-                /
-                {new Date(params.row.story_view_date)
-                  .toISOString()
-                  .substr(2, 2)}
-              </>
-            ) : (
-              ""
-            )}
-          </div>
-        );
+        field: "story_view_date",
+        headerName: "Story View Date",
+        width: 150,
+        renderCell: (params) => {
+          return (
+            <div>
+              {params.row?.story_view_date ? (
+                <>
+                  {new Date(params.row.story_view_date).toISOString().substr(8, 2)}/
+                  {new Date(params.row.story_view_date).toISOString().substr(5, 2)}/
+                  {new Date(params.row.story_view_date).toISOString().substr(2, 2)}
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          );
+        },
       },
-    },
     {
       field: "end_date",
       headerName: "End Date",
@@ -524,34 +484,17 @@ export default function ExeHistory() {
       },
     },
   ];
-
   return (
-    <>
-      {" "}
-      <div style={{ width: "100%", margin: "0 0 0 0%" }}>
-        <UserNav />
-        <FormContainer
-          mainTitle="Stats History"
-          link="/ip-master"
-          buttonAccess={buttonAccess}
-        />
+    <div>
+      <div style={{ width: "100%", margin: "0 0 0 0" }}>
+        <FormContainer mainTitle="All Pages Detail" link="/ip-master" />
         <DataGrid
-          rows={data}
+          rows={allPagesDetail}
           columns={columns}
           pageSize={10}
-          rowsPerPageOptions={[10]}
-          checkboxSelection
           getRowId={(row) => row._id}
         />
       </div>
-      <DeleteHistoryConfirmation
-        handleCloseDeleteHistoryConFirmation={
-          handleCloseDeleteHistoryConFirmation
-        }
-        openDeleteHistoryConFirmation={openDeleteHistoryConFirmation}
-        rowData={rowData}
-        apiCall={apiCall}
-      />
-    </>
+    </div>
   );
 }

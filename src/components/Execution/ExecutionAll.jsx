@@ -65,6 +65,7 @@ function ExecutionAll() {
   const [rowData, setRowData] = useState({});
   const [statesFor, setStatesFor] = useState("");
   const [startDate, setStartDate] = useState("");
+  const [storyViewDate, setStoryViewDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [demoFile, setDemoFile] = useState();
   const [stateForIsValid, setStateForIsValid] = useState(false);
@@ -83,57 +84,61 @@ function ExecutionAll() {
   const [contextData, setContextData] = useState(false);
   const [alert, setAlert] = useState([]);
   const [openExeDialog, setOpenExeDialog] = React.useState(false);
-  const [reachandImpressionImg, setReachandImpressionImg] = useState();
+  // const [reachandImpressionImg, setReachandImpressionImg] = useState();
+  const [impressionImg, setImpressionImg] = useState(null);
   const [engagementImg, setEngagementImg] = useState();
   const [storyViewImg, setStoryViewImg] = useState();
   const [storyViewVideo, setStoryViewVideo] = useState();
-  const [city1, setCity1] = useState();
-  const [city2, setCity2] = useState();
-  const [city3, setCity3] = useState();
-  const [city4, setCity4] = useState();
-  const [city5, setCity5] = useState();
-  const [city1Percentage, setCity1Percentage] = useState();
-  const [city2Percentage, setCity2Percentage] = useState();
-  const [city3Percentage, setCity3Percentage] = useState();
-  const [city4Percentage, setCity4Percentage] = useState();
-  const [city5Percentage, setCity5Percentage] = useState();
+  const [city1, setCity1] = useState("");
+  const [city2, setCity2] = useState("");
+  const [city3, setCity3] = useState("");
+  const [city4, setCity4] = useState("");
+  const [city5, setCity5] = useState("");
+  const [city1Percentage, setCity1Percentage] = useState(0);
+  const [city2Percentage, setCity2Percentage] = useState(0);
+  const [city3Percentage, setCity3Percentage] = useState(0);
+  const [city4Percentage, setCity4Percentage] = useState(0);
+  const [city5Percentage, setCity5Percentage] = useState(0);
   const [cityImg, setCityImg] = useState();
-  const [malePercentage, setMalePercentage] = useState();
-  const [femalePercentage, setFemalePercentage] = useState();
-  const [age1Percentage, setAge1Percentage] = useState();
-  const [age2Percentage, setAge2Percentage] = useState();
-  const [age3Percentage, setAge3Percentage] = useState();
-  const [age4Percentage, setAge4Percentage] = useState();
-  const [age5Percentage, setAge5Percentage] = useState();
-  const [age6percentage, setAge6Percentage] = useState();
-  const [age7Percentage, setAge7Percentage] = useState();
+  const [malePercentage, setMalePercentage] = useState(0);
+  const [femalePercentage, setFemalePercentage] = useState(0);
+  const [age1Percentage, setAge1Percentage] = useState(0);
+  const [age2Percentage, setAge2Percentage] = useState(0);
+  const [age3Percentage, setAge3Percentage] = useState(0);
+  const [age4Percentage, setAge4Percentage] = useState(0);
+  const [age5Percentage, setAge5Percentage] = useState(0);
+  const [age6percentage, setAge6Percentage] = useState(0);
+  const [age7Percentage, setAge7Percentage] = useState(0);
   const [ageImg, setAgeImg] = useState("");
   const [profileVisit, setProfileVisit] = useState(0);
   const [countryList, setCountryList] = useState([]);
   const [cityList, setCityList] = useState([]);
-  const [country1, setCountry1] = useState();
-  const [country2, setCountry2] = useState();
-  const [country3, setCountry3] = useState();
-  const [country4, setCountry4] = useState();
-  const [country5, setCountry5] = useState();
-  const [country1Percentage, setCountry1Percentage] = useState();
-  const [country2Percentage, setCountry2Percentage] = useState();
-  const [country3Percentage, setCountry3Percentage] = useState();
-  const [country4Percentage, setCountry4Percentage] = useState();
-  const [country5Percentage, setCountry5Percentage] = useState();
+  const [country1, setCountry1] = useState("");
+  const [country2, setCountry2] = useState("");
+  const [country3, setCountry3] = useState("");
+  const [country4, setCountry4] = useState("");
+  const [country5, setCountry5] = useState("");
+  const [country1Percentage, setCountry1Percentage] = useState(0);
+  const [country2Percentage, setCountry2Percentage] = useState(0);
+  const [country3Percentage, setCountry3Percentage] = useState(0);
+  const [country4Percentage, setCountry4Percentage] = useState(0);
+  const [country5Percentage, setCountry5Percentage] = useState(0);
   const [countryImg, setCountryImg] = useState();
   const [updatePercentage, setSetUpdatePercentage] = useState([]);
   const [totalPercentage, setTotalPercentage] = useState(0);
   const [statsUpdateFlag, setSetStatsUpdateFlag] = useState([]);
   const [profileVisitError, setProfileVisitError] = useState(false);
-  const [reachAndImpressionimgSrc, setReachAndImpressionimgSrc] =
-    useState(null);
+  // const [reachAndImpressionimgSrc, setReachAndImpressionimgSrc] =
+  //   useState(null);
+  const [impressionImgSrc, setImpressionImgSrc] = useState(null);
   const [engagementImgSrc, setEngagementImgSrc] = useState(null);
   const [storyViewImgSrc, setStoryViewImgSrc] = useState(null);
   const [storyViewVideoSrc, setStoryViewVideoSrc] = useState(null);
   const [countryImgSrc, setCountryImgSrc] = useState(null);
   const [cityImgSrc, setCityImgSrc] = useState(null);
   const [ageImgSrc, setAgeImgSrc] = useState(null);
+  const [reachImgSrc, setReachImgSrc] = useState(null);
+  const [reachImg, setReachImg] = useState(null);
 
   const handlePercentageChange = (value, setter) => {
     const newValue = parseFloat(value);
@@ -205,50 +210,53 @@ function ExecutionAll() {
     setEngagement(0);
     setStoryView(0);
     setRowData({});
-    setCity1();
-    setCity2();
-    setCity3();
-    setCity4();
-    setCity5();
-    setCity1Percentage("");
-    setCity2Percentage("");
-    setCity3Percentage("");
-    setCity4Percentage("");
-    setCity5Percentage("");
+    setCity1("");
+    setCity2("");
+    setCity3("");
+    setCity4("");
+    setCity5("");
+    setCity1Percentage(0);
+    setCity2Percentage(0);
+    setCity3Percentage(0);
+    setCity4Percentage(0);
+    setCity5Percentage(0);
     setMalePercentage(0);
     setFemalePercentage(0);
-    setAge1Percentage("");
-    setAge2Percentage("");
-    setAge3Percentage("");
-    setAge4Percentage("");
-    setAge5Percentage("");
-    setAge6Percentage("");
-    setAge7Percentage("");
+    setAge1Percentage(0);
+    setAge2Percentage(0);
+    setAge3Percentage(0);
+    setAge4Percentage(0);
+    setAge5Percentage(0);
+    setAge6Percentage(0);
+    setAge7Percentage(0);
     setAgeImg();
     setCityImg();
-    setReachandImpressionImg();
+    setImpressionImg();
     setEngagementImg();
     setStoryViewImg();
     setStoryViewVideo();
     setProfileVisit(0);
-    setCountry1();
-    setCountry2();
-    setCountry3();
-    setCountry4();
-    setCountry5();
-    setCountry1Percentage("");
-    setCountry2Percentage("");
-    setCountry3Percentage("");
-    setCountry4Percentage("");
-    setCountry5Percentage("");
+    setCountry1("");
+    setCountry2("");
+    setCountry3("");
+    setCountry4("");
+    setCountry5("");
+    setCountry1Percentage(0);
+    setCountry2Percentage(0);
+    setCountry3Percentage(0);
+    setCountry4Percentage(0);
+    setCountry5Percentage(0);
     setCountryImg();
     setCityImgSrc(null);
     setCountryImgSrc(null);
     setAgeImgSrc(null);
-    setReachAndImpressionimgSrc(null);
+    setImpressionImg(null);
     setEngagementImgSrc(null);
     setStoryViewImgSrc(null);
     setStoryViewVideoSrc(null);
+    setStoryViewDate(null);
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const dropdownStaticData = [
@@ -416,10 +424,17 @@ function ExecutionAll() {
   };
 
   const handleStartDateChange = (newValue) => {
+    // const date = new Date(newValue.$d);
+    // const offset = date.getTimezoneOffset();
+    // date.setMinutes(date.getMinutes() - offset);
+    // console.log("ooooooooooooooo",newValue.$d);
+    setStartDate(newValue.$d);
+  };
+  const handleStoryViewDateChange = (newValue) => {
     const date = new Date(newValue.$d);
     const offset = date.getTimezoneOffset();
     date.setMinutes(date.getMinutes() - offset);
-    setStartDate(newValue);
+    setStoryViewDate(newValue);
   };
 
   const handleEndDateChange = (newValue) => {
@@ -684,6 +699,19 @@ function ExecutionAll() {
 
   const saveStats = async (e) => {
     e.preventDefault();
+
+    const preSDate = new Date(startDate);
+    preSDate.setDate(preSDate.getDate() + 1);
+    const sDate = preSDate.toISOString();
+
+    const preEDate = new Date(endDate);
+    preEDate.setDate(preEDate.getDate() + 1);
+    const eDate = preEDate.toISOString();
+
+    const preSVDate = new Date(storyViewDate);
+    preSVDate.setDate(preSVDate.getDate() + 1);
+    const svDate = preSVDate.toISOString();
+
     const formData = new FormData();
     formData.append("p_id", rowData.p_id);
     formData.append("reach", reach);
@@ -692,10 +720,12 @@ function ExecutionAll() {
     formData.append("story_view", storyView);
     demoFile ? formData.append("media", demoFile) : "";
     quater ? formData.append("quater", quater) : "";
-    formData.append("start_date", startDate);
-    formData.append("end_date", endDate);
+    formData.append("start_date", sDate);
+    formData.append("story_view_date", svDate);
+    formData.append("end_date", eDate);
     formData.append("stats_for", statesFor);
-    formData.append("reach_impression_upload_image", reachandImpressionImg);
+    formData.append("impression_upload_image", impressionImg);
+    formData.append("reach_upload_image", reachImg);
     formData.append("engagement_upload_image", engagementImg);
     formData.append("story_view_upload_image", storyViewImg);
     formData.append("story_view_upload_video", storyViewVideo);
@@ -732,6 +762,7 @@ function ExecutionAll() {
     formData.append("percentage_country4_name", country4Percentage);
     formData.append("percentage_country5_name", country5Percentage);
     formData.append("country_image_upload", countryImg);
+    formData.append("user_id", userID);
 
     axios
       .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
@@ -750,50 +781,53 @@ function ExecutionAll() {
         setEngagement(0);
         setStoryView(0);
         setRowData({});
-        setCity1();
-        setCity2();
-        setCity3();
-        setCity4();
-        setCity5();
-        setCity1Percentage("");
-        setCity2Percentage("");
-        setCity3Percentage("");
-        setCity4Percentage("");
-        setCity5Percentage("");
-        setMalePercentage("");
-        setFemalePercentage("");
-        setAge1Percentage("");
-        setAge2Percentage("");
-        setAge3Percentage("");
-        setAge4Percentage("");
-        setAge5Percentage("");
-        setAge6Percentage("");
-        setAge7Percentage("");
-        setAgeImg("");
-        setCityImg("");
-        setReachandImpressionImg("");
+        setCity1("");
+        setCity2("");
+        setCity3("");
+        setCity4("");
+        setCity5("");
+        setCity1Percentage(0);
+        setCity2Percentage(0);
+        setCity3Percentage(0);
+        setCity4Percentage(0);
+        setCity5Percentage(0);
+        setMalePercentage(0);
+        setFemalePercentage(0);
+        setAge1Percentage(0);
+        setAge2Percentage(0);
+        setAge3Percentage(0);
+        setAge4Percentage(0);
+        setAge5Percentage(0);
+        setAge6Percentage(0);
+        setAge7Percentage(0);
+        setAgeImg(null);
+        setCityImg(null);
+        setReachImg(null);
+        setImpressionImg(null);
         setEngagementImg("");
         setStoryViewImg("");
         setStoryViewVideo("");
         setProfileVisit(0);
-        setCountry1();
-        setCountry2();
-        setCountry3();
-        setCountry4();
-        setCountry5();
-        setCountry1Percentage("");
-        setCountry2Percentage("");
-        setCountry3Percentage("");
-        setCountry4Percentage("");
-        setCountry5Percentage("");
+        setCountry1("");
+        setCountry2("");
+        setCountry3("");
+        setCountry4("");
+        setCountry5("");
+        setCountry1Percentage(0);
+        setCountry2Percentage(0);
+        setCountry3Percentage(0);
+        setCountry4Percentage(0);
+        setCountry5Percentage(0);
         setCountryImg();
         setCityImgSrc(null);
         setCountryImgSrc(null);
         setAgeImgSrc(null);
-        setReachAndImpressionimgSrc(null);
+        // setReachAndImpressionimgSrc(null);
+        setImpressionImgSrc(null);
         setEngagementImgSrc(null);
         setStoryViewImgSrc(null);
         setStoryViewVideoSrc(null);
+        setStoryViewDate(null);
 
         toastAlert("Form Submitted success");
       });
@@ -1061,7 +1095,7 @@ function ExecutionAll() {
                         dateAdapter={AdapterDayjs}
                       >
                         <DatePicker
-                          // className="col-lg-4 mt-2"
+                          className="my-1"
                           label="Start Date *"
                           format="DD/MM/YY"
                           value={startDate}
@@ -1137,9 +1171,6 @@ function ExecutionAll() {
                             setReach(enteredValue);
                           } else {
                             setReachValidation(false);
-                            // You might choose to handle negative values in a specific way, such as setting reach to 0 or showing an error message.
-                            // For example, you can set reach to 0:
-                            // setReach(0);
                           }
                         }}
                         error={!reachValidation}
@@ -1147,6 +1178,49 @@ function ExecutionAll() {
                           !reachValidation ? "Please enter a valid count" : ""
                         }
                       />
+                      <div className="col-md-3 py-1 mb-2  ">
+                        <Button
+                          component="label"
+                          variant="contained"
+                          startIcon={<CloudUploadIcon />}
+                          size="small"
+                          title="Reach"
+                        >
+                          Image
+                          <VisuallyHiddenInput
+                            onChange={(e) => {
+                              const uploadedFile = e.target.files[0];
+                              if (uploadedFile) {
+                                const imageUrl =
+                                  URL.createObjectURL(uploadedFile);
+                                setReachImgSrc(imageUrl);
+                                setReachImg(uploadedFile);
+                              }
+                            }}
+                            type="file"
+                            accept="image/png, image/jpeg"
+                          />
+                        </Button>
+
+                        {reachImgSrc && (
+                          <div className="d-flex">
+                            <img
+                              src={reachImgSrc}
+                              className="mt-1"
+                              alt="Uploaded"
+                            />{" "}
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                setReachImgSrc(null);
+                                setReachImg(null);
+                              }}
+                            >
+                              <CloseTwoToneIcon />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="col-md-3 col-lg-12 my-2">
                       <TextField
@@ -1176,7 +1250,7 @@ function ExecutionAll() {
                         variant="contained"
                         startIcon={<CloudUploadIcon />}
                         size="small"
-                        title="Reach & Impression"
+                        title="Impression"
                       >
                         Image
                         <VisuallyHiddenInput
@@ -1185,8 +1259,8 @@ function ExecutionAll() {
                             if (uploadedFile) {
                               const imageUrl =
                                 URL.createObjectURL(uploadedFile);
-                              setReachAndImpressionimgSrc(imageUrl);
-                              setReachandImpressionImg(uploadedFile);
+                              setImpressionImgSrc(imageUrl);
+                              setImpressionImg(uploadedFile);
                             }
                           }}
                           type="file"
@@ -1194,16 +1268,19 @@ function ExecutionAll() {
                         />
                       </Button>
 
-                      {reachAndImpressionimgSrc && (
+                      {impressionImgSrc && (
                         <div className="d-flex">
                           <img
-                            src={reachAndImpressionimgSrc}
+                            src={impressionImgSrc}
                             className="mt-1"
                             alt="Uploaded"
                           />{" "}
                           <Button
                             size="small"
-                            onClick={() => setReachAndImpressionimgSrc(null)}
+                            onClick={() => {
+                              setImpressionImgSrc(null);
+                              setImpressionImg(null);
+                            }}
                           >
                             <CloseTwoToneIcon />
                           </Button>
@@ -1291,6 +1368,21 @@ function ExecutionAll() {
                             : ""
                         }
                       />
+                    </div>
+                    <div className="col-md-3 col-lg-12 py-1 mb-2">
+                      <LocalizationProvider
+                        className=" col-lg-3 my-3 mx-3"
+                        dateAdapter={AdapterDayjs}
+                      >
+                        <DatePicker
+                          label="Story View Date"
+                          format="DD/MM/YY"
+                          value={storyViewDate}
+                          onChange={(newValue) => {
+                            handleStoryViewDateChange(newValue);
+                          }}
+                        />
+                      </LocalizationProvider>
                     </div>
                     <div className="col-md-3 col-lg-12 py-1 mb-2">
                       <Button
