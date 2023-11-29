@@ -10,19 +10,18 @@ import FieldContainer from "../AdminPanel/FieldContainer";
 import jwtDecode from "jwt-decode";
 import * as XLSX from "xlsx";
 import Select from "react-select";
+import Modal from "react-modal";
 const SimOverview = () => {
   const [search, setSearch] = useState("");
+  const [ImageModalOpen, setImageModalOpen] = useState(false);
+
   const [data, setData] = useState([]);
   const [filterdata, setFilterData] = useState([]);
-  const [departmentData, setDepartmentData] = useState([]);
-  const [designationData, setDesignationData] = useState([]);
+
   const [userData, setUserData] = useState([]);
 
   const [simTypeFilter, setSimTypeFilter] = useState("");
   const [providerFilter, setProviderFilter] = useState("");
-
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [designationFilter, setDesignationFilter] = useState("");
 
   const [simallocationdata, setSimAllocationData] = useState([]);
 
@@ -39,9 +38,17 @@ const SimOverview = () => {
   const [simAllocationTransferData, setSimAllocationTransferData] = useState(
     []
   );
+
+  const [showAssetsImage , setShowAssetImages] = useState([])
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const userID = decodedToken.id;
+
+  const [assetsType, setAssetsType] = useState("");
+  const AsstestTypeOptions = [
+    { value: "New", label: "New" },
+    { value: "Old", label: "Old" },
+  ];
 
   function getData() {
     axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
@@ -58,36 +65,46 @@ const SimOverview = () => {
       }
     });
   }
+  // function getAllocatedData (){
+  //   axios.get("http://34.93.135.33:8080/api/get_all_allocations").then((res) => {
+  //     console.log(res.data)
+  //   });
+  // }
 
   useEffect(() => {
     const MSD = userData.filter((data) => data.user_id == selectedUserTransfer);
-    // setSelectedModalUserData(modalSelectedUserData);
-    // console.log(MSD[0], "MSD");
-    // console.log(selectedUserTransfer);
     setModalSelectedUserData(MSD);
   }, [selectedUserTransfer]);
+
+  const [categoryData, setCategoryData] = useState([]);
+  const [category, setCategory] = useState("");
+  const [subcategoryData, setSubCategoryData] = useState([]);
+  const [subcategory, setSubCategory] = useState("");
+  const getCategoryData = () => {
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_asset_category")
+      .then((res) => {
+        setCategoryData(res.data);
+      });
+  };
+  const getSubCategoryData = () => {
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_asset_sub_category")
+      .then((res) => {
+        setSubCategoryData(res.data);
+      });
+  };
   useEffect(() => {
     getData();
+    getCategoryData();
+    getSubCategoryData();
   }, [selectedStatus]);
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
-      .then((res) => {
-        setDepartmentData(res.data);
-      });
-
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
-      .then((res) => {
-        setDesignationData(res.data.data);
-      });
-
-    axios
       .get("http://34.93.135.33:8080/api/get_all_allocations")
       .then((res) => {
         setSimAllocationData(res.data.data);
-        // console.log(res.data.data, "there is data");
       });
 
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
@@ -96,29 +113,11 @@ const SimOverview = () => {
   }, []);
 
   useEffect(() => {
-    const result = data.filter((d) => {
-      const simTypeMatch =
-        !simTypeFilter ||
-        d.s_type.toLowerCase() === simTypeFilter.toLowerCase();
-      const providerMatch =
-        !providerFilter ||
-        d.provider.toLowerCase() === providerFilter.toLowerCase();
-      const departmentMatch = !departmentFilter || d.dept == departmentFilter;
-      const designationMatch =
-        !designationFilter || d.desi == designationFilter;
+    const result = data?.filter((d) => {
       return (
-        simTypeMatch && providerMatch && departmentMatch && designationMatch
-      );
-    });
-    setFilterData(result);
-  }, [simTypeFilter, providerFilter, departmentFilter, designationFilter]);
-
-  useEffect(() => {
-    const result = data.filter((d) => {
-      return (
-        d.mobileNumber.toLowerCase().match(search.toLowerCase()) ||
-        d.provider.toLowerCase().match(search.toLowerCase()) ||
-        d.type.toLowerCase().match(search.toLowerCase())
+        d.mobileNumber?.toLowerCase().match(search.toLowerCase()) ||
+        d.provider?.toLowerCase().match(search.toLowerCase()) ||
+        d.type?.toLowerCase().match(search.toLowerCase())
       );
     });
     setFilterData(result);
@@ -129,6 +128,7 @@ const SimOverview = () => {
       .get(`http://34.93.135.33:8080/api/get_single_sim/${simId}`)
       .then((res) => {
         setModalData(res.data.data);
+        // console.log(res.data.data , "there is data")
       });
   }
 
@@ -138,9 +138,6 @@ const SimOverview = () => {
         (data) => data.sim_id == modalData.sim_id
       );
       setSimAllocationTransferData(simAllocationTransfer);
-      // console.log(simAllocationTransfer, "simAllocationTransfer");
-      // console.log(modalData, "modalData");
-      // console.log(simallocationdata, "simallocationdata");
     }
   }, [modalData]);
 
@@ -149,11 +146,7 @@ const SimOverview = () => {
       const commonUserId = userData.filter(
         (data) => data.user_id == simAllocationTransferData[0].user_id
       );
-      setParticularUserName(commonUserId[0].user_name);
-      // console.log(
-      //   simAllocationTransferData[0].user_id,
-      //   "simAllocationTransferData[0].user_id"
-      // );
+      setParticularUserName(commonUserId[0]?.user_name);
     }
   }, [simAllocationTransferData, userData]);
 
@@ -163,9 +156,9 @@ const SimOverview = () => {
       const dateString = currDate.replace("T", " ").replace("Z", "");
       axios.put("http://34.93.135.33:8080/api/update_allocationsim", {
         sim_id: simAllocationTransferData[0].sim_id,
-        id: simAllocationTransferData[0].allo_id,
+        allo_id: simAllocationTransferData[0].allo_id,
         user_id: simAllocationTransferData[0].user_id,
-        dept_id: modalSelectedUserData[0].dept_id,
+        // dept_id: modalSelectedUserData[0].dept_id,
         status: "Available",
         submitted_by: userID,
         Last_updated_by: userID,
@@ -176,7 +169,7 @@ const SimOverview = () => {
       axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         sim_id: Number(simAllocationTransferData[0].sim_id),
-        dept_id: Number(modalSelectedUserData[0].dept_id),
+        // dept_id: Number(modalSelectedUserData[0].dept_id),
         created_by: userID,
       });
       setSelectedUserTransfer("");
@@ -191,7 +184,9 @@ const SimOverview = () => {
         user_id: Number(selectedUserTransfer),
         status: "Allocated",
         sim_id: Number(modalData.sim_id),
-        dept_id: Number(modalSelectedUserData[0].dept_id),
+        category_id:Number(modalData.category_id),
+        sub_category_id:Number(modalData.sub_category_id),
+        // dept_id: Number(modalSelectedUserData[0].dept_id),
         created_by: userID,
       });
 
@@ -213,6 +208,7 @@ const SimOverview = () => {
     }
   }
 
+  // console.log(modalData , "there is modal data")
   const columns = [
     {
       name: "S.No",
@@ -235,6 +231,16 @@ const SimOverview = () => {
     {
       name: "Asset ID",
       selector: (row) => row.asset_id,
+      sortable: true,
+    },
+    {
+      name: "Allocated To",
+      selector: (row) => row.allocated_username,
+      sortable: true,
+    },
+    {
+      name: "Duration",
+      selector: (row) => row.date_difference + ""+"days",
       sortable: true,
     },
     {
@@ -261,7 +267,10 @@ const SimOverview = () => {
     {
       name: "img",
       selector: (row) => (
-        <button className="btn btn-outline-success">
+        <button
+          className="btn btn-outline-success"
+          onClick={() => handleImageClick(row.sim_id)}
+        >
           <i class="bi bi-images"></i>
         </button>
       ),
@@ -340,6 +349,30 @@ const SimOverview = () => {
     XLSX.writeFile(workbook, fileName);
   };
 
+  const handleImageClick = (row) => {
+    axios.post(`http://34.93.135.33:8080/api/get_single_assets_image`, {
+      sim_id: row,
+    })
+    .then((res) => {
+      // console.log(res.data.data, "new one");
+      setShowAssetImages(res.data.data)
+    });
+    setImageModalOpen(true);
+  };
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
+  };
+  useEffect(() => {
+    const result = data.filter((d) => {
+      const categoryMatch = !category || d.category_id === category;
+      const subcategoryMatch =
+        !subcategory || d.sub_category_id === subcategory;
+      const assettypeMatch = !assetsType || d.s_type === assetsType
+      return categoryMatch && subcategoryMatch && assettypeMatch
+    });
+    setFilterData(result);
+  }, [category, subcategory , assetsType]);
+
   return (
     <>
       <div>
@@ -366,7 +399,7 @@ const SimOverview = () => {
 
                 {/* There is masters  */}
 
-                <Link to="/asset/asset-category-overview">
+                <Link to="/asset-category-overview">
                   <button
                     type="button"
                     className="btn btn-outline-primary btn-sm"
@@ -446,48 +479,74 @@ const SimOverview = () => {
                 <div className="row thm_form">
                   <div className="form-group col-3">
                     <label className="form-label">
-                      Department Name <sup style={{ color: "red" }}>*</sup>
+                      Category <sup style={{ color: "red" }}>*</sup>
                     </label>
                     <Select
-                      className=""
-                      options={departmentData.map((option) => ({
-                        value: option.dept_id,
-                        label: `${option.dept_name}`,
-                      }))}
-                      value={{
-                        value: departmentFilter,
-                        label:
-                          departmentData.find(
-                            (user) => user.dept_id === departmentFilter
-                          )?.dept_name || "",
-                      }}
-                      onChange={(e) => {
-                        setDepartmentFilter(e.value);
+                      options={[
+                        { value: "", label: "All" },
+                        ...categoryData.map((option) => ({
+                          value: option.category_id,
+                          label: option.category_name,
+                        })),
+                      ]}
+                      value={
+                        category === ""
+                          ? { value: "", label: "All" }
+                          : {
+                              value: category,
+                              label:
+                                categoryData.find(
+                                  (dept) => dept.category_id === category
+                                )?.category_name || "Select...",
+                            }
+                      }
+                      onChange={(selectedOption) => {
+                        const selectedValue = selectedOption
+                          ? selectedOption.value
+                          : "";
+                        setCategory(selectedValue);
+                        if (selectedValue === "") {
+                          getData();
+                        }
                       }}
                       required
                     />
                   </div>
                   <div className="form-group col-3">
                     <label className="form-label">
-                      Department Name <sup style={{ color: "red" }}>*</sup>
+                      Sub Category <sup style={{ color: "red" }}>*</sup>
                     </label>
                     <Select
                       className=""
-                      options={departmentData.map((option) => ({
-                        value: option.dept_id,
-                        label: `${option.dept_name}`,
+                      options={subcategoryData.map((option) => ({
+                        value: option.sub_category_id,
+                        label: `${option.sub_category_name}`,
                       }))}
                       value={{
-                        value: departmentFilter,
+                        value: subcategory,
                         label:
-                          departmentData.find(
-                            (user) => user.dept_id === departmentFilter
-                          )?.dept_name || "",
+                          subcategoryData.find(
+                            (user) => user.sub_category_id === subcategory
+                          )?.sub_category_name || "",
                       }}
                       onChange={(e) => {
-                        setDepartmentFilter(e.value);
+                        setSubCategory(e.value);
                       }}
                       required
+                    />
+                  </div>
+                  <div className="form-group col-3">
+                    <label className="form-label">
+                      Assets Type<sup style={{ color: "red" }}>*</sup>
+                    </label>
+                    <Select
+                      value={AsstestTypeOptions.find(
+                        (option) => option.value === assetsType
+                      )}
+                      onChange={(selectedOption) => {
+                        setAssetsType(selectedOption.value);
+                      }}
+                      options={AsstestTypeOptions}
                     />
                   </div>
                 </div>
@@ -562,28 +621,16 @@ const SimOverview = () => {
                 <div className="modal_formbx">
                   <ul>
                     <li>
-                      <span>Mobile Number : </span>
-                      {modalData.mobileNumber}
-                    </li>
-                    <li>
-                      <span>Provider: </span>
-                      {modalData.provider}
+                      <span>Asset Name : </span>
+                      {modalData.assetsName}
                     </li>
                     <li>
                       <span>Registered TO: </span>
                       {modalData.register}
                     </li>
                     <li>
-                      <span>Sim No: </span>
-                      {modalData.sim_no}
-                    </li>
-                    <li>
                       <span>Status: </span>
                       {modalData.status}
-                    </li>
-                    <li>
-                      <span>Type : </span>
-                      {modalData.type}
                     </li>
                     <li>
                       <span>Allocated To: </span>
@@ -592,7 +639,7 @@ const SimOverview = () => {
                     <li>
                       <span>Sim Type: </span>
                       {modalData.s_type}
-                    </li>
+                    </li> 
                   </ul>
                 </div>
                 {/* <div className="modal_formbx row thm_form">
@@ -700,32 +747,16 @@ const SimOverview = () => {
                 <div className="modal_formbx">
                   <ul>
                     <li>
-                      <span>Mobile Number : </span>
-                      {modalData.mobileNumber}
+                      <span>Asset Name : </span>
+                      {modalData.assetsName}
                     </li>
                     <li>
-                      <span>Provider: </span>
-                      {modalData.provider}
-                    </li>
-                    <li>
-                      <span>Registered TO: </span>
-                      {modalData.register}
-                    </li>
-                    <li>
-                      <span>Sim No: </span>
-                      {modalData.sim_no}
+                      <span>Asset ID: </span>
+                      {modalData.asset_id}
                     </li>
                     <li>
                       <span>Status: </span>
                       {modalData.status}
-                    </li>
-                    <li>
-                      <span>Type : </span>
-                      {modalData.type}
-                    </li>
-                    <li>
-                      <span>Sim Type: </span>
-                      {modalData.s_type}
                     </li>
                   </ul>
                 </div>
@@ -806,6 +837,101 @@ const SimOverview = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={ImageModalOpen}
+        onRequestClose={handleCloseImageModal}
+        style={{
+          content: {
+            width: "80%",
+            height: "80%",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        <div>
+          <div className="d-flex justify-content-between mb-2">
+            <h2>Assets Images</h2>
+
+            <button
+              className="btn btn-success float-left"
+              onClick={handleCloseImageModal}
+            >
+              X
+            </button>
+          </div>               
+        </div> 
+
+{showAssetsImage.length > 0 && (
+        <div className="summary_cards flex-row row">
+        <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                  <div className="summary_card">
+                    <div className="summary_cardtitle">
+                    </div>
+                    <div className="summary_cardbody">
+                      <div className="summary_cardrow flex-column">
+                        <div className="summary_box text-center ml-auto mr-auto">
+                        </div>
+                        <div className="summary_box col">
+                          <img src={showAssetsImage[0]?.img1_url} width="80px" height="80px"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                  <div className="summary_card">
+                    <div className="summary_cardtitle">
+                    </div>
+                    <div className="summary_cardbody">
+                      <div className="summary_cardrow flex-column">
+                        <div className="summary_box text-center ml-auto mr-auto">
+                        </div>
+                        <div className="summary_box col">
+                          <img src={showAssetsImage[0]?.img2_url} width="80px" height="80px"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                  <div className="summary_card">
+                    <div className="summary_cardtitle">
+                    </div>
+                    <div className="summary_cardbody">
+                      <div className="summary_cardrow flex-column">
+                        <div className="summary_box text-center ml-auto mr-auto">
+                        </div>
+                        <div className="summary_box col">
+                          <img src={showAssetsImage[0]?.img3_url} width="80px" height="80px"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                  <div className="summary_card">
+                    <div className="summary_cardtitle">
+                    </div>
+                    <div className="summary_cardbody">
+                      <div className="summary_cardrow flex-column">
+                        <div className="summary_box text-center ml-auto mr-auto">
+                        </div>
+                        <div className="summary_box col">
+                          <img src={showAssetsImage[0]?.img4_url} width="80px" height="80px"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                )}
+      </Modal>
     </>
   );
 };

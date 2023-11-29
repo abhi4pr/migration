@@ -23,7 +23,7 @@ const SimAllocationOverview = () => {
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_allocations")
+      .get("http://34.93.135.33:8080/api/alldataofsimallocment")
       .then((res) => {
         const filteredData = res.data.data.filter(
           (check) => check.submitted_at == null || check.status == "Allocated"
@@ -37,13 +37,14 @@ const SimAllocationOverview = () => {
   }, []);
 
   useEffect(() => {
-    const result = data.filter((d) => {
-      return d.mobileNo.toLowerCase().match(search.toLowerCase());
+    const result = data?.filter((d) => {
+      return d.mobileNo?.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
 
   const getSimData = (row) => {
+    // console.log(row , "row yha hai")
     axios
       .get(`http://34.93.135.33:8080/api/get_single_sim/${row.sim_id}`)
       .then((res) => {
@@ -68,7 +69,7 @@ const SimAllocationOverview = () => {
   };
 
   const handleSubmit = (row) => {
-    console.log(simData.allo_id, "tullo id");
+    // console.log(simData.allo_id, "tullo id");
 
     const currentReason = reason[row.sim_id];
     const currSubDate = subDate[row.sim_id];
@@ -77,7 +78,7 @@ const SimAllocationOverview = () => {
         sim_id: row.sim_id,
         allo_id: simData.allo_id,
         user_id: simData.user_id,
-        dept_id: simData.dept_id,
+        // dept_id: simData.dept_id,
         status: "Available",
         submitted_by: userID,
         Last_updated_by: userID,
@@ -102,7 +103,7 @@ const SimAllocationOverview = () => {
           getData();
         })
         .catch((error) => {
-          console.error(error);
+          // console.error(error);
         });
     }
   };
@@ -115,27 +116,28 @@ const SimAllocationOverview = () => {
       sortable: true,
     },
     {
-      name: "Mobile Number",
+      name: "Assets Name",
       // width: "15%",
-      selector: (row) => row.mobileNo,
+      selector: (row) => row.assetsName,
       sortable: true,
     },
     {
-      name: "User",
+      name: "Asset ID",
       // width: "10%",
-      selector: (row) => row.userName,
+      selector: (row) => row.asset_id,
       sortable: true,
     },
     {
-      name: "Department",
-      selector: (row) => row.dept_name,
+      name: "Category",
+      selector: (row) => row.category_name,
       sortable: true,
     },
     {
-      name: "Designation",
-      selector: (row) => row.desi_name,
+      name: "sub category",
+      selector: (row) => row.sub_category_name,
       sortable: true,
     },
+    
     // {
     // name: "Allocated Date",
     // width: "10%",

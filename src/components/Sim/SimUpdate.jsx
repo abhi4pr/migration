@@ -15,9 +15,10 @@ const SimUpdate = () => {
   const [isValidcontact, setValidContact] = useState(false);
   // const [isContactTouched, setisContactTouched] = useState(false);
 
-  const [assetType, setAssetType] = useState("");
-  const [assetsCategory, setAssetsCategory] = useState("");
+  const [assetType, setAssetType] = useState(null);
+  const [assetsCategory, setAssetsCategory] = useState(null);
   const [subCategory, setSubCategory] = useState("");
+  // console.log(subCategory , "Asset")
   const [vendorName, setVendorName] = useState("");
   const [invoiceCopy, setInvoiceCopy] = useState("");
   const [inWarranty, setInWarranty] = useState("");
@@ -74,7 +75,7 @@ const SimUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_sim/${20}`)
+      .get(`http://34.93.135.33:8080/api/get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         //if (fetchedData.length > 0) {
@@ -132,7 +133,7 @@ const SimUpdate = () => {
     formData.append("warrantyDate", warrantyDate);
     formData.append("inWarranty", inWarranty);
     formData.append("dateOfPurchase", dateOfPurchase);
-    formData.append("category_id", assetsCategory.category_id);
+    formData.append("category_id", assetsCategory);
     formData.append("sub_category_id", subCategory.sub_category_id);
     formData.append("vendor_id", vendorName.vendor_id);
     formData.append("invoiceCopy", invoiceCopy);
@@ -147,7 +148,7 @@ const SimUpdate = () => {
     formData.append("status", "Available");
 
     axios.put(
-      "http://34.93.135.33:8080/api/update_sim",
+      "http://34.93.135.33:8080/api/update_simsfsfsdf",
       formData
       // id: simId,
       // mobilenumber: mobileNumber,
@@ -167,6 +168,7 @@ const SimUpdate = () => {
     setIsFormSubmitted(true);
   };
 
+  // console.log(categoryData?.filter(e => e.category_id == assetsCategory)[0]?.category_name)
   if (isFormSubmitted) {
     return <Navigate to="/sim-overview" />;
   }
@@ -279,34 +281,27 @@ const SimUpdate = () => {
 
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group form_select">
-                <Autocomplete
+                ` <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={categoryData.map((cat) => ({
-                    label: cat.category_name,
-                    value: cat.category_id,
+                  options={categoryData?.map((cat) => ({
+                    label: cat?.category_name,
+                    value: cat?.category_id,
                   }))}
-                  value={
-                    assetsCategory
-                      ? {
-                          label:
-                            categoryData.find(
-                              (cat) => cat.category_id === assetsCategory
-                            )?.category_name || "",
-                          value: assetsCategory,
-                        }
-                      : null
-                  }
-                  onChange={(e, newvalue) => {
-                    setAssetsCategory((pre) => ({
-                      label: newvalue.label,
-                      category_id: newvalue.value,
-                    }));
+                
+                  value={categoryData?.find((cat) => cat.category_id === assetsCategory)?.category_name || ""}
+                  onChange={(e, newValue) => {
+                    setAssetsCategory(newValue.value);
+                    // console.log(newValue.value)
                   }}
+                  // getOptionLabel={(option) => option} // This is the key change
                   renderInput={(params) => (
                     <TextField {...params} label="Assets Category" />
                   )}
                 />
+
+
+                `
               </div>
             </div>
 
@@ -319,17 +314,18 @@ const SimUpdate = () => {
                     label: sub.sub_category_name,
                     value: sub.sub_category_id,
                   }))}
-                  value={
-                    subCategory
-                      ? {
-                          label:
-                            subcategoryData.find(
-                              (d) => d.sub_category_id === subCategory
-                            )?.sub_category_name || "",
-                          value: subCategory,
-                        }
-                      : null
-                  }
+                  value={subCategory}
+                  // value={
+                  //   subCategory
+                  //     ? {
+                  //         label:
+                  //           subcategoryData.find(
+                  //             (d) => d.sub_category_id === subCategory
+                  //           )?.sub_category_name || "",
+                  //         value: subCategory,
+                  //       }
+                  //     : null
+                  // }
                   onChange={(e, newvalue) => {
                     setSubCategory((pre) => ({
                       label: newvalue.label,
@@ -357,11 +353,11 @@ const SimUpdate = () => {
                   value={
                     vendorName
                       ? {
-                          label:
-                            vendorData.find((d) => d.vendor_id === vendorName)
-                              ?.vendor_name || "",
-                          value: vendorName,
-                        }
+                        label:
+                          vendorData.find((d) => d.vendor_id === vendorName)
+                            ?.vendor_name || "",
+                        value: vendorName,
+                      }
                       : null
                   }
                   onChange={(e, newvalue) => {

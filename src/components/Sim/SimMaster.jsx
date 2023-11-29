@@ -47,7 +47,9 @@ const SimMaster = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
+  const [imageType , setImageType] = useState("")
   const inWarrantyOption = ["No", "Yes"];
+  const IMGType = ["HR", "User"];
   const assettype = ["New", "Old"];
 
   // All Category , subcategory and vendor api here
@@ -84,6 +86,7 @@ const SimMaster = () => {
       formData.append("sim_no", assetsID);
       formData.append("assetsOtherID", assetsOtherID);
       formData.append("s_type", assetType);
+      // console.log(assetType , "assettype hai")
       formData.append("warrantyDate", warrantyDate);
       formData.append("inWarranty", inWarranty);
       formData.append("dateOfPurchase", dateOfPurchase);
@@ -112,6 +115,8 @@ const SimMaster = () => {
       const imageData = new FormData();
       imageData.append("sim_id", responseSimID);
       imageData.append("uploaded_by", 90);
+
+      imageData.append("type", imageType);
       imageData.append("img1", assetsImg1);
       imageData.append("img2", assetsImg2);
       imageData.append("img3", assetsImg3);
@@ -124,7 +129,7 @@ const SimMaster = () => {
       toastAlert("Form Submitted success");
       setIsFormSubmitted(true);
     } catch {
-      console.error("Error:", error);
+      // console.error("Error:", error);
       toastAlert("Form submission failed. Please try again.");
     }
   };
@@ -399,7 +404,7 @@ const SimMaster = () => {
                 />
               </div>
             </div>
-            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -410,7 +415,7 @@ const SimMaster = () => {
                 />
               </div>
             </div>
-            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+            <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
@@ -418,6 +423,21 @@ const SimMaster = () => {
                   label="IMG 4"
                   type="file"
                   onChange={(e) => setAssetsImg4(e.target.files[0])}
+                />
+              </div>
+            </div>
+            <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  // sx={{ width: 600 }}
+                  id="combo-box-demo"
+                  options={IMGType}
+                  value={imageType}
+                  onChange={(e, newvalue) => setImageType(newvalue)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Type" />
+                  )}
                 />
               </div>
             </div>

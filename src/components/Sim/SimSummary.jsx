@@ -5,6 +5,7 @@ import UserNav from "../Pantry/UserPanel/UserNav";
 import { useParams } from "react-router";
 import jwtDecode from "jwt-decode";
 
+
 const SimSummary = () => {
   const [showInfo, setShowInfo] = useState({});
   const { id } = useParams();
@@ -30,7 +31,7 @@ const SimSummary = () => {
     axios
       .put("http://34.93.135.33:8080/api/update_allocationsim", {
         sim_id: sum.sim_id,
-        id: sum.allo_id,
+        allo_id: sum.allo_id,
         user_id: sum.user_id,
         dept_id: sum.dept_id,
         status: "Deleted",
@@ -69,6 +70,10 @@ const SimSummary = () => {
                   const differenceInDays =
                     differenceInMilliseconds / (1000 * 60 * 60 * 24);
 
+//  There is Date Formate Correct 
+const originalCreationDate = sum.Creation_date ? sum.Creation_date.slice(0, 10) : "";
+const reversedCreationDate = originalCreationDate.split("-").reverse().join("-");
+
                   return (
                     <div className="summary_card" key={sum.id}>
                       <div className="summary_cardtitle">
@@ -87,24 +92,24 @@ const SimSummary = () => {
                         <div className="summary_cardrow">
                           <div className="summary_box summary_allocatebox">
                             <h4>
-                              <span>Allocated date</span>
+                              <span>Allocated date : </span>
                               {sum.Creation_date
-                                ? sum.Creation_date.slice(0, 10)
+                                ? reversedCreationDate
                                 : ""}
                             </h4>
                           </div>
                           <div className="summary_box summary_returnbox">
                             <h4>
-                              <span>Returned date</span>
+                              <span>Returned date : </span>
                               {sum.submitted_at
-                                ? sum.submitted_at.slice(0, 10)
+                                ? sum.submitted_at.split("-").reverse().join("-")
                                 : ""}
                             </h4>
                           </div>
                           <div className="summary_box summary_numbox">
                             <h4>
-                              <span>Mobile Number</span>
-                              {sum.mobile_number}
+                              <span>Asset Name</span>
+                              {sum.assetsName}
                             </h4>
                           </div>
                         </div>
@@ -112,12 +117,6 @@ const SimSummary = () => {
                           <h4>
                             <span>Reason</span>
                             {sum.reason}
-                          </h4>
-                        </div>
-                        <div className="summary_box summary_returnbox">
-                          <h4>
-                            <span>Date difference (in days)</span>
-                            {differenceInDays}
                           </h4>
                         </div>
                       </div>
