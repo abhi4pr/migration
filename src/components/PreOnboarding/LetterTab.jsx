@@ -34,6 +34,8 @@ const LetterTab = ({ allUserData, gettingData }) => {
       });
   };
 
+  console.log(allUserData);
+
   return (
     <>
       <div className="letterBoard">
@@ -44,8 +46,13 @@ const LetterTab = ({ allUserData, gettingData }) => {
               {allUserData.designation_name}, he/she brings valuable experience
               to our team. <br />
               Based at {allUserData.permanent_address}, {allUserData.user_name}{" "}
-              officially joined us on {allUserData.joining_date} and reports to{" "}
-              {allUserData.user_report_to_id}. <br />
+              officially joined us on{" "}
+              {allUserData.joining_date
+                .split("T")[0]
+                .split("-")
+                .reverse()
+                .join("-")}{" "}
+              and reports to {allUserData.user_report_to_id}. <br />
               We're confident {allUserData.user_name} will seamlessly integrate
               into our collaborative work culture, contributing to our success.{" "}
               <br />

@@ -50,6 +50,7 @@ import IndianStatesMui from "../ReusableComponents/IndianStatesMui";
 import LetterTab from "./LetterTab";
 import ContactNumber from "../ReusableComponents/ContactNumber";
 import DocumentTab from "./DocumentTab";
+import FAQTab from "./FAQTab";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -376,11 +377,11 @@ const PreOnboardingUserMaster = () => {
           gaurdian_number,
           relation_with_guardian,
           guardian_address,
-          designation_name,
-          user_report_to_id,
-          ctc,
-          offer_letter_send,
-          offer_later_status,
+          // designation_name,
+          // user_report_to_id,
+          // ctc,
+          // offer_letter_send,
+          // offer_later_status,
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
@@ -813,17 +814,25 @@ const PreOnboardingUserMaster = () => {
 
   const steps = [
     {
-      selector: ".sidebar_itembox",
+      selector: "#sidebarFormBox",
       content:
         "Complete the form by entering your personal details, including name, contact information, address, and any other required information.",
     },
     {
-      selector: ".policy_tab_name",
+      selector: "#sidebarDocumentBox",
       content: "From here you can see our policies",
     },
     {
-      selector: ".letter_tab_name",
-      content: "From here you can see your offer letter",
+      selector: "#sidebarPolicyBox",
+      content: "From here you can see company policies.",
+    },
+    {
+      selector: "#sidebarLetterBox",
+      content: "From here you can see your offer letter.",
+    },
+    {
+      selector: "#sidebarFaqBox",
+      content: "Here you can look for FAQ's",
     },
     {
       selector: ".user_logout",
@@ -854,6 +863,7 @@ const PreOnboardingUserMaster = () => {
                 className={`sidebar_itembox ${
                   activeTab == 1 ? "sidebar_item_active" : ""
                 }`}
+                id="sidebarFormBox"
                 onClick={() => setActiveTab(1)}
               >
                 {/* p-100 is percentage of document procedure */}
@@ -876,6 +886,7 @@ const PreOnboardingUserMaster = () => {
                 className={`sidebar_itembox ${
                   activeTab == 2 ? "sidebar_item_active" : ""
                 }`}
+                id="sidebarDocumentBox"
                 onClick={() => setActiveTab(2)}
               >
                 <div
@@ -894,9 +905,10 @@ const PreOnboardingUserMaster = () => {
               </div>
 
               <div
-                className={`sidebar_itembox ${
+                className={`sidebar_itembox  ${
                   activeTab == 3 ? "sidebar_item_active" : ""
                 }`}
+                id="sidebarPolicyBox"
                 onClick={() => setActiveTab(3)}
               >
                 <div className="progress-circle progressing p-26">
@@ -915,6 +927,7 @@ const PreOnboardingUserMaster = () => {
                 className={`sidebar_itembox ${
                   activeTab == 7 ? "sidebar_item_active" : ""
                 }`}
+                id="sidebarLetterBox"
                 onClick={() => setActiveTab(7)}
               >
                 <div className="progress-circle progressing p-26">
@@ -933,6 +946,7 @@ const PreOnboardingUserMaster = () => {
                 className={`sidebar_itembox ${
                   activeTab == 4 ? "sidebar_item_active" : ""
                 }`}
+                id="sidebarFaqBox"
                 onClick={() => setActiveTab(4)}
               >
                 <div className="progress-circle progressing p-100">
@@ -1720,112 +1734,9 @@ const PreOnboardingUserMaster = () => {
                 {/* Policy Screen End */}
 
                 {/* FAQ Screen Start */}
-                {activeTab == 4 && (
-                  <div className="policyarea">
-                    <div className="thm_texthead">
-                      <h2 className="text-center">
-                        FAQ (Frequently Asked Questions)
-                      </h2>
-                      <div className="thm_textarea">
-                        <div className="thm_textbx">
-                          <h3>1. What is this onboarding process for?</h3>
-                          <p>
-                            The on-boarding process is for all new Creative Fuel
-                            employees to welcome them.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>2. What will my First day look like?</h3>
-                          <p>
-                            You will have an orientation on your First day which
-                            will help you adjust better in the work space.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>3. How much on-the-job training is there?</h3>
-                          <p>
-                            On-the-training depends upon your experience and the
-                            position you were hired for, most commonly, it does
-                            not exceed 2 weeks.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>
-                            4. Information about the documents to be Filled
-                            during the onboarding process.
-                          </h3>
-                          <p>
-                            We have created an online on-boarding dashboard so
-                            that you can easily access, which all documents are
-                            required to get on-boarded.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>
-                            5. Who can I ask if I have questions about my job or
-                            the company?
-                          </h3>
-                          <p>
-                            The Human Resource team will always be readily
-                            available to help you out with all your queries.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>6. What is the leave policy?</h3>
-                          <p>
-                            Leaves must be scheduled in advance and in a manner
-                            that balances both the individual desire &amp; the
-                            company&#39;s need for appropriate coverage of team
-                            and projects. Permission for WFH can be given in
-                            case of a medical emergency only.
-                          </p>
-                          <p>
-                            It&#39;s mandatory to inform us 48 Hrs prior. If
-                            not, then the deduction will be doubled. No paid
-                            leaves would be allowed. 2 days of WFH are allowed
-                            during menstruation for female employees without any
-                            deduction.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>7. When and how do I get paid?</h3>
-                          <p>
-                            Refer to your Human Resources manager for any
-                            compensation-related queries.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>8. How do WFH works?</h3>
-                          <p>
-                            WFH is allowed only for severe medical reasons. 2
-                            days of WFH are allowed during menstruation for
-                            female employees.
-                          </p>
-                        </div>
-                        <div className="thm_textbx">
-                          <h3>
-                            9. What’s the feedback form and how should I Fill it
-                            out?
-                          </h3>
-                          <p>
-                            Our employee feedback form will help us gather
-                            honest feedback and to Find out how employees feel
-                            about the work environment, employee beneits,
-                            salary, company culture, or management. This
-                            feedback form will be sent to you on your registered
-                            mail id on your First day.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="ml-auto mr-auto text-center">
-                        {/* <button className="btn btn_pill btn_cmn btn_white">
-                          Submit
-                        </button> */}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                {activeTab == 4 && <FAQTab />}
                 {/* FAQ Screen End */}
+
                 {activeTab == 5 && (
                   <form>
                     <div className="formarea">
@@ -2006,7 +1917,13 @@ const PreOnboardingUserMaster = () => {
                   )}
 
                   <div className="chooseImg">
-                    <h5>Choose Image:</h5>
+                    <div className="d-flex justify-content-between">
+                      <h5>Choose Image:</h5>
+                      <i
+                        className="bi bi-x-circle-fill"
+                        onClick={() => setShowImageSelector(true)}
+                      />
+                    </div>
                     <div className="chooseImgItem">
                       {images.map((image) => (
                         <img
