@@ -58,6 +58,7 @@ const params = useParams()
   const [campignData, setCampignData] = useState([{}]);
   const [deleteRowModal, setDeleteRowModal] = useState(false);
   const [deleteRowId, setDeleteRowId] = useState("");
+  const [temp,setTemp]=useState([])
 
   // const handleUploadLinkChange = (event, index) => {
   //   const newUploadLink = event.target.value;
@@ -228,65 +229,7 @@ const params = useParams()
     });
   };
 
-  // const sendData = async (data) => {
-  //   console.log(data, "data");
-
-  //   for (const field of data.fields) {
-  //     console.log(field, "field");
-  //     for (let i = 0; i < field.textValue; i++) {
-  //       console.log("come to for loop");
-  //       try {
-  //         const response = await axios
-  //           .post("http://34.93.135.33:8080/api/contentSectionReg", {
-  //             // ...data,
-  //             content_type_id: field.selectValue,
-  //             register_campaign_id: campaignId,
-  //             content_brief: field.brief,
-  //             est_static_vedio: data.videoCount,
-  //             status: "1",
-  //             stage: "1",
-  //             campaign_brief: data.campaignBrief,
-  //             // console.log(field.brief, "<-----------------------field.brief");
-  //             // console.log(field.selectValue, "<-----------------------field.selectValue");
-  //             // console.log(field.)
-  //           })
-  //           .then((response) => {
-  //             axios
-  //               .put("http://34.93.135.33:8080/api/register_campaign", {
-  //                 register_campaign_id: campaignId,
-  //                 status: 1,
-  //               })
-  //               .then((res) => {
-  //                 console.log(res);
-  //                 handleClose();
-  //                 // formData.contentCount = "";
-  //                 formData.videoCount = "";
-  //                 formData.campaignBrief = "";
-  //                 formData.fields = [
-  //                   { selectValue: null, textValue: "", brief: "" },
-  //                 ];
-  //                 setFormData(formData);
-  //               });
-  //             console.log(response);
-  //             setReload(!reload);
-  //           })
-  //           .catch((error) => {
-  //             console.log(error);
-  //           });
-  //         if (response.status === 200) {
-  //           console.log(`Successfully sent data for ${field.brief}`);
-  //         } else {
-  //           console.error(`Error sending data for ${field.brief}`);
-  //         }
-  //       } catch (error) {
-  //         console.error(
-  //           `Error sending data for ${field.brief}: ${error.message}`
-  //         );
-  //       }
-  //     }
-  //   }
-  // };
-
+  
   const sendData = async (data) => {
     console.log(data, "data");
     for (const field of data.fields) {
@@ -490,6 +433,7 @@ const handlePhase = (event)=>{
     // });
   }, [reload]);
 
+  
   const tab1Columns = [
     {
       field: "S.NO",
@@ -591,14 +535,36 @@ const handlePhase = (event)=>{
       field: "plan_creation",
       headerName: "Plan Creation",
       renderCell: (params) => {
-        return (
+        const rowId = params.row._id;
+        const [planData, setPlanData] = useState([]);
+          let newdata;
+          useEffect(()=>{
+            const fetchData = async () => {
+              try {
+                const newData = await axios.get(`http://34.93.135.33:8080/api/campaignplan/${rowId}`);
+                setPlanData(newData);
+              } catch (error) {
+                console.error('Error fetching plan data:', error);
+              }
+            };
+  
+            fetchData();
+          },[rowId])
+          // console.log(planData.data.data)
+          return (
           <div className="d-flex text-center align-item-center justify-content-center">
-            {/* <Link to={`/admin/planCreation`}> */}
-            <Button type="button" onClick={()=>handlePlan(params.row)}>
+         
+            {!planData?.data?.data.length>0 ?<Button type="button" onClick={()=>handlePlan(params.row)}>
               <SendTwoToneIcon  />
              
-            </Button>
-            {/* </Link> */}
+            </Button>:"N/A"}
+            
+            
+            {/* <Button type="button" onClick={()=>handlePlan(params.row)}>
+              <SendTwoToneIcon  />
+             
+            </Button> */}
+            
           </div>
         );
       },
@@ -608,13 +574,31 @@ const handlePhase = (event)=>{
       field: "phase_creation",
       headerName: "phase creation",
       renderCell: (params) => {
+        const rowId = params.row._id;
+        const [planData, setPlanData] = useState([]);
+         
+          useEffect(()=>{
+            const fetchData = async () => {
+              try {
+                const newData = await axios.get(`http://34.93.135.33:8080/api/campaignplan/${rowId}`);
+                setPlanData(newData);
+              } catch (error) {
+                console.error('Error fetching plan data:', error);
+              }
+            };
+  
+            fetchData();
+          },[rowId])
         return (
           <div className="d-flex text-center align-item-center justify-content-center">
             {/* <Link to={`/admin/planCreation`}> */}
-            <Button type="button" onClick={()=>handlePhase(params.row)}>
+            {
+              planData?.data?.data.length>0 ?<Button type="button" onClick={()=>handlePhase(params.row)}>
               <SendTwoToneIcon  />
              
-            </Button>
+            </Button>:"N/A"
+            }
+            
             {/* </Link> */}
           </div>
         );
