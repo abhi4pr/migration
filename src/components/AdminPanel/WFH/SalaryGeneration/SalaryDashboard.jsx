@@ -69,7 +69,7 @@ const SalaryDashboard = () => {
   const getAttendanceData = () => {
     axios
       .post("http://34.93.135.33:8080/api/get_salary_by_filter", {
-        dept: department == "" ? 0 : department,
+        dept: department == "" ? 0 : Number(department),
       })
       .then((res) => {
         const data = res.data.data;

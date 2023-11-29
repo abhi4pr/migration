@@ -1445,9 +1445,6 @@ const PreOnboardingUserMaster = () => {
                                 label="Current Pincode"
                                 variant="outlined"
                                 type="text"
-                                // className="form-control"
-                                // name="pincode"
-                                // placeholder="Pincode"
                                 value={currentPincode}
                                 onChange={(e) =>
                                   setcurrentPincode(e.target.value)
