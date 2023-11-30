@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import ModeCommentTwoToneIcon from "@mui/icons-material/ModeCommentTwoTone";
 import SendTwoToneIcon from "@mui/icons-material/SendTwoTone";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
   Autocomplete,
@@ -20,19 +20,14 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { createTheme } from "react-data-table-component";
-
-import { blue, grey } from "@mui/material/colors";
 import DownloadTwoToneIcon from "@mui/icons-material/DownloadTwoTone";
 import { useEffect } from "react";
 import axios from "axios";
-import { set } from "date-fns";
 import { Page } from "@react-pdf/renderer";
-import { Link } from "react-router-dom";
 
 export default function RegisteredCampaign() {
   const navigate = useNavigate();
-const params = useParams()
+  const params = useParams();
   const [reload, setReload] = useState(false);
   const [contentTypeList, setContentTypeList] = useState([]);
   const [formData, setFormData] = useState({
@@ -50,35 +45,13 @@ const params = useParams()
   const [loadTable1, SetLoadTable1] = useState(false);
   const [table1Data2, setTable1Data2] = useState(false);
   const [brandName, setBrandName] = useState([]);
-  const [contentcount, setContentCount] = useState(0);
   const [open, setOpen] = React.useState(false);
   const [commitmentModalData, setCommitmentModalData] = useState([{}]);
   const [campaignId, setCampaignId] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
   const [campignData, setCampignData] = useState([{}]);
   const [deleteRowModal, setDeleteRowModal] = useState(false);
   const [deleteRowId, setDeleteRowId] = useState("");
-  const [temp,setTemp]=useState([])
 
-  // const handleUploadLinkChange = (event, index) => {
-  //   const newUploadLink = event.target.value;
-  //   const updatedFields = [...formData.fields];
-  //   updatedFields[index].uploadLink = newUploadLink;
-  //   // Use setFormData to update the state
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     fields: updatedFields,
-  //   }));
-  // };
-  const handleUpload = () => {
-    // You can handle the file upload logic here
-    if (selectedFile) {
-      // Perform file upload operation
-      console.log("Uploading file:", selectedFile.name);
-    } else {
-      console.log("No file selected");
-    }
-  };
 
   const handleFileChange = (event, index) => {
     const file = event.target.files[0];
@@ -213,9 +186,6 @@ const params = useParams()
       if (!field.textValue) {
         errors[`value${index}`] = "Value is required";
       }
-      // if (!field.brief) {
-      //   errors[`brief${index}`] = "Brief is required";
-      // }
     });
 
     return errors;
@@ -229,7 +199,6 @@ const params = useParams()
     });
   };
 
-  
   const sendData = async (data) => {
     console.log(data, "data");
     for (const field of data.fields) {
@@ -293,20 +262,20 @@ const params = useParams()
     }
   };
 
-  const handlePlan = (event)=>{
-  console.log(event);
-  const path=`/admin/planCreation/${event._id}`
-  navigate(path);
-
-  
-}
-const handlePhase = (event)=>{
-  console.log(event);
-  const path=`/admin/phase/${event._id}`
-  navigate(path);
-
-  
-}
+  const handlePlan = (event) => {
+    const path = `/admin/planCreation/${event._id}`;
+    navigate(path);
+  };
+  const handleShowPlan = (event) => {
+    const path = `/admin/planOverview/${event._id}`;
+    navigate(path);
+  };
+  handleShowPlan
+  const handlePhase = (event) => {
+    // console.log(event);
+    const path = `/admin/phase/${event._id}`;
+    navigate(path);
+  };
 
   const handleSubmit = () => {
     const validationErrors = validateForm(formData);
@@ -315,7 +284,7 @@ const handlePhase = (event)=>{
     if (Object.keys(validationErrors).length === 0) {
       console.log("form is valid");
       sendData(formData);
-      console.log(formData, "formData");
+      // console.log(formData, "formData");
     } else {
       console.log("Form is invalid");
       // Form is invalid, update the errors state
@@ -326,11 +295,8 @@ const handlePhase = (event)=>{
     axios
       .get("http://34.93.135.33:8080/api/register_campaign")
       .then((response) => {
-        console.log(response.data.data, "response");
+        // console.log(response.data.data, "response");
         SetLoadTable1(true);
-        // const modifiedData = response.data.data.map((element, i) => {
-        // return { ...element, count: i + 1 };
-        // });
         const table1Data = response.data.data
           .filter((element) => element.status === 0)
           .map((element, index) => {
@@ -338,7 +304,7 @@ const handlePhase = (event)=>{
           })
           .sort((a, b) => b.register_campaign_id - a.register_campaign_id);
 
-        console.log(table1Data);
+        // console.log(table1Data);
         setTable1Data(table1Data);
         setTable2Data(
           response.data.data
@@ -391,9 +357,6 @@ const handlePhase = (event)=>{
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
-        // const modifiedData = response.data.data.map((element, i) => {
-        // return { ...element, count: i + 1 };
-        // });
         const table1Data = response.data.data
           .filter((element) => element.status === 0)
           .map((element, index) => {
@@ -425,15 +388,8 @@ const handlePhase = (event)=>{
       .catch((err) => {
         console.log(err);
       });
-    // axios.get("http://34.93.135.33:8080/api/campaign").then((response) => {
-    //   const data = response.data;
-    //   console.log(data, "<--------");
-
-    //   setCommits(data);
-    // });
   }, [reload]);
 
-  
   const tab1Columns = [
     {
       field: "S.NO",
@@ -448,6 +404,7 @@ const handlePhase = (event)=>{
     {
       field: "exeCmpId",
       headerName: "Campaign Name",
+      width: 170,
       renderCell: (params) => {
         return campignData.filter((e) => {
           return e.exeCmpId == params.row.exeCmpId;
@@ -462,7 +419,6 @@ const handlePhase = (event)=>{
         return brandName.filter((e) => {
           return e.brand_id == params.row.brand_id;
         })[0]?.brand_name;
-        //  return params.row.brand_id.filter(e=>brandName.map(e=>e.brand_id).includes(e))[0].brand_name
       },
     },
     {
@@ -519,7 +475,7 @@ const handlePhase = (event)=>{
     },
     {
       field: "send_for_content_creation",
-      headerName: "Send for Content Creation",
+      headerName: "Content Creation",
       renderCell: (params) => {
         return (
           <div className="d-flex text-center align-item-center justify-content-center">
@@ -537,34 +493,31 @@ const handlePhase = (event)=>{
       renderCell: (params) => {
         const rowId = params.row._id;
         const [planData, setPlanData] = useState([]);
-          let newdata;
-          useEffect(()=>{
-            const fetchData = async () => {
-              try {
-                const newData = await axios.get(`http://34.93.135.33:8080/api/campaignplan/${rowId}`);
-                setPlanData(newData);
-              } catch (error) {
-                console.error('Error fetching plan data:', error);
-              }
-            };
-  
-            fetchData();
-          },[rowId])
-          // console.log(planData.data.data)
-          return (
+        let newdata;
+        useEffect(() => {
+          const fetchData = async () => {
+            try {
+              const newData = await axios.get(
+                `http://34.93.135.33:8080/api/campaignplan/${rowId}`
+              );
+              setPlanData(newData);
+            } catch (error) {
+              console.error("Error fetching plan data:", error);
+            }
+          };
+
+          fetchData();
+        }, [rowId]);
+        // console.log(planData.data.data)
+        return (
           <div className="d-flex text-center align-item-center justify-content-center">
-         
-            {!planData?.data?.data.length>0 ?<Button type="button" onClick={()=>handlePlan(params.row)}>
-              <SendTwoToneIcon  />
-             
-            </Button>:"N/A"}
-            
-            
-            {/* <Button type="button" onClick={()=>handlePlan(params.row)}>
-              <SendTwoToneIcon  />
-             
-            </Button> */}
-            
+            {!planData?.data?.data.length > 0 ? (
+              <Button type="button" onClick={() => handlePlan(params.row)}>
+                <SendTwoToneIcon />
+              </Button>
+            ) : (
+              <Button variant="outlined"  onClick={() => handleShowPlan(params.row)}   >Show plan</Button>
+            )}
           </div>
         );
       },
@@ -576,29 +529,32 @@ const handlePhase = (event)=>{
       renderCell: (params) => {
         const rowId = params.row._id;
         const [planData, setPlanData] = useState([]);
-         
-          useEffect(()=>{
-            const fetchData = async () => {
-              try {
-                const newData = await axios.get(`http://34.93.135.33:8080/api/campaignplan/${rowId}`);
-                setPlanData(newData);
-              } catch (error) {
-                console.error('Error fetching plan data:', error);
-              }
-            };
-  
-            fetchData();
-          },[rowId])
+
+        useEffect(() => {
+          const fetchData = async () => {
+            try {
+              const newData = await axios.get(
+                `http://34.93.135.33:8080/api/campaignplan/${rowId}`
+              );
+              setPlanData(newData);
+            } catch (error) {
+              console.error("Error fetching plan data:", error);
+            }
+          };
+
+          fetchData();
+        }, [rowId]);
         return (
           <div className="d-flex text-center align-item-center justify-content-center">
             {/* <Link to={`/admin/planCreation`}> */}
-            {
-              planData?.data?.data.length>0 ?<Button type="button" onClick={()=>handlePhase(params.row)}>
-              <SendTwoToneIcon  />
-             
-            </Button>:"N/A"
-            }
-            
+            {planData?.data?.data.length > 0 ? (
+              <Button type="button" onClick={() => handlePhase(params.row)}>
+                <SendTwoToneIcon />
+              </Button>
+            ) : (
+              "N/A"
+            )}
+
             {/* </Link> */}
           </div>
         );
@@ -638,7 +594,6 @@ const handlePhase = (event)=>{
         return brandName.filter((e) => {
           return e.brand_id == params.row.brand_id;
         })[0]?.brand_name;
-        //  return params.row.brand_id.filter(e=>brandName.map(e=>e.brand_id).includes(e))[0].brand_name
       },
     },
     {
@@ -734,70 +689,7 @@ const handlePhase = (event)=>{
     setActiveAccordionIndex(index);
   };
 
-  //   {
-  //     field: "s_no",
-  //     headerName: "S NO",
-  //     width: 80,
-  //   },
-  //   {
-  //     field: "brand_name",
-  //     headerName: "Brand Name",
-  //     width: 150,
-  //   },
-  //   {
-  //     field: "date_time",
-  //     headerName: "Date & Time",
-  //     width: 200,
-  //   },
-  //   {
-  //     field: "commits",
-  //     headerName: "Commits",
-  //     width: 150,
-  //     renderCell: (params) => {
-  //       return (
-  //         <div>
-  //           <Button onClick={handleOpen2} variant="text">
-  //             <ModeCommentTwoToneIcon />
-  //           </Button>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     field: "excel",
-  //     headerName: "Excel Action",
-  //     width: 150,
-  //     renderCell: (params) => {
-  //       return (
-  //         <div>
-  //           <Button variant="text">
-  //             <DownloadTwoToneIcon />
-  //           </Button>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     field: "send_for_content_creation",
-  //     headerName: "Send for Content Creation",
-  //     renderCell: (params) => {
-  //       return (
-  //         <div className="d-flex text-center align-item-center justify-content-center">
-  //           <Button type="button" onClick={handleOpen}>
-  //             <SendTwoToneIcon />
-  //           </Button>
-  //         </div>
-  //       );
-  //     },
-  //     width: 200,
-  //   },
-  // ];
   const commitColumns = [
-    // {
-    //   field: "s_no",
-    //   headerName: "S NO",
-    //   width: 80,
-    // },
     {
       field: "selectValue",
       headerName: "Commits",
@@ -1006,9 +898,9 @@ const handlePhase = (event)=>{
                                 onChange={(event) =>
                                   handleUploadLinkChange(event, index)
                                 }
-                              // name="value"
-                              // error={!!errors.fields?.textValue}
-                              // helperText={errors.fields?.textValue}
+                                // name="value"
+                                // error={!!errors.fields?.textValue}
+                                // helperText={errors.fields?.textValue}
                               />
                               {/* <Typography variant="h6">File Upload Example</Typography> */}
                               <OutlinedInput
@@ -1079,15 +971,15 @@ const handlePhase = (event)=>{
                   {videoType.filter(
                     (e) => !fields.map((e) => e.selectValue).includes(e)
                   ).length > 0 && (
-                      <Button
-                        variant="outlined"
-                        sx={{ marginBottom: "10px", marginRight: "10px" }}
-                        color="primary"
-                        onClick={handleAddField}
-                      >
-                        Add Row
-                      </Button>
-                    )}
+                    <Button
+                      variant="outlined"
+                      sx={{ marginBottom: "10px", marginRight: "10px" }}
+                      color="primary"
+                      onClick={handleAddField}
+                    >
+                      Add Row
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="d-flex justify-content-between">

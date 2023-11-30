@@ -606,12 +606,12 @@ const SidebarLinks = () => {
                           >
                             Registered Campaign
                           </Link>
-                          <Link
+                          {/* <Link
                             className="collapse-item"
                             to="/admin/planOverview"
                           >
                             Plan Overview
-                          </Link>
+                          </Link> */}
                           {/* <Link
                             className="collapse-item"
                             to="/admin/phase"

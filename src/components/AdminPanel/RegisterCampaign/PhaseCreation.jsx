@@ -1,4 +1,4 @@
-import { Paper, TextField, Typography, Button } from "@mui/material";
+import { Paper, TextField, Typography, Button, Box } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CampaignDetailes from "./CampaignDetailes";
@@ -17,7 +17,7 @@ const PhaseCreation = () => {
   const [phaseDcripation, setPhaseDcripation] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-console.log(allPageData);
+  console.log(allPageData);
   const getPageData = async () => {
     const pageData = await axios.get(
       `http://34.93.135.33:8080/api/campaignplan/${id}`
@@ -26,7 +26,6 @@ console.log(allPageData);
     setAllPageData(pageData.data.data);
   };
   useEffect(() => {
-
     getPageData();
   }, []);
   const columns = [
@@ -80,37 +79,53 @@ console.log(allPageData);
       <Typography variant="h6" sx={{ margin: "20px", fontWeight: "40px" }}>
         Phase Details
       </Typography>
-      <Paper sx={{ p: 2, m: 2, display: "flex" }}>
-        <TextField
-          label="Phase"
-          value={phaseData}
-          onChange={(e) => setPhaseData(e.target.value)}
-          sx={{ m: 2 }}
-        />
-        <TextField
-          label="Description"
-          value={phaseDcripation}
-          onChange={(e) => setPhaseDcripation(e.target.value)}
-          sx={{ m: 2 }}
-        />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Start Date *"
-            format="DD/MM/YY"
-            fullWidth
-            value={startDate}
-            onChange={(e) => setStartDate(e)}
+      <Paper>
+        <Box sx={{ p: 2, m: 2, display: "flex" }}>
+          <TextField
+            label="Phase"
+            value={phaseData}
+            onChange={(e) => setPhaseData(e.target.value)}
             sx={{ m: 2 }}
           />
-          <DatePicker
-            label="End Date *"
-            format="DD/MM/YY"
-            fullWidth
-            value={endDate}
-            onChange={(e) => setEndDate(e)}
+          <TextField
+            label="Description"
+            value={phaseDcripation}
+            onChange={(e) => setPhaseDcripation(e.target.value)}
             sx={{ m: 2 }}
           />
-        </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Start Date *"
+              format="DD/MM/YY"
+              fullWidth
+              value={startDate}
+              onChange={(e) => setStartDate(e)}
+              sx={{ m: 2 }}
+            />
+            <DatePicker
+              label="End Date *"
+              format="DD/MM/YY"
+              fullWidth
+              value={endDate}
+              onChange={(e) => setEndDate(e)}
+              sx={{ m: 2 }}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box sx={{ p: 2, m: 2, display: "flex" }}>
+          <TextField
+            label="Commitment"
+            disabled
+            defaultValue={"likes"}
+            sx={{ m: 2 }}
+          />
+          <TextField
+            label="Value"
+            defaultValue={"6000"}
+            type="number"
+            sx={{ m: 2 }}
+          />
+        </Box>
       </Paper>
       <DataGrid
         rows={allPageData}
@@ -120,6 +135,7 @@ console.log(allPageData);
         slots={{
           toolbar: GridToolbar,
         }}
+        checkboxSelection
       />
       <Button variant="contained" onClick={""}>
         Contained
