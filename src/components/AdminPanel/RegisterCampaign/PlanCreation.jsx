@@ -1,16 +1,20 @@
-import { DataGrid } from "@mui/x-data-grid";
 import CampaignDetailes from "./CampaignDetailes";
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import PageDetaling from "./PageDetailing";
+import { DataGrid } from "@mui/x-data-grid";
 
 import {
   Paper,
   TextField,
-  Grid,
-  Typography,
+  Button,
   Autocomplete,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Box,
 } from "@mui/material";
 
 let options = []
@@ -23,8 +27,12 @@ const PlanCreation = () => {
   const [searchedPages, setSearchedPages] = useState([])
   const [selectedCategory, setSelectedCategory] = useState([])
   const [selectedFollower, setSelectedFollower] = useState(null)
-  const [searched,setSearched]=useState(false)
-  const [campaignName,setCampaignName] = useState(null)
+  const [searched, setSearched] = useState(false)
+  const [campaignName, setCampaignName] = useState(null)
+  const [remainingPages, setRemainingPages] = useState([])
+  const [modalSearchPage, setModalSearchPage] = useState([])
+  const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false)
+  const [selectedRows, setSelectedRows] = useState([]);
   // const [options,setOptions] = useState([])
 
   // const options = [];
@@ -53,6 +61,13 @@ const PlanCreation = () => {
     getPageData()
   }, [])
 
+  useEffect(() => {
+    const remainingData = allPageData.filter(
+      (item) => !filterdPages.some((selectedItem) => selectedItem.p_id == item.p_id)
+    );
+    setRemainingPages(remainingData)
+  }, [filterdPages])
+  console.log(remainingPages)
   //this function will feed the category data to categories option array
   const categorySet = () => {
     allPageData.forEach(data => {
@@ -62,14 +77,14 @@ const PlanCreation = () => {
       }
     })
   }
-//whenever a pageData is available call categoryset function
+  //whenever a pageData is available call categoryset function
   useEffect(() => {
     if (allPageData.length > 0) {
       categorySet()
     }
   }, [allPageData])
 
-//useEffect for category selection change events
+  //useEffect for category selection change events
   useEffect(() => {
     if (selectedCategory.length > 0 && selectedFollower) {
       //if there is a selected category and selected follower
@@ -130,15 +145,19 @@ const PlanCreation = () => {
       })
       setFilteredPages(page)
       // setSelectedFollower(null)
-    } else setSelectedFollower(null)
+    } else if(selectedCategory.length==0 && !selectedFollower){
+      setFilteredPages(allPageData)
+    }else if(selectedCategory.length==0 && selectedFollower){
+
+    }
   }, [selectedCategory])
 
   // useEffect(()=>{
-    
+
   //   setSearchedPages(filterdPages)
   // },[filterdPages])
 
-//useEffect for follower selection change events
+  //useEffect for follower selection change events
   useEffect(() => {
     //
     if (selectedFollower) {
@@ -207,35 +226,144 @@ const PlanCreation = () => {
     setSelectedFollower(op)
   }
 
-  let timer
-  const handleSearchChange=(e,op) => {
-    
-    if(!e.target.value.length ==0) {
-      clearTimeout(timer)
-      timer=setTimeout(()=>{
 
-        const searched = filterdPages.filter(page=>{
-          
-          return page.page_name==e.target.value
+
+  let timer
+  const handleSearchChange = (e) => {
+
+    if (!e.target.value.length == 0) {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+
+        const searched = filterdPages.filter(page => {
+          return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
         })
+
+       
         console.log(searched)
         setSearchedPages(searched)
         setSearched(true)
-      },500)
-    
-    }else{
-      
+      }, 500)
+
+    } else {
+
       console.log("empty")
       setSearched(false)
-    // if(e.targe)
-  }
+      // if(e.targe)
+    }
   }
 
-  const getCampaignName=(detail)=>{
+  
+  
+
+  const getCampaignName = (detail) => {
     setCampaignName(detail.exeCmpName)
   }
   // console.log(allPageData)
   console.log(selectedFollower)
+
+  //all logic related to add new page modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log(isModalOpen, "dasdas");
+  const handleClick = () => {
+    setIsModalOpen(true);
+  };
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSeachChangeModal = (e) => {
+    if (!e.target.value.length == 0) {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        console.log(e.target.value)
+        const searched = remainingPages.filter(page => {
+          return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
+        })
+        console.log(searched)
+        setModalSearchPage(searched)
+        setModalSearchPageStatus(true)
+      
+      }, 500)
+
+    } else {
+
+
+    }
+  }
+
+  const handleModalPageAdd=()=>{
+    
+    const selectedRowData = selectedRows.map((rowId) =>
+            remainingPages.find((row) => row.p_id === rowId)
+          );
+          console.log(selectedRowData)
+    setFilteredPages([...filterdPages,...selectedRowData])
+    setModalSearchPageStatus(false)
+    setIsModalOpen(false);
+  }
+
+  const handleSelectionChange=(newSelection)=>{
+    setSelectedRows(newSelection);
+  }
+
+  console.log(selectedRows)
+  // useEffect(()=>{
+  //   setModalSearchPage
+  // },[selectedRows])
+
+
+  const columns = [
+    {
+      field: "S.NO",
+      headerName: "S.NO",
+      width: 90,
+      renderCell: (params) => {
+        const rowIndex = remainingPages.indexOf(params.row);
+        return <div>{rowIndex + 1}</div>;
+      },
+    },
+    {
+      field: "page_name",
+      headerName: "pages",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "follower_count",
+      headerName: "follower",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "cat_name",
+      headerName: "cat_name",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "post_page",
+      headerName: "post / page",
+      width: 150,
+
+      renderCell: (params) => {
+        return (
+          <input
+            style={{ width: "60%" }}
+            type="number"
+            value={params.row.postPerPage}
+
+          />
+        );
+      },
+    },
+    {
+      field: "platform",
+      headerName: "vender",
+      width: 150,
+      editable: true,
+    },
+  ];
 
 
   return (
@@ -283,10 +411,57 @@ const PlanCreation = () => {
             // value={searchText}
             onChange={handleSearchChange}
             style={{ margin: "10px" }}
+
           />
+          <Button variant="contained" onClick={handleClick}>
+            Add More Pages
+          </Button>
         </Paper>
-        <PageDetaling pages={filterdPages} search={searched} searchedpages={searchedPages} campaignId={id} campaignName={campaignName} type={"plan"}  />
+        <PageDetaling pages={filterdPages} search={searched} searchedpages={searchedPages} campaignId={id} campaignName={campaignName} type={"plan"} />
       </div>
+      <>
+        <Dialog open={isModalOpen}>
+          <DialogTitle>Add more Pages</DialogTitle>
+          <DialogContent>
+            <Box sx={{ height: 400, width: "100%" }}>
+              <TextField
+                label="Search"
+                variant="outlined"
+                // value={searchText}
+                onChange={handleSeachChangeModal}
+                style={{ margin: "10px" }}
+
+              />
+              {
+                modalSearchPageStatus ? <DataGrid
+                rows={modalSearchPage || []}
+                columns={columns}
+                getRowId={(row) => row.p_id}
+                pageSizeOptions={[5]}
+                checkboxSelection
+                onRowSelectionModelChange={(row)=>handleSelectionChange(row)}
+                rowSelectionModel={selectedRows.map((row) => row)}
+              /> : <DataGrid
+              rows={remainingPages || []}
+              columns={columns}
+              getRowId={(row) => row.p_id}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              onRowSelectionModelChange={(row)=>handleSelectionChange(row)}
+              rowSelectionModel={selectedRows.map((row) => row)}
+            /> 
+              }
+              
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button color="primary" onClick={handleModalPageAdd}>Add</Button>
+          </DialogActions>
+        </Dialog>
+      </>
     </>
   );
 };
