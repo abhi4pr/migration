@@ -97,7 +97,7 @@ const SimMaster = () => {
     if (!subCategory || !subCategory.sub_category_id) {
       setSubCategoryError("Assets SubCategory is required");
     }
-    if (!vendorName || vendorName.vendor_id) {
+    if (!vendorName || !vendorName.vendor_id) {
       setVendorNameError("Vendor Name is required");
     }
     try {
@@ -352,7 +352,6 @@ const SimMaster = () => {
                       setVendorNameError("");
                     }
                   }}
-                  // defaultValue={categoryData[0]}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -383,8 +382,8 @@ const SimMaster = () => {
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
-                  label="Self Audit Period"
-                  type="text"
+                  label="Self Audit Period in days"
+                  type="number"
                   value={selfAuditPeriod}
                   onChange={(e) => setSelfAuditPeriod(e.target.value)}
                 />
@@ -409,8 +408,8 @@ const SimMaster = () => {
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
-                  label="HR Self Audit Period"
-                  type="text"
+                  label="HR Self Audit Period in days"
+                  type="number"
                   value={hrselfAuditPeriod}
                   onChange={(e) => setHrSelfAuditPeriod(e.target.value)}
                 />
