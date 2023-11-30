@@ -747,6 +747,66 @@ const SidebarLinks = () => {
         </li>
       )}
 
+      {/* {isWFHVisible && ( */}
+            <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseNine"
+            aria-expanded="true"
+            aria-controls="collapseNine"
+          >
+            <i className="bi bi-person-gear" />
+            <span>Finance</span>
+          </Link>
+          <div
+            id="collapseNine"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              <Link className="collapse-item" to="/admin/finance-alltransactions">
+                All Transaction
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-approveinvoice">
+                Approval Invoices
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-balancepayment">
+                Balance Payment List
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-dashboard">
+                Finance Dashboard
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-incentivepayment">
+                Incentive Payment
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-paymentmode">
+                Payment Mode
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendingapproverefund">
+                Pending Approval Refund
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendingapproveupdate">
+                Pending Approval Update
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendinginvoice">
+                Pending Invoices
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendingrequests">
+                Refund Requests
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-salebookingclose">
+                Sale Booking close
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-salebookingverify">
+                Sale Booking verify
+              </Link>
+            </div>
+          </div>
+        </li>
+      {/* )} */}
+
       {/* {isInstaApiVisible && (
         <li className="nav-item">
           <Link

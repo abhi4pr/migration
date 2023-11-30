@@ -143,6 +143,19 @@ import ExeHistory from "../Execution/ExeHistory";
 import { SelfAudit } from "./AssetNotifier/SelfAudit";
 import StatsAllPagesDetail from "../Execution/StatsAllPagesDetail";
 
+import AllTransactions from "./Finance/AllTransactions";
+import ApprovalInvoice from "./Finance/ApprovalInvoice";
+import BalancePaymentList from "./Finance/BalancePaymentList";
+import FinanceDashboard from "./Finance/FinanceDashboard";
+import IncentivePayment from "./Finance/IncentivePayment";
+import PaymentMode from "./Finance/PaymentMode";
+import PendingApprovalRefund from "./Finance/PendingApprovalRefund";
+import PendingApprovalsUpdate from "./Finance/PendingApprovalsUpdate";
+import PendingInvoice from "./Finance/PendingInvoice";
+import RefundRequests from "./Finance/RefundRequests";
+import SaleBookingClose from "./Finance/SaleBookingClose";
+import SaleBookingVerify from "./Finance/SaleBookingVerify";
+
 const Admin = () => {
   const [contextData, setData] = useState([]);
 
@@ -487,6 +500,54 @@ const Admin = () => {
                   <Route
                     path="/pre-onboard-all-notifications"
                     element={<NotificationHistory />}
+                  />
+                  <Route
+                    path="/finance-alltransactions"
+                    element={<AllTransactions />}
+                  />
+                  <Route
+                    path="/finance-approveinvoice"
+                    element={<ApprovalInvoice />}
+                  />
+                  <Route
+                    path="/finance-balancepayment"
+                    element={<BalancePaymentList />}
+                  />
+                  <Route
+                    path="/finance-dashboard"
+                    element={<FinanceDashboard />}
+                  />
+                  <Route
+                    path="/finance-incentivepayment"
+                    element={<IncentivePayment />}
+                  />
+                  <Route
+                    path="/finance-paymentmode"
+                    element={<PaymentMode />}
+                  />
+                  <Route
+                    path="/finance-pendingapproverefund"
+                    element={<PendingApprovalRefund />}
+                  />
+                  <Route
+                    path="/finance-pendingapproveupdate"
+                    element={<PendingApprovalsUpdate />}
+                  />
+                  <Route
+                    path="/finance-pendinginvoice"
+                    element={<PendingInvoice />}
+                  />
+                  <Route
+                    path="/finance-pendingrequests"
+                    element={<RefundRequests />}
+                  />
+                  <Route
+                    path="/finance-salebookingclose"
+                    element={<SaleBookingClose />}
+                  />
+                  <Route
+                    path="/finance-salebookingverify"
+                    element={<SaleBookingVerify />}
                   />
                   <Route
                     path="/pre-onboard-coc-update/:id"
