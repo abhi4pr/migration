@@ -417,7 +417,7 @@ const PlanCreation = () => {
             Add More Pages
           </Button>
         </Paper>
-        <PageDetaling pages={filterdPages} search={searched} searchedpages={searchedPages} campaignId={id} campaignName={campaignName} type={"plan"} />
+        <PageDetaling pageName={"planCreation"} pages={filterdPages} search={searched} searchedpages={searchedPages} setFilteredPages={setFilteredPages}  data={{campaignId:id,campaignName}} />
       </div>
       <>
         <Dialog open={isModalOpen}>

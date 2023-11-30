@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useEffect } from "react";
-import { TextField } from "@mui/material";
+import { TextField,Button } from "@mui/material";
 import axios from "axios";
 
-const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId }) => {
-  console.log(searchedpages,search,campaignName)
+const PageDetaling = ({pageName, pages,search,searchedpages,data,setFilteredPages }) => {
+ 
     const [allPages,setAllPages]=useState([])
     const [postpage,setPostPage]=useState(0)
     useEffect(()=>{
@@ -30,6 +30,8 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
         
       }
     },[pages,search,searchedpages])
+
+
   const columns = [
     {
       field: "S.NO",
@@ -81,27 +83,7 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
               })
               console.log(update)
             }}
-            // onKeyDown={(e) => {
-            //     if(e.key=='Backspace'){
-            //        const x=allPages.map(page=>{
-            //         if(params.row.p_id==page.p_id){
-            //             return {...page,postPerPage:0}
-            //         }else return page
-            //        })
-            //        setAllPages(x)
-
-            //    }
-            //     else{
-
-            //         const ppp=allPages.map(page=>{
-            //             if(params.row.p_id==page.p_id){
-            //                 return {...page,postPerPage:Number(e.target.value)}
-            //             }else return page
-            //         })
-            //         setAllPages(ppp)
-            //     }
-               
-            // }}
+       
           />
         );
       },
@@ -112,8 +94,28 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
       width: 150,
       editable: true,
     },
+    {
+      field: "Action",
+      headerName: "Action",
+      width: 150,
+      editable: true,
+      renderCell:(params)=>{
+        return (
+          <Button onClick={()=>removePage(params)}>Remove</Button>
+          
+        )
+      }
+    },
   ];
 
+  const removePage=(params)=>{
+    // console.log(params)
+    const newData=allPages.filter(page=>{
+      return page.p_id!=params.id
+    })
+    setFilteredPages(newData)
+    
+  }
   const handlePost=(e)=>{
 
     const ppp=allPages.map(page=>{
@@ -124,20 +126,28 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
   }
 
   const submitPlan=async (e)=>{
-    const planName=campaignName+"plan"
-    const data={
-      planName,
-      campaignName,
-      campaignId,
-      pages:allPages,
+    if(pageName=='planCreation'){
+      console.log("first")
+      const planName=data.campaignName+"plan"
 
+      const newdata={
+        planName,
+        "campaignName":data.campaignName,
+        "campaignId":data.campaignId,
+        pages:allPages,
+  
+      }
+      try {
+        
+        const result=await axios.post('http://localhost:8080/api/campaignplan',newdata)
+
+        console.log(result)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    try {
-      
-      const result=await axios.post('http://localhost:8080/api/campaignplan',data)
-      console.log(result)
-    } catch (error) {
-      console.log(error)
+    if(pageName=='phaseCreation'){
+
     }
 
   }
