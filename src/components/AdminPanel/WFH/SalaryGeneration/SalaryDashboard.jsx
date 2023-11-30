@@ -3,7 +3,7 @@ import axios from "axios";
 import Select from "react-select";
 import "./SalaryDashboard.css";
 import * as XLSX from "xlsx";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 const SalaryDashboard = () => {
   const { id } = useParams();
@@ -16,13 +16,26 @@ const SalaryDashboard = () => {
   const [allwfhusers, setAllWFHUsers] = useState([]);
   const [activeusers, setActiveUsers] = useState("");
 
+  const [navigation, setNavigation] = useState(false);
+  const [navigationData, setNavigationData] = useState(null);
+
   useEffect(() => {
     if (id !== 0) {
       setDepartment(id);
     }
   }, []);
+
+  const handleNavigate = (data) => {
+    setNavigationData({
+      DashDepartment: id,
+      DashMonth: data?.month,
+      DashYear: data?.year,
+    });
+    setNavigation(true);
+  };
+
   const months = [
-    " January",
+    "January",
     "February",
     "March",
     "April",
@@ -35,19 +48,16 @@ const SalaryDashboard = () => {
     "November",
     "December",
   ];
-  useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/dept_with_wfh").then((res) => {
-      getDepartmentData(res.data);
-    });
 
+  useEffect(() => {
     axios
       .post("http://34.93.135.33:8080/api/get_salary_count_by_dept_year", {
-        dept: department,
+        dept: id,
       })
       .then((res) => {
         setTotalSalary(res.data.data);
       });
-  }, [department]);
+  }, [id]);
 
   useEffect(() => {
     axios.get("http://34.93.135.33:8080/api/get_all_wfh_users").then((res) => {
@@ -65,11 +75,12 @@ const SalaryDashboard = () => {
       setTotalCountOfSalary(res.data.data);
     });
   }, []);
+
   // ----------------------------------------------------------------------
   const getAttendanceData = () => {
     axios
       .post("http://34.93.135.33:8080/api/get_salary_by_filter", {
-        dept: department == "" ? 0 : Number(department),
+        dept: id,
       })
       .then((res) => {
         const data = res.data.data;
@@ -107,6 +118,9 @@ const SalaryDashboard = () => {
 
   return (
     <div>
+      {navigation && navigationData && (
+        <Navigate to="/admin/salaryWFH" state={navigationData} />
+      )}
       <div>
         <div className="form-heading">
           <div className="form_heading_title">
@@ -115,29 +129,15 @@ const SalaryDashboard = () => {
         </div>
         <div className="row ">
           <div className="form-group col-3">
-            <label className="form-label">
-              Department Name <sup style={{ color: "red" }}>*</sup>
-            </label>
-            <Select
-              className=""
-              options={departmentdata.map((option) => ({
-                value: option.dept_id,
-                label: `${option.dept_name}`,
-              }))}
-              value={{
-                value: department,
-                label:
-                  departmentdata.find((user) => user.dept_id === department)
-                    ?.dept_name || "",
-              }}
-              onChange={(e) => {
-                setDepartment(e.value);
-              }}
-              required
-            />
             <span style={{ color: "green" }}>
               Active : {activeusers.length}
             </span>
+          </div>
+          <div className="form-label col-3">
+            <label className="form-label">Department</label>
+            <div>
+              <h4>{resData[0]?.dept_name}</h4>
+            </div>
           </div>
           <div className="form-group col-3">
             <label className="form-label">Total Salary Department Wise </label>
@@ -177,10 +177,16 @@ const SalaryDashboard = () => {
                   <div className="button-align">
                     <div>
                       <button
-                        className="btn btn-primary"
+                        className="btn btn-primary mr-3"
                         onClick={() => handleExport(d[0]?.month)}
                       >
                         ExcelSheet
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleNavigate(d[0])}
+                      >
+                        Overview
                       </button>
                     </div>
                     <div>
@@ -188,7 +194,15 @@ const SalaryDashboard = () => {
                     </div>
                   </div>
                   <div className="salary-deparmtnet">
-                    {/* <div>Department wise Salary : 100000 ₹</div> */}
+                    <div>
+                      Total Salary :
+                      {d.reduce((accumulator, currentObject) => {
+                        return accumulator + currentObject.total_salary;
+                      }, 0)}
+                    </div>
+                    <div onClick={() => handleNavigate(d[0])}>
+                      Total Employees: {d.length}
+                    </div>
                   </div>
                   <div className="card_main">
                     <div>
@@ -197,7 +211,6 @@ const SalaryDashboard = () => {
                           Date: {d[0]?.month} {d[0]?.year}
                         </h6>
                         <h6>Department : {d[0]?.dept_name}</h6>
-                        {console.log(d)}
                       </div>
                     </div>
                   </div>
