@@ -64,32 +64,44 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
       width: 150,
 
       renderCell: (params) => {
+        // params.value=params.row.postPerPage
         return (
           <input
             style={{ width: "60%" }}
             type="number"
-            value={params.row.postPerPage}
-            onKeyDown={(e) => {
-                if(e.key=='Backspace'){
-                   const x=allPages.map(page=>{
-                    if(params.row.p_id==page.p_id){
-                        return {...page,postPerPage:0}
-                    }else return page
-                   })
-                   setAllPages(x)
-
-               }
-                else{
-
-                    const ppp=allPages.map(page=>{
-                        if(params.row.p_id==page.p_id){
-                            return {...page,postPerPage:Number(e.target.value)}
-                        }else return page
-                    })
-                    setAllPages(ppp)
+            
+            value={params.value}
+            placeholder={params.row.postPerPage}
+            onChange={(e)=>{
+            const update=  allPages.map(page=>{
+                if(params.row.p_id==page.p_id){
+                  return {...page,postPerPage:e.target.value}
                 }
-               
+                return page
+              })
+              console.log(update)
             }}
+            // onKeyDown={(e) => {
+            //     if(e.key=='Backspace'){
+            //        const x=allPages.map(page=>{
+            //         if(params.row.p_id==page.p_id){
+            //             return {...page,postPerPage:0}
+            //         }else return page
+            //        })
+            //        setAllPages(x)
+
+            //    }
+            //     else{
+
+            //         const ppp=allPages.map(page=>{
+            //             if(params.row.p_id==page.p_id){
+            //                 return {...page,postPerPage:Number(e.target.value)}
+            //             }else return page
+            //         })
+            //         setAllPages(ppp)
+            //     }
+               
+            // }}
           />
         );
       },
@@ -143,7 +155,8 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
           pageSizeOptions={[5]}
         />
       </Box>
-      <button onClick={submitPlan}>submit</button>
+      {!search && <button onClick={submitPlan}>submit</button> }
+      
     </>
   );
 };
