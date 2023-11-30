@@ -391,21 +391,17 @@ const Admin = () => {
                         />
                       </>
                     )}
-                    {/* {contextData &&
+                  {/* {contextData &&
                     contextData[5] &&
                     contextData[5].view_value === 1 && ( */}
-                      <>
-                        <Route
-                          path="/self-audit"
-                          element={<SelfAudit />}
-                        />
-                       {/* <Route
+                  <>
+                    <Route path="/self-audit" element={<SelfAudit />} />
+                    {/* <Route
                           path="/product-overview"
                           element={<ProductOverview />}
                         /> */}
-
-                      </>
-                    {/* )} */}
+                  </>
+                  {/* )} */}
                   {contextData &&
                     contextData[6] &&
                     contextData[6].view_value === 1 && (
@@ -623,7 +619,6 @@ const Admin = () => {
                   <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
 
-
                   <Route
                     path="/checkPageFollowers"
                     element={<CheckPageFollowers />}
@@ -638,7 +633,7 @@ const Admin = () => {
                   <Route path="/subcategory" element={<SubCategoryMaster />} />
 
                   <Route path="/contentcreater" element={<ContentCreater />} />
-                
+
                   {/* ----------------------lead source routes -----------------------------*/}
                   <Route
                     path="/exploreleads"
@@ -680,7 +675,10 @@ const Admin = () => {
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />
                   <Route path="/exeexecution/all" element={<ExecutionAll />} />
-                  <Route path="/exeexecution/allpagesdetail" element={<StatsAllPagesDetail />} />
+                  <Route
+                    path="/exeexecution/allpagesdetail"
+                    element={<StatsAllPagesDetail />}
+                  />
                   <Route path="/exeexecution/own" element={<ExecutionOwn />} />
                   <Route
                     path="/exeexecution/other"
