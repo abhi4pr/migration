@@ -42,6 +42,7 @@ import AssetSubCategoryUpdate from "./components/Sim/AssetCategory/AssetSubCateg
 import VenderOverView from "./components/Sim/Vender/VenderOverView";
 import VenderMaster from "./components/Sim/Vender/VenderMaster";
 import VendorUpdate from "./components/Sim/Vender/VendorUpdate";
+import SingleAssetUserDetails from "./components/Sim/SingleAssetUserDetails";
 
 function App() {
   return (
@@ -78,6 +79,10 @@ function App() {
 
           {/* sim */}
           <Route path="/sim-overview" element={<SimOverview />} />
+          <Route
+            path="/singleAssetDetails/:id"
+            element={<SingleAssetUserDetails />}
+          />
           <Route path="/sim-master" element={<SimMaster />} />
           <Route path="/sim-update/:id" element={<SimUpdate />} />
           <Route path="/sim-dashboard" element={<SimDashboard />} />
@@ -114,18 +119,9 @@ function App() {
           />
           {/* vender pages */}
 
-          <Route
-            path="/venderOverView"
-            element={<VenderOverView />}
-          />
-             <Route
-            path="/vendorMaster"
-            element={<VenderMaster />}
-          />
-            <Route
-            path="/vendorUpdate/:id"
-            element={<VendorUpdate />}
-          />
+          <Route path="/venderOverView" element={<VenderOverView />} />
+          <Route path="/vendorMaster" element={<VenderMaster />} />
+          <Route path="/vendorUpdate/:id" element={<VendorUpdate />} />
 
           <Route path="/ip-overview" element={<IpOverview />} />
           <Route path="/ip-master" element={<IpMaster />} />
@@ -141,9 +137,6 @@ function App() {
           <Route path="/brand-view/:id" element={<BrandView />} />
 
           {/* Execution history */}
-          
-
-
         </Routes>
       </BrowserRouter>
     </>

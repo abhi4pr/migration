@@ -225,15 +225,22 @@ const DepartmentOverview = () => {
         {selectedRow && (
           <div>
             <div className="d-flex justify-content-between mb-2">
-            <h2>Department: {selectedRow.dept_name}</h2>
+              <h2>Department: {selectedRow.dept_name}</h2>
 
-            <button className="btn btn-success float-left" onClick={handleCloseModal}>
-              X
-            </button>
+              <button
+                className="btn btn-success float-left"
+                onClick={handleCloseModal}
+              >
+                X
+              </button>
             </div>
             <DataTable
               columns={[
-                { name: "S.No", cell: (row, index) => <div>{index + 1}</div>, width: "10%" },
+                {
+                  name: "S.No",
+                  cell: (row, index) => <div>{index + 1}</div>,
+                  width: "10%",
+                },
                 { name: "Name", selector: "user_name" },
                 { name: "Email", selector: "user_email_id" },
                 { name: "Contact", selector: "user_contact_no" },
@@ -253,7 +260,6 @@ const DepartmentOverview = () => {
                 />
               }
             />
-           
           </div>
         )}
       </Modal>
