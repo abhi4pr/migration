@@ -30,23 +30,23 @@ const PendingOrder = () => {
   };
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/alldept").then((data) => {
-      setDepartmentName(data.data);
-    });
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_deparmtnets")
+      .then((data) => {
+        setDepartmentName(data.data);
+      });
   }, []);
 
   useEffect(() => {
     axios
       .get(`http://34.93.135.33:8080/api/get_delivery_boy/${3}`)
       .then((res) => setAllDeliveryBoy(res.data.results));
-    console.log(showALlDeliveryBoy);
   }, []);
 
   const handleStatusChange = (row, selectedStatus) => {
     if (selectedStatus === "declined") {
       setIsModalOpen(true);
       setSelectedRow(row);
-      console.log("row", row);
       return;
     } else {
       axios
@@ -157,7 +157,6 @@ const PendingOrder = () => {
         order_req_id: orderRequestTransfer[0],
       })
       .then((response) => {
-        console.log("Order delivery submitted successfully", response);
         setTransferTo("");
         setReason("");
         setSelectedDeliveryBoy("");

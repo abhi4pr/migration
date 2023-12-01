@@ -46,23 +46,23 @@ const PantryHome = () => {
         setAllOrderData(res.data.data);
       });
   }, []);
-  const pendingOrdersCount = allOrderData.filter(
+  const pendingOrdersCount = allOrderData?.filter(
     (orders) => orders.Status.toLowerCase() === "pending"
   ).length;
-  const deliveredOrdersCount = allOrderData.filter(
+  const deliveredOrdersCount = allOrderData?.filter(
     (orders) => orders.Status === "Delivered"
   ).length;
-  const declinedOrderCount = allOrderData.filter(
+  const declinedOrderCount = allOrderData?.filter(
     (orders) => orders.Status.toLowerCase() === "declined"
   ).length;
 
-  const allOrderCount = allOrderData.length;
+  const allOrderCount = allOrderData?.length;
   useEffect(() => {
     axios.get("http://34.93.135.33:8080/api/get_all_transreq").then((res) => {
       setTransferReq(res.data.data);
     });
   }, []);
-  const TransferDataLength = transferReq.length;
+  const TransferDataLength = transferReq?.length;
   return (
     <>
       <div className="form-heading">
