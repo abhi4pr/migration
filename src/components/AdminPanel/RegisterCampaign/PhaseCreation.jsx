@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridExpandMoreIcon } from "@mui/x-data-grid";
 import PageDetaling from "./PageDetailing";
 
 import {
@@ -19,10 +19,14 @@ import {
   DialogContent,
   DialogActions,
   Box,
-  Typography
+  Typography,
+  AccordionDetails,
 } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Accordioan from "./Accordioan";
 
-let options = []
+let options = [];
 const PhaseCreation = () => {
   const param = useParams();
   const id = param.id;
@@ -34,15 +38,15 @@ const PhaseCreation = () => {
   const [endDate, setEndDate] = useState(null);
 
   //state related to filtering and modal
-  const [filterdPages, setFilteredPages] = useState([])
-  const [searchedPages, setSearchedPages] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState([])
-  const [selectedFollower, setSelectedFollower] = useState(null)
-  const [searched, setSearched] = useState(false)
-  const [campaignName, setCampaignName] = useState(null)
-  const [remainingPages, setRemainingPages] = useState([])
-  const [modalSearchPage, setModalSearchPage] = useState([])
-  const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false)
+  const [filterdPages, setFilteredPages] = useState([]);
+  const [searchedPages, setSearchedPages] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedFollower, setSelectedFollower] = useState(null);
+  const [searched, setSearched] = useState(false);
+  const [campaignName, setCampaignName] = useState(null);
+  const [remainingPages, setRemainingPages] = useState([]);
+  const [modalSearchPage, setModalSearchPage] = useState([]);
+  const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
   const Follower_Count = [
@@ -61,7 +65,7 @@ const PhaseCreation = () => {
     );
     console.log(pageData.data.data);
     setAllPageData(pageData.data.data);
-    setFilteredPages(pageData.data.data)
+    setFilteredPages(pageData.data.data);
   };
   useEffect(() => {
     getPageData();
@@ -69,94 +73,116 @@ const PhaseCreation = () => {
 
   useEffect(() => {
     const remainingData = allPageData.filter(
-      (item) => !filterdPages.some((selectedItem) => selectedItem.p_id == item.p_id)
+      (item) =>
+        !filterdPages.some((selectedItem) => selectedItem.p_id == item.p_id)
     );
-    setRemainingPages(remainingData)
-  }, [filterdPages])
-  console.log(remainingPages)
+    setRemainingPages(remainingData);
+  }, [filterdPages]);
+  console.log(remainingPages);
   //this function will feed the category data to categories option array
   const categorySet = () => {
-    allPageData.forEach(data => {
+    allPageData.forEach((data) => {
       if (!options.includes(data.cat_name)) {
         // setOptions([...options, data.cat_name])
-        options.push(data.cat_name)
+        options.push(data.cat_name);
       }
-    })
-  }
+    });
+  };
   //whenever a pageData is available call categoryset function
   useEffect(() => {
     if (allPageData.length > 0) {
-      categorySet()
+      categorySet();
     }
-  }, [allPageData])
+  }, [allPageData]);
 
   //useEffect for category selection change events
   useEffect(() => {
     if (selectedCategory.length > 0 && selectedFollower) {
       //if there is a selected category and selected follower
-      const page = allPageData.filter(pages => {
+      const page = allPageData.filter((pages) => {
         //based on the selected follower a condition will be executed
 
         if (selectedFollower == "<10k") {
           if (selectedCategory.length > 0) {
-            //if there is category selected then this 
-            return Number(pages.follower_count) <= 10000 && selectedCategory.includes(pages.cat_name)
+            //if there is category selected then this
+            return (
+              Number(pages.follower_count) <= 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
             //if there is no category selected
-            return Number(pages.follower_count) <= 10000
+            return Number(pages.follower_count) <= 10000;
           }
         }
         if (selectedFollower == "10k to 100k ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000
+            );
           }
-
         }
         if (selectedFollower == "100k to 1M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000
+            );
           }
         }
         if (selectedFollower == "1M to 5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000
+            );
           }
         }
         if (selectedFollower == ">5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) > 5000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) > 5000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) > 5000000
+            return Number(pages.follower_count) > 5000000;
           }
         }
         // return selectedCategory.includes(pages.cat_name)
-      })
+      });
       //to set the filtered page
-      setFilteredPages(page)
+      setFilteredPages(page);
     } else if (selectedCategory.length > 0 && !selectedFollower) {
-
       //in case category is present but follower count is not selected
-      const page = allPageData.filter(pages => {
-        return selectedCategory.includes(pages.cat_name)
-      })
-      setFilteredPages(page)
+      const page = allPageData.filter((pages) => {
+        return selectedCategory.includes(pages.cat_name);
+      });
+      setFilteredPages(page);
       // setSelectedFollower(null)
     } else if (selectedCategory.length == 0 && !selectedFollower) {
-      setFilteredPages(allPageData)
+      setFilteredPages(allPageData);
     } else if (selectedCategory.length == 0 && selectedFollower) {
-
+      console.log();
     }
-  }, [selectedCategory])
+  }, [selectedCategory]);
 
   // useEffect(()=>{
 
@@ -167,106 +193,122 @@ const PhaseCreation = () => {
   useEffect(() => {
     //
     if (selectedFollower) {
-      const page = allPageData.filter(pages => {
+      const page = allPageData.filter((pages) => {
         if (selectedFollower == "<10k") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 10000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 10000
+            return Number(pages.follower_count) <= 10000;
           }
         }
         if (selectedFollower == "10k to 100k ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000
+            );
           }
-
         }
         if (selectedFollower == "100k to 1M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000
+            );
           }
         }
         if (selectedFollower == "1M to 5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000
+            );
           }
         }
         if (selectedFollower == ">5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) > 5000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) > 5000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) > 5000000
+            return Number(pages.follower_count) > 5000000;
           }
         }
         // return selectedCategory.includes(pages.cat_name)
-      })
-      setFilteredPages(page)
+      });
+      setFilteredPages(page);
     } else {
       if (selectedCategory.length > 0) {
-        const page = allPageData.filter(pages => {
-          return selectedCategory.includes(pages.cat_name)
-        })
-        setFilteredPages(page)
-      } else setFilteredPages(allPageData)
+        const page = allPageData.filter((pages) => {
+          return selectedCategory.includes(pages.cat_name);
+        });
+        setFilteredPages(page);
+      } else setFilteredPages(allPageData);
     }
-  }, [selectedFollower])
+  }, [selectedFollower]);
 
   //this functin will be called whenever category is changed
   const categoryChangeHandler = (e, op) => {
-    setSelectedCategory(op)
-  }
+    setSelectedCategory(op);
+  };
 
   //this functin will be called whenever follower count is changed
   const followerChangeHandler = (e, op) => {
-    setSelectedFollower(op)
-  }
+    setSelectedFollower(op);
+  };
 
-
-
-  let timer
+  let timer;
   const handleSearchChange = (e) => {
-
     if (!e.target.value.length == 0) {
-      clearTimeout(timer)
+      clearTimeout(timer);
       timer = setTimeout(() => {
+        const searched = filterdPages.filter((page) => {
+          return (
+            page.page_name
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase()) ||
+            page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
+          );
+        });
 
-        const searched = filterdPages.filter(page => {
-          return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
-        })
-
-
-        console.log(searched)
-        setSearchedPages(searched)
-        setSearched(true)
-      }, 500)
-
+        console.log(searched);
+        setSearchedPages(searched);
+        setSearched(true);
+      }, 500);
     } else {
-
-      console.log("empty")
-      setSearched(false)
+      console.log("empty");
+      setSearched(false);
       // if(e.targe)
     }
-  }
-
-
-
+  };
 
   const getCampaignName = (detail) => {
-    setCampaignName(detail.exeCmpName)
-  }
+    setCampaignName(detail.exeCmpName);
+  };
   // console.log(allPageData)
-  console.log(selectedFollower)
+  console.log(selectedFollower);
 
   //all logic related to add new page modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -280,44 +322,44 @@ const PhaseCreation = () => {
 
   const handleSeachChangeModal = (e) => {
     if (!e.target.value.length == 0) {
-      clearTimeout(timer)
+      clearTimeout(timer);
       timer = setTimeout(() => {
-        console.log(e.target.value)
-        const searched = remainingPages.filter(page => {
-          return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
-        })
-        console.log(searched)
-        setModalSearchPage(searched)
-        setModalSearchPageStatus(true)
-
-      }, 500)
-
+        console.log(e.target.value);
+        const searched = remainingPages.filter((page) => {
+          return (
+            page.page_name
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase()) ||
+            page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
+          );
+        });
+        console.log(searched);
+        setModalSearchPage(searched);
+        setModalSearchPageStatus(true);
+      }, 500);
     } else {
-
-
+      console.log( );
     }
-  }
+  };
 
   const handleModalPageAdd = () => {
-
     const selectedRowData = selectedRows.map((rowId) =>
       remainingPages.find((row) => row.p_id === rowId)
     );
-    console.log(selectedRowData)
-    setFilteredPages([...filterdPages, ...selectedRowData])
-    setModalSearchPageStatus(false)
+    console.log(selectedRowData);
+    setFilteredPages([...filterdPages, ...selectedRowData]);
+    setModalSearchPageStatus(false);
     setIsModalOpen(false);
-  }
+  };
 
   const handleSelectionChange = (newSelection) => {
     setSelectedRows(newSelection);
-  }
+  };
 
-  console.log(selectedRows)
+  console.log(selectedRows);
   // useEffect(()=>{
   //   setModalSearchPage
   // },[selectedRows])
-
 
   const columns = [
     {
@@ -358,7 +400,6 @@ const PhaseCreation = () => {
             style={{ width: "60%" }}
             type="number"
             value={params.row.postPerPage}
-
           />
         );
       },
@@ -370,8 +411,12 @@ const PhaseCreation = () => {
       editable: true,
     },
   ];
+  const newData = [1, 2, 3];
+  const [expanded, setExpanded] = useState(false);
 
-
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
   return (
     <>
       <div className="form_heading_title">
@@ -430,15 +475,38 @@ const PhaseCreation = () => {
           />
         </Box>
       </Paper>
+      {/* add Accordion for show phase------------------- */}
+      <Paper sx={{ pb: 4 }}>
+        {newData.map((item, index) => (
+          <Paper key={index} sx={{ mb: 2 }}>
+            <Accordion
+              key={index}
+              expanded={expanded === `panel${index}`}
+              onChange={handleChange(`panel${index}`)}
+            >
+              <AccordionSummary
+                expandIcon={<GridExpandMoreIcon />}
+                // aria-controls={`panel${index}bh-content`}
+                // id={`panel${index}bh-header`}
+              >
+                <Typography>{`Phase ${index + 1}`}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Accordioan data={item} />
+              </AccordionDetails>
+            </Accordion>
+          </Paper>
+        ))}
+      </Paper>
+
+      {/* add Accordion for show end phase------------------- */}
       <Paper sx={{ display: "flex", gap: "10" }}>
         <Autocomplete
           multiple
           id="combo-box-demo"
           options={options}
-          // sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Category" />}
           onChange={categoryChangeHandler}
-
         />
         <Autocomplete
           id="combo-box-demo"
@@ -465,15 +533,22 @@ const PhaseCreation = () => {
           // value={searchText}
           onChange={handleSearchChange}
           style={{ margin: "10px" }}
-
         />
-        <Button variant="contained" onClick={handleClick}>
+        <Button variant="outlined" onClick={handleClick}>
           Add More Pages
         </Button>
       </Paper>
-      {/* <div style={{ height: 400, width: "100%" }}>
-      </div> */}
-      <PageDetaling pageName={"createPlan"} pages={filterdPages} search={searched} searchedpages={searchedPages} setFilteredPages={setFilteredPages} campaignId={id} campaignName={campaignName} type={"plan"} />
+
+      <PageDetaling
+        pageName={"createPlan"}
+        pages={filterdPages}
+        search={searched}
+        searchedpages={searchedPages}
+        setFilteredPages={setFilteredPages}
+        campaignId={id}
+        campaignName={campaignName}
+        type={"plan"}
+      />
       <Dialog open={isModalOpen}>
         <DialogTitle>Add more Pages</DialogTitle>
         <DialogContent>
@@ -481,13 +556,11 @@ const PhaseCreation = () => {
             <TextField
               label="Search"
               variant="outlined"
-              // value={searchText}
               onChange={handleSeachChangeModal}
               style={{ margin: "10px" }}
-
             />
-            {
-              modalSearchPageStatus ? <DataGrid
+            {modalSearchPageStatus ? (
+              <DataGrid
                 rows={modalSearchPage || []}
                 columns={columns}
                 getRowId={(row) => row.p_id}
@@ -495,7 +568,9 @@ const PhaseCreation = () => {
                 checkboxSelection
                 onRowSelectionModelChange={(row) => handleSelectionChange(row)}
                 rowSelectionModel={selectedRows.map((row) => row)}
-              /> : <DataGrid
+              />
+            ) : (
+              <DataGrid
                 rows={remainingPages || []}
                 columns={columns}
                 getRowId={(row) => row.p_id}
@@ -504,19 +579,19 @@ const PhaseCreation = () => {
                 onRowSelectionModelChange={(row) => handleSelectionChange(row)}
                 rowSelectionModel={selectedRows.map((row) => row)}
               />
-            }
-
+            )}
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button color="primary" onClick={handleModalPageAdd}>Add</Button>
+          <Button color="primary" onClick={handleModalPageAdd}>
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
       {/* <PageDetaling pages={allPageData} search={false}/> */}
-
     </>
   );
 };
