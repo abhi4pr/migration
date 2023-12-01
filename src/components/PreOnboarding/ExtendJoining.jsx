@@ -70,7 +70,6 @@ const ExtendJoining = ({
         [username, joingingExtendDate.split("-").reverse().join("-")]
       );
 
-      // Reset form and refresh data
       setJoiningExtendDate("");
       setJoiningExtendReason("");
       setJoiningExtendDocument(null);
@@ -78,8 +77,6 @@ const ExtendJoining = ({
       closeModal();
     } catch (error) {
       console.error("An error occurred:", error);
-      // Handle the error appropriately
-      // For example: Show an error message to the user
     }
   };
 

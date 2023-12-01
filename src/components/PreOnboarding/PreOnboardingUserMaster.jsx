@@ -40,17 +40,14 @@ import imageTest28 from "../../assets/img/product/Avtar28.png";
 import imageTest29 from "../../assets/img/product/Avtar29.png";
 import imageTest30 from "../../assets/img/product/Avtar30.png";
 
-var profileimage;
-var nicknames;
 import Modal from "react-modal";
 import ExtendJoining from "./ExtendJoining";
-import { AutoComplete } from "antd";
-import IndianStates from "../ReusableComponents/IndianStates";
 import IndianStatesMui from "../ReusableComponents/IndianStatesMui";
 import LetterTab from "./LetterTab";
 import ContactNumber from "../ReusableComponents/ContactNumber";
 import DocumentTab from "./DocumentTab";
 import FAQTab from "./FAQTab";
+import ReadyToOnboardContent from "./ReadyToOnboardContent";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -70,7 +67,7 @@ const maritialStatusData = ["Single", "Married"]; //,"Divorced","Widowed","Separ
 const genderData = ["Male", "Female", "Other"];
 
 const PreOnboardingUserMaster = () => {
-  const [isTourOpen, setIsTourOpen] = useState(true);
+  const [isTourOpen, setIsTourOpen] = useState(false);
   const whatsappApi = WhatsappAPI();
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
@@ -194,47 +191,21 @@ const PreOnboardingUserMaster = () => {
   const [nickName, setNickName] = useState("");
   const [getProfile, setGetProfile] = useState("");
   const [getNickName, setGetNickName] = useState("");
-  const [loginUserData, setLoginUserData] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [readyToOnboardModal, setReadyToOnboard] = useState(false);
 
-  const profileSingleData = () => {
-    axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
-      .then((res) => {
-        const fetchedData = res.data.profileflag;
-        profileimage = res.data.image_url;
-        nicknames = res.data.nick_name;
-        setGetProfile(profileimage);
-        setGetNickName(nicknames);
-        {
-          fetchedData !== 1 && setShowImageSelector(true);
-        }
-      });
+  const fetchCOCData = async () => {
+    try {
+      const response = await axios.get(
+        "http://34.93.135.33:8080/api/get_all_cocs"
+      );
+      const data = response.data;
+      setCocData(data.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  useEffect(() => {
-    // axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
-    //   getUsersData(res.data.data);
-    //   const userSitting = res.data.data.map((user) => user.sitting_id);
-    //   setAllUsersSittings(userSitting);
-    // });
-
-    profileSingleData();
-  }, []);
-
-  useEffect(() => {
-    const fetchCOCData = async () => {
-      try {
-        const response = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_cocs"
-        );
-        const data = response.data;
-        setCocData(data.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchCOCData();
-  }, []);
   // Step 1: Group data by display_sequence
   const groupedData = cocData?.reduce((result, item) => {
     const displaySequence = item.display_sequence;
@@ -268,15 +239,19 @@ const PreOnboardingUserMaster = () => {
     ));
   };
 
-  useEffect(() => {
-    axios
-      .post("http://34.93.135.33:8080/api/login_user_data", {
-        user_id: id,
-      })
-      .then((res) => setLoginUserData(res.data));
-  }, []);
+  const openReadyToOnboardModal = () => {
+    setReadyToOnboard(true);
+  };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeReadyToOnboardModal = () => {
+    setReadyToOnboard(false);
+  };
+
+  const handleIamReady = () => {
+    setIsTourOpen(true);
+    setReadyToOnboard(false);
+    handleGetOnboard();
+  };
 
   const openReactModal = () => {
     setIsModalOpen(true);
@@ -311,10 +286,6 @@ const PreOnboardingUserMaster = () => {
     );
     setDocumentData(response.data.data);
   };
-
-  useEffect(() => {
-    getDocuments();
-  }, []);
 
   useEffect(() => {
     const approveCount = documentData.filter(
@@ -377,18 +348,16 @@ const PreOnboardingUserMaster = () => {
           gaurdian_number,
           relation_with_guardian,
           guardian_address,
-          // designation_name,
-          // user_report_to_id,
-          // ctc,
-          // offer_letter_send,
-          // offer_later_status,
+          profileflag,
+          image_url,
+          nick_name,
+          showOnboardingModal,
+          image,
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
         setEmail(user_email_id);
         setPersonalEmail(PersonalEmail);
-        //setContact(PersonalNumber);
-        //setPersonalContact(user_contact_no);
         setContact(user_contact_no);
         setPersonalContact(PersonalNumber);
         setPersonalEmail(PersonalEmail);
@@ -462,11 +431,21 @@ const PreOnboardingUserMaster = () => {
         setGuardianContact(gaurdian_number);
         setRelationToGuardian(relation_with_guardian);
         setGuardianAddress(guardian_address);
+        setGetProfile(image_url);
+        setGetNickName(nick_name);
+        console.log(showOnboardingModal, image);
+        {
+          showOnboardingModal
+            ? openReadyToOnboardModal()
+            : !image && setShowImageSelector(true);
+        }
       });
   };
 
   useEffect(() => {
     gettingData();
+    fetchCOCData();
+    getDocuments();
   }, [id]);
 
   const handleSubmit = (e) => {
@@ -607,73 +586,7 @@ const PreOnboardingUserMaster = () => {
     setPassword(generatePassword);
   };
 
-  const generateLoginId = () => {
-    const randomSuffix = Math.floor(Math.random() * 1000);
-    const generatedLoginId = `${username}@${randomSuffix}`;
-    setLoginId(generatedLoginId);
-  };
-
-  const handleLoginIdChange = (event) => {
-    const selectedLoginId = event.target.value;
-    setLoginId(selectedLoginId);
-  };
-
-  function handleEmailChange(e) {
-    const newEmail = e.target.value;
-    setEmail(newEmail);
-
-    if (newEmail == "") {
-      setValidEmail(false);
-    } else {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      setValidEmail(emailRegex.test(newEmail));
-    }
-  }
-
-  function handleContactChange(event) {
-    const newContact = event.target.value;
-    setContact(newContact);
-
-    if (newContact === "") {
-      setValidContact(false);
-    } else {
-      setValidContact(/^(\+91[ \-\s]?)?[0]?(91)?[6789]\d{9}$/.test(newContact));
-    }
-  }
-
-  function handlePersonalContactChange(event) {
-    const newContact1 = event.target.value;
-    setPersonalContact(newContact1);
-
-    if (newContact1 === "") {
-      setValidContact1(false);
-    } else {
-      setValidContact1(
-        /^(\+91[ \-\s]?)?[0]?(91)?[6789]\d{9}$/.test(newContact1)
-      );
-    }
-  }
-
-  function handleContentBlur() {
-    setisContactTouched(true);
-    setisContactTouched1(true);
-    if (contact.length < 10) {
-      setValidContact(false);
-      setValidContact1(false);
-    }
-  }
-
-  // function handleLanguageSelect(selectedOption) {
-  //   setTempLanguage(selectedOption);
-  // }
-
-  // useEffect(() => {
-  //   const test = tempLanguage?.map((option) => option.value).join();
-  //   setSpeakingLanguage(test);
-  // }, [tempLanguage]);
-
   useEffect(() => {
-    // Set the initial value for selectedLanguages
     setSpeakingLanguage(
       backendSpeakingLanguage ? backendSpeakingLanguage.split(",") : []
     );
@@ -778,7 +691,7 @@ const PreOnboardingUserMaster = () => {
   const handleImageClick = async (image) => {
     try {
       const response = await axios.get(image, {
-        responseType: "arraybuffer", // Request the image as an array buffer
+        responseType: "arraybuffer",
       });
 
       setImagePreview(image);
@@ -809,7 +722,14 @@ const PreOnboardingUserMaster = () => {
       },
     });
     setShowModal(false);
-    profileSingleData();
+    gettingData();
+  };
+
+  const handleGetOnboard = async () => {
+    await axios.put(`http://34.93.135.33:8080/api/update_user`, {
+      user_id: id,
+      showOnboardingModal: false,
+    });
   };
 
   const steps = [
@@ -840,18 +760,46 @@ const PreOnboardingUserMaster = () => {
     },
   ];
 
-  useEffect(() => {
-    setIsTourOpen(true);
-  }, []);
-
   return (
     <>
-      {/* Dashboard Section Start */}
       <Tour
         steps={steps}
         isOpen={isTourOpen}
-        onRequestClose={() => setIsTourOpen(false)}
+        onRequestClose={() => {
+          setIsTourOpen(false), setShowImageSelector(true);
+        }}
       />
+
+      <Modal
+        className="Ready to Onboard"
+        isOpen={readyToOnboardModal}
+        onRequestClose={closeReadyToOnboardModal}
+        contentLabel="Rocket Modal"
+        appElement={document.getElementById("root")}
+        style={{
+          overlay: {
+            position: "fixed",
+            backgroundColor: "rgba(255, 255, 255, 0.75)",
+          },
+          content: {
+            position: "absolute",
+            width: "500px",
+            border: "1px solid #ccc",
+            background: "#fff",
+            overflow: "auto",
+            WebkitOverflowScrolling: "touch",
+            borderRadius: "4px",
+            outline: "none",
+            padding: "20px",
+          },
+        }}
+      >
+        <ReadyToOnboardContent
+          handleIamReady={handleIamReady}
+          closeModal={closeReadyToOnboardModal}
+        />
+      </Modal>
+
       <section className="section">
         <div className="page_wrapper">
           <div className="sidebar_wrapper">
@@ -1224,17 +1172,6 @@ const PreOnboardingUserMaster = () => {
                               </div>
                             )}
 
-                            {/* <div className="form-group">
-                              <Select
-                                isMulti
-                                name="languages"
-                                options={LanguageList}
-                                className="basic-multi-select"
-                                classNamePrefix={tempLanguage}
-                                onChange={handleLanguageSelect}
-                              />
-                            </div> */}
-
                             <div className="form-group">
                               <Autocomplete
                                 multiple
@@ -1265,66 +1202,6 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
 
-                            {/* <div className="form-group">
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Age"
-                              value={age}
-                            />
-                          </div> */}
-                            {/* <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="Login ID"
-                                variant="outlined"
-                                type="text"
-                                value={loginId}
-                                onChange={handleLoginIdChange}
-                              />
-                              <div className="input-group-append">
-                                <button
-                                  className="btn btn-outline-primary"
-                                  onClick={generateLoginId}
-                                  type="button"
-                                >
-                                  <i className="bi bi-shuffle"></i>
-                                </button>
-                              </div>
-                            </div> */}
-
-                            {/* <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="Password"
-                                variant="outlined"
-                                type="text"
-                                // className="form-control"
-                                value={password}
-                                // placeholder="Password"
-                                onChange={(e) => setPassword(e.target.value)}
-                              />
-                              <div className="input-group-append">
-                                <button
-                                  className="btn btn-outline-primary"
-                                  onClick={generatePassword}
-                                  type="button"
-                                >
-                                  <i className="bi bi-shuffle"></i>
-                                </button>
-                              </div>
-                            </div> */}
-
-                            {/* <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="Joining Date"
-                                variant="outlined"
-                                type="date"
-                                value={joiningDate}
-                                onChange={(e) => setJoiningDate(e.target.value)}
-                              />
-                            </div> */}
                             <div className="form-group">
                               <TextField
                                 id="outlined-basic"
@@ -1356,18 +1233,6 @@ const PreOnboardingUserMaster = () => {
                                 }
                               />
                             </div>
-                            {/* <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="Guardian Contact"
-                                variant="outlined"
-                                type="number"
-                                value={guardianContact}
-                                onChange={(e) =>
-                                  setGuardianContact(e.target.value)
-                                }
-                              />
-                            </div> */}
 
                             <div className="form-group">
                               <ContactNumber
@@ -1534,142 +1399,6 @@ const PreOnboardingUserMaster = () => {
                 {/* Form Screen End */}
 
                 {/* Document Screen Start */}
-                {/* {activeTab == 2 && (
-                  <div className="documentarea">
-                    <div className="document_box">
-                      <h2>Documents</h2>
-
-                      <div className="docTable table-responsive">
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th scope="col">Document Type</th>
-                              <th scope="col">Priority Days</th>
-                              <th scope="col">Time</th>
-                              <th scope="col">Upload</th>
-                              <th scope="col" className="text-center">
-                                Status
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td scope="row">10th Marksheet</td>
-                              <td>2 Days</td>
-                              <td>1 Day</td>
-                              <td>
-                                <i className="bi bi-cloud-arrow-up" /> Upload
-                              </td>
-                              <td>
-                                <div className="docStatus">
-                                  <span className="warning_badges reject">
-                                    <h4>Rejected</h4>
-                                    <h5>
-                                      {
-                                        allUserData?.tenth_marksheet_validate_remark
-                                      }
-                                    </h5>
-                                  </span>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="row">10th Marksheet</td>
-                              <td>2 Days</td>
-                              <td>1 Day</td>
-                              <td>
-                                <i className="bi bi-cloud-arrow-up"></i> Upload
-                              </td>
-                              <td>
-                                <div className="docStatus">
-                                  <span className="warning_badges approve">
-                                    <h4>Accepted</h4>
-                                  </span>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="row">10th Marksheet</td>
-                              <td>2 Days</td>
-                              <td>1 Day</td>
-                              <td>
-                                <i className="bi bi-cloud-arrow-up"></i> Upload
-                              </td>
-                              <td>
-                                <div className="docStatus">
-                                  <span className="warning_badges pending">
-                                    <h4>Pending</h4>
-                                  </span>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-
-                      <ul className="doc_items_list">
-                        <li className="doc_list_item">
-                          <div
-                            className={
-                              XMarksheet
-                                ? "doc_item doc_item_active"
-                                : "doc_item"
-                            }
-                          >
-                            <p>10th Marksheet</p>
-                            <input
-                              type="file"
-                              value=""
-                              onChange={(e) => {
-                                setXMarksheet(e.target.files[0]);
-                                setXMarksheetValidation("Pending");
-                              }}
-                            />
-                            <span
-                              className="delete"
-                              onClick={() => setXMarksheet(null)}
-                            >
-                              <a href="#">
-                                <i className="bi bi-x-lg" />
-                              </a>
-                            </span>
-                          </div>
-                          {allUserData?.tenth_marksheet_validate ==
-                            "Reject" && (
-                            <div className="warning_badges reject">
-                              <h4>Reject</h4>
-                              <h5>
-                                {allUserData?.tenth_marksheet_validate_remark}
-                              </h5>
-                            </div>
-                          )}
-                          {allUserData?.tenth_marksheet_validate ==
-                            "Approve" && (
-                            <div className="warning_badges approve">
-                              <h4>Accepted</h4>
-                            </div>
-                          )}
-                          {allUserData?.tenth_marksheet_validate ==
-                            "Pending" && (
-                            <div className="warning_badges pending">
-                              <h4>Pending</h4>
-                            </div>
-                          )}
-                        </li>
-                      </ul>
-                      <div className="ml-auto mr-auto text-center">
-                        <button
-                          className="btn btn_pill btn_cmn btn_white"
-                          // type="submit"
-                          onClick={handleSubmit}
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )} */}
-
                 {activeTab == 2 && (
                   <DocumentTab
                     documentData={documentData}
