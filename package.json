@@ -42,6 +42,7 @@
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-chartjs-2": "^5.2.0",
+    "react-circular-progressbar": "^2.1.0",
     "react-cron-generator": "^2.0.9",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",

@@ -33,7 +33,6 @@ export default function ExeHistory() {
         const data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
         });
-        console.log(data);
         setData(data);
       });
   };
@@ -41,7 +40,6 @@ export default function ExeHistory() {
   useEffect(() => {
     apiCall();
     axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
-      console.log(res.data.data);
       setAllUsers(res.data.data);
     });
   }, []);
@@ -49,7 +47,6 @@ export default function ExeHistory() {
   const handleDeleteRowData = (data) => {
     setRowData(data);
     handleClickOpenDeleteHistoryConFirmation();
-    // console.log(data);
   };
 
   const columns = [
@@ -90,8 +87,7 @@ export default function ExeHistory() {
             {params.row?.user_id ? (
               <>
                 {
-                  allUsers.filter((e) => e.user_id == params.row.user_id)[0]
-                    .user_name
+                  allUsers.filter((e) => e.user_id == params.row.user_id)[0]?.user_name
                 }
               </>
             ) : (

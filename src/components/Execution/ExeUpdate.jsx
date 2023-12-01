@@ -113,8 +113,7 @@ export default function ExeUPdate() {
   const [country4Percentage, setCountry4Percentage] = useState(0);
   const [country5Percentage, setCountry5Percentage] = useState(0);
   const [countryImg, setCountryImg] = useState();
-  const [impressionimgSrc, setImpressionimgSrc] =
-    useState(null);
+  const [impressionimgSrc, setImpressionimgSrc] = useState(null);
   const [engagementImgSrc, setEngagementImgSrc] = useState(null);
   const [storyViewImgSrc, setStoryViewImgSrc] = useState(null);
   const [storyViewVideoSrc, setStoryViewVideoSrc] = useState(null);
@@ -123,6 +122,7 @@ export default function ExeUPdate() {
   const [ageImgSrc, setAgeImgSrc] = useState(null);
   const [reachImgSrc, setReachImgSrc] = useState(null);
   const [reachImg, setReachImg] = useState(null);
+  const [storyViewDate, setStoryViewDate] = useState('');
 
   const navigate = useNavigate();
   const saveStats = async (e) => {
@@ -165,6 +165,7 @@ export default function ExeUPdate() {
     formData.append("Age_45_54_percent", age5Percentage);
     formData.append("Age_55_64_percent", age6percentage);
     formData.append("Age_65_plus_percent", age7Percentage);
+
     formData.append("profile_visit", profileVisit);
     formData.append("country1_name", country1);
     formData.append("country2_name", country2);
@@ -178,7 +179,7 @@ export default function ExeUPdate() {
     formData.append("percentage_country5_name", country5Percentage);
     formData.append("country_image_upload", countryImg);
     formData.append("user_id", userID);
-
+    formData.append("story_view_date", storyViewDate);
 
     axios
       .put(`http://34.93.135.33:8080/api/edit_exe_ip_count_history`, formData, {
@@ -211,20 +212,21 @@ export default function ExeUPdate() {
         setAge5Percentage(data.Age_45_54_percent);
         setAge6Percentage(data.Age_55_64_percent);
         setAge7Percentage(data.Age_65_plus_percent);
-        setAgeImg(data.Age_upload_url);
+        // setAgeImg(data.Age_upload_url);
         setAgeImgSrc(data.Age_upload_url);
         setCity1(data.city1_name);
         setCity2(data.city2_name);
         setCity3(data.city3_name);
         setCity4(data.city4_name);
         setCity5(data.city5_name);
-        setCityImg(data.city_image_upload_url);
+        // setCityImg(data.city_image_upload_url);
         setCityImgSrc(data.city_image_upload_url);
         setEndDate(data.end_date);
         setEndDate(dayjs(new Date(data.end_date?.split("T")[0])));
         setStartDate(dayjs(new Date(data.start_date?.split("T")[0])));
+        setStoryViewDate(dayjs(new Date(data.story_view_date?.split("T")[0])));
         setEngagement(data.engagement);
-        setEngagementImg(data.engagement_upload_image_url);
+        // setEngagementImg(data.engagement_upload_image_url);
         setEngagementImgSrc(data.engagement_upload_image_url);
         setFemalePercentage(data.female_percent);
         setImpression(data.impression);
@@ -239,8 +241,8 @@ export default function ExeUPdate() {
         impressionimgSrc(data.impression_upload_image_url);
         setStatesFor(data.stats_for);
         setStoryView(data.story_view);
-        setStoryViewImg(data.story_view_upload_image_url);
-        setStoryViewVideo(data.story_view_upload_video_url);
+        // setStoryViewImg(data.story_view_upload_image_url);
+        // setStoryViewVideo(data.story_view_upload_video_url);
         setStoryViewVideoSrc(data.story_view_upload_video_url);
         setStoryViewImgSrc(data.story_view_upload_image_url);
         setCountry1(data.country1_name);
@@ -253,11 +255,11 @@ export default function ExeUPdate() {
         setCountry3Percentage(data.percentage_country3_name);
         setCountry4Percentage(data.percentage_country4_name);
         setCountry5Percentage(data.percentage_country5_name);
-        setCountryImg(data.country_image_upload_url);
+        // setCountryImg(data.country_image_upload_url);
         setCountryImgSrc(data.country_image_upload_url);
-        setReachImg(data.reach_upload_image_url);
+        // setReachImg(data.reach_upload_image_url);
         setReachImgSrc(data.reach_upload_image_url);
-        setImpressionImg(data.impression_upload_image_url);
+        // setImpressionImg(data.impression_upload_image_url);
         setImpressionimgSrc(data.impression_upload_image_url);
       });
   };
@@ -352,6 +354,14 @@ export default function ExeUPdate() {
     date.setMinutes(date.getMinutes() - offset);
 
     setStartDate(newValue);
+  };
+  const handleStoryViewDateChange = (newValue) => {
+    const date = new Date(newValue.$d);
+
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() - offset);
+
+    setStoryViewDate(newValue);
   };
 
   const id = useParams();
@@ -451,6 +461,7 @@ export default function ExeUPdate() {
             />
           )}
         </div>
+        <h4  className="h3 text-center">Followers Bifurcation</h4>
         <div className="row ">
           <div className="card">
             <div className="card-body">
@@ -470,50 +481,49 @@ export default function ExeUPdate() {
                     !reachValidation ? "Please enter a valid Count" : ""
                   }
                 />
-                 <div className="col-md-3 py-1 mb-2  ">
-                        <Button
-                          component="label"
-                          variant="contained"
-                          startIcon={<CloudUploadIcon />}
-                          size="small"
-                          title="Reach"
-                        >
-                          Image
-                          <VisuallyHiddenInput
-                            onChange={(e) => {
-                              const uploadedFile = e.target.files[0];
-                              if (uploadedFile) {
-                                const imageUrl =
-                                  URL.createObjectURL(uploadedFile);
-                                setReachImgSrc(imageUrl);
-                                setReachImg(uploadedFile);
-                              }
-                            }}
-                            type="file"
-                            accept="image/png, image/jpeg"
-                          />
-                        </Button>
+                <div className="col-md-3 py-1 mb-2  ">
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
+                    size="small"
+                    title="Reach"
+                  >
+                    Image
+                    <VisuallyHiddenInput
+                      onChange={(e) => {
+                        const uploadedFile = e.target.files[0];
+                        if (uploadedFile) {
+                          const imageUrl = URL.createObjectURL(uploadedFile);
+                          setReachImgSrc(imageUrl);
+                          setReachImg(uploadedFile);
+                        }
+                      }}
+                      type="file"
+                      accept="image/png, image/jpeg"
+                    />
+                  </Button>
 
-                        {reachImgSrc && (
-                          <div className="d-flex">
-                            <img
-                            style={{ width: "50px", height: "50px" }}
-                              src={reachImgSrc}
-                              className="mt-1"
-                              alt="Uploaded"
-                            />{" "}
-                            <Button
-                              size="small"
-                              onClick={() => {
-                                setReachImgSrc(null);
-                                setReachImg(null);
-                              }}
-                            >
-                              <CloseTwoToneIcon />
-                            </Button>
-                          </div>
-                        )}
-                      </div>
+                  {reachImgSrc && (
+                    <div className="d-flex">
+                      <img
+                        style={{ width: "50px", height: "50px" }}
+                        src={reachImgSrc}
+                        className="mt-1"
+                        alt="Uploaded"
+                      />{" "}
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          setReachImgSrc(null);
+                          setReachImg(null);
+                        }}
+                      >
+                        <CloseTwoToneIcon />
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="col-md-3 col-lg-12 d-block my-2">
                 <TextField
@@ -566,7 +576,10 @@ export default function ExeUPdate() {
                     />{" "}
                     <Button
                       size="small"
-                      onClick={() =>{ setImpressionimgSrc(null);setImpressionImg(null);}}
+                      onClick={() => {
+                        setImpressionimgSrc(null);
+                        setImpressionImg(null);
+                      }}
                     >
                       <CloseTwoToneIcon />
                     </Button>
@@ -623,7 +636,10 @@ export default function ExeUPdate() {
                     />{" "}
                     <Button
                       size="small"
-                      onClick={() =>{ setEngagementImgSrc(null); setEngagementImg(null)}}
+                      onClick={() => {
+                        setEngagementImgSrc(null);
+                        setEngagementImg(null);
+                      }}
                     >
                       <CloseTwoToneIcon />
                     </Button>
@@ -690,6 +706,19 @@ export default function ExeUPdate() {
                     accept="video/mp4,video/avi"
                   />
                 </Button>
+                <div className="my-2 d-block ">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    className="my-1"
+                    label="Story View Date"
+                    format="DD/MM/YY"
+                    value={storyViewDate}
+                    onChange={(newValue) => {
+                      handleStoryViewDateChange(newValue);
+                    }}
+                  />
+                </LocalizationProvider>
+                </div>
                 <div>
                   {storyViewImgSrc && (
                     <div className="d-flex">

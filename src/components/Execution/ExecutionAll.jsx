@@ -580,13 +580,13 @@ function ExecutionAll() {
             : 0;
 
         const a =
-          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? statsUpdateFlag.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry?.stats_update_flag
-            : false;
-        const res = a ? num : 0;
+        updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+        .length > 0
+        ? updatePercentage.filter(
+            (e) => e.latestEntry.p_id == params.row.p_id
+          )[0]?.latestEntry.isDeleted
+        : false;
+        const res = !a ? num : 0;
 
         return (
           <button
@@ -657,6 +657,15 @@ function ExecutionAll() {
       width: 150,
       headerName: "Stats Update %",
       renderCell: (params) => {
+        console.log(
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry.isDeleted
+            : false,
+          params.row.p_id
+        );
         const num =
           updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
             .length > 0
@@ -665,13 +674,13 @@ function ExecutionAll() {
               )[0].totalPercentage
             : 0;
         const a =
-          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
             .length > 0
-            ? statsUpdateFlag.filter(
+            ? updatePercentage.filter(
                 (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry?.stats_update_flag
+              )[0]?.latestEntry.isDeleted
             : false;
-        const res = a ? num : 0;
+        const res = !a ? num : 0;
         return Math.round(+res) + "%";
       },
     },
@@ -1156,6 +1165,7 @@ function ExecutionAll() {
                   </div>
                 )}
               </div>
+              <h4 className="h3 text-center">Followers Bifurcation</h4>
               <div className="row gap-4">
                 <div className="card   col-sm-12 col-lg-3">
                   <div>

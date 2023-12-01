@@ -483,11 +483,12 @@ const SidebarLinks = () => {
                         {/* <Link className="collapse-item" to="/admin/exeinventory">
                           Dashboard
                         </Link> */}
-                        <Link
+                        <Link to='/admin/exeexecution/dashboard' className="collapse-item">Dashboard</Link>
+                         <Link
                           className="collapse-item"
                           to="/admin/exeexecution/allpagesdetail"
                         >
-                          All Pages Detail
+                          All Pages Detailed
                         </Link>{" "}
                         <Link
                           className="collapse-item"

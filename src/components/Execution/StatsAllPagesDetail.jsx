@@ -8,23 +8,62 @@ import { set } from "date-fns";
 import { Button } from "antd";
 import InsertPhotoTwoToneIcon from "@mui/icons-material/InsertPhotoTwoTone";
 import OndemandVideoTwoToneIcon from "@mui/icons-material/OndemandVideoTwoTone";
+import DeleteHistoryConfirmation from "./DeleteHistoryConfirmation";
 
 export default function StatsAllPagesDetail() {
   const [allPagesDetail, setAllPagesDetail] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-  useEffect(() => {
+  const [phpData, setPhpData] = useState([]);
+  const [rowData, setRowData] = useState([]);
+  const [openDeleteHistoryConFirmation, setOpenDeleteHistoryConFirmation] =
+  useState(false);
+
+  const apiCall = () => {
     axios
       .get("http://34.93.135.33:8080/api/get_distinct_count_history")
       .then((res) => {
         console.log(res.data);
         setAllPagesDetail(res.data.data);
       });
+  };
+  
+  useEffect(() => {
+    const formData = new URLSearchParams();
+    formData.append("loggedin_user_id", 36);
+
+    axios
+      .post(
+        "https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      ).then((res) => {
+        console.log(res.data.body);
+        setPhpData(res.data.body);
+      });
+    apiCall();
       axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
       console.log(res.data.data);
       setAllUsers(res.data.data);
     });
   }, []);
 
+  const handleClickOpenDeleteHistoryConFirmation = () => {
+    setOpenDeleteHistoryConFirmation(true);
+  };
+
+  const handleDeleteRowData = (data) => {
+    setRowData(data);
+    handleClickOpenDeleteHistoryConFirmation();
+  };
+
+  const handleCloseDeleteHistoryConFirmation = () => {
+    setOpenDeleteHistoryConFirmation(false);
+  };
+ 
   const columns = [
     {
       field: "S.No",
@@ -33,6 +72,70 @@ export default function StatsAllPagesDetail() {
         const rowIndex = allPagesDetail.indexOf(params.row);
         return <div>{rowIndex + 1}</div>;
       },
+    },
+    {
+      field:"platform",
+      headerName:"Platform",
+      width:150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.p_id ? (
+              <>{phpData.filter((e) => e.p_id == params.row.p_id)[0]?.platform}</>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      field: "page_name",
+      headerName: "Page Name",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.p_id ? (
+              <>{phpData.filter((e) => e.p_id == params.row.p_id)[0]?.page_name}</>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      field:"followers",
+      headerName:"Followers Count",
+      width:150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.p_id ? (
+              <>{phpData.filter((e) => e.p_id == params.row.p_id)[0]?.follower_count}</>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      field:"acc_cat",
+      headerName:"Account Category",
+      width:150,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row?.p_id ? (
+              <>{phpData.filter((e) => e.p_id == params.row.p_id)[0]?.cat_name}</>
+            ) : (
+              ""
+            )}
+          </div>
+        );
+      }
     },
     {
       field: "creation_date",
@@ -467,22 +570,22 @@ export default function StatsAllPagesDetail() {
         );
       },
     },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <Button
-            onClick={() => handleDeleteRowData(params.row)}
-            variant="contained"
-            color="primary"
-          >
-            Delete
-          </Button>
-        );
-      },
-    },
+    // {
+    //   field: "action",
+    //   headerName: "Action",
+    //   width: 150,
+    //   renderCell: (params) => {
+    //     return (
+    //       <Button
+    //         onClick={() => handleDeleteRowData(params.row)}
+    //         variant="contained"
+    //         color="primary"
+    //       >
+    //         Delete
+    //       </Button>
+    //     );
+    //   },
+    // },
   ];
   return (
     <div>
@@ -495,6 +598,14 @@ export default function StatsAllPagesDetail() {
           getRowId={(row) => row._id}
         />
       </div>
+      <DeleteHistoryConfirmation
+        handleCloseDeleteHistoryConFirmation={
+          handleCloseDeleteHistoryConFirmation
+        }
+        openDeleteHistoryConFirmation={openDeleteHistoryConFirmation}
+        rowData={rowData}
+        apiCall={apiCall}
+      />
     </div>
   );
 }
