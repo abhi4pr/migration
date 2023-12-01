@@ -6,7 +6,6 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import FormContainer from "../../FormContainer";
 import { useGlobalContext } from "../../../../Context/Context";
-import Select from "react-select";
 import jwtDecode from "jwt-decode";
 import image1 from "./images/image1.png";
 import image2 from "./images/image2.png";
@@ -15,17 +14,12 @@ import image4 from "./images/i4.png";
 import image5 from "./images/image5.png";
 import Slider from "react-slick";
 import * as XLSX from "xlsx";
-import {
-  Document,
-  Image,
-  PDFDownloadLink,
-  Page,
-  View,
-} from "@react-pdf/renderer";
+import { Document, PDFDownloadLink, Page, View } from "@react-pdf/renderer";
 import { Text, StyleSheet } from "@react-pdf/renderer";
 import { Button } from "@mui/material";
-
 import { generatePDF } from "./pdfGenerator";
+import { useParams } from "next/navigation";
+import { useLocation } from "react-router-dom";
 
 const images = [
   { temp_id: 1, image: image1 },
@@ -36,6 +30,7 @@ const images = [
 ];
 
 const SalaryWFH = () => {
+  const location = useLocation();
   const { toastAlert } = useGlobalContext();
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -70,6 +65,7 @@ const SalaryWFH = () => {
   //harshal
   const [completedYearsMonths, setCompletedYearsMonths] = useState([]);
   const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+  const [navigateCardIndex, setNavigateCardIndex] = useState(null);
 
   //cards
   const [newJoineeCount, setNewJoineeCount] = useState([]);
@@ -87,7 +83,16 @@ const SalaryWFH = () => {
     variableWidth: true,
   };
 
-  //harshal
+  useEffect(() => {
+    if (location.state) {
+      const { DashDepartment, DashMonth, DashYear } = location.state;
+      setDepartment(Number(DashDepartment));
+      setMonth(DashMonth);
+      setYear(Number(DashYear));
+      setNavigateCardIndex(Number(DashDepartment));
+    }
+  }, []);
+
   const months = [
     "January",
     "February",
@@ -993,11 +998,7 @@ const SalaryWFH = () => {
                         "pdf"
                       }
                       style={{
-                        // textDecoration: "none",
-                        // padding: "10px",
                         color: "#4a4a4a",
-                        // backgroundColor: "#f2f2f2",
-                        // border: "1px solid #4a4a4a",
                       }}
                     >
                       <button className="btn btn-primary me-3" type="button">

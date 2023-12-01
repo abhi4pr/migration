@@ -28,6 +28,12 @@ const SimUpdate = () => {
   const [hrselfAuditPeriod, setHrSelfAuditPeriod] = useState("");
   const [hrselfAuditUnit, setHrSelfAuditUnit] = useState("");
 
+  const [imageType, setImageType] = useState("");
+  const [assetsImg1, setAssetsImg1] = useState(null);
+  const [assetsImg2, setAssetsImg2] = useState(null);
+  const [assetsImg3, setAssetsImg3] = useState(null);
+  const [assetsImg4, setAssetsImg4] = useState(null);
+
   const [assetsValue, setAssetsValue] = useState("");
   const [assetsCurrentValue, setAssetsCurrentValue] = useState("");
 
@@ -149,6 +155,15 @@ const SimUpdate = () => {
         "http://34.93.135.33:8080/api/update_sim",
         formData
       );
+      const imageData = new FormData();
+      imageData.append("sim_id", id);
+      imageData.append("uploaded_by", 90);
+      imageData.append("type", imageType);
+      imageData.append("img1", assetsImg1);
+      imageData.append("img2", assetsImg2);
+      imageData.append("img3", assetsImg3);
+      imageData.append("img4", assetsImg4);
+      axios.put("http://34.93.135.33:8080/api/update_assets_images", imageData);
 
       if (response.status === 200) {
         toastAlert("Form Submitted successfully");
@@ -364,7 +379,7 @@ const SimUpdate = () => {
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
-                  label="Self Audit Period"
+                  label="Self Audit Period in dasy"
                   type="number"
                   value={selfAuditPeriod}
                   onChange={(e) => setSelfAuditPeriod(e.target.value)}
@@ -390,7 +405,7 @@ const SimUpdate = () => {
               <div className="form-group">
                 <TextField
                   id="outlined-basic"
-                  label="HR Self Audit Period"
+                  label="HR Self Audit Period in days"
                   type="number"
                   value={hrselfAuditPeriod}
                   onChange={(e) => setHrSelfAuditPeriod(e.target.value)}

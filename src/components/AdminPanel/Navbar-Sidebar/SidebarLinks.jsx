@@ -67,7 +67,7 @@ const SidebarLinks = () => {
   const isLeadManagementVisible = [22].some(
     (index) => contextData[index]?.view_value === 1
   );
-  const isExecutionVisible = [24, 31, 32,34].some(
+  const isExecutionVisible = [24, 31, 32, 34].some(
     (index) => contextData[index]?.view_value === 1
   );
   const isInstaApiVisible = [25].some(
@@ -189,18 +189,8 @@ const SidebarLinks = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white collapse-inner">
-              {contextData &&
-                contextData[17] &&
-                contextData[17].view_value === 1 && (
-                  <Link
-                    className="collapse-item"
-                    to="/admin/salary-dashboard/0"
-                  >
-                    Dashboard
-                  </Link>
-                )}
               <Link className="collapse-item" to="/admin/wfh-user-dashboard">
-                User Dashboard
+                Dashboard
               </Link>
               {contextData &&
                 contextData[17] &&
@@ -276,43 +266,43 @@ const SidebarLinks = () => {
         </li>
       )}
 
-{/* {isAssetNotifierVisible && ( */}
-        <li className="nav-item">
-          <Link
-            className="nav-link collapsed"
-            data-toggle="collapse"
-            data-target="#collapseEight"
-            aria-expanded="true"
-            aria-controls="collapseEight"
-          >
-            <i className="bi bi-person-gear" />
-            <span>Asset Notifier</span>
-          </Link>
-          <div
-            id="collapseEight"
-            className="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white collapse-inner">
-              {/* {contextData &&
+      {/* {isAssetNotifierVisible && ( */}
+      <li className="nav-item">
+        <Link
+          className="nav-link collapsed"
+          data-toggle="collapse"
+          data-target="#collapseEight"
+          aria-expanded="true"
+          aria-controls="collapseEight"
+        >
+          <i className="bi bi-person-gear" />
+          <span>Asset Notifier</span>
+        </Link>
+        <div
+          id="collapseEight"
+          className="collapse"
+          aria-labelledby="headingTwo"
+          data-parent="#accordionSidebar"
+        >
+          <div className="bg-white collapse-inner">
+            {/* {contextData &&
                 contextData[5] &&
                 contextData[5].view_value === 1 && ( */}
-                  <Link className="collapse-item" to="/admin/self-audit">
-                  Audit asset
-                  </Link>
-                {/* )} */}
+            <Link className="collapse-item" to="/admin/self-audit">
+              Audit asset
+            </Link>
+            {/* )} */}
 
-              {/* {contextData &&
+            {/* {contextData &&
                 contextData[8] &&
                 contextData[8].view_value === 1 && ( */}
-                  {/* <Link className="collapse-item" to="/admin/hr-audit">
+            {/* <Link className="collapse-item" to="/admin/hr-audit">
                   Hr Audit
                   </Link> */}
-                {/* )} */}
-            </div>
+            {/* )} */}
           </div>
-        </li>
+        </div>
+      </li>
       {/* )} */}
 
       {isOnboardingVisible && (
@@ -747,6 +737,66 @@ const SidebarLinks = () => {
           </div>
         </li>
       )}
+
+      {/* {isWFHVisible && ( */}
+            <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseNine"
+            aria-expanded="true"
+            aria-controls="collapseNine"
+          >
+            <i className="bi bi-person-gear" />
+            <span>Finance</span>
+          </Link>
+          <div
+            id="collapseNine"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              <Link className="collapse-item" to="/admin/finance-alltransactions">
+                All Transaction
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-approveinvoice">
+                Approval Invoices
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-balancepayment">
+                Balance Payment List
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-dashboard">
+                Finance Dashboard
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-incentivepayment">
+                Incentive Payment
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-paymentmode">
+                Payment Mode
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendingapproverefund">
+                Pending Approval Refund
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendingapproveupdate">
+                Pending Approval Update
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendinginvoice">
+                Pending Invoices
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-pendingrequests">
+                Refund Requests
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-salebookingclose">
+                Sale Booking close
+              </Link>
+              <Link className="collapse-item" to="/admin/finance-salebookingverify">
+                Sale Booking verify
+              </Link>
+            </div>
+          </div>
+        </li>
+      {/* )} */}
 
       {/* {isInstaApiVisible && (
         <li className="nav-item">

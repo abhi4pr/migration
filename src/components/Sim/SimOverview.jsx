@@ -180,9 +180,9 @@ const SimOverview = () => {
     }
   }
 
-  function handleSimAllocation() {
+  const handleSimAllocation = async () => {
     if (selectedUserTransfer !== "") {
-      axios.post("http://192.168.29.116:8080/api/add_sim_allocation", {
+      await axios.post("http://192.168.29.116:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         status: "Allocated",
         sim_id: Number(modalData.sim_id),
@@ -191,24 +191,28 @@ const SimOverview = () => {
         created_by: userID,
       });
 
-      axios.put("http://34.93.135.33:8080/api/update_sim", {
-        id: modalData.sim_id,
-        mobilenumber: modalData.mobileNumber,
-        sim_no: modalData.sim_no,
-        provider: modalData.provider,
-        dept_id: Number(modalSelectedUserData[0].dept_id),
-        desi_id: Number(modalSelectedUserData[0].user_designation),
-        status: "Allocated",
-        s_type: modalData.s_type,
-        type: modalData.type,
-        remark: modalData.Remarks,
-      });
-      toastAlert("Asset Allocated Successfully");
-      setSelectedUserTransfer("");
+      await axios
+        .put("http://34.93.135.33:8080/api/update_sim", {
+          id: modalData.sim_id,
+          mobilenumber: modalData.mobileNumber,
+          sim_no: modalData.sim_no,
+          provider: modalData.provider,
+          dept_id: Number(modalSelectedUserData[0].dept_id),
+          desi_id: Number(modalSelectedUserData[0].user_designation),
+          status: "Allocated",
+          s_type: modalData.s_type,
+          type: modalData.type,
+          remark: modalData.Remarks,
+        })
+        .then(() => {
+          getData();
+          toastAlert("Asset Allocated Successfully");
+          setSelectedUserTransfer("");
+        });
     } else {
       alert("Please select user first");
     }
-  }
+  };
 
   // console.log(modalData , "there is modal data")
   const columns = [
@@ -220,9 +224,21 @@ const SimOverview = () => {
     },
     {
       name: "Assets Name",
-      selector: (row) => row.assetsName,
+      selector: (row) => (
+        <Link
+          style={{ color: "blue" }}
+          to={`/singleAssetDetails/${row.sim_id}`}
+        >
+          {row.assetsName}
+        </Link>
+      ),
       sortable: true,
     },
+    // {
+    //   name: "Assets Name",
+    //   selector: (row) => row.assetsName,
+    //   sortable: true,
+    // },
     {
       name: "Asset ID",
       selector: (row) => row.asset_id,
@@ -350,7 +366,6 @@ const SimOverview = () => {
         sim_id: row,
       })
       .then((res) => {
-        // console.log(res.data.data, "new one");
         setShowAssetImages(res.data.data);
       });
     setImageModalOpen(true);
@@ -363,7 +378,8 @@ const SimOverview = () => {
       const categoryMatch = !category || d.category_id === category;
       const subcategoryMatch =
         !subcategory || d.sub_category_id === subcategory;
-      const assettypeMatch = !assetsType || d.s_type === assetsType;
+      const assettypeMatch = !assetsType || d.asset_type === assetsType;
+      // console.log(assetsType, d.asset_type, "asset");
       return categoryMatch && subcategoryMatch && assettypeMatch;
     });
     setFilterData(result);
@@ -574,7 +590,7 @@ const SimOverview = () => {
                           className="btn btn-outline-success ml-2 btn-sm"
                           onClick={handleExport}
                         >
-                          Export TO Exvel
+                          Export TO Excel
                         </button>
                       </>
                     }

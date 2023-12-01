@@ -3,33 +3,66 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useEffect } from "react";
-import { TextField } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import axios from "axios";
+import {
+  Paper,
+ 
+  Autocomplete,
+ 
+} from "@mui/material";
+let options=[]
+const PageDetaling = ({ pageName, realPageData, pages, search, searchedpages, data, setFilteredPages }) => {
 
-const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId }) => {
-  console.log(searchedpages,search,campaignName)
-    const [allPages,setAllPages]=useState([])
-    const [postpage,setPostPage]=useState(0)
-    useEffect(()=>{
-      if(search==false){
+  const [allPages, setAllPages] = useState([])
+  const [postpage, setPostPage] = useState(0)
 
-        if(pages?.length>0){
-            const addPost=pages.map(page=>{
-                return {...page,postPerPage:0}
-            })
-            setAllPages([...addPost])
-        }
-      }else{
-        if(searchedpages?.length>0){
-          console.log("first")
-            const addPost=searchedpages.map(page=>{
-                return {...page,postPerPage:0}
-            })
-            setAllPages([...addPost])
-        }
-        
+
+  const [remainingPages, setRemainingPages] = useState([])
+
+
+  useEffect(() => {
+    if (search == false) {
+
+      if (pages?.length > 0) {
+        const addPost = pages.map(page => {
+          return { ...page, postPerPage: 0 }
+        })
+        setAllPages([...addPost])
+        const differenceArray = realPageData.filter((element) => {
+          if(!pages.includes(element)){
+            options.push(element.page_name)
+            return !pages.includes(element)}
+          }
+          );
+        setRemainingPages(differenceArray)
       }
-    },[pages,search,searchedpages])
+    } else {
+      if (searchedpages?.length > 0) {
+        console.log("first")
+        const addPost = searchedpages.map(page => {
+          return { ...page, postPerPage: 0 }
+        })
+        setAllPages([...addPost])
+      }
+
+    }
+  }, [pages, search, searchedpages])
+
+
+
+const pageReplacement=(e,params,index)=>{
+  console.log(e.target.innerText,params,index)
+  
+  const pageReplacement =realPageData.find((page)=>{
+    return page.page_name==e.target.innerText
+  })
+  console.log(pageReplacement)
+  const z=[...allPages]
+ z.splice(index,1,pageReplacement)
+  console.log(z)
+  setAllPages(z)
+}
   const columns = [
     {
       field: "S.NO",
@@ -45,6 +78,23 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
       headerName: "pages",
       width: 150,
       editable: true,
+      renderCell: (params) => {
+        // console.log(params)
+        return (
+          params?.row?.status == false ?  <Autocomplete
+          id="combo-box-demo"
+          options={options}
+          getOptionLabel={(option) => option}
+          sx={{ width: 300 }}
+          renderInput={(param) => (
+            // console.log(params)
+            <TextField {...param} label={params.row.page_name} />
+          )}
+          onChange={(e)=>pageReplacement(e,params.row,allPages.indexOf(params.row))}
+        /> : params.page_name
+          
+        )
+      }
     },
     {
       field: "follower_count",
@@ -69,39 +119,19 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
           <input
             style={{ width: "60%" }}
             type="number"
-            
+
             value={params.value}
             placeholder={params.row.postPerPage}
-            onChange={(e)=>{
-            const update=  allPages.map(page=>{
-                if(params.row.p_id==page.p_id){
-                  return {...page,postPerPage:e.target.value}
+            onChange={(e) => {
+              const update = allPages.map(page => {
+                if (params.row.p_id == page.p_id) {
+                  return { ...page, postPerPage: e.target.value }
                 }
                 return page
               })
               console.log(update)
             }}
-            // onKeyDown={(e) => {
-            //     if(e.key=='Backspace'){
-            //        const x=allPages.map(page=>{
-            //         if(params.row.p_id==page.p_id){
-            //             return {...page,postPerPage:0}
-            //         }else return page
-            //        })
-            //        setAllPages(x)
 
-            //    }
-            //     else{
-
-            //         const ppp=allPages.map(page=>{
-            //             if(params.row.p_id==page.p_id){
-            //                 return {...page,postPerPage:Number(e.target.value)}
-            //             }else return page
-            //         })
-            //         setAllPages(ppp)
-            //     }
-               
-            // }}
           />
         );
       },
@@ -112,41 +142,69 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
       width: 150,
       editable: true,
     },
+    {
+      field: "Action",
+      headerName: "Action",
+      width: 150,
+      editable: true,
+      renderCell: (params) => {
+        return (
+          <Button onClick={() => removePage(params)}>Remove</Button>
+
+        )
+      }
+    },
   ];
 
-  const handlePost=(e)=>{
+  const removePage = (params) => {
+    // console.log(params)
+    const newData = allPages.filter(page => {
+      return page.p_id != params.id
+    })
+    setFilteredPages(newData)
 
-    const ppp=allPages.map(page=>{
-        return {...page,postPerPage:Number(e.target.value)}
+  }
+  const handlePost = (e) => {
+
+    const ppp = allPages.map(page => {
+      return { ...page, postPerPage: Number(e.target.value) }
     })
     setAllPages(ppp)
     setPostPage(Number(e.target.value))
   }
 
-  const submitPlan=async (e)=>{
-    const planName=campaignName+"plan"
-    const data={
-      planName,
-      campaignName,
-      campaignId,
-      pages:allPages,
+  const submitPlan = async (e) => {
+    if (pageName == 'planCreation') {
 
+      const planName = data.campaignName + "plan"
+
+      const newdata = {
+        planName,
+        "campaignName": data.campaignName,
+        "campaignId": data.campaignId,
+        pages: allPages,
+
+      }
+      try {
+
+        const result = await axios.post('http://34.93.135.33:8080/api/campaignplan', newdata)
+
+        console.log(result)
+      } catch (error) {
+        console.log(error)
+      }
     }
-    try {
-      
-      const result=await axios.post('http://localhost:8080/api/campaignplan',data)
-      console.log(result)
-    } catch (error) {
-      console.log(error)
+    if (pageName == 'phaseCreation') {
+
     }
 
   }
   console.log(allPages);
   return (
     <>
-        <Box sx={{pt:2,pb:2}}>
+      <Box sx={{ pt: 2, pb: 2 }}>
         <TextField id="outlined-basic" label="Post/pages" variant="outlined" onChange={handlePost} />
-        </Box>
+      </Box>
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={allPages || []}
@@ -155,8 +213,8 @@ const PageDetaling = ({ pages,search,searchedpages,campaignName,type,campaignId 
           pageSizeOptions={[5]}
         />
       </Box>
-      {!search && <button onClick={submitPlan}>submit</button> }
-      
+      {!search && <button onClick={submitPlan}>submit</button>}
+
     </>
   );
 };

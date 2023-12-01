@@ -4,10 +4,11 @@ import FormContainer from "../AdminPanel/FormContainer";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import { useParams } from "react-router";
 import jwtDecode from "jwt-decode";
-
+import { useGlobalContext } from "../../Context/Context";
 
 const SimSummary = () => {
-  const [showInfo, setShowInfo] = useState({});
+  const { toastAlert } = useGlobalContext();
+  const [showInfo, setShowInfo] = useState([]);
   const { id } = useParams();
 
   const token = sessionStorage.getItem("token");
@@ -19,12 +20,10 @@ const SimSummary = () => {
       .get(`http://34.93.135.33:8080/api/get_allocation_data_by_id/${id}`)
       .then((res) => setShowInfo(res.data));
   }
-  useEffect(() => {
-    // if (id) {
-    getData();
-  }, []);
 
-  // }, [id]);
+  useEffect(() => {
+    getData();
+  }, [id]);
 
   function handleDelete(e, sum) {
     e.preventDefault();
@@ -38,12 +37,13 @@ const SimSummary = () => {
         submitted_by: loginUserId,
         Last_updated_by: loginUserId,
         Reason: sum.reason,
-        // submitted_at: submissionDate,
       })
-      .then(() => getData());
+      .then(() => getData())
+      .then(() => {
+        toastAlert("Deleted Status Update");
+      });
   }
 
-  // console.log(showInfo, "show info");
   return (
     <>
       <div>
@@ -53,15 +53,13 @@ const SimSummary = () => {
           <div className="container">
             <div className="action_heading">
               <div className="action_title">
-                <FormContainer
-                  mainTitle="Sim"
-                  link="/sim-master"
-                  // buttonAccess={buttonAccess}
-                />
+                <FormContainer mainTitle="Sim" link="/sim-master" />
               </div>
             </div>
             <div className="summary_cards">
-              {showInfo.length > 0 &&
+              {showInfo.length === 0 ? (
+                <h3>There is No data available</h3>
+              ) : (
                 showInfo.map((sum) => {
                   const lastUpdatedDate = new Date(sum.Last_updated_date);
                   const submittedDate = new Date(sum.submitted_at);
@@ -70,9 +68,14 @@ const SimSummary = () => {
                   const differenceInDays =
                     differenceInMilliseconds / (1000 * 60 * 60 * 24);
 
-//  There is Date Formate Correct 
-const originalCreationDate = sum.Creation_date ? sum.Creation_date.slice(0, 10) : "";
-const reversedCreationDate = originalCreationDate.split("-").reverse().join("-");
+                  //  There is Date Formate Correct
+                  const originalCreationDate = sum.Creation_date
+                    ? sum.Creation_date.slice(0, 10)
+                    : "";
+                  const reversedCreationDate = originalCreationDate
+                    .split("-")
+                    .reverse()
+                    .join("-");
 
                   return (
                     <div className="summary_card" key={sum.id}>
@@ -93,16 +96,17 @@ const reversedCreationDate = originalCreationDate.split("-").reverse().join("-")
                           <div className="summary_box summary_allocatebox">
                             <h4>
                               <span>Allocated date : </span>
-                              {sum.Creation_date
-                                ? reversedCreationDate
-                                : ""}
+                              {sum.Creation_date ? reversedCreationDate : ""}
                             </h4>
                           </div>
                           <div className="summary_box summary_returnbox">
                             <h4>
                               <span>Returned date : </span>
                               {sum.submitted_at
-                                ? sum.submitted_at.split("-").reverse().join("-")
+                                ? sum.submitted_at
+                                    .split("-")
+                                    .reverse()
+                                    .join("-")
                                 : ""}
                             </h4>
                           </div>
@@ -122,7 +126,8 @@ const reversedCreationDate = originalCreationDate.split("-").reverse().join("-")
                       </div>
                     </div>
                   );
-                })}
+                })
+              )}
             </div>
           </div>
         </div>

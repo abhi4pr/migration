@@ -1,9 +1,11 @@
 import CampaignDetailes from "./CampaignDetailes";
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import PageDetaling from "./PageDetailing";
 import { DataGrid } from "@mui/x-data-grid";
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
+import { styled } from '@mui/system';
 
 import {
   Paper,
@@ -18,6 +20,7 @@ import {
 } from "@mui/material";
 
 let options = []
+let text;
 const PlanCreation = () => {
   const param = useParams()
   const id = param.id
@@ -33,9 +36,13 @@ const PlanCreation = () => {
   const [modalSearchPage, setModalSearchPage] = useState([])
   const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false)
   const [selectedRows, setSelectedRows] = useState([]);
-  // const [options,setOptions] = useState([])
 
-  // const options = [];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  //copy paste states
+
+  const [isModalOpenCP, setIsModalOpenCP] = useState(false)
+
   const Follower_Count = [
     "<10k",
     "10k to 100k ",
@@ -145,9 +152,9 @@ const PlanCreation = () => {
       })
       setFilteredPages(page)
       // setSelectedFollower(null)
-    } else if(selectedCategory.length==0 && !selectedFollower){
+    } else if (selectedCategory.length == 0 && !selectedFollower) {
       setFilteredPages(allPageData)
-    }else if(selectedCategory.length==0 && selectedFollower){
+    } else if (selectedCategory.length == 0 && selectedFollower) {
 
     }
   }, [selectedCategory])
@@ -239,7 +246,7 @@ const PlanCreation = () => {
           return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
         })
 
-       
+
         console.log(searched)
         setSearchedPages(searched)
         setSearched(true)
@@ -253,8 +260,8 @@ const PlanCreation = () => {
     }
   }
 
-  
-  
+
+
 
   const getCampaignName = (detail) => {
     setCampaignName(detail.exeCmpName)
@@ -263,7 +270,7 @@ const PlanCreation = () => {
   console.log(selectedFollower)
 
   //all logic related to add new page modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   console.log(isModalOpen, "dasdas");
   const handleClick = () => {
     setIsModalOpen(true);
@@ -283,7 +290,7 @@ const PlanCreation = () => {
         console.log(searched)
         setModalSearchPage(searched)
         setModalSearchPageStatus(true)
-      
+
       }, 500)
 
     } else {
@@ -292,26 +299,113 @@ const PlanCreation = () => {
     }
   }
 
-  const handleModalPageAdd=()=>{
-    
+  const handleModalPageAdd = () => {
+
     const selectedRowData = selectedRows.map((rowId) =>
-            remainingPages.find((row) => row.p_id === rowId)
-          );
-          console.log(selectedRowData)
-    setFilteredPages([...filterdPages,...selectedRowData])
+      remainingPages.find((row) => row.p_id === rowId)
+    );
+    console.log(selectedRowData)
+    setFilteredPages([...filterdPages, ...selectedRowData])
     setModalSearchPageStatus(false)
     setIsModalOpen(false);
   }
 
-  const handleSelectionChange=(newSelection)=>{
+  const handleSelectionChange = (newSelection) => {
     setSelectedRows(newSelection);
   }
 
-  console.log(selectedRows)
-  // useEffect(()=>{
-  //   setModalSearchPage
-  // },[selectedRows])
+  //logic related to copy and paste 
 
+  const handleCP = () => {
+    setIsModalOpenCP(true)
+  }
+
+  const handleCloseCP = () => {
+    setIsModalOpenCP(false);
+  };
+
+  const [CPInput, setCPInput] = useState('')
+
+  const handleInputChange = (e) => {
+    text = e.target.value;
+  }
+  const handleModalPageCP = () => {
+    console.log(text.split(/\s+/))
+    const pageInfo=text.split(/\s+/)
+    let x = []
+    const remainingData = allPageData.filter(
+      (item) => pageInfo.some((selectedItem) => {
+        if (selectedItem === item.page_name) {
+
+          x.push( selectedItem);
+          return selectedItem === item.page_name
+        }
+      })
+    );
+    const differenceArray = pageInfo.filter((element) => !x.includes(element));
+    const falsepage=differenceArray.map((element) =>{
+      let pid = allPageData.length + Math.floor(Math.random() * 1000) + 1
+      return {'page_name':element,'status':false,'p_id':String(pid) }
+    })
+    setFilteredPages([...remainingData, ...falsepage])
+    console.log(x)
+    console.log(differenceArray)
+    console.log(remainingData)
+  }
+
+  const blue = {
+    100: '#DAECFF',
+    200: '#b6daff',
+    400: '#3399FF',
+    500: '#007FFF',
+    600: '#0072E5',
+    900: '#003A75',
+  };
+
+  const grey = {
+    50: '#F3F6F9',
+    100: '#E5EAF2',
+    200: '#DAE2ED',
+    300: '#C7D0DD',
+    400: '#B0B8C4',
+    500: '#9DA8B7',
+    600: '#6B7A90',
+    700: '#434D5B',
+    800: '#303740',
+    900: '#1C2025',
+  };
+
+  const Textarea = styled(BaseTextareaAutosize)(
+    ({ theme }) => `
+    width: 320px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+    box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+
+    &:hover {
+      border-color: ${blue[400]};
+    }
+
+    &:focus {
+      border-color: ${blue[400]};
+      box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+    }
+
+    // firefox
+    &:focus-visible {
+      outline: 0;
+    }
+  `,
+  );
+
+  //copy paste logic ends here
 
   const columns = [
     {
@@ -413,13 +507,33 @@ const PlanCreation = () => {
             style={{ margin: "10px" }}
 
           />
+          <Button variant="contained" onClick={handleCP}>
+            copy/paste
+          </Button>
           <Button variant="contained" onClick={handleClick}>
             Add More Pages
           </Button>
         </Paper>
-        <PageDetaling pages={filterdPages} search={searched} searchedpages={searchedPages} campaignId={id} campaignName={campaignName} type={"plan"} />
+        <PageDetaling realPageData={allPageData} pageName={"planCreation"} pages={filterdPages} search={searched} searchedpages={searchedPages} setFilteredPages={setFilteredPages} data={{ campaignId: id, campaignName }} />
       </div>
       <>
+        <Dialog open={isModalOpenCP}>
+          <DialogTitle>Add  Pages</DialogTitle>
+          <DialogContent>
+            <Box sx={{ height: "100%" }}>
+              <Textarea
+
+                onChange={handleInputChange} style={{ color: "green", fontSize: "20px" }} aria-label="minimum height" minRows={6} placeholder="copy paste here..." />
+
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseCP} color="primary">
+              Cancel
+            </Button>
+            <Button color="primary" onClick={handleModalPageCP}>Add</Button>
+          </DialogActions>
+        </Dialog>
         <Dialog open={isModalOpen}>
           <DialogTitle>Add more Pages</DialogTitle>
           <DialogContent>
@@ -434,24 +548,24 @@ const PlanCreation = () => {
               />
               {
                 modalSearchPageStatus ? <DataGrid
-                rows={modalSearchPage || []}
-                columns={columns}
-                getRowId={(row) => row.p_id}
-                pageSizeOptions={[5]}
-                checkboxSelection
-                onRowSelectionModelChange={(row)=>handleSelectionChange(row)}
-                rowSelectionModel={selectedRows.map((row) => row)}
-              /> : <DataGrid
-              rows={remainingPages || []}
-              columns={columns}
-              getRowId={(row) => row.p_id}
-              pageSizeOptions={[5]}
-              checkboxSelection
-              onRowSelectionModelChange={(row)=>handleSelectionChange(row)}
-              rowSelectionModel={selectedRows.map((row) => row)}
-            /> 
+                  rows={modalSearchPage || []}
+                  columns={columns}
+                  getRowId={(row) => row.p_id}
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  onRowSelectionModelChange={(row) => handleSelectionChange(row)}
+                  rowSelectionModel={selectedRows.map((row) => row)}
+                /> : <DataGrid
+                  rows={remainingPages || []}
+                  columns={columns}
+                  getRowId={(row) => row.p_id}
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  onRowSelectionModelChange={(row) => handleSelectionChange(row)}
+                  rowSelectionModel={selectedRows.map((row) => row)}
+                />
               }
-              
+
             </Box>
           </DialogContent>
           <DialogActions>

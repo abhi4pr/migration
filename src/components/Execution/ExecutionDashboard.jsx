@@ -10,14 +10,15 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { GridColumnMenu } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
+import { set } from "date-fns";
 
 export default function ExecutionDashboard() {
   const [contextData, setContextData] = useState(false);
-  
+
   const [pagemode, setPagemode] = useState(1);
   const [copiedData, setCopiedData] = useState("");
-    const [rowSelectionModel, setRowSelectionModel] = useState([]);
-    const [selectedOptions, setSelectedOptions] = useState([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [updatePercentage, setSetUpdatePercentage] = useState([]);
   const [rows, setRows] = useState([]);
   const [alldata, setAlldata] = useState([]);
@@ -29,6 +30,7 @@ export default function ExecutionDashboard() {
   const [openExeDialog, setOpenExeDialog] = React.useState(false);
   const [statsUpdateFlag, setSetStatsUpdateFlag] = useState([]);
   const [alert, setAlert] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
@@ -69,6 +71,7 @@ export default function ExecutionDashboard() {
               }
             });
         }
+  
         for (let i = 0; i < tempdata.length; i++) {
           axios
             .get(
@@ -131,6 +134,10 @@ export default function ExecutionDashboard() {
   };
 
   const percentageDataCal = () => {
+    setDataLessThan100([]);
+    setDataLessThan75([]);
+    setDataLessThan50([]);
+    setDataLessThan25([]);
     let temp25 = [];
     for (let i = 0; i < updatePercentage.length; i++) {
       if (updatePercentage[i].totalPercentage <= 25) {
@@ -138,8 +145,7 @@ export default function ExecutionDashboard() {
       }
     }
     setDataLessThan25(temp25);
-    //console.log(temp25, "temp");
-    //console.log(temp25.length, "temp.length");
+
 
     let temp50 = [];
     for (let i = 0; i < updatePercentage.length; i++) {
@@ -151,8 +157,7 @@ export default function ExecutionDashboard() {
       }
     }
 
-    //console.log(temp50, "temp50");
-    //console.log(temp50.length, "temp50.length");
+  
     setDataLessThan50(temp50);
 
     let temp75 = [];
@@ -164,8 +169,7 @@ export default function ExecutionDashboard() {
         temp75.push(updatePercentage[i]);
       }
     }
-    //console.log(temp75, "temp75");
-    //console.log(temp75.length, "temp75.length");
+ 
     setDataLessThan75(temp75);
 
     let temp100 = [];
@@ -177,16 +181,15 @@ export default function ExecutionDashboard() {
         temp100.push(updatePercentage[i]);
       }
     }
-    //console.log(temp100, "temp100");
-    //console.log(temp100.length, "temp100.length");
     setDataLessThan100(temp100);
 
     return temp25;
+    
   };
 
   setTimeout(() => {
     percentageDataCal();
-  }, 10000);
+  }, 5000);
 
   const columns = [
     {
@@ -194,7 +197,7 @@ export default function ExecutionDashboard() {
       headerName: "ID",
       width: 40,
       renderCell: (params) => {
-        const rowIndex = rows.indexOf(params.row);
+        const rowIndex = tableData.indexOf(params.row);
         return <div>{rowIndex + 1}</div>;
       },
     },
@@ -308,12 +311,12 @@ export default function ExecutionDashboard() {
             : 0;
 
         const a =
-        updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-        .length > 0
-        ? updatePercentage.filter(
-            (e) => e.latestEntry.p_id == params.row.p_id
-          )[0]?.latestEntry.isDeleted
-        : false;
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry.isDeleted
+            : false;
         const res = !a ? num : 0;
 
         return (
@@ -429,6 +432,13 @@ export default function ExecutionDashboard() {
     },
   ];
 
+  const handlesetTableDataByPercentage = (data) => {
+
+    let a = data.map((e) => e.latestEntry.p_id);
+    const matchingData = rows.filter((item) => a.includes(parseInt(item.p_id)));
+    setTableData(matchingData);
+  };
+
   return (
     <div>
       <div style={{ width: "100%", margin: "0 0 0 0" }}>
@@ -450,7 +460,9 @@ export default function ExecutionDashboard() {
               <Button
                 // variant="contained"
                 color="primary"
-                onClick={() =>{ console.log(dataLessThan25,'<---dataLessThan25 '),console.log(rows,'<---rows'),setRows([...dataLessThan25.latestEntry])}}
+                onClick={() => {
+                    handlesetTableDataByPercentage(dataLessThan25);
+                }}
               >
                 {dataLessThan25.length}
               </Button>
@@ -470,9 +482,7 @@ export default function ExecutionDashboard() {
             <p className="fs-5">
               {" "}
               Page Count :-{" "}
-              <Button
-              //  onClick={()=>console.log(dataLessThan50)}
-               >
+              <Button onClick={() => handlesetTableDataByPercentage(dataLessThan50)}>
                 {dataLessThan50.length}
               </Button>
             </p>
@@ -491,8 +501,8 @@ export default function ExecutionDashboard() {
               {" "}
               Page Count :-{" "}
               <Button
-              //  onClick={() => setRows(dataLessThan75)}
-               >
+              onClick={() => handlesetTableDataByPercentage(dataLessThan75 )}
+              >
                 {dataLessThan75.length}
               </Button>
             </p>
@@ -511,8 +521,8 @@ export default function ExecutionDashboard() {
             <p className="fs-5">
               {" "}
               Page Count :-{" "}
-              <Button 
-              // onClick={() => setRows(dataLessThan100)}
+              <Button
+              onClick={() => handlesetTableDataByPercentage(dataLessThan100)}
               >
                 {dataLessThan100.length}
               </Button>
@@ -521,27 +531,27 @@ export default function ExecutionDashboard() {
         </div>
 
         <DataGrid
-              rows={rows}
-              columns={columns}
-              getRowId={(row) => row.p_id}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 50,
-                  },
-                },
-              }}
-              slots={{ toolbar: GridToolbar, columnMenu: CustomColumnMenu }}
-              pageSizeOptions={[5, 25, 50, 100, 500]}
-              checkboxSelection
-              disableRowSelectionOnClick
-              onRowSelectionModelChange={(newRowSelectionModel) => {
-                setRowSelectionModel(newRowSelectionModel);
-              }}
-              rowSelectionModel={rowSelectionModel}
-              onClipboardCopy={(copiedString) => setCopiedData(copiedString)}
-              unstable_ignoreValueFormatterDuringExport
-             /> 
+          rows={tableData}
+          columns={columns}
+          getRowId={(row) => row.p_id}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 50,
+              },
+            },
+          }}
+          slots={{ toolbar: GridToolbar, columnMenu: CustomColumnMenu }}
+          pageSizeOptions={[5, 25, 50, 100, 500]}
+          checkboxSelection
+          disableRowSelectionOnClick
+          onRowSelectionModelChange={(newRowSelectionModel) => {
+            setRowSelectionModel(newRowSelectionModel);
+          }}
+          rowSelectionModel={rowSelectionModel}
+          onClipboardCopy={(copiedString) => setCopiedData(copiedString)}
+          unstable_ignoreValueFormatterDuringExport
+        />
       </div>
     </div>
   );
