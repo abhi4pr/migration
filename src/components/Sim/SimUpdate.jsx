@@ -102,6 +102,7 @@ const SimUpdate = () => {
           assetsValue,
           assetsCurrentValue,
           dateOfPurchase,
+          Remarks,
         } = fetchedData;
         setAssetsName(assetsName);
         setAssetsID(sim_no);
@@ -111,16 +112,16 @@ const SimUpdate = () => {
         setSubCategory(sub_category_id);
         setVendorName(vendor_id);
         setInWarranty(inWarranty);
-        setWarrantyDate(warrantyDate.split("T")?.[0]);
-        setDateOfPurchase(dateOfPurchase.split("T")?.[0]);
+        setWarrantyDate(warrantyDate?.split("T")?.[0]);
+        setDateOfPurchase(dateOfPurchase?.split("T")?.[0]);
         setSelfAuditPeriod(selfAuditPeriod);
         setSelfAuditUnit(selfAuditUnit);
         setHrSelfAuditPeriod(hrAuditPeriod);
         setHrSelfAuditUnit(hrAuditUnit);
         setAssetsValue(assetsValue);
         setAssetsCurrentValue(assetsCurrentValue);
-        setRemark;
-        setSimData(fetchedData);
+        setRemark(Remarks);
+        // setSimData(fetchedData);
       });
   }, [id]);
 
@@ -133,9 +134,9 @@ const SimUpdate = () => {
     formData.append("sim_no", assetsID);
     formData.append("assetsOtherID", assetsOtherID);
     formData.append("s_type", assetType);
-    formData.append("warrantyDate", warrantyDate);
+    formData.append("warrantyDate", Date(warrantyDate));
     formData.append("inWarranty", inWarranty);
-    formData.append("dateOfPurchase", dateOfPurchase);
+    formData.append("dateOfPurchase", Date(dateOfPurchase));
     formData.append("category_id", assetsCategory);
     formData.append("sub_category_id", subCategory);
     formData.append("vendor_id", vendorName);
@@ -144,8 +145,8 @@ const SimUpdate = () => {
     formData.append("selfAuditUnit", selfAuditUnit);
     formData.append("hrselfAuditPeriod", hrselfAuditPeriod);
     formData.append("hrselfAuditUnit", hrselfAuditUnit);
-    formData.append("assetsValue", assetsValue);
-    formData.append("assetsCurrentValue", assetsCurrentValue);
+    formData.append("assetsValue", Number(assetsValue));
+    formData.append("assetsCurrentValue", Number(assetsCurrentValue));
     formData.append("remark", remark);
     formData.append("created_by", loginUserId);
     formData.append("status", "Available");

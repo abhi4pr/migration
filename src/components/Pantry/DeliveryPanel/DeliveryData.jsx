@@ -26,7 +26,7 @@ const DeliveryData = () => {
     axios
       .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
       .then((res) => {
-        if (res.data.data.length !== orderLength) {
+        if (res.data.data?.length !== orderLength) {
           orderLength = res.data.data.length;
           if (Notification.permission === "granted") {
             new Notification("New Order Received", {
@@ -43,7 +43,12 @@ const DeliveryData = () => {
         room_id: roomId,
       })
       .then((res) => {
-        setDeliveryData(res.data);
+        if (res.data && res.data.length > 0) {
+          setDeliveryData(res.data);
+        } else {
+          // alert("No Order available");
+          console.log("No Order Available");
+        }
       })
       .catch((error) => {
         console.error("Error fetching delivery data:", error);
@@ -119,20 +124,22 @@ const DeliveryData = () => {
   };
 
   const filterDataByUserId = (userId) => {
-    return deliveryData.filter((d) => d.User_id === userId);
+    return deliveryData?.filter((d) => d.User_id === userId);
   };
 
   const createOrderCards = () => {
-    const userIds = [...new Set(deliveryData.map((d) => d.User_id))];
+    const userIds = [...new Set(deliveryData?.map((d) => d.User_id))];
+    console.log(deliveryData, "there is data delivery");
 
-    return userIds.map((userId) => {
+    return userIds?.map((userId) => {
       const filteredData = filterDataByUserId(userId);
-      // console.log('ffffff',filteredData)
+      console.log("ffffff", filteredData);
 
       return (
         <div className="col-12" key={userId}>
-          <h1> {deliveryBoyData.User_name}</h1>
-          {deliveryData.map((d) => (
+          <h1> {deliveryBoyData?.User_name}</h1>
+
+          {deliveryData?.map((d) => (
             <div className="order_card">
               <div className="order_card_head">
                 <div className="emply_info">

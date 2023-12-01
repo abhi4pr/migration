@@ -6,6 +6,7 @@ import "./OrderRequest.css";
 import jwtDecode from "jwt-decode";
 import successImage from "../../../assets/img/icon/success.png";
 const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
+  console.log(selectedSitting, "hendle sitting");
   const { count, setCount } = useContext(DataContext);
   const [cartToggle, setCartToggle] = useState(false);
   // const [message, setMessage] = useState("");
@@ -17,7 +18,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const userId = decodedToken.id;
-  const SittingId = decodedToken.Sitting_id;
+  const SittingId = decodedToken.sitting_id;
   const loginUserRoomId = decodedToken.room_id;
 
   const cartValue = Object.keys(cartItems).length;

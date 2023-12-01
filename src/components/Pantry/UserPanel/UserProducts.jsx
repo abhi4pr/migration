@@ -86,13 +86,13 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
       .then((res) => setSittingHistory(res.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/allsitting")
+      .get("http://34.93.135.33:8080/api/get_all_sittings")
       .then((res) => setSittingData(res.data.data));
   }, []);
   // new sitting api ---------------------------------------------
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/sittingdatabyid/${loginUserSitting}`)
+      .get(`http://34.93.135.33:8080/api/get_single_sitting/${sittingId}`)
       .then((res) => {
         setSittingAreaData(res.data);
       });
@@ -101,9 +101,10 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   useEffect(() => {
     if (selectedSitting) {
       axios
-        .get(`http://34.93.135.33:8080/api/sittingdatabyid/${loginUserSitting}`)
+        .get(`http://34.93.135.33:8080/api/get_single_sitting/${sittingId}`)
         .then((res) => {
-          handleSitting(res.data.sitting_area);
+          // handleSitting(res.data.sitting_area);
+          //  104 sitting problem ke liye comment kiya
         });
     }
   }, [selectedSitting]);
@@ -127,7 +128,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
 
   const handleSittingChange = (selectedOption) => {
     setSelectedSitting(selectedOption); // Set selectedSitting with the selected option
-    handleSitting(selectedOption.value); // Set selectedSitting with the selected option
+    handleSitting(selectedOption.value);
   };
 
   const handleCloseModal = () => {
