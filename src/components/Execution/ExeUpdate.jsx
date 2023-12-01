@@ -461,6 +461,7 @@ export default function ExeUPdate() {
             />
           )}
         </div>
+        <h4  className="h3 text-center">Followers Bifurcation</h4>
         <div className="row ">
           <div className="card">
             <div className="card-body">

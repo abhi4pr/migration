@@ -142,6 +142,7 @@ import ExeUPdate from "../Execution/ExeUPdate";
 import ExeHistory from "../Execution/ExeHistory";
 import { SelfAudit } from "./AssetNotifier/SelfAudit";
 import StatsAllPagesDetail from "../Execution/StatsAllPagesDetail";
+import ExecutionDashboard from "../Execution/ExecutionDashboard";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -614,7 +615,7 @@ const Admin = () => {
                   />
 
                   {/*------------------------ Execution --------------------------------*/}
-
+                    <Route path="/exeexecution/dashboard" element={<ExecutionDashboard />} />
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />
