@@ -17,7 +17,6 @@ const ProductOverview = () => {
   const [contextData, setDatas] = useState([]);
 
   const storedToken = sessionStorage.getItem("token");
-  console.log(storedToken, "stored token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
   useEffect(() => {
@@ -108,7 +107,6 @@ const ProductOverview = () => {
                   title="Edit"
                   className="btn btn-outline-primary btn-sm user-button"
                   onClick={() => {
-                    console.log(row, "row");
                     setToLocalStorage(
                       row.product_id,
                       row.Product_name,

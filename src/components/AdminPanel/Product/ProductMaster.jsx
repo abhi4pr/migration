@@ -17,9 +17,6 @@ const ProductMaster = () => {
   const [openingStock, setOpeningStock] = useState("");
   const [openingStockDate, setOpeningStockDate] = useState("");
   const [remark, setRemark] = useState("");
-  // const [props1, setProps1] = useState("");
-  // const [props2, setProps2] = useState("");
-  // const [props3, setProps3] = useState("");
   const [inputFields, setInputFields] = useState([]);
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -27,8 +24,9 @@ const ProductMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const [hours, minutes] = duration.split(":").map(Number);
+    const [minutes] = duration.split(":").map(Number);
     const durationInMinutes = 0 * 60 + minutes;
+    console.log(durationInMinutes, "duration here");
 
     const formData = new FormData();
     formData.append("Product_name", productName);
@@ -40,9 +38,6 @@ const ProductMaster = () => {
     formData.append("Opening_stock", openingStock);
     formData.append("Opening_stock_date", openingStockDate);
     formData.append("Remarks", remark);
-    // formData.append("props1", props1);
-    // formData.append("props2", props2);
-    // formData.append("props3", props3);
 
     await axios.post("http://34.93.135.33:8080/api/add_product", formData, {
       headers: {
@@ -209,24 +204,6 @@ const ProductMaster = () => {
           onChange={(e) => setOpeningStockDate(e.target.value)}
           required
         />
-        {/* <FieldContainer
-          label="Props 1"
-          value={props1}
-          required={false}
-          onChange={(e) => setProps1(e.target.value)}
-        />
-        <FieldContainer
-          label="Props 2"
-          value={props2}
-          required={false}
-          onChange={(e) => setProps2(e.target.value)}
-        />
-        <FieldContainer
-          label="Props 3"
-          value={props3}
-          required={false}
-          onChange={(e) => setProps3(e.target.value)}
-        /> */}
 
         {inputFields.map((inputField, index) => (
           <div key={inputField.key} className="row">

@@ -80,7 +80,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/userpresitting", {
+      .post("http://34.93.135.33:8080/api/get_user_pre_sitting", {
         user_id: userId,
       })
       .then((res) => setSittingHistory(res.data));
