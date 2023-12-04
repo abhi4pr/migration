@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Paper, TextField, Button, Tooltip } from "@mui/material";
+import {  Paper, Button } from "@mui/material";//Tooltip
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import ReplacePagesModal from "./ReplacePagesModal";
+import CampaignDetailes from "./CampaignDetailes";
 
 const PlanOverview = () => {
   const [selectData, setSelectData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const param = useParams();
   const id = param.id;
   console.log(selectData);
@@ -21,6 +24,14 @@ const PlanOverview = () => {
   useEffect(() => {
     getSelectPage();
   }, []);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const columns = [
     {
@@ -54,30 +65,60 @@ const PlanOverview = () => {
       headerName: "post / Page",
       width: 150,
     },
-
+    {
+      field: "Action",
+      headerName: "Action",
+      width: 150,
+      editable: true,
+      renderCell: () => {
+        return (
+          <Button>
+            <DeleteIcon />
+          </Button>
+        );
+      },
+    },
+    {
+      field: "replace",
+      headerName: "Replace Pages",
+      width: 150,
+      editable: true,
+      renderCell: () => {
+        return (
+          <Button onClick={handleOpenModal}>
+            <PublishedWithChangesIcon />
+          </Button>
+        );
+      },
+    },
   ];
 
   return (
-    <Paper >
+    <Paper>
       <div>
         <div className="form_heading_title">
           <h2 className="form-heading">Plan Overview</h2>
         </div>
       </div>
-      <Box sx={{ p: 2, m: 2 }}>
-        <label style={{ marginTop: "14px", marginRight: "10px", fontSize: "20px" }}>Plan Name : </label>
+      <CampaignDetailes cid={id} />
+      {/* <Box sx={{ p: 2, m: 2 }}>
+        <label
+          style={{ marginTop: "14px", marginRight: "10px", fontSize: "20px" }}
+        >
+          Plan Name :{" "}
+        </label>
         <TextField
           disabled
           id="outlined-disabled"
           value={selectData[0]?.planName}
         />
-       <Tooltip title="Delete Plan">
-  <Button type="button">
-    <DeleteIcon />
-  </Button>
-</Tooltip>
+        <Tooltip title="Delete Plan">
+          <Button type="button">
+            <DeleteIcon />
+          </Button>
+        </Tooltip>
+      </Box> */}
 
-      </Box>
       <DataGrid
         rows={selectData}
         columns={columns}
@@ -85,6 +126,7 @@ const PlanOverview = () => {
         rowsPerPageOptions={[5]}
         getRowId={(row) => row.p_id}
       />
+      <ReplacePagesModal open={isModalOpen} handleClose={handleCloseModal} />
     </Paper>
   );
 };
