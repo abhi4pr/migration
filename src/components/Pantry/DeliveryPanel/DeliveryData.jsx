@@ -145,7 +145,7 @@ const DeliveryData = () => {
                 <div className="emply_info">
                   <img src={d.image} alt="img" />
                   <div className="emply_title">
-                    <h2>{d.User_name}</h2>
+                    <h2>{d.user_name}</h2>
                     <ul>
                       <li>Room - {d.Sitting_area}</li>
                       <li>Chair - {d.Sitting_ref_no}</li>

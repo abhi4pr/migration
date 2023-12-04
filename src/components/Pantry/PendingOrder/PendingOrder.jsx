@@ -31,7 +31,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_deparmtnets")
+      .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((data) => {
         setDepartmentName(data.data);
       });
@@ -39,7 +39,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_delivery_boy/${3}`)
+      .get(`http://34.93.135.33:8080/api/get_delivery_boy`)
       .then((res) => setAllDeliveryBoy(res.data.results));
   }, []);
 
@@ -194,6 +194,18 @@ const PendingOrder = () => {
       name: "Quantity",
       selector: (row) => row.Order_quantity,
     },
+    // {
+    //   name: "Delivery Boy",
+    //   selector: (row) => {
+    //     if (showALlDeliveryBoy.length > 0) {
+    //       const usernames = showALlDeliveryBoy.map((d) => d.user_name);
+    //       return <div>{usernames.join(", ")}</div>;
+    //     } else {
+    //       return "Unknown User";
+    //     }
+    //   },
+    //   width: "20%",
+    // },
     {
       name: "Delivery Boy",
       selector: (row) => {
@@ -226,7 +238,11 @@ const PendingOrder = () => {
         const dept = departmentName.find(
           (data) => data.dept_id === row.dept_id
         );
-        return dept ? dept.dept_name : "Unknown Department";
+        return dept ? (
+          <div style={{ whiteSpace: "normal" }}>{dept.dept_name}</div>
+        ) : (
+          "Unknown Department"
+        );
       },
     },
     {
