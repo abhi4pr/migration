@@ -505,6 +505,7 @@ const PlanCreation = () => {
         </div>
       </div>
       <CampaignDetailes cid={id} getCampaign={getCampaignName} />
+    
       <Paper sx={{ display: "flex", justifyContent: "space-around" }}>
         <Autocomplete
           multiple
