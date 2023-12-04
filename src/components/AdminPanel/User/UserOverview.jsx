@@ -440,7 +440,7 @@ const UserOverview = () => {
                 <EditIcon sx={{ gap: "4px", margin: "5px", color: "blue" }} />
               </Link>
             )}
-          {contextData &&
+          {/* {contextData &&
             contextData[0] &&
             contextData[0].delete_flag_value === 1 && (
               <DeleteOutlineIcon
@@ -448,7 +448,7 @@ const UserOverview = () => {
                 color="error"
                 onClick={() => handleDelete(params.row.user_id)}
               />
-            )}
+            )} */}
         </>
       ),
     },
