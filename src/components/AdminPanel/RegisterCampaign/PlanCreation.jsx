@@ -490,7 +490,7 @@ const PlanCreation = () => {
             )}
             onChange={followerChangeHandler}
           />
-          <Autocomplete
+          {/* <Autocomplete
             id="combo-box-demo"
             options={page_health}
             getOptionLabel={(option) => option}
@@ -498,7 +498,7 @@ const PlanCreation = () => {
             renderInput={(params) => (
               <TextField {...params} label="Page health" />
             )}
-          />
+          /> */}
           <TextField
             label="Search"
             variant="outlined"
