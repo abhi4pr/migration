@@ -483,8 +483,13 @@ const SidebarLinks = () => {
                         {/* <Link className="collapse-item" to="/admin/exeinventory">
                           Dashboard
                         </Link> */}
-                        <Link to='/admin/exeexecution/dashboard' className="collapse-item">Dashboard</Link>
-                         <Link
+                        <Link
+                          to="/admin/exeexecution/dashboard"
+                          className="collapse-item"
+                        >
+                          Dashboard
+                        </Link>
+                        <Link
                           className="collapse-item"
                           to="/admin/exeexecution/allpagesdetail"
                         >
@@ -739,7 +744,7 @@ const SidebarLinks = () => {
       )}
 
       {/* {isWFHVisible && ( */}
-            <li className="nav-item">
+      {/* <li className="nav-item">
           <Link
             className="nav-link collapsed"
             data-toggle="collapse"
@@ -795,7 +800,246 @@ const SidebarLinks = () => {
               </Link>
             </div>
           </div>
-        </li>
+        </li> */}
+      {/* )} */}
+      {/* {isExecutionVisible && ( */}
+      <li className="nav-item">
+        <Link
+          className="nav-link collapsed"
+          data-toggle="collapse"
+          data-target="#collapseNine"
+          aria-expanded="true"
+          aria-controls="collapseNine"
+        >
+          <i className="bi bi-person-gear" />
+          <span>Finance</span>
+        </Link>
+        <div
+          id="collapseNine"
+          className="collapse"
+          aria-labelledby="headingTwo"
+          data-parent="#accordionSidebar"
+        >
+          <div className="bg-white collapse-inner">
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerOneFinance"
+                aria-expanded="true"
+                aria-controls="collapsInnerOneFinance"
+              >
+                <span>Payment Update</span>
+              </a>
+              <div
+                id="collapsInnerOneFinance"
+                className="collapse"
+                aria-labelledby="headingTwo"
+              >
+                <div className="bg-white collapse-inner">
+                  <Link
+                    className="collapse-item"
+                    to="/admin/finance-paymentmode"
+                  >
+                    Payment Mode
+                  </Link>
+                  <Link
+                    className="collapse-item"
+                    to="/admin/finance-pendingapproveupdate"
+                  >
+                    Pending Approval
+                  </Link>
+                  <Link
+                    className="collapse-item"
+                    to="/admin/finance-alltransactions"
+                  >
+                    All Transaction
+                  </Link>
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <a
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerOneFinanceSecound"
+                aria-expanded="true"
+                aria-controls="collapsInnerOneFinanceSecound"
+              >
+                {/* <i className="bi bi-person-gear" /> */}
+                <span>Payment Refund</span>
+              </a>
+              <div
+                id="collapsInnerOneFinanceSecound"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                // data-parent="#accordionSidebar"
+              >
+                <div className="bg-white collapse-inner">
+                  <Link
+                    className="collapse-item"
+                    to="/admin/finance-pendingapproverefund"
+                  >
+                    Pending Approval Refund
+                  </Link>
+                  <Link
+                    className="collapse-item"
+                    to="/admin/finance-pendingrequests"
+                  >
+                    All Refund Request
+                  </Link>
+                  
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerThree"
+                aria-expanded="true"
+                aria-controls="collapsInnerThree"
+              >
+                <span>Balance Payment Update</span>
+              </Link>
+              <div
+                id="collapsInnerThree"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                // data-parent="#accordionSidebar"
+              >
+                <div className="bg-white collapse-inner">
+                  <>
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-balancepayment"
+                    >
+                      List
+                    </Link>
+                    
+                  </>
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerFourFinance"
+                aria-expanded="true"
+                aria-controls="collapsInnerFourFinance"
+              >
+                <span>Incentive Payment</span>
+              </Link>
+              <div
+                id="collapsInnerFourFinance"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                // data-parent="#accordionSidebar"
+              >
+                <div className="bg-white collapse-inner">
+                  <>
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-incentivepayment"
+                    >
+                      View Incentive Payment
+                    </Link>
+                  </>
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerFiveFinance"
+                aria-expanded="true"
+                aria-controls="collapsInnerFiveFinance"
+              >
+                <span>Invoice</span>
+              </Link>
+              <div
+                id="collapsInnerFiveFinance"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                // data-parent="#accordionSidebar"
+              >
+                <div className="bg-white collapse-inner">
+                  <>
+                    <Link className="collapse-item"  to="/admin/finance-pendinginvoice">
+                     Pending Invoice Creation
+                    </Link>
+                    <Link className="collapse-item"  to="/admin/finance-pendinginvoice">
+                     Invoice Created
+                    </Link>
+                  </>
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerSixFinance"
+                aria-expanded="true"
+                aria-controls="collapsInnerSixFinance"
+              >
+                <span>Pending Payment Followups</span>
+              </Link>
+              <div
+                id="collapsInnerSixFinance"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                // data-parent="#accordionSidebar"
+              >
+                <div className="bg-white collapse-inner">
+                  <>
+                    <Link className="collapse-item" to="/admin/finance-pendinginvoice">
+                     Pending Payments List
+                    </Link>
+                  </>
+                </div>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                className="nav-link collapsed"
+                data-toggle="collapse"
+                data-target="#collapsInnerSevenFinance"
+                aria-expanded="true"
+                aria-controls="collapsInnerSevenFinance"
+              >
+                <span>TDS</span>
+              </Link>
+              <div
+                id="collapsInnerSevenFinance"
+                className="collapse"
+                aria-labelledby="headingTwo"
+                // data-parent="#accordionSidebar"
+              >
+                <div className="bg-white collapse-inner">
+                  <>
+                    <Link className="collapse-item" to="/admin/finance-salebookingclose">
+                     Sales Booking Closing
+                    </Link>
+                    <Link className="collapse-item" to="/admin/finance-salebookingverify">
+                     Sales Booking Verification
+                    </Link>
+                  </>
+                </div>
+              </div>
+            </li>
+          </div>
+        </div>
+      </li>
+      
       {/* )} */}
 
       {/* {isInstaApiVisible && (

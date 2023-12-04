@@ -159,7 +159,7 @@ const typeData = ["Hr", "User"];
             columns={columns}
             data={filterData}
             fixedHeader
-            // pagination
+            pagination
             fixedHeaderScrollHeight="64vh"
             highlightOnHover
             subHeader

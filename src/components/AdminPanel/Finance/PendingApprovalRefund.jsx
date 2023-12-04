@@ -45,6 +45,31 @@ const PendingApprovalRefund = () => {
     getData();
   }, []);
 
+
+  //Update status
+  const handleStatusChange = (row, selectedStatus) => {
+    console.log(selectedStatus)
+    toastAlert("Status Update Successfully");
+        axios
+          .put("http://34.93.135.33:8080/api", {
+            // product_id: row.product_id,
+            // order_req_id: row.Order_req_id,
+            // order_quantity: row.Order_quantity,
+            // special_request: row.Special_request,
+            // user_id: row.User_id,
+            // sitting_id: row.Sitting_id,
+            status: selectedStatus, 
+            // request_delivered_by: row.Request_delivered_by,
+            // message: row.Message,
+            // remarks: "",
+          })
+          .then(() => {
+            getData();
+            toastAlert("Status Update Successfully");
+          });
+      
+    };
+
   useEffect(() => {
     const result = datas.filter((d) => {
       return (
@@ -56,7 +81,7 @@ const PendingApprovalRefund = () => {
 
   const columns = [
     {
-      name: "S.No",
+      name: "Id",
       cell: (row, index) => <div>{index + 1}</div>,
       width: "9%",
       sortable: true,
@@ -71,38 +96,42 @@ const PendingApprovalRefund = () => {
       selector: (row) => row.sub_category_name,
     },
     {
-      name: "Finance refund reason",
+      name: "Finance Refund Reason",
       selector: (row) => row.category_name,
     },
     {
-      name: "refund request date",
+      name: "Refund Request Date",
       selector: (row) => row.vendor_name,
     },
     {
-      name: "refund updated date",
+      name: "Refund Updated Date",
       selector: (row) =>row.dateOfPurchase 
     },
     {
-      name: "refund Payment image",
+      name: "Refund Payment Image",
       selector: (row) => row.paymentAmount
     },
     {
       name: "Action",
       selector: (row) => (
-          <button
-            className="btn btn-outline-success"
-            // onClick={() => handleImageClick(row)}
-          >
-            Summary
-          </button>
-        ),
-    }
+        <select
+          className="form-control"
+          value={row.statusDropdown}
+          onChange={(e) => handleStatusChange(row, e.target.value)}
+        >
+          <option value="">Select</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      ),
+      width: "7%",
+    },
   ];
 
   return (
     <>
       <FormContainer
-        mainTitle="Pending Approval for refund"
+        mainTitle="Payment Refund List"
         link="/admin/finance-pedingapprovalrefund"
         buttonAccess={
           contextData &&
@@ -115,7 +144,7 @@ const PendingApprovalRefund = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Pending Approval for refund"
+            title="Pending Approval for Refund"
             columns={columns}
             data={filterData}
             fixedHeader

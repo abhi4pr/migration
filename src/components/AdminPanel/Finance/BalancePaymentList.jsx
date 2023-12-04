@@ -6,6 +6,7 @@ import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
+import Modal from "react-modal";
 
 const BalancePaymentList = () => {
   
@@ -18,20 +19,34 @@ const BalancePaymentList = () => {
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [ImageModalOpen, setImageModalOpen] = useState(false);
+  const [balAmount, setBalAmount] = useState("");
+  const [paymentRefNo, setPaymentRefNo] = useState("");
+  const [paymentRefImg, setPaymentRefImg] = useState("");
+  const [paymentType, setPaymentType] = useState("");
+  const [paymentDetails, setPaymentDetails] = useState("");
+  const [paymentMode, setPaymentMode] = useState("");
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/",{
-        display_sequence: displaySeq,
-      });
-
-      toastAlert("Coc created");
-      setIsFormSubmitted(true);
+    const formData = new FormData();
+    formData.append("img1",image1 );
+    formData.append("img2", image2);
+    formData.append("img3", image3);
+    formData.append("img4", image4);
+    formData.append("sim_id", sim_id);
+    formData.append("uploaded_by",userID );
+    formData.append("type", type);
+    await axios.post("http://34.93.135.33:8080/api/add_assets_images", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          setImageModalOpen(false)
   };
 
   function getData() {
@@ -44,6 +59,12 @@ const BalancePaymentList = () => {
   useEffect(() => {
     getData();
   }, []);
+  const handleImageClick = (row) => {
+    setImageModalOpen(true);
+  };
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
+  };
 
   useEffect(() => {
     const result = datas.filter((d) => {
@@ -56,30 +77,57 @@ const BalancePaymentList = () => {
 
   const columns = [
     {
-      name: "S.No",
+      name: "Id",
       cell: (row, index) => <div>{index + 1}</div>,
       width: "9%",
       sortable: true,
     },
     {
-      name: "Sales executive Name",
-      selector: (row) => row.assetsName,
+      name: "Customer Name",
+      selector: (row) => "Testing ",
       sortable: true,
     },
     {
-      name: "Requested amount",
-      selector: (row) => row.sub_category_name,
+      name: "Sales Executive Name",
+      selector: (row) => "	Bhushan",
+
     },
     {
+      name: "Sale Booking Date",
+      selector: (row) =>"07-11-2023",
+
+    },
+    {
+      name: "Campaign Amount",
+      selector: (row) => "4000",
+    },
+    {
+      name: "Paid Amount",
+      selector: (row) => "2600",
+    },
+    {
+      name: "Balance Amount",
+      selector: (row) => "800",
+    },
+    
+    {
       name: "Status",
-      selector: (row) => row.category_name,
-    }
+      cell: (row) => (
+        <button
+          className="btn btn-sm btn-outline-info"
+          onClick={() => handleImageClick(row)}
+        >
+          Balance Update
+        </button>
+      ),
+    },
+    
   ];
 
   return (
     <>
       <FormContainer
-        mainTitle="Balance payment list"
+        mainTitle="Sale Booking - All Balance Payment List Pending"
         link="/admin/balance-payment-list"
         buttonAccess={
           contextData &&
@@ -96,7 +144,7 @@ const BalancePaymentList = () => {
             columns={columns}
             data={filterData}
             fixedHeader
-            // pagination
+            pagination
             fixedHeaderScrollHeight="64vh"
             highlightOnHover
             subHeader
@@ -112,6 +160,117 @@ const BalancePaymentList = () => {
           />
         </div>
       </div>
+      <Modal
+        isOpen={ImageModalOpen}
+        onRequestClose={handleCloseImageModal}
+        style={{
+          content: {
+            width: "80%",
+            height: "80%",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        <div>
+          <div className="d-flex justify-content-between mb-2">
+            <h2>Assets Images</h2>
+
+            <button
+              className="btn btn-success float-left"
+              onClick={handleCloseImageModal}
+            >
+              X
+            </button>
+          </div>               
+        </div> 
+      <div className="row">
+        <div className="col-md-12 ">
+          <form onSubmit={handleSubmit}>
+            
+          <div className="form-group col-12">
+        <label className="form-label">
+          Type <sup style={{ color: "red" }}>*</sup>
+        </label>
+       
+      </div>
+
+            {/* images */}
+            <div className="form-group">
+              <label htmlFor="images">Image First</label>
+              <input
+                type="file"
+                className="form-control"
+                id="images"
+                name="images"
+                // onChange={(e) => {
+                //     setImage1(e.target.files[0]);
+                //   }}
+                accept="image/*"
+                required
+              />
+            </div>
+
+            {/* images */}
+            <div className="form-group">
+              <label htmlFor="images">Image Secound</label>
+              <input
+                type="file"
+                className="form-control"
+                id="images"
+                name="images"
+                // onChange={(e) => {
+                //     setImage2(e.target.files[0]);
+                //   }}
+                accept="image/*"
+             
+              />
+            </div>
+
+            {/* images */}
+            <div className="form-group">
+              <label htmlFor="images">Image Third</label>
+              <input
+                type="file"
+                className="form-control"
+                id="images"
+                name="images"
+                // onChange={(e) => {
+                //     setImage3(e.target.files[0]);
+                //   }}
+                accept="image/*"
+               
+              />
+            </div>
+
+            {/* images */}
+            <div className="form-group">
+              <label htmlFor="images">Image Four</label>
+              <input
+                type="file"
+                className="form-control"
+                id="images"
+                name="images"
+                // onChange={(e) => {
+                //     setImage4(e.target.files[0]);
+                //   }}
+                accept="image/*"
+                
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+
+      </Modal>
     </>
   );
 };

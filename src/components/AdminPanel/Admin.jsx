@@ -156,6 +156,7 @@ import PendingInvoice from "./Finance/PendingInvoice";
 import RefundRequests from "./Finance/RefundRequests";
 import SaleBookingClose from "./Finance/SaleBookingClose";
 import SaleBookingVerify from "./Finance/SaleBookingVerify";
+import PaymentSummary from "./Finance/PaymentSummary";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -547,6 +548,10 @@ const Admin = () => {
                     element={<SaleBookingVerify />}
                   />
                   <Route
+                    path="/payment-summary/:id"
+                    element={<PaymentSummary />}
+                  />
+                  <Route
                     path="/pre-onboard-coc-update/:id"
                     element={<CocUpdate />}
                   />
@@ -671,7 +676,10 @@ const Admin = () => {
                   />
 
                   {/*------------------------ Execution --------------------------------*/}
-                    <Route path="/exeexecution/dashboard" element={<ExecutionDashboard />} />
+                  <Route
+                    path="/exeexecution/dashboard"
+                    element={<ExecutionDashboard />}
+                  />
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />

@@ -56,7 +56,7 @@ const RefundRequests = () => {
 
   const columns = [
     {
-      name: "S.No",
+      name: "Id",
       cell: (row, index) => <div>{index + 1}</div>,
       width: "9%",
       sortable: true,
@@ -75,34 +75,27 @@ const RefundRequests = () => {
       selector: (row) => row.category_name,
     },
     {
-      name: "refund request date",
+      name: "Refund Request Date",
       selector: (row) => row.vendor_name,
     },
     {
-      name: "refund updated date",
+      name: "Refund Updated Date",
       selector: (row) =>row.dateOfPurchase 
     },
     {
-      name: "refund Payment image",
+      name: "Refund Payment Image",
       selector: (row) => row.paymentAmount
     },
     {
       name: "Action",
-      selector: (row) => (
-          <button
-            className="btn btn-outline-success"
-            // onClick={() => handleImageClick(row)}
-          >
-            Summary
-          </button>
-        ),
+      selector: (row) => "Pending",
     }
   ];
 
   return (
     <>
       <FormContainer
-        mainTitle="All refund requests"
+        mainTitle="Payment Refund List"
         link="/admin/finance-refundrequests"
         buttonAccess={
           contextData &&
@@ -115,11 +108,11 @@ const RefundRequests = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="All refund requests"
+            title="All Refund Requests"
             columns={columns}
             data={filterData}
             fixedHeader
-            // pagination
+            pagination
             fixedHeaderScrollHeight="64vh"
             highlightOnHover
             subHeader
