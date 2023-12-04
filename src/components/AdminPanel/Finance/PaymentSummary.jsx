@@ -7,7 +7,7 @@ import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 
-const PaymentMode = () => {
+const PaymentSummary = () => {
   
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
@@ -62,36 +62,48 @@ const PaymentMode = () => {
     {
       name: "ID",
       cell: (row, index) => <div>{index + 1}</div>,
-      width: "9%",
+      width: "6%",
       sortable: true,
     },
     {
-      name: <div style={{ whiteSpace: 'normal' }}>Title</div>,
-      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Bank Details for MMC</div>,
-      width: "15%",
+      name: "Customer Name",
+      selector: (row) => "Arvind Kejriwal",
       sortable: false,
     },
     {
-      name: "Detail",
-      selector: (row) =>  <div style={{ whiteSpace: 'normal' }}>Name: Meme Marketing Company Account No: 004105020328 IFSE CODE: ICIC0000041</div>,
-
+      name: "Sales Booking Date",
+      selector: (row) => "28-11-2023",
     },
     {
-      name: "Payment Type",
-      selector: (row) => "NEFT",
-      width: "12%",
+      name: "Campaign Amount",
+      selector: (row) => "1200",
     },
     {
-      name: "GST Bank",
-      selector: (row) => "Non GST",
-      width : "8%"
+      name: "Total Paid Amount",
+      selector: (row) => "120",
+    },
+    {
+      name: "Reason",
+      selector: (row) => "",
+    },
+    {
+      name: "Credit Approval Reason",
+      selector: (row) => "",
+    },
+    {
+      name: "Balance Payment Ondate",
+      selector: (row) => "",
+    },
+    {
+      name: "Status",
+      selector: (row) => "Pending",
     }
   ];
 
   return (
     <>
       <FormContainer
-        mainTitle="Payment Mode"
+        mainTitle="Payment Summary"
         link="/admin/finance-paymentmode"
         buttonAccess={
           contextData &&
@@ -104,7 +116,7 @@ const PaymentMode = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Payment Mode"
+            title="Customer Purchase History Finance Approval"
             columns={columns}
             data={filterData}
             fixedHeader
@@ -128,4 +140,4 @@ const PaymentMode = () => {
   );
 };
 
-export default PaymentMode;
+export default PaymentSummary;

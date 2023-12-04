@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
@@ -56,71 +56,83 @@ const AllTransactions = () => {
 
   const columns = [
     {
-      name: "S.No",
-      cell: (row, index) => <div>{index + 1}</div>,
-      width: "9%",
+      name: "Id",
+      cell: (row, index) => <div style={{ whiteSpace: 'normal' }}>{index + 1}</div>,
+      width: "7%",
       sortable: true,
     },
     {
-      name: "Request By",
-      selector: (row) => row.assetsName,
-      sortable: true,
+      name: <div style={{ whiteSpace: 'normal' }}>Requested By</div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Growth Manager </div>,
+      width: "8%",
+      sortable: false,
     },
     {
-      name: "Customer Name",
-      selector: (row) => row.sub_category_name,
+      name:<div style={{ whiteSpace: 'normal' }}>Customer Name</div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Arvind Kejriwal| 2023-11-28| 1200 </div>,
+      width: "8%",
     },
     {
-      name: "Campaign Amount",
-      selector: (row) => row.category_name,
+      name: <div style={{ whiteSpace: 'normal' }}>Campaign Amount</div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>1200 </div>,
+      width: "6%",
     },
     {
-      name: "Campaign amt without gst",
-      selector: (row) => row.vendor_name,
+      name: <div style={{ whiteSpace: 'normal' }}>Campaign Amount Without Gst</div>,
+      selector: (row) => "2800",
+      width: "6%",
     },
     {
-      name: "Payment On Date",
-      selector: (row) =>row.dateOfPurchase 
+      name: <div style={{ whiteSpace: 'normal' }}>Payment On Date</div>,
+      selector: (row) => "28-11-2023",
+      width: "7%",
     },
     {
-      name: "Payment Amount",
-      selector: (row) => row.paymentAmount
+      name: <div style={{ whiteSpace: 'normal' }}>Payment Amount</div>,
+      selector: (row) => "2100",
+      width: "6%",
     },
     {
-      name: "Payment View",
-      selector: (row) => row.paymentMode
+      name: <div style={{ whiteSpace: 'normal' }}>Payment Mode</div>,
+      selector: (row) => "UPI",
+      width: "6%",
     },
     {
       name: "Bank Name",
-      selector: (row) => row.paymentMode
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>GST Payment Details </div>,
     },
     {
-      name: "Bank Details",
-      selector: (row) => row.paymentMode
+      name: "Bank Detail",
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Bank Name: Kotak Mahindra Bank Account Name: Creativefuel Pvt Ltd Account No: 2814216875 IFSE Code: KKBK0005915 Branch: Vijay Nagar, Indore (M.P.) </div>,
+      width: "12%",
     },
     {
-      name: "Reference Number",
-      selector: (row) => row.paymentMode
+      name: <div style={{ whiteSpace: 'normal' }}>Reference No</div>,
+      selector: (row) => "mdfklkb",
+      width: "5%",
     },
     {
       name: "Remarks",
-      selector: (row) => row.paymentMode
+      selector: (row) => "test remarks",
+      width: "8%",
     },
     {
       name: "Status",
-      selector: (row) => row.status
+      selector: (row) => "Approved"
     },
     {
       name: "Action",
-      selector: (row) => (
-          <button
-            className="btn btn-outline-success"
-            // onClick={() => handleImageClick(row)}
-          >
-            Summary
-          </button>
-        ),
-    }
+      selector: (row,index) => <><Link to={`/admin/payment-summary/${index + 1}`}>
+      <button
+        title="Summary"
+        className="btn btn-outline-primary btn-sm user-button"
+      >
+        <i className="bi bi-journal-text"></i>
+      </button>
+    </Link></>,
+      width: "4%",
+    },
+    
   ];
 
   return (
