@@ -279,9 +279,13 @@ export default function ExeUPdate() {
 
   useEffect(() => {
     setCountryList(Country.getAllCountries());
-    setCityList([
-      ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
-    ]);
+    axios.get('http://34.93.135.33:8080/api/get_all_cities').then((res) => {
+      console.log(res.data.data);
+      setCityList(res.data.data.map((city) => city.city_name));
+  });
+    // setCityList([
+    //   ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
+    // ]);
   }, []);
 
   const cityCopyValidation = (value) => {

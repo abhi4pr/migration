@@ -476,7 +476,7 @@ export default function ExecutionDashboard() {
             <h3 className="h6">Pages Evalution</h3>
             <div className="w-50 m-auto">
               <div style={{ width: 100, height: 100 }}>
-                <CircularProgressbar value={50} text={`25-50%`} />
+                <CircularProgressbar value={50} text={`26-50%`} />
               </div>
             </div>
             <p className="fs-5">
@@ -494,7 +494,7 @@ export default function ExecutionDashboard() {
             <h3 className="h6">Pages Evalution</h3>
             <div className="w-50 m-auto">
               <div style={{ width: 100, height: 100 }}>
-                <CircularProgressbar value={75} text={`50-75%`} />
+                <CircularProgressbar value={75} text={`51-75%`} />
               </div>
             </div>
             <p className="fs-5">
@@ -515,7 +515,7 @@ export default function ExecutionDashboard() {
             <h3 className="h6">Pages Evalution</h3>
             <div className="w-50 m-auto">
               <div style={{ width: 100, height: 100 }}>
-                <CircularProgressbar value={100} text={`75-100%`} />
+                <CircularProgressbar value={100} text={`76-100%`} />
               </div>
             </div>
             <p className="fs-5">

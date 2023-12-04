@@ -169,9 +169,15 @@ function ExecutionAll() {
 
   useEffect(() => {
     setCountryList(Country.getAllCountries());
-    setCityList([
-      ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
-    ]);
+
+    axios.get('http://34.93.135.33:8080/api/get_all_cities').then((res) => {
+      console.log(res.data.data);
+      setCityList(res.data.data.map((city) => city.city_name));
+  });
+
+    // setCityList([
+    //   ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
+    // ]);
   }, []);
 
   const cityCopyValidation = (value) => {
@@ -268,10 +274,10 @@ function ExecutionAll() {
   ];
 
   const QuarterStaticData = [
-    "Quater 1 (Jan-Mar)",
-    "Quater 2 (Apr-Jun)",
-    "Quater 3 (Jul-Sep)",
-    "Quater 4 (Oct-Dec)",
+    "Quarter 1 (Jan-Mar)",
+    "Quarter 2 (Apr-Jun)",
+    "Quarter 3 (Jul-Sep)",
+    "Quarter 4 (Oct-Dec)",
   ];
 
   const theme = createTheme({
@@ -657,15 +663,6 @@ function ExecutionAll() {
       width: 150,
       headerName: "Stats Update %",
       renderCell: (params) => {
-        console.log(
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry.isDeleted
-            : false,
-          params.row.p_id
-        );
         const num =
           updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
             .length > 0
