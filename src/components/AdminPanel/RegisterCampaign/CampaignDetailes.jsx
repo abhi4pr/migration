@@ -20,6 +20,8 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
         console.log(err);
       });
   };
+  console.log(campaignData);
+  console.log(commitData)
   const getBrandInfo = async () => {
     const brand = await axios.get(`http://34.93.135.33:8080/api/get_brands`);
     const myBrand = brand.data.data.find(
@@ -49,6 +51,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
     );
     setCommitData(myComm);
   };
+  
   useEffect(() => {
     if (campaignData.brand_id) {
       campaignData.commitment.forEach((element) => {
@@ -97,7 +100,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
             />
           </Grid>
           {commitData.length > 0 &&
-            commitData.map((comm) => (
+            commitData.map((comm,index) => (
               <>
                 <Grid item xs={12} sm={6} sx={{ mb: 2 }}>
                   <TextField
@@ -112,7 +115,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
                     disabled
                     fullWidth
                     label="value"
-                    value={"Tiger 3"}
+                    value={campaignData?.commitment[index].textValue}
                   />
                 </Grid>
               </>
