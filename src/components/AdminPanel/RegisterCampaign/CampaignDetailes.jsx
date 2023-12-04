@@ -67,7 +67,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
   return (
     <>
       {/* Non editable campaigning detailes */}
-      <Paper sx={{p:3}}>
+      <Paper sx={{p:1}}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={3}>
             <label> Brand Name</label>
@@ -102,7 +102,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
           {commitData.length > 0 &&
             commitData.map((comm,index) => (
               <>
-                <Grid item xs={12} sm={6} sx={{ mb: 2 }}>
+                <Grid item xs={12} sm={6} sx={{ mb: 2 , }}>
                   <TextField
                     disabled
                     fullWidth

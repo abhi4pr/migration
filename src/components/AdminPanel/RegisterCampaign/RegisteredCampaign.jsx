@@ -52,7 +52,6 @@ export default function RegisteredCampaign() {
   const [deleteRowModal, setDeleteRowModal] = useState(false);
   const [deleteRowId, setDeleteRowId] = useState("");
 
-
   const handleFileChange = (event, index) => {
     const file = event.target.files[0];
     const updatedFields = [...formData.fields];
@@ -270,7 +269,7 @@ export default function RegisteredCampaign() {
     const path = `/admin/planOverview/${event._id}`;
     navigate(path);
   };
-  handleShowPlan
+  handleShowPlan;
   const handlePhase = (event) => {
     // console.log(event);
     const path = `/admin/phase/${event._id}`;
@@ -516,7 +515,12 @@ export default function RegisteredCampaign() {
                 <SendTwoToneIcon />
               </Button>
             ) : (
-              <Button variant="outlined"  onClick={() => handleShowPlan(params.row)}   >Show plan</Button>
+              <Button
+                variant="outlined"
+                onClick={() => handleShowPlan(params.row)}
+              >
+                Show plan
+              </Button>
             )}
           </div>
         );
@@ -552,7 +556,9 @@ export default function RegisteredCampaign() {
                 <SendTwoToneIcon />
               </Button>
             ) : (
-              "N/A"
+              <div style={{ display:"flex",alignItems:"center",justifyContent:"center" }}>
+                <parseInt style={{width:"5em",color:"red"}}>N/A</parseInt>
+              </div>
             )}
 
             {/* </Link> */}
