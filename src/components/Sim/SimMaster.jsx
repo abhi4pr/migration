@@ -280,15 +280,18 @@ const SimMaster = () => {
                     label: cat.category_name,
                     value: cat.category_id,
                   }))}
-                  value={assetsCategory}
+                  // value={assetsCategory}
                   onChange={(e, newvalue) => {
+                    // if (newvalue != null) {
                     setAssetsCategory((pre) => ({
                       label: newvalue.label,
                       category_id: newvalue.value,
                     }));
+                    // console.log(newvalue, "there is new value");
                     if (assetsCategoryError) {
                       setAssetsCategoryError("");
                     }
+                    // }
                   }}
                   renderInput={(params) => (
                     <TextField

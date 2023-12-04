@@ -6,7 +6,6 @@ import "./OrderRequest.css";
 import jwtDecode from "jwt-decode";
 import successImage from "../../../assets/img/icon/success.png";
 const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
-  console.log(selectedSitting, "hendle sitting");
   const { count, setCount } = useContext(DataContext);
   const [cartToggle, setCartToggle] = useState(false);
   // const [message, setMessage] = useState("");
@@ -55,7 +54,6 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
     const updatedCartItems = cartItems.map((item) => {
       if (item.product_id === productId) {
         const propNames = item["propNames"] || [];
-        console.log(propNames);
         for (let i = 0; i < propNames.length; i++) {
           if (propNames[i][1] == propid) {
             propNames[i] = propNames[propNames.length - 1];
@@ -78,9 +76,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/get_delivery_boy", {
-        room_id: loginUserRoomId,
-      })
+      .get("http://34.93.135.33:8080/api/get_delivery_boy")
       .then((res) => setReqDelApiData(res.data.results));
   }, []);
   const handlePlaceOrder = async () => {
@@ -94,7 +90,6 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
       }
       const finalsitting_id =
         selectedSitting == "" ? Number(SittingId) : Number(selectedSitting);
-      console.log(userId, "userId");
       await axios
         .post("http://34.93.135.33:8080/api/add_orderreq", {
           product_id: element.product_id,

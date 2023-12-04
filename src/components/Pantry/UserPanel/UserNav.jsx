@@ -22,7 +22,7 @@ const UserNav = () => {
   useEffect(() => {
     axios
       .post("http://34.93.135.33:8080/api/login_user_data", {
-        id: loginUserId,
+        user_id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));
   }, []);

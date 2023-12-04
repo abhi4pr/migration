@@ -37,9 +37,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/get_delivery_boy", {
-        room_id: loginUserRoomId,
-      })
+      .get("http://34.93.135.33:8080/api/get_delivery_boy")
       .then((res) => setReqDelApiData(res.data.results));
   }, []);
 
