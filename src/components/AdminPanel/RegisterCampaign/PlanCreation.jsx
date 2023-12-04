@@ -1,11 +1,11 @@
 import CampaignDetailes from "./CampaignDetailes";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import PageDetaling from "./PageDetailing";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
-import { styled } from '@mui/system';
+import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
+import { styled } from "@mui/system";
 
 import {
   Paper,
@@ -19,29 +19,29 @@ import {
   Box,
 } from "@mui/material";
 
-let options = []
+let options = [];
 let text;
 const PlanCreation = () => {
-  const param = useParams()
-  const id = param.id
+  const param = useParams();
+  const id = param.id;
 
-  const [allPageData, setAllPageData] = useState([])
-  const [filterdPages, setFilteredPages] = useState([])
-  const [searchedPages, setSearchedPages] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState([])
-  const [selectedFollower, setSelectedFollower] = useState(null)
-  const [searched, setSearched] = useState(false)
-  const [campaignName, setCampaignName] = useState(null)
-  const [remainingPages, setRemainingPages] = useState([])
-  const [modalSearchPage, setModalSearchPage] = useState([])
-  const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false)
+  const [allPageData, setAllPageData] = useState([]);
+  const [filterdPages, setFilteredPages] = useState([]);
+  const [searchedPages, setSearchedPages] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedFollower, setSelectedFollower] = useState(null);
+  const [searched, setSearched] = useState(false);
+  const [campaignName, setCampaignName] = useState(null);
+  const [remainingPages, setRemainingPages] = useState([]);
+  const [modalSearchPage, setModalSearchPage] = useState([]);
+  const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   //copy paste states
 
-  const [isModalOpenCP, setIsModalOpenCP] = useState(false)
+  const [isModalOpenCP, setIsModalOpenCP] = useState(false);
 
   const Follower_Count = [
     "<10k",
@@ -52,112 +52,132 @@ const PlanCreation = () => {
   ];
   const page_health = ["Active", "nonActive"];
 
-
-
   //to fetch all pages
   const getPageData = async () => {
-    const pageData = await axios.get(`https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`)
-    setAllPageData(pageData.data.body)
-    setFilteredPages(pageData.data.body)
+    const pageData = await axios.get(
+      `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
+    );
+    setAllPageData(pageData.data.body);
+    setFilteredPages(pageData.data.body);
     // setSearchedPages(pageData.data.body)
-
-  }
+  };
 
   //to call getPageData function
   useEffect(() => {
-    getPageData()
-  }, [])
+    getPageData();
+  }, []);
 
   useEffect(() => {
     const remainingData = allPageData.filter(
-      (item) => !filterdPages.some((selectedItem) => selectedItem.p_id == item.p_id)
+      (item) =>
+        !filterdPages.some((selectedItem) => selectedItem.p_id == item.p_id)
     );
-    setRemainingPages(remainingData)
-  }, [filterdPages])
-  console.log(remainingPages)
+    setRemainingPages(remainingData);
+  }, [filterdPages]);
+  console.log(remainingPages);
   //this function will feed the category data to categories option array
   const categorySet = () => {
-    allPageData.forEach(data => {
+    allPageData.forEach((data) => {
       if (!options.includes(data.cat_name)) {
         // setOptions([...options, data.cat_name])
-        options.push(data.cat_name)
+        options.push(data.cat_name);
       }
-    })
-  }
+    });
+  };
   //whenever a pageData is available call categoryset function
   useEffect(() => {
     if (allPageData.length > 0) {
-      categorySet()
+      categorySet();
     }
-  }, [allPageData])
+  }, [allPageData]);
 
   //useEffect for category selection change events
   useEffect(() => {
     if (selectedCategory.length > 0 && selectedFollower) {
       //if there is a selected category and selected follower
-      const page = allPageData.filter(pages => {
+      const page = allPageData.filter((pages) => {
         //based on the selected follower a condition will be executed
 
         if (selectedFollower == "<10k") {
           if (selectedCategory.length > 0) {
-            //if there is category selected then this 
-            return Number(pages.follower_count) <= 10000 && selectedCategory.includes(pages.cat_name)
+            //if there is category selected then this
+            return (
+              Number(pages.follower_count) <= 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
             //if there is no category selected
-            return Number(pages.follower_count) <= 10000
+            return Number(pages.follower_count) <= 10000;
           }
         }
         if (selectedFollower == "10k to 100k ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000
+            );
           }
-
         }
         if (selectedFollower == "100k to 1M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000
+            );
           }
         }
         if (selectedFollower == "1M to 5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000
+            );
           }
         }
         if (selectedFollower == ">5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) > 5000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) > 5000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) > 5000000
+            return Number(pages.follower_count) > 5000000;
           }
         }
         // return selectedCategory.includes(pages.cat_name)
-      })
+      });
       //to set the filtered page
-      setFilteredPages(page)
+      setFilteredPages(page);
     } else if (selectedCategory.length > 0 && !selectedFollower) {
-
       //in case category is present but follower count is not selected
-      const page = allPageData.filter(pages => {
-        return selectedCategory.includes(pages.cat_name)
-      })
-      setFilteredPages(page)
+      const page = allPageData.filter((pages) => {
+        return selectedCategory.includes(pages.cat_name);
+      });
+      setFilteredPages(page);
       // setSelectedFollower(null)
     } else if (selectedCategory.length == 0 && !selectedFollower) {
-      setFilteredPages(allPageData)
+      setFilteredPages(allPageData);
     } else if (selectedCategory.length == 0 && selectedFollower) {
-
     }
-  }, [selectedCategory])
+  }, [selectedCategory]);
 
   // useEffect(()=>{
 
@@ -168,106 +188,122 @@ const PlanCreation = () => {
   useEffect(() => {
     //
     if (selectedFollower) {
-      const page = allPageData.filter(pages => {
+      const page = allPageData.filter((pages) => {
         if (selectedFollower == "<10k") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 10000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 10000
+            return Number(pages.follower_count) <= 10000;
           }
         }
         if (selectedFollower == "10k to 100k ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 100000 && Number(pages.follower_count) > 10000
+            return (
+              Number(pages.follower_count) <= 100000 &&
+              Number(pages.follower_count) > 10000
+            );
           }
-
         }
         if (selectedFollower == "100k to 1M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 1000000 && Number(pages.follower_count) > 100000
+            return (
+              Number(pages.follower_count) <= 1000000 &&
+              Number(pages.follower_count) > 100000
+            );
           }
         }
         if (selectedFollower == "1M to 5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) <= 5000000 && Number(pages.follower_count) > 1000000
+            return (
+              Number(pages.follower_count) <= 5000000 &&
+              Number(pages.follower_count) > 1000000
+            );
           }
         }
         if (selectedFollower == ">5M ") {
           if (selectedCategory.length > 0) {
-
-            return Number(pages.follower_count) > 5000000 && selectedCategory.includes(pages.cat_name)
+            return (
+              Number(pages.follower_count) > 5000000 &&
+              selectedCategory.includes(pages.cat_name)
+            );
           } else {
-            return Number(pages.follower_count) > 5000000
+            return Number(pages.follower_count) > 5000000;
           }
         }
         // return selectedCategory.includes(pages.cat_name)
-      })
-      setFilteredPages(page)
+      });
+      setFilteredPages(page);
     } else {
       if (selectedCategory.length > 0) {
-        const page = allPageData.filter(pages => {
-          return selectedCategory.includes(pages.cat_name)
-        })
-        setFilteredPages(page)
-      } else setFilteredPages(allPageData)
+        const page = allPageData.filter((pages) => {
+          return selectedCategory.includes(pages.cat_name);
+        });
+        setFilteredPages(page);
+      } else setFilteredPages(allPageData);
     }
-  }, [selectedFollower])
+  }, [selectedFollower]);
 
   //this functin will be called whenever category is changed
   const categoryChangeHandler = (e, op) => {
-    setSelectedCategory(op)
-  }
+    setSelectedCategory(op);
+  };
 
   //this functin will be called whenever follower count is changed
   const followerChangeHandler = (e, op) => {
-    setSelectedFollower(op)
-  }
+    setSelectedFollower(op);
+  };
 
-
-
-  let timer
+  let timer;
   const handleSearchChange = (e) => {
-
     if (!e.target.value.length == 0) {
-      clearTimeout(timer)
+      clearTimeout(timer);
       timer = setTimeout(() => {
+        const searched = filterdPages.filter((page) => {
+          return (
+            page.page_name
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase()) ||
+            page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
+          );
+        });
 
-        const searched = filterdPages.filter(page => {
-          return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
-        })
-
-
-        console.log(searched)
-        setSearchedPages(searched)
-        setSearched(true)
-      }, 500)
-
+        console.log(searched);
+        setSearchedPages(searched);
+        setSearched(true);
+      }, 500);
     } else {
-
-      console.log("empty")
-      setSearched(false)
+      console.log("empty");
+      setSearched(false);
       // if(e.targe)
     }
-  }
-
-
-
+  };
 
   const getCampaignName = (detail) => {
-    setCampaignName(detail.exeCmpName)
-  }
+    setCampaignName(detail.exeCmpName);
+  };
   // console.log(allPageData)
-  console.log(selectedFollower)
+  console.log(selectedFollower);
 
   //all logic related to add new page modal
 
@@ -281,98 +317,97 @@ const PlanCreation = () => {
 
   const handleSeachChangeModal = (e) => {
     if (!e.target.value.length == 0) {
-      clearTimeout(timer)
+      clearTimeout(timer);
       timer = setTimeout(() => {
-        console.log(e.target.value)
-        const searched = remainingPages.filter(page => {
-          return page.page_name.toLowerCase().includes(e.target.value.toLowerCase()) || page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
-        })
-        console.log(searched)
-        setModalSearchPage(searched)
-        setModalSearchPageStatus(true)
-
-      }, 500)
-
+        console.log(e.target.value);
+        const searched = remainingPages.filter((page) => {
+          return (
+            page.page_name
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase()) ||
+            page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
+          );
+        });
+        console.log(searched);
+        setModalSearchPage(searched);
+        setModalSearchPageStatus(true);
+      }, 500);
     } else {
-
-
     }
-  }
+  };
 
   const handleModalPageAdd = () => {
-
     const selectedRowData = selectedRows.map((rowId) =>
       remainingPages.find((row) => row.p_id === rowId)
     );
-    console.log(selectedRowData)
-    setFilteredPages([...filterdPages, ...selectedRowData])
-    setModalSearchPageStatus(false)
+    console.log(selectedRowData);
+    setFilteredPages([...filterdPages, ...selectedRowData]);
+    setModalSearchPageStatus(false);
     setIsModalOpen(false);
-  }
+  };
 
   const handleSelectionChange = (newSelection) => {
     setSelectedRows(newSelection);
-  }
+  };
 
-  //logic related to copy and paste 
+  //logic related to copy and paste
 
   const handleCP = () => {
-    setIsModalOpenCP(true)
-  }
+    setIsModalOpenCP(true);
+  };
 
   const handleCloseCP = () => {
     setIsModalOpenCP(false);
   };
 
-  const [CPInput, setCPInput] = useState('')
+  const [CPInput, setCPInput] = useState("");
 
   const handleInputChange = (e) => {
     text = e.target.value;
-  }
+  };
   const handleModalPageCP = () => {
-    console.log(text.split(/\s+/))
-    const pageInfo=text.split(/\s+/)
-    let x = []
-    const remainingData = allPageData.filter(
-      (item) => pageInfo.some((selectedItem) => {
+    console.log(text.split(/\s+/));
+    const pageInfo = text.split(/\s+/);
+    let x = [];
+    const remainingData = allPageData.filter((item) =>
+      pageInfo.some((selectedItem) => {
         if (selectedItem === item.page_name) {
-
-          x.push( selectedItem);
-          return selectedItem === item.page_name
+          x.push(selectedItem);
+          return selectedItem === item.page_name;
         }
       })
     );
     const differenceArray = pageInfo.filter((element) => !x.includes(element));
-    const falsepage=differenceArray.map((element) =>{
-      let pid = allPageData.length + Math.floor(Math.random() * 1000) + 1
-      return {'page_name':element,'status':false,'p_id':String(pid) }
-    })
-    setFilteredPages([...remainingData, ...falsepage])
-    console.log(x)
-    console.log(differenceArray)
-    console.log(remainingData)
-  }
+    const falsepage = differenceArray.map((element) => {
+      let pid = allPageData.length + Math.floor(Math.random() * 1000) + 1;
+      return { page_name: element, status: false, p_id: String(pid) };
+    });
+    setFilteredPages([...remainingData, ...falsepage]);
+    console.log(x);
+    console.log(differenceArray);
+    console.log(remainingData);
+  };
 
   const blue = {
-    100: '#DAECFF',
-    200: '#b6daff',
-    400: '#3399FF',
-    500: '#007FFF',
-    600: '#0072E5',
-    900: '#003A75',
+    100: "#DAECFF",
+    200: "#b6daff",
+    400: "#3399FF",
+    500: "#007FFF",
+    600: "#0072E5",
+    900: "#003A75",
   };
 
   const grey = {
-    50: '#F3F6F9',
-    100: '#E5EAF2',
-    200: '#DAE2ED',
-    300: '#C7D0DD',
-    400: '#B0B8C4',
-    500: '#9DA8B7',
-    600: '#6B7A90',
-    700: '#434D5B',
-    800: '#303740',
-    900: '#1C2025',
+    50: "#F3F6F9",
+    100: "#E5EAF2",
+    200: "#DAE2ED",
+    300: "#C7D0DD",
+    400: "#B0B8C4",
+    500: "#9DA8B7",
+    600: "#6B7A90",
+    700: "#434D5B",
+    800: "#303740",
+    900: "#1C2025",
   };
 
   const Textarea = styled(BaseTextareaAutosize)(
@@ -384,10 +419,12 @@ const PlanCreation = () => {
     line-height: 1.5;
     padding: 8px 12px;
     border-radius: 8px;
-    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+    color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
+    box-shadow: 0px 2px 2px ${
+      theme.palette.mode === "dark" ? grey[900] : grey[50]
+    };
 
     &:hover {
       border-color: ${blue[400]};
@@ -395,14 +432,16 @@ const PlanCreation = () => {
 
     &:focus {
       border-color: ${blue[400]};
-      box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+      box-shadow: 0 0 0 3px ${
+        theme.palette.mode === "dark" ? blue[600] : blue[200]
+      };
     }
 
     // firefox
     &:focus-visible {
       outline: 0;
     }
-  `,
+  `
   );
 
   //copy paste logic ends here
@@ -446,7 +485,6 @@ const PlanCreation = () => {
             style={{ width: "60%" }}
             type="number"
             value={params.row.postPerPage}
-
           />
         );
       },
@@ -459,7 +497,6 @@ const PlanCreation = () => {
     },
   ];
 
-
   return (
     <>
       <div>
@@ -468,70 +505,78 @@ const PlanCreation = () => {
         </div>
       </div>
       <CampaignDetailes cid={id} getCampaign={getCampaignName} />
-
-      <div style={{ height: 400, width: "100%" }}>
-        <Paper sx={{ display: "flex", gap: "10" }}>
-          <Autocomplete
-            multiple
-            id="combo-box-demo"
-            options={options}
-            // sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Category" />}
-            onChange={categoryChangeHandler}
-
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            options={Follower_Count}
-            getOptionLabel={(option) => option}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Follower Count" />
-            )}
-            onChange={followerChangeHandler}
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            options={page_health}
-            getOptionLabel={(option) => option}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Page health" />
-            )}
-          />
-          <TextField
-            label="Search"
-            variant="outlined"
-            // value={searchText}
-            onChange={handleSearchChange}
-            style={{ margin: "10px" }}
-
-          />
-          <Button variant="contained" onClick={handleCP}>
-            copy/paste
+      <Paper sx={{ display: "flex", justifyContent: "space-around" }}>
+        <Autocomplete
+          multiple
+          id="combo-box-demo"
+          options={options}
+          sx={{ width: 200 }}
+          renderInput={(params) => <TextField {...params} label="Category" />}
+          onChange={categoryChangeHandler}
+        />
+        <Autocomplete
+          id="combo-box-demo"
+          options={Follower_Count}
+          getOptionLabel={(option) => option}
+          sx={{ width: 200 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Follower Count" />
+          )}
+          onChange={followerChangeHandler}
+        />
+        <Autocomplete
+          id="combo-box-demo"
+          options={page_health}
+          getOptionLabel={(option) => option}
+          sx={{ width: 200 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Page health" />
+          )}
+        />
+        <TextField
+          label="Search"
+          variant="outlined"
+          onChange={handleSearchChange}
+        />
+        <Box>
+          <Button variant="contained" onClick={handleCP} sx={{ m: 1 }}>
+            Copy / paste
           </Button>
-          <Button variant="contained" onClick={handleClick}>
+          <Button variant="contained" onClick={handleClick} sx={{ m: 1 }}>
             Add More Pages
           </Button>
-        </Paper>
-        <PageDetaling realPageData={allPageData} pageName={"planCreation"} pages={filterdPages} search={searched} searchedpages={searchedPages} setFilteredPages={setFilteredPages} data={{ campaignId: id, campaignName }} />
-      </div>
+        </Box>
+      </Paper>
+      <PageDetaling
+        realPageData={allPageData}
+        pageName={"planCreation"}
+        pages={filterdPages}
+        search={searched}
+        searchedpages={searchedPages}
+        setFilteredPages={setFilteredPages}
+        data={{ campaignId: id, campaignName }}
+      />
       <>
         <Dialog open={isModalOpenCP}>
-          <DialogTitle>Add  Pages</DialogTitle>
+          <DialogTitle>Add Pages</DialogTitle>
           <DialogContent>
             <Box sx={{ height: "100%" }}>
               <Textarea
-
-                onChange={handleInputChange} style={{ color: "green", fontSize: "20px" }} aria-label="minimum height" minRows={6} placeholder="copy paste here..." />
-
+                onChange={handleInputChange}
+                style={{ color: "green", fontSize: "20px" }}
+                aria-label="minimum height"
+                minRows={6}
+                placeholder="copy paste here..."
+              />
             </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseCP} color="primary">
               Cancel
             </Button>
-            <Button color="primary" onClick={handleModalPageCP}>Add</Button>
+            <Button color="primary" onClick={handleModalPageCP}>
+              Add
+            </Button>
           </DialogActions>
         </Dialog>
         <Dialog open={isModalOpen}>
@@ -544,35 +589,41 @@ const PlanCreation = () => {
                 // value={searchText}
                 onChange={handleSeachChangeModal}
                 style={{ margin: "10px" }}
-
               />
-              {
-                modalSearchPageStatus ? <DataGrid
+              {modalSearchPageStatus ? (
+                <DataGrid
                   rows={modalSearchPage || []}
                   columns={columns}
                   getRowId={(row) => row.p_id}
                   pageSizeOptions={[5]}
                   checkboxSelection
-                  onRowSelectionModelChange={(row) => handleSelectionChange(row)}
+                  onRowSelectionModelChange={(row) =>
+                    handleSelectionChange(row)
+                  }
                   rowSelectionModel={selectedRows.map((row) => row)}
-                /> : <DataGrid
+                />
+              ) : (
+                <DataGrid
                   rows={remainingPages || []}
                   columns={columns}
                   getRowId={(row) => row.p_id}
                   pageSizeOptions={[5]}
                   checkboxSelection
-                  onRowSelectionModelChange={(row) => handleSelectionChange(row)}
+                  onRowSelectionModelChange={(row) =>
+                    handleSelectionChange(row)
+                  }
                   rowSelectionModel={selectedRows.map((row) => row)}
                 />
-              }
-
+              )}
             </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button color="primary" onClick={handleModalPageAdd}>Add</Button>
+            <Button color="primary" onClick={handleModalPageAdd}>
+              Add
+            </Button>
           </DialogActions>
         </Dialog>
       </>

@@ -3,11 +3,20 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useEffect } from "react";
-import { TextField, Button, DialogActions, DialogContentText, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import {
+  TextField,
+  Button,
+  DialogActions,
+  DialogContentText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 import axios from "axios";
 import { Paper, Autocomplete } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useGlobalContext } from "../../../Context/Context";
 
 let options = [];
 const PageDetaling = ({
@@ -19,11 +28,13 @@ const PageDetaling = ({
   data,
   setFilteredPages,
 }) => {
+  const { toastAlert ,toastError} = useGlobalContext();
+
   const navigate = useNavigate();
   const [allPages, setAllPages] = useState([]);
   const [postpage, setPostPage] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
-const [deletingPageId, setDeletingPageId] = useState(null);
+  const [deletingPageId, setDeletingPageId] = useState(null);
   const [remainingPages, setRemainingPages] = useState([]);
 
   useEffect(() => {
@@ -76,7 +87,7 @@ const [deletingPageId, setDeletingPageId] = useState(null);
     },
     {
       field: "page_name",
-      headerName: "pages",
+      headerName: "Pages",
       width: 150,
       editable: true,
       renderCell: (params) => {
@@ -102,19 +113,19 @@ const [deletingPageId, setDeletingPageId] = useState(null);
     },
     {
       field: "follower_count",
-      headerName: "follower",
+      headerName: "Follower",
       width: 150,
       editable: true,
     },
     {
       field: "cat_name",
-      headerName: "cat_name",
+      headerName: "Category",
       width: 150,
       editable: true,
     },
     {
       field: "post_page",
-      headerName: "post / page",
+      headerName: "Post / Page",
       width: 150,
 
       renderCell: (params) => {
@@ -138,12 +149,12 @@ const [deletingPageId, setDeletingPageId] = useState(null);
         );
       },
     },
-    {
-      field: "platform",
-      headerName: "vender",
-      width: 150,
-      editable: true,
-    },
+    // {
+    //   field: "platform",
+    //   headerName: "vender",
+    //   width: 150,
+    //   editable: true,
+    // },
     {
       field: "Action",
       headerName: "Action",
@@ -193,11 +204,13 @@ const [deletingPageId, setDeletingPageId] = useState(null);
           "http://34.93.135.33:8080/api/campaignplan",
           newdata
         );
-
         console.log(result);
-        navigate("/admin/registered-campaign");
+        toastAlert("Plan Created SuccessFully");
+        setTimeout(() => {
+          navigate("/admin/registered-campaign");
+        }, 2000);
       } catch (error) {
-        console.log(error);
+        toastError("Plan not Created");
       }
     }
     if (pageName == "phaseCreation") {
@@ -205,8 +218,8 @@ const [deletingPageId, setDeletingPageId] = useState(null);
   };
   console.log(allPages);
   return (
-    <>
-      <Box sx={{ pt: 2, pb: 2 }}>
+    <Paper>
+      <Box sx={{ p: 2 }}>
         <TextField
           id="outlined-basic"
           label="Post/pages"
@@ -224,6 +237,7 @@ const [deletingPageId, setDeletingPageId] = useState(null);
             return params.row.status == false ? "unavailable" : "available";
           }}
           sx={{
+            ml: 2,
             ".unavailable": {
               bgcolor: " #FF4433",
               "&:hover": {
@@ -262,7 +276,7 @@ const [deletingPageId, setDeletingPageId] = useState(null);
           </DialogActions>
         </Dialog>
       </>
-    </>
+    </Paper>
   );
 };
 
