@@ -889,7 +889,6 @@ const SidebarLinks = () => {
                   >
                     All Refund Request
                   </Link>
-                  
                 </div>
               </div>
             </li>
@@ -918,7 +917,6 @@ const SidebarLinks = () => {
                     >
                       List
                     </Link>
-                    
                   </>
                 </div>
               </div>
@@ -971,11 +969,17 @@ const SidebarLinks = () => {
               >
                 <div className="bg-white collapse-inner">
                   <>
-                    <Link className="collapse-item"  to="/admin/finance-pendinginvoice">
-                     Pending Invoice Creation
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-pendinginvoice"
+                    >
+                      Pending Invoice Creation
                     </Link>
-                    <Link className="collapse-item"  to="/admin/finance-pendinginvoice">
-                     Invoice Created
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-createdinvoice"
+                    >
+                      Invoice Created
                     </Link>
                   </>
                 </div>
@@ -1000,8 +1004,11 @@ const SidebarLinks = () => {
               >
                 <div className="bg-white collapse-inner">
                   <>
-                    <Link className="collapse-item" to="/admin/finance-pendinginvoice">
-                     Pending Payments List
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-pendingpaymentslist"
+                    >
+                      Pending Payments List
                     </Link>
                   </>
                 </div>
@@ -1026,11 +1033,17 @@ const SidebarLinks = () => {
               >
                 <div className="bg-white collapse-inner">
                   <>
-                    <Link className="collapse-item" to="/admin/finance-salebookingclose">
-                     Sales Booking Closing
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-salebookingclose"
+                    >
+                      Sales Booking Closing
                     </Link>
-                    <Link className="collapse-item" to="/admin/finance-salebookingverify">
-                     Sales Booking Verification
+                    <Link
+                      className="collapse-item"
+                      to="/admin/finance-salebookingverify"
+                    >
+                      Sales Booking Verification
                     </Link>
                   </>
                 </div>
@@ -1039,7 +1052,7 @@ const SidebarLinks = () => {
           </div>
         </div>
       </li>
-      
+
       {/* )} */}
 
       {/* {isInstaApiVisible && (

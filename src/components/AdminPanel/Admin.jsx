@@ -157,6 +157,9 @@ import RefundRequests from "./Finance/RefundRequests";
 import SaleBookingClose from "./Finance/SaleBookingClose";
 import SaleBookingVerify from "./Finance/SaleBookingVerify";
 import PaymentSummary from "./Finance/PaymentSummary";
+import PendingInvoiceCustomerDeatils from "./Finance/PendingInvoiceCustomerDeatils";
+import InvoiceCreated from "./Finance/InvoiceCreated";
+import PendingPaymentsList from "./Finance/PendingPaymentsList";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -534,6 +537,18 @@ const Admin = () => {
                   <Route
                     path="/finance-pendinginvoice"
                     element={<PendingInvoice />}
+                  />
+                  <Route
+                    path="/finance-pendinginvoice/customer-details"
+                    element={<PendingInvoiceCustomerDeatils />}
+                  />
+                  <Route
+                    path="/finance-createdinvoice"
+                    element={<InvoiceCreated />}
+                  />
+                  <Route
+                    path="/finance-pendingpaymentslist"
+                    element={<PendingPaymentsList />}
                   />
                   <Route
                     path="/finance-pendingrequests"

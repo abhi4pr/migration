@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 
 const IncentivePayment = () => {
-  
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
   const [heading, setHeading] = useState("");
@@ -18,20 +15,20 @@ const IncentivePayment = () => {
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  
+
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/",{
-        display_sequence: displaySeq,
-      });
 
-      toastAlert("Coc created");
-      setIsFormSubmitted(true);
+    await axios.post("http://34.93.135.33:8080/api/", {
+      display_sequence: displaySeq,
+    });
+
+    toastAlert("Coc created");
+    setIsFormSubmitted(true);
   };
 
   function getData() {
@@ -47,9 +44,7 @@ const IncentivePayment = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return (
-        d.assetsName?.toLowerCase().match(search.toLowerCase())
-      );
+      return d.assetsName?.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -62,47 +57,24 @@ const IncentivePayment = () => {
       sortable: true,
     },
     {
-      name: "Customer Name",
-      selector: (row) => row.assetsName,
-      sortable: true,
-    },
-    {
       name: "Sales executive name",
       selector: (row) => row.sub_category_name,
     },
     {
-      name: "Sale booking date",
-      selector: (row) => row.category_name,
-    },
-    {
-      name: "campaign amount",
+      name: "Request Amount",
       selector: (row) => row.vendor_name,
     },
+
     {
-      name: "paid amount",
-      selector: (row) =>row.dateOfPurchase 
+      name: "Status",
+      selector: (row) => row.paymentAmount,
     },
-    {
-      name: "balance amount",
-      selector: (row) => row.paymentAmount
-    },
-    {
-      name: "Action",
-      selector: (row) => (
-          <button
-            className="btn btn-outline-success"
-            // onClick={() => handleImageClick(row)}
-          >
-            Balance Update
-          </button>
-        ),
-    }
   ];
 
   return (
     <>
       <FormContainer
-        mainTitle="Incentive payment list"
+        mainTitle="Sales Executive Incentive Request List"
         link="/admin/incentive-payment-list"
         buttonAccess={
           contextData &&
@@ -115,7 +87,7 @@ const IncentivePayment = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Incentive payment list"
+            title="Sales Executive Incentive Request List"
             columns={columns}
             data={filterData}
             fixedHeader
