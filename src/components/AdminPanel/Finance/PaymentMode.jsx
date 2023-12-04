@@ -35,7 +35,10 @@ const PaymentMode = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_payment_acc_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_acc_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -48,11 +51,7 @@ const PaymentMode = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       return (
-        d.assetsName?.toLowerCase().match(search.toLowerCase()) ||
-        d.category_name?.toLowerCase().match(search.toLowerCase()) ||
-        d.vendor_name?.toLowerCase().match(search.toLowerCase()) ||
-        d.sub_category_name?.toLowerCase().match(search.toLowerCase())
-       
+        d.title?.toLowerCase().match(search.toLowerCase())       
       );
     });
     setFilterData(result);
@@ -67,23 +66,23 @@ const PaymentMode = () => {
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Title</div>,
-      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Bank Details for MMC</div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>{row.title}</div>,
       width: "15%",
       sortable: false,
     },
     {
       name: "Detail",
-      selector: (row) =>  <div style={{ whiteSpace: 'normal' }}>Name: Meme Marketing Company Account No: 004105020328 IFSE CODE: ICIC0000041</div>,
+      selector: (row) =>  <div style={{ whiteSpace: 'normal' }}>{row.detail}</div>,
 
     },
     {
       name: "Payment Type",
-      selector: (row) => "NEFT",
+      selector: (row) => row.payment_type,
       width: "12%",
     },
     {
       name: "GST Bank",
-      selector: (row) => "Non GST",
+      selector: (row) => row.gst_bank,
       width : "8%"
     }
   ];
