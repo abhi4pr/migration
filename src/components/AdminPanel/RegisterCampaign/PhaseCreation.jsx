@@ -49,6 +49,8 @@ const PhaseCreation = () => {
   const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
+  const [allPhaseData, setAllPhaseData] = useState([]);
+
   const Follower_Count = [
     "<10k",
     "10k to 100k ",
@@ -63,13 +65,27 @@ const PhaseCreation = () => {
     const pageData = await axios.get(
       `http://34.93.135.33:8080/api/campaignplan/${id}`
     );
-    console.log(pageData.data.data);
-    setAllPageData(pageData.data.data);
+
+    const allpage = await axios.get(`https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`)
+    setAllPageData(allpage.data.body)
+
     setFilteredPages(pageData.data.data);
   };
+
+  const getPhaseData = async ()=>{
+    const data=await axios.get(`http://34.93.135.33:8080/api/campaignphase/6569d72b0bbaf9546707dca8`)
+    setAllPhaseData(data?.data?.result)
+    console.log(data?.data?.result)
+  }
+  console.log(allPhaseData)
   useEffect(() => {
     getPageData();
-  }, []);
+    getPhaseData();
+  },[]);
+
+
+  console.log(filterdPages)
+  console.log(allPageData)
 
   useEffect(() => {
     const remainingData = allPageData.filter(
@@ -312,7 +328,7 @@ const PhaseCreation = () => {
 
   //all logic related to add new page modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log(isModalOpen, "dasdas");
+  // console.log(isModalOpen, "dasdas");
   const handleClick = () => {
     setIsModalOpen(true);
   };
@@ -411,7 +427,7 @@ const PhaseCreation = () => {
       editable: true,
     },
   ];
-  const newData = [1, 2, 3];
+  // const newData = [1, 2, 3];
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -477,7 +493,7 @@ const PhaseCreation = () => {
       </Paper>
       {/* add Accordion for show phase------------------- */}
       <Paper sx={{ pb: 4 }}>
-        {newData.map((item, index) => (
+        {allPhaseData?.map((item, index) => (
           <Paper key={index} sx={{ mb: 2 }}>
             <Accordion
               key={index}
@@ -540,7 +556,7 @@ const PhaseCreation = () => {
       </Paper>
 
       <PageDetaling
-        pageName={"createPlan"}
+        pageName={"phaseCreation"}
         pages={filterdPages}
         search={searched}
         searchedpages={searchedPages}
