@@ -6,7 +6,7 @@ import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
 
-const SaleBookingVerify = () => {
+const PendingPaymentsList = () => {
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
   const [heading, setHeading] = useState("");
@@ -58,15 +58,11 @@ const SaleBookingVerify = () => {
       sortable: true,
     },
     {
-      name: "Customer Name",
+      name: "Customer Mobile",
       selector: (row) => row.sub_category_name,
     },
     {
-      name: "Sales Executive Name",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Booking Date",
+      name: "Customer Email Id",
       selector: (row) => row.vendor_name,
     },
     {
@@ -74,39 +70,15 @@ const SaleBookingVerify = () => {
       selector: (row) => row.vendor_name,
     },
     {
-      name: "Base Amount",
+      name: "Approved Paid Amount",
       selector: (row) => row.vendor_name,
     },
     {
-      name: "GST Amount",
+      name: "Balance Amount",
       selector: (row) => row.vendor_name,
     },
     {
-      name: "Net Amount",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Paid Amount",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Paid Amount",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Refund Balance Amount",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Net Balance Customer To Pay Amount",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Net Balance Customer to pay Amount (In %)",
-      selector: (row) => row.vendor_name,
-    },
-    {
-      name: "Booking Created Date",
+      name: "Balance Amount OnDate",
       selector: (row) => row.vendor_name,
     },
     {
@@ -118,7 +90,7 @@ const SaleBookingVerify = () => {
   return (
     <>
       <FormContainer
-        mainTitle="Sale Booking "
+        mainTitle="Pending invoice "
         link="/admin/incentive-payment-list"
         buttonAccess={
           contextData &&
@@ -131,7 +103,7 @@ const SaleBookingVerify = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Sale Booking Close"
+            title="Payment List"
             columns={columns}
             data={filterData}
             fixedHeader
@@ -155,4 +127,4 @@ const SaleBookingVerify = () => {
   );
 };
 
-export default SaleBookingVerify;
+export default PendingPaymentsList;
