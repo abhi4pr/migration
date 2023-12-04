@@ -163,10 +163,9 @@ const AdminPreOnboarding = () => {
             username,
             [username, loginId, password, "http://jarvis.work/"]
           );
-
           axios
             .post("http://34.93.135.33:8080/api/add_send_user_mail", {
-              email: email,
+              email: personalEmail,
               subject: "User Registration",
               text: "A new user has been onboard.",
               attachment: selectedImage,

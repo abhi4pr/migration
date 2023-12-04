@@ -272,22 +272,22 @@ const PendingOrder = () => {
     {
       name: "Req Time",
       selector: (row) => row.Request_datetime.substring(11, 16),
-
-      // const [hours, minutes] = requestTime.split(":").map(Number);
-      // let newHours = (hours + 5) % 12;
-      // const newMinutes = (minutes + 30) % 60;
-      // const amPm = hours >= 12 ? "AM" : "PM";
-
-      // if (newHours === 0) {
-      //   newHours = 12;
-      // }
-
-      // const newTime = `${String(newHours).padStart(2, "0")}:${String(
-      //   newMinutes
-      // ).padStart(2, "0")} ${amPm}`;
-      // return newTime;
-      // },
     },
+    // {
+    //   name: "Req Time",
+    //   selector: (row) => {
+    //     const datetime = new Date(row.Request_datetime);
+    //     const amPm = datetime.getHours() >= 12 ? "PM" : "AM";
+    //     const formattedHours = (datetime.getHours() % 12 || 12)
+    //       .toString()
+    //       .padStart(2, "0");
+    //     const formattedMinutes = datetime
+    //       .getMinutes()
+    //       .toString()
+    //       .padStart(2, "0");
+    //     return `${formattedHours}:${formattedMinutes} ${amPm}`;
+    //   },
+    // },
     {
       name: "Message",
       selector: (row) => row.Message,
