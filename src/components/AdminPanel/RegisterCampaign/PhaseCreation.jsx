@@ -573,7 +573,7 @@ const PhaseCreation = () => {
       <PageDetaling
         pageName={"phaseCreation"}
         data={{ campaignName: cmpName, campaignId: id }}
-        pages={filterdPages}
+        pages={filterdPages?.filter(page=>page.postRemaining >0)}
         search={searched}
         searchedpages={searchedPages}
         setFilteredPages={setFilteredPages}
