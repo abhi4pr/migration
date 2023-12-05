@@ -43,13 +43,14 @@ const PhaseCreation = () => {
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedFollower, setSelectedFollower] = useState(null);
   const [searched, setSearched] = useState(false);
-  const [campaignName, setCampaignName] = useState(null);
+  const [campaignName, setCampaignName] = useState([]);
   const [remainingPages, setRemainingPages] = useState([]);
   const [modalSearchPage, setModalSearchPage] = useState([]);
   const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-
+  const [cmpName, setCmpName] = useState('');
   const [allPhaseData, setAllPhaseData] = useState([]);
+  const [newPhaseData, setNewPhaseData] = useState([]);
 
   const Follower_Count = [
     "<10k",
@@ -62,18 +63,18 @@ const PhaseCreation = () => {
 
   //fetching data for the single plan
   const getPageData = async () => {
-    const pageData = await axios.get(
+    const pageD = await axios.get(
       `http://34.93.135.33:8080/api/campaignplan/${id}`
     );
+    setFilteredPages(pageD.data.data);
 
     const allpage = await axios.get(`https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`)
     setAllPageData(allpage.data.body)
 
-    setFilteredPages(pageData.data.data);
   };
 
-  const getPhaseData = async ()=>{
-    const data=await axios.get(`http://34.93.135.33:8080/api/campaignphase/6569d72b0bbaf9546707dca8`)
+  const getPhaseData = async () => {
+    const data = await axios.get(`http://34.93.135.33:8080/api/campaignphase/${id}`)
     setAllPhaseData(data?.data?.result)
     console.log(data?.data?.result)
   }
@@ -81,11 +82,11 @@ const PhaseCreation = () => {
   useEffect(() => {
     getPageData();
     getPhaseData();
-  },[]);
+  }, []);
 
 
-  console.log(filterdPages)
-  console.log(allPageData)
+  // console.log(filterdPages)
+  // console.log(allPageData)
 
   useEffect(() => {
     const remainingData = allPageData.filter(
@@ -95,9 +96,10 @@ const PhaseCreation = () => {
     setRemainingPages(remainingData);
   }, [filterdPages]);
   console.log(remainingPages);
+
   //this function will feed the category data to categories option array
   const categorySet = () => {
-    allPageData.forEach((data) => {
+    filterdPages.forEach((data) => {
       if (!options.includes(data.cat_name)) {
         // setOptions([...options, data.cat_name])
         options.push(data.cat_name);
@@ -115,7 +117,7 @@ const PhaseCreation = () => {
   useEffect(() => {
     if (selectedCategory.length > 0 && selectedFollower) {
       //if there is a selected category and selected follower
-      const page = allPageData.filter((pages) => {
+      const page = filterdPages.filter((pages) => {
         //based on the selected follower a condition will be executed
 
         if (selectedFollower == "<10k") {
@@ -188,28 +190,25 @@ const PhaseCreation = () => {
       setFilteredPages(page);
     } else if (selectedCategory.length > 0 && !selectedFollower) {
       //in case category is present but follower count is not selected
-      const page = allPageData.filter((pages) => {
+      const page = filterdPages.filter((pages) => {
         return selectedCategory.includes(pages.cat_name);
       });
       setFilteredPages(page);
       // setSelectedFollower(null)
     } else if (selectedCategory.length == 0 && !selectedFollower) {
-      setFilteredPages(allPageData);
+      setFilteredPages(filterdPages);
     } else if (selectedCategory.length == 0 && selectedFollower) {
+      setFilteredPages(filterdPages);
       console.log();
     }
   }, [selectedCategory]);
 
-  // useEffect(()=>{
-
-  //   setSearchedPages(filterdPages)
-  // },[filterdPages])
 
   //useEffect for follower selection change events
   useEffect(() => {
     //
     if (selectedFollower) {
-      const page = allPageData.filter((pages) => {
+      const page = filterdPages.filter((pages) => {
         if (selectedFollower == "<10k") {
           if (selectedCategory.length > 0) {
             return (
@@ -277,11 +276,13 @@ const PhaseCreation = () => {
       setFilteredPages(page);
     } else {
       if (selectedCategory.length > 0) {
-        const page = allPageData.filter((pages) => {
+        const page = filterdPages.filter((pages) => {
           return selectedCategory.includes(pages.cat_name);
         });
         setFilteredPages(page);
-      } else setFilteredPages(allPageData);
+      } else setFilteredPages(filterdPages);
+    } if (selectedCategory.length == 0) {
+      console.log("hello")
     }
   }, [selectedFollower]);
 
@@ -320,10 +321,13 @@ const PhaseCreation = () => {
     }
   };
 
-  const getCampaignName = (detail) => {
-    setCampaignName(detail.exeCmpName);
+  const getCampaignName = (detail, cmp) => {
+    console.log(detail)
+    console.log(cmp)
+    setCmpName(cmp)
+    setCampaignName(detail)
   };
-  // console.log(allPageData)
+  console.log(campaignName);
   console.log(selectedFollower);
 
   //all logic related to add new page modal
@@ -354,7 +358,7 @@ const PhaseCreation = () => {
         setModalSearchPageStatus(true);
       }, 500);
     } else {
-      console.log( );
+      console.log();
     }
   };
 
@@ -433,13 +437,15 @@ const PhaseCreation = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  // console.log(startDate.$d,endDate)
   return (
     <>
       <div className="form_heading_title">
         <h2 className="form-heading">Phase Creation</h2>
       </div>
-
-      <CampaignDetailes cid={id} />
+      {id && <CampaignDetailes cid={id} getCampaign={getCampaignName} />}
+      
       <Typography variant="h6" sx={{ margin: "20px", fontWeight: "40px" }}>
         Phase Details
       </Typography>
@@ -463,7 +469,7 @@ const PhaseCreation = () => {
               format="DD/MM/YY"
               fullWidth
               value={startDate}
-              onChange={(e) => setStartDate(e)}
+              onChange={(e) => setStartDate(e.$d)}
               sx={{ m: 2 }}
             />
             <DatePicker
@@ -471,25 +477,34 @@ const PhaseCreation = () => {
               format="DD/MM/YY"
               fullWidth
               value={endDate}
-              onChange={(e) => setEndDate(e)}
+              onChange={(e) => setEndDate(e.$d)}
               sx={{ m: 2 }}
             />
           </LocalizationProvider>
         </Box>
-        <Box sx={{ p: 2, m: 2, display: "flex" }}>
-          <TextField
-            label="Commitment"
-            disabled
-            defaultValue={"likes"}
-            sx={{ m: 2 }}
-          />
-          <TextField
-            label="Value"
-            defaultValue={"6000"}
-            type="number"
-            sx={{ m: 2 }}
-          />
-        </Box>
+        {campaignName?.map((cmp, index) => {
+          return <Box sx={{ p: 2, m: 2, display: "flex" }}>
+
+            <TextField
+
+              disabled
+              value={cmp?.commitment}
+
+              sx={{ m: 2 }}
+            />
+            <TextField
+              label="Value"
+              defaultValue={"0"}
+              type="number"
+              onChange={(e) => {
+                let x = [...campaignName]
+                x.splice(index, 1, { commitment: cmp?.commitment, value: Number(e.target.value) })
+                setCampaignName(x)
+              }}
+              sx={{ m: 2 }}
+            />
+          </Box>
+        })}
       </Paper>
       {/* add Accordion for show phase------------------- */}
       <Paper sx={{ pb: 4 }}>
@@ -502,8 +517,8 @@ const PhaseCreation = () => {
             >
               <AccordionSummary
                 expandIcon={<GridExpandMoreIcon />}
-                // aria-controls={`panel${index}bh-content`}
-                // id={`panel${index}bh-header`}
+              // aria-controls={`panel${index}bh-content`}
+              // id={`panel${index}bh-header`}
               >
                 <Typography>{`Phase ${index + 1}`}</Typography>
               </AccordionSummary>
@@ -554,16 +569,18 @@ const PhaseCreation = () => {
           Add More Pages
         </Button>
       </Paper>
-
+       
       <PageDetaling
         pageName={"phaseCreation"}
+        data={{ campaignName: cmpName, campaignId: id }}
         pages={filterdPages}
         search={searched}
         searchedpages={searchedPages}
         setFilteredPages={setFilteredPages}
-        campaignId={id}
-        campaignName={campaignName}
+        // campaignId={id}
+        // campaignName={campaignName}
         type={"plan"}
+        phaseInfo={{ "phaseName": phaseData, "description": phaseDcripation, "commitment": campaignName }}
       />
       <Dialog open={isModalOpen}>
         <DialogTitle>Add more Pages</DialogTitle>

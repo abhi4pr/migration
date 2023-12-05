@@ -27,8 +27,9 @@ const PageDetaling = ({
   searchedpages,
   data,
   setFilteredPages,
+  phaseInfo
 }) => {
-  const { toastAlert ,toastError} = useGlobalContext();
+  const { toastAlert, toastError } = useGlobalContext();
 
   const navigate = useNavigate();
   const [allPages, setAllPages] = useState([]);
@@ -198,6 +199,7 @@ const PageDetaling = ({
         campaignName: data.campaignName,
         campaignId: data.campaignId,
         pages: allPages,
+        
       };
       try {
         const result = await axios.post(
@@ -214,6 +216,30 @@ const PageDetaling = ({
       }
     }
     if (pageName == "phaseCreation") {
+      console.log("phase creation")
+      const planName = data.campaignName + "plan";
+      const newdata = {
+        planName,
+        campaignName: data.campaignName,
+        campaignId: data.campaignId,
+        pages: allPages,
+        phaseName:phaseInfo.phaseName,
+        desciption:phaseInfo.description,
+        commitment:phaseInfo.commitment
+      };
+      try {
+        const result = await axios.post(
+          "http://localhost:8080/api/campaignphase",
+          newdata
+        );
+        console.log(result);
+        toastAlert("Plan Created SuccessFully");
+        setTimeout(() => {
+          navigate("/admin/registered-campaign");
+        }, 2000);
+      } catch (error) {
+        toastError("Plan not Created");
+      }
     }
   };
   console.log(allPages);
