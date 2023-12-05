@@ -241,7 +241,7 @@ export default function StatsAllPagesDetail() {
             <div>
               {params.row?.reach ? (
                 <>
-                  {params.row.reach} {params.row.percentage_reach}%&nbsp;
+                  {params.row.reach} {params.row.percentage_reach}&nbsp;
                   {params.row.reach_upload_image_url && (
                     <a
                       key="reach"
@@ -273,7 +273,7 @@ export default function StatsAllPagesDetail() {
               {params.row?.impression ? (
                 <>
                   {params.row.impression} {params.row.percentage_impression}
-                  %&nbsp;
+                  &nbsp;
                   {params.row.impression_upload_image_url && (
                     <a
                       key="reach"
@@ -305,7 +305,7 @@ export default function StatsAllPagesDetail() {
             {params.row?.engagement ? (
               <>
                 {params.row.engagement} {params.row.percentage_engagement}
-                %&nbsp;
+                &nbsp;
                 {params.row.engagement_upload_image_url && (
                   <a
                     key="engagement"
@@ -337,7 +337,7 @@ export default function StatsAllPagesDetail() {
             {params.row?.story_view ? (
               <>
                 {params.row.story_view} {params.row.percentage_story_view}
-                %&nbsp;
+                &nbsp;
                 {params.row.story_view_upload_image_url && (
                   <a
                     key="storyImg"
