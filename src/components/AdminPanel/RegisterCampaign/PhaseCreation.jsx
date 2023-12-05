@@ -85,8 +85,8 @@ const PhaseCreation = () => {
   }, []);
 
 
-  console.log(filterdPages)
-  console.log(allPageData)
+  // console.log(filterdPages)
+  // console.log(allPageData)
 
   useEffect(() => {
     const remainingData = allPageData.filter(
@@ -198,6 +198,7 @@ const PhaseCreation = () => {
     } else if (selectedCategory.length == 0 && !selectedFollower) {
       setFilteredPages(filterdPages);
     } else if (selectedCategory.length == 0 && selectedFollower) {
+      setFilteredPages(filterdPages);
       console.log();
     }
   }, [selectedCategory]);
@@ -443,8 +444,8 @@ const PhaseCreation = () => {
       <div className="form_heading_title">
         <h2 className="form-heading">Phase Creation</h2>
       </div>
-
-      <CampaignDetailes cid={id} getCampaign={getCampaignName} />
+      {id && <CampaignDetailes cid={id} getCampaign={getCampaignName} />}
+      
       <Typography variant="h6" sx={{ margin: "20px", fontWeight: "40px" }}>
         Phase Details
       </Typography>
@@ -568,7 +569,7 @@ const PhaseCreation = () => {
           Add More Pages
         </Button>
       </Paper>
-
+       
       <PageDetaling
         pageName={"phaseCreation"}
         data={{ campaignName: cmpName, campaignId: id }}

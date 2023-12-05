@@ -195,8 +195,8 @@ const PageDetaling = ({
       const planName = data.campaignName + "plan";
 
       const newdata = {
-        planName:"plan",
-        campaignName: "data.campaignName",
+        planName,
+        campaignName: data.campaignName,
         campaignId: data.campaignId,
         pages: allPages,
         
@@ -220,7 +220,7 @@ const PageDetaling = ({
       const planName = data.campaignName + "plan";
       const newdata = {
         planName,
-        campaignName: "cmp",
+        campaignName: data.campaignName,
         campaignId: data.campaignId,
         pages: allPages,
         phaseName:phaseInfo.phaseName,
