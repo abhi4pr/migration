@@ -17,6 +17,7 @@ export default function StatsAllPagesDetail() {
   const [rowData, setRowData] = useState([]);
   const [openDeleteHistoryConFirmation, setOpenDeleteHistoryConFirmation] =
   useState(false);
+  const [updatePercentage, setSetUpdatePercentage] = useState([]);
 
   const apiCall = () => {
     axios
@@ -43,10 +44,25 @@ export default function StatsAllPagesDetail() {
       ).then((res) => {
         console.log(res.data.body);
         setPhpData(res.data.body);
+        let tempdata = res.data.body.filter((ele) => {
+          return ele.platform.toLowerCase() == "instagram";
+        });
+
+        for (let i = 0; i < tempdata.length; i++) {
+          axios
+            .post(`http://34.93.135.33:8080/api/get_percentage`, {
+              p_id: tempdata[i].p_id,
+            })
+            .then((res) => {
+              if (res.status == 200) {
+                setSetUpdatePercentage((prev) => [...prev, res.data]);
+              }
+            });
+        }
+
       });
     apiCall();
       axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
-      console.log(res.data.data);
       setAllUsers(res.data.data);
     });
   }, []);
@@ -136,6 +152,38 @@ export default function StatsAllPagesDetail() {
           </div>
         );
       }
+    },
+    {
+      field: "Update percentage",
+      width: 150,
+      headerName: "Stats Update %",
+      renderCell: (params) => {
+        console.log(
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry.isDeleted
+            : false,
+          params.row.p_id
+        );
+        const num =
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0].totalPercentage
+            : 0;
+        const a =
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry.isDeleted
+            : false;
+        const res = !a ? num : 0;
+        return Math.round(+res) + "%";
+      },
     },
     {
       field: "creation_date",
