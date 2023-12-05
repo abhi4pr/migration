@@ -59,7 +59,7 @@ export default function ExecutionDashboard() {
           return ele.platform.toLowerCase() == "instagram";
         });
         setRows(tempdata);
-
+        setTableData(tempdata);
         for (let i = 0; i < tempdata.length; i++) {
           axios
             .post(`http://34.93.135.33:8080/api/get_percentage`, {

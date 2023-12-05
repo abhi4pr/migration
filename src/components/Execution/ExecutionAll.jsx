@@ -1,11 +1,10 @@
-import React, { use } from "react";
+import React from "react";
 import Stack from "@mui/material/Stack";
 import {
   Autocomplete,
   Button,
   Checkbox,
   InputAdornment,
-  OutlinedInput,
   Paper,
   TextField,
   Typography,
@@ -89,11 +88,11 @@ function ExecutionAll() {
   const [engagementImg, setEngagementImg] = useState();
   const [storyViewImg, setStoryViewImg] = useState();
   const [storyViewVideo, setStoryViewVideo] = useState();
-  const [city1, setCity1] = useState("");
-  const [city2, setCity2] = useState("");
-  const [city3, setCity3] = useState("");
-  const [city4, setCity4] = useState("");
-  const [city5, setCity5] = useState("");
+  const [city1, setCity1] = useState();
+  const [city2, setCity2] = useState();
+  const [city3, setCity3] = useState();
+  const [city4, setCity4] = useState();
+  const [city5, setCity5] = useState();
   const [city1Percentage, setCity1Percentage] = useState(0);
   const [city2Percentage, setCity2Percentage] = useState(0);
   const [city3Percentage, setCity3Percentage] = useState(0);
@@ -113,6 +112,7 @@ function ExecutionAll() {
   const [profileVisit, setProfileVisit] = useState(0);
   const [countryList, setCountryList] = useState([]);
   const [cityList, setCityList] = useState([]);
+  const [cityListTemp, setCityListTemp] = useState();
   const [country1, setCountry1] = useState("");
   const [country2, setCountry2] = useState("");
   const [country3, setCountry3] = useState("");
@@ -170,23 +170,37 @@ function ExecutionAll() {
   useEffect(() => {
     setCountryList(Country.getAllCountries());
 
-    axios.get('http://34.93.135.33:8080/api/get_all_cities').then((res) => {
-      console.log(res.data.data);
+    axios.get("http://34.93.135.33:8080/api/get_all_cities").then((res) => {
+      setCityListTemp(res.data.data.map((city) => city.city_name));
       setCityList(res.data.data.map((city) => city.city_name));
-  });
+    });
 
     // setCityList([
     //   ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
     // ]);
   }, []);
 
-  const cityCopyValidation = (value) => {
+  const cityCopyValidation = (selectedCity, city) => {
     setTimeout(() => {
-      let tempCityList = [...cityList];
+      console.log(selectedCity);
 
-      tempCityList = tempCityList.filter((city) => !value.includes(city));
+      // Early exit if the selected city is null
+      if (selectedCity === null) {
+        let temp = cityListTemp.filter(
+          (city) => ![city1, city2, city3, city4, city5].includes(city)
+        );
+        setCityList([...temp, city]);
+        return;
+      }
 
-      setCityList(tempCityList);
+      // Filter out the selected city from the city list
+      const newCityList = cityListTemp.filter(
+        (city) =>
+          city !== selectedCity &&
+          ![city1, city2, city3, city4, city5].includes(city)
+      );
+
+      setCityList(newCityList);
     }, 400);
   };
 
@@ -349,6 +363,7 @@ function ExecutionAll() {
           }
         });
     }
+    setTimeout(() => {}, 500);
   }, []);
 
   const converttoclipboard = (copydata) => {
@@ -586,12 +601,12 @@ function ExecutionAll() {
             : 0;
 
         const a =
-        updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-        .length > 0
-        ? updatePercentage.filter(
-            (e) => e.latestEntry.p_id == params.row.p_id
-          )[0]?.latestEntry.isDeleted
-        : false;
+          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
+            .length > 0
+            ? updatePercentage.filter(
+                (e) => e.latestEntry.p_id == params.row.p_id
+              )[0]?.latestEntry.isDeleted
+            : false;
         const res = !a ? num : 0;
 
         return (
@@ -716,7 +731,8 @@ function ExecutionAll() {
 
     const preSVDate = new Date(storyViewDate);
     preSVDate.setDate(preSVDate.getDate() + 1);
-    const svDate = preSVDate.toISOString();
+    console.log(preSVDate, "prevSVDate");
+    const svDate = preSVDate != "Invalid Date" ? preSVDate?.toISOString() : "";
 
     const formData = new FormData();
     formData.append("p_id", rowData.p_id);
@@ -1151,7 +1167,7 @@ function ExecutionAll() {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="Quater *"
+                          label="Quarter *"
                           error={!quaterIsValid}
                           helperText={
                             !quaterIsValid ? "Please select an option" : ""
@@ -1507,8 +1523,8 @@ function ExecutionAll() {
                       value={city1}
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
-                        cityCopyValidation(value);
-                        setCity1(value);
+                        cityCopyValidation(value, city1);
+                        setCity1(() => value);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 1" />
@@ -1537,7 +1553,7 @@ function ExecutionAll() {
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity2(value);
-                        cityCopyValidation(value);
+                        cityCopyValidation(value,city2);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 2" />
@@ -1566,7 +1582,7 @@ function ExecutionAll() {
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity3(value);
-                        cityCopyValidation(value);
+                        cityCopyValidation(value,city3);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 3" />
@@ -1595,7 +1611,7 @@ function ExecutionAll() {
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity4(value);
-                        cityCopyValidation(value);
+                        cityCopyValidation(value,city4);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 4" />
@@ -1624,7 +1640,7 @@ function ExecutionAll() {
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity5(value);
-                        cityCopyValidation(value);
+                        cityCopyValidation(value,city5);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 5" />
@@ -1899,8 +1915,7 @@ function ExecutionAll() {
                         value={age1Percentage}
                         onChange={(e) =>
                           handlePercentageChange(
-                            e.target.value,
-                            setAge1Percentage
+                            setAge1Percentage(e.target.value)
                           )
                         }
                         InputProps={{
@@ -1920,8 +1935,7 @@ function ExecutionAll() {
                         value={age2Percentage}
                         onChange={(e) =>
                           handlePercentageChange(
-                            e.target.value,
-                            setAge2Percentage
+                            setAge2Percentage(e.target.value)
                           )
                         }
                         InputProps={{
@@ -1941,8 +1955,7 @@ function ExecutionAll() {
                         value={age3Percentage}
                         onChange={(e) =>
                           handlePercentageChange(
-                            e.target.value,
-                            setAge3Percentage
+                            setAge3Percentage(e.target.value)
                           )
                         }
                         InputProps={{
@@ -1962,8 +1975,7 @@ function ExecutionAll() {
                         value={age4Percentage}
                         onChange={(e) =>
                           handlePercentageChange(
-                            e.target.value,
-                            setAge4Percentage
+                            setAge4Percentage(e.target.value)
                           )
                         }
                         InputProps={{
@@ -1983,8 +1995,7 @@ function ExecutionAll() {
                         value={age5Percentage}
                         onChange={(e) =>
                           handlePercentageChange(
-                            e.target.value,
-                            setAge5Percentage
+                            setAge5Percentage(e.target.value)
                           )
                         }
                         InputProps={{
