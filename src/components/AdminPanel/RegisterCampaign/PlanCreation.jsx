@@ -299,8 +299,9 @@ const PlanCreation = () => {
     }
   };
 
-  const getCampaignName = (detail) => {
-    setCampaignName(detail.exeCmpName);
+  const getCampaignName = (data,cmpName) => {
+    setCampaignName(cmpName);
+    console.log(cmpName)
   };
   // console.log(allPageData)
   console.log(selectedFollower);
