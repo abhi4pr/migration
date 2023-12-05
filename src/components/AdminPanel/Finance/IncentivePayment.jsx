@@ -32,7 +32,10 @@ const IncentivePayment = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_payment_incentive_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_incentive_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -44,7 +47,7 @@ const IncentivePayment = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.assetsName?.toLowerCase().match(search.toLowerCase());
+      return d.name?.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -58,16 +61,16 @@ const IncentivePayment = () => {
     },
     {
       name: "Sales executive name",
-      selector: (row) => row.sub_category_name,
+      selector: (row) => row.name,
     },
     {
       name: "Request Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.request_amount,
     },
 
     {
       name: "Status",
-      selector: (row) => row.paymentAmount,
+      selector: (row) => row.finance_status,
     },
   ];
 

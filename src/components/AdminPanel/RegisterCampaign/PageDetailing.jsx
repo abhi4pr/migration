@@ -27,7 +27,8 @@ const PageDetaling = ({
   searchedpages,
   data,
   setFilteredPages,
-  phaseInfo
+  phaseInfo,
+  setPhaseDataError
 }) => {
   const { toastAlert, toastError } = useGlobalContext();
 
@@ -76,6 +77,22 @@ const PageDetaling = ({
     // console.log(z)
     setAllPages(z);
   };
+
+  const handlePostPerPageChange = (e, params) => {
+    const updatedValue = e.target.value;
+    if (e.target.value > Number(params.row.postRemaining)) {
+      updatedValue = params.row.postRemaining
+    }
+
+    // Check if the input value is being set or cleared
+    if (updatedValue !== params.value || updatedValue === '') {
+      const updatedPages = allPages.map((page) =>
+        page.p_id === params.row.p_id ? { ...page, postPerPage: updatedValue, value: null } : page
+      );
+      setAllPages(updatedPages);
+    }
+  };
+  console.log(allPages);
   const columns = [
     {
       field: "S.NO",
@@ -135,20 +152,31 @@ const PageDetaling = ({
           <input
             style={{ width: "60%" }}
             type="number"
-            value={params.value}
-            placeholder={params.row.postPerPage}
-            onChange={(e) => {
-              const update = allPages.map((page) => {
-                if (params.row.p_id == page.p_id) {
-                  return { ...page, postPerPage: e.target.value };
-                }
-                return page;
-              });
-              console.log(update);
-            }}
+            value={params.row.postPerPage !== null ? params.row.postPerPage : params.value || ''}
+            placeholder={params.row.postPerPage || ''}
+            onChange={(e) => handlePostPerPageChange(e, params)}
           />
         );
       },
+    },
+    {
+      field: "remainingPages",
+      headerName: "remainingPages",
+      width: 150,
+      renderCell: (params) => {
+        // params.value=params.row.postPerPage
+        return (
+          <input
+            style={{ width: "60%" }}
+            type="number"
+            // value={}
+            disabled
+            placeholder={params.row.postRemaining}
+
+          />
+        );
+      },
+
     },
     // {
     //   field: "platform",
@@ -190,7 +218,7 @@ const PageDetaling = ({
   };
 
   const submitPlan = async (e) => {
-    e.preventDefault();
+
     if (pageName == "planCreation") {
       const planName = data.campaignName + "plan";
 
@@ -199,7 +227,7 @@ const PageDetaling = ({
         campaignName: data.campaignName,
         campaignId: data.campaignId,
         pages: allPages,
-        
+
       };
       try {
         const result = await axios.post(
@@ -216,20 +244,27 @@ const PageDetaling = ({
       }
     }
     if (pageName == "phaseCreation") {
-      console.log("phase creation")
+      // console.log("phase creation")
+if(phaseInfo.phaseDataError === ""){
+  setPhaseDataError("Phase ID is Required")
+}
       const planName = data.campaignName + "plan";
+      e.preventDefault();
+      const finalPages = allPages.map((page) => {
+        return { ...page, postRemaining: page.postRemaining - page.postPerPage }
+      })
       const newdata = {
         planName,
         campaignName: data.campaignName,
         campaignId: data.campaignId,
-        pages: allPages,
-        phaseName:phaseInfo.phaseName,
-        desciption:phaseInfo.description,
-        commitment:phaseInfo.commitment
+        pages: finalPages,
+        phaseName: phaseInfo.phaseName,
+        desciption: phaseInfo.description,
+        commitment: phaseInfo.commitment
       };
       try {
         const result = await axios.post(
-          "http://localhost:8080/api/campaignphase",
+          "http://192.168.29.110:8080/api/campaignphase",
           newdata
         );
         console.log(result);

@@ -35,7 +35,10 @@ const PendingApprovalRefund = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_payment_refund_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_refund_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -45,23 +48,12 @@ const PendingApprovalRefund = () => {
     getData();
   }, []);
 
-
-  //Update status
   const handleStatusChange = (row, selectedStatus) => {
     console.log(selectedStatus)
     toastAlert("Status Update Successfully");
         axios
           .put("http://34.93.135.33:8080/api", {
-            // product_id: row.product_id,
-            // order_req_id: row.Order_req_id,
-            // order_quantity: row.Order_quantity,
-            // special_request: row.Special_request,
-            // user_id: row.User_id,
-            // sitting_id: row.Sitting_id,
-            status: selectedStatus, 
-            // request_delivered_by: row.Request_delivered_by,
-            // message: row.Message,
-            // remarks: "",
+            status: selectedStatus
           })
           .then(() => {
             getData();
@@ -73,7 +65,7 @@ const PendingApprovalRefund = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       return (
-        d.assetsName?.toLowerCase().match(search.toLowerCase())
+        d.cust_name?.toLowerCase().match(search.toLowerCase())
       );
     });
     setFilterData(result);
