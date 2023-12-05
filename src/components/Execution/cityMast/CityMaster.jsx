@@ -191,6 +191,7 @@ export default function CityMaster() {
         toastAlert={toastAlert}
         callApi={callApi}
       />
+      {openEditCity &&
       <EditCity
         handleCloseEditCityName={handleCloseEditCityName}
         openEditCity={openEditCity}
@@ -201,6 +202,7 @@ export default function CityMaster() {
         toastAlert={toastAlert}
         handleSaveEditCityName={handleSaveEditCityName}
       />
+      }
     </>
   );
 }
