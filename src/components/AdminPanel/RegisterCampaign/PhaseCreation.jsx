@@ -33,10 +33,10 @@ const PhaseCreation = () => {
   console.log(id);
   const [allPageData, setAllPageData] = useState([]);
   const [phaseData, setPhaseData] = useState("");
+  const [phaseDataError, setPhaseDataError] = useState("")
   const [phaseDcripation, setPhaseDcripation] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
   //state related to filtering and modal
   const [filterdPages, setFilteredPages] = useState([]);
   const [searchedPages, setSearchedPages] = useState([]);
@@ -48,9 +48,9 @@ const PhaseCreation = () => {
   const [modalSearchPage, setModalSearchPage] = useState([]);
   const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [cmpName, setCmpName] = useState('');
+  const [cmpName, setCmpName] = useState("");
   const [allPhaseData, setAllPhaseData] = useState([]);
-  const [newPhaseData, setNewPhaseData] = useState([]);
+  const [showPageDetails, setShowPageDetails] = useState(false);
 
   const Follower_Count = [
     "<10k",
@@ -68,17 +68,20 @@ const PhaseCreation = () => {
     );
     setFilteredPages(pageD.data.data);
 
-    const allpage = await axios.get(`https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`)
-    setAllPageData(allpage.data.body)
-
+    const allpage = await axios.get(
+      `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
+    );
+    setAllPageData(allpage.data.body);
   };
 
   const getPhaseData = async () => {
-    const data = await axios.get(`http://34.93.135.33:8080/api/campaignphase/${id}`)
-    setAllPhaseData(data?.data?.result)
-    console.log(data?.data?.result)
-  }
-  console.log(allPhaseData)
+    const data = await axios.get(
+      `http://34.93.135.33:8080/api/campaignphase/${id}`
+    );
+    setAllPhaseData(data?.data?.result);
+    // console.log(data?.data?.result);
+  };
+  // console.log(allPhaseData);
   useEffect(() => {
     getPageData();
     getPhaseData();
@@ -101,7 +104,6 @@ const PhaseCreation = () => {
   const categorySet = () => {
     filterdPages.forEach((data) => {
       if (!options.includes(data.cat_name)) {
-        // setOptions([...options, data.cat_name])
         options.push(data.cat_name);
       }
     });
@@ -203,7 +205,6 @@ const PhaseCreation = () => {
     }
   }, [selectedCategory]);
 
-
   //useEffect for follower selection change events
   useEffect(() => {
     //
@@ -271,7 +272,6 @@ const PhaseCreation = () => {
             return Number(pages.follower_count) > 5000000;
           }
         }
-        // return selectedCategory.includes(pages.cat_name)
       });
       setFilteredPages(page);
     } else {
@@ -281,17 +281,16 @@ const PhaseCreation = () => {
         });
         setFilteredPages(page);
       } else setFilteredPages(filterdPages);
-    } if (selectedCategory.length == 0) {
-      console.log("hello")
+    }
+    if (selectedCategory.length == 0) {
+      console.log("hello");
     }
   }, [selectedFollower]);
 
-  //this functin will be called whenever category is changed
   const categoryChangeHandler = (e, op) => {
     setSelectedCategory(op);
   };
 
-  //this functin will be called whenever follower count is changed
   const followerChangeHandler = (e, op) => {
     setSelectedFollower(op);
   };
@@ -317,22 +316,15 @@ const PhaseCreation = () => {
     } else {
       console.log("empty");
       setSearched(false);
-      // if(e.targe)
     }
   };
 
   const getCampaignName = (detail, cmp) => {
-    console.log(detail)
-    console.log(cmp)
-    setCmpName(cmp)
-    setCampaignName(detail)
+    setCmpName(cmp);
+    setCampaignName(detail);
   };
-  console.log(campaignName);
-  console.log(selectedFollower);
-
-  //all logic related to add new page modal
+  const [expanded, setExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // console.log(isModalOpen, "dasdas");
   const handleClick = () => {
     setIsModalOpen(true);
   };
@@ -431,83 +423,24 @@ const PhaseCreation = () => {
       editable: true,
     },
   ];
-  // const newData = [1, 2, 3];
-  const [expanded, setExpanded] = useState(false);
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  // console.log(startDate.$d,endDate)
+  // Function to toggle the visibility of page details
+  const togglePageDetails = () => {
+    setShowPageDetails(!showPageDetails);
+  };
+
   return (
     <>
       <div className="form_heading_title">
         <h2 className="form-heading">Phase Creation</h2>
       </div>
       {id && <CampaignDetailes cid={id} getCampaign={getCampaignName} />}
-      
-      <Typography variant="h6" sx={{ margin: "20px", fontWeight: "40px" }}>
-        Phase Details
-      </Typography>
-      <Paper>
-        <Box sx={{ p: 2, m: 2, display: "flex" }}>
-          <TextField
-            label="Phase"
-            value={phaseData}
-            onChange={(e) => setPhaseData(e.target.value)}
-            sx={{ m: 2 }}
-          />
-          <TextField
-            label="Description"
-            value={phaseDcripation}
-            onChange={(e) => setPhaseDcripation(e.target.value)}
-            sx={{ m: 2 }}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Start Date *"
-              format="DD/MM/YY"
-              fullWidth
-              value={startDate}
-              onChange={(e) => setStartDate(e.$d)}
-              sx={{ m: 2 }}
-            />
-            <DatePicker
-              label="End Date *"
-              format="DD/MM/YY"
-              fullWidth
-              value={endDate}
-              onChange={(e) => setEndDate(e.$d)}
-              sx={{ m: 2 }}
-            />
-          </LocalizationProvider>
-        </Box>
-        {campaignName?.map((cmp, index) => {
-          return <Box sx={{ p: 2, m: 2, display: "flex" }}>
 
-            <TextField
-
-              disabled
-              value={cmp?.commitment}
-
-              sx={{ m: 2 }}
-            />
-            <TextField
-              label="Value"
-              defaultValue={"0"}
-              type="number"
-              onChange={(e) => {
-                let x = [...campaignName]
-                x.splice(index, 1, { commitment: cmp?.commitment, value: Number(e.target.value) })
-                setCampaignName(x)
-              }}
-              sx={{ m: 2 }}
-            />
-          </Box>
-        })}
-      </Paper>
-      {/* add Accordion for show phase------------------- */}
-      <Paper sx={{ pb: 4 }}>
+     {/* add Accordion for show phase------------------- */}
+     <Paper sx={{ pb: 4 }}>
         {allPhaseData?.map((item, index) => (
           <Paper key={index} sx={{ mb: 2 }}>
             <Accordion
@@ -529,59 +462,151 @@ const PhaseCreation = () => {
           </Paper>
         ))}
       </Paper>
-
       {/* add Accordion for show end phase------------------- */}
-      <Paper sx={{ display: "flex", gap: "10" }}>
-        <Autocomplete
-          multiple
-          id="combo-box-demo"
-          options={options}
-          renderInput={(params) => <TextField {...params} label="Category" />}
-          onChange={categoryChangeHandler}
-        />
-        <Autocomplete
-          id="combo-box-demo"
-          options={Follower_Count}
-          getOptionLabel={(option) => option}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Follower Count" />
-          )}
-          onChange={followerChangeHandler}
-        />
-        <Autocomplete
-          id="combo-box-demo"
-          options={page_health}
-          getOptionLabel={(option) => option}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label="Page health" />
-          )}
-        />
-        <TextField
-          label="Search"
-          variant="outlined"
-          // value={searchText}
-          onChange={handleSearchChange}
-          style={{ margin: "10px" }}
-        />
-        <Button variant="outlined" onClick={handleClick}>
-          Add More Pages
-        </Button>
-      </Paper>
-       
-      <PageDetaling
-        pageName={"phaseCreation"}
-        data={{ campaignName: cmpName, campaignId: id }}
-        pages={filterdPages?.filter(page=>page.postRemaining >0)}
-        search={searched}
-        searchedpages={searchedPages}
-        setFilteredPages={setFilteredPages}
-        // campaignId={id}
-        // campaignName={campaignName}
-        type={"plan"}
-        phaseInfo={{ "phaseName": phaseData, "description": phaseDcripation, "commitment": campaignName }}
-      />
+
+
+      <Button variant="outlined" onClick={togglePageDetails} sx={{ mt: 2, mb: 4 }}>
+        {showPageDetails ? 'Hide Page Details' : 'Create New Phase'}
+      </Button>
+      {showPageDetails && (
+        <>
+          <Typography variant="h6" sx={{ margin: "20px", fontWeight: "40px" }}>
+            Phase Details
+          </Typography>
+          <Paper>
+            <Box sx={{ p: 2, m: 2, display: "flex" }}>
+              <TextField
+                label="Phase"
+                value={phaseData}
+                onChange={(e) => {
+                  if ((phaseDataError)) {
+                    setPhaseDataError("");
+                  }
+                  setPhaseData(e.target.value);
+                }}
+                sx={{ m: 2 }}
+                error={!!phaseDataError}
+                helperText={phaseDataError}
+              />
+
+
+              <TextField
+                label="Description"
+                value={phaseDcripation}
+                onChange={(e) => setPhaseDcripation(e.target.value)}
+                sx={{ m: 2 }}
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Start Date *"
+                  format="DD/MM/YY"
+                  fullWidth
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.$d)}
+                  sx={{ m: 2 }}
+                />
+                <DatePicker
+                  label="End Date *"
+                  format="DD/MM/YY"
+                  fullWidth
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.$d)}
+                  sx={{ m: 2 }}
+                />
+              </LocalizationProvider>
+            </Box>
+            {campaignName?.map((cmp, index) => {
+              return (
+                <Box sx={{ p: 2, m: 2, display: "flex" }} key={index}>
+                  <TextField disabled value={cmp?.commitment} sx={{ m: 2 }} />
+                  <TextField
+                    label="Value"
+                    defaultValue={"0"}
+                    type="number"
+                    onChange={(e) => {
+                      let x = [...campaignName];
+                      x.splice(index, 1, {
+                        commitment: cmp?.commitment,
+                        value: Number(e.target.value),
+                      });
+                      setCampaignName(x);
+                    }}
+                    sx={{ m: 2 }}
+                  />
+                </Box>
+              );
+            })}
+          </Paper>
+
+          <Paper sx={{ display: "flex", gap: "10" }}>
+            <Autocomplete
+              multiple
+              id="combo-box-demo"
+              options={options}
+              renderInput={(params) => <TextField {...params} label="Category" />}
+              onChange={categoryChangeHandler}
+            />
+            <Autocomplete
+              id="combo-box-demo"
+              options={Follower_Count}
+              getOptionLabel={(option) => option}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Follower Count" />
+              )}
+              onChange={followerChangeHandler}
+            />
+            <Autocomplete
+              id="combo-box-demo"
+              options={page_health}
+              getOptionLabel={(option) => option}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Page health" />
+              )}
+            />
+            <TextField
+              label="Search"
+              variant="outlined"
+              onChange={handleSearchChange}
+              style={{ margin: "10px" }}
+            />
+            <Button variant="outlined" onClick={handleClick}>
+              Add More Pages
+            </Button>
+          </Paper>
+          {/* <PageDetaling
+            pageName={"phaseCreation"}
+            data={{ campaignName: cmpName, campaignId: id }}
+           
+            search={searched}
+            searchedpages={searchedPages}
+            setFilteredPages={setFilteredPages}
+            // campaignId={id}
+            // campaignName={campaignName}
+            type={"plan"}
+            phaseInfo={{ "phaseName": phaseData, "description": phaseDcripation, "commitment": campaignName }}
+          /> */}
+
+          <PageDetaling
+            pageName={"phaseCreation"}
+            data={{ campaignName: cmpName, campaignId: id }}
+            pages={filterdPages?.filter(page => page.postRemaining > 0)}
+            search={searched}
+            searchedpages={searchedPages}
+            setFilteredPages={setFilteredPages}
+            type={"plan"}
+            setPhaseDataError={setPhaseDataError}
+            phaseInfo={{
+              phaseName: phaseData,
+              description: phaseDcripation,
+              commitment: campaignName,
+              phaseDataError: phaseDataError
+
+            }}
+          />
+        </>
+      )}
       <Dialog open={isModalOpen}>
         <DialogTitle>Add more Pages</DialogTitle>
         <DialogContent>
@@ -624,7 +649,6 @@ const PhaseCreation = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* <PageDetaling pages={allPageData} search={false}/> */}
     </>
   );
 };

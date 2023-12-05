@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-import {  Paper, Button } from "@mui/material";//Tooltip
+import {  Paper, Button, Box } from "@mui/material";//Tooltip
 import DeleteIcon from "@mui/icons-material/Delete";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import ReplacePagesModal from "./ReplacePagesModal";
@@ -101,25 +101,7 @@ const PlanOverview = () => {
         </div>
       </div>
       <CampaignDetailes cid={id} />
-      {/* <Box sx={{ p: 2, m: 2 }}>
-        <label
-          style={{ marginTop: "14px", marginRight: "10px", fontSize: "20px" }}
-        >
-          Plan Name :{" "}
-        </label>
-        <TextField
-          disabled
-          id="outlined-disabled"
-          value={selectData[0]?.planName}
-        />
-        <Tooltip title="Delete Plan">
-          <Button type="button">
-            <DeleteIcon />
-          </Button>
-        </Tooltip>
-      </Box> */}
-
-      <DataGrid
+  <Box sx={{ height: 400, width: "100%", mt:2 }}>      <DataGrid
         rows={selectData}
         columns={columns}
         pageSize={5}
@@ -127,6 +109,8 @@ const PlanOverview = () => {
         getRowId={(row) => row.p_id}
       />
       <ReplacePagesModal open={isModalOpen} handleClose={handleCloseModal} />
+      </Box>
+
     </Paper>
   );
 };

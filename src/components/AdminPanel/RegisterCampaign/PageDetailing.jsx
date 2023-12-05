@@ -27,7 +27,8 @@ const PageDetaling = ({
   searchedpages,
   data,
   setFilteredPages,
-  phaseInfo
+  phaseInfo,
+  setPhaseDataError
 }) => {
   const { toastAlert, toastError } = useGlobalContext();
 
@@ -243,7 +244,10 @@ const PageDetaling = ({
       }
     }
     if (pageName == "phaseCreation") {
-      console.log("phase creation")
+      // console.log("phase creation")
+if(phaseInfo.phaseDataError === ""){
+  setPhaseDataError("Phase ID is Required")
+}
       const planName = data.campaignName + "plan";
       e.preventDefault();
       const finalPages = allPages.map((page) => {
@@ -260,7 +264,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "http://localhost:8080/api/campaignphase",
+          "http://192.168.29.110:8080/api/campaignphase",
           newdata
         );
         console.log(result);
