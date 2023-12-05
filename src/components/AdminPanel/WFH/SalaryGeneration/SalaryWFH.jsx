@@ -76,11 +76,13 @@ const SalaryWFH = () => {
   var settings = {
     dots: false,
     arrows: true,
-    infinite: false,
     speed: 500,
-    slidesToShow: 1,
+    // slidesToShow: 8,
+    initialSlide: new Date().getMonth() - 4,
+    slidesToScroll: 1,
     swipeToSlide: true,
     variableWidth: true,
+    infinite: false,
   };
 
   useEffect(() => {
@@ -106,9 +108,6 @@ const SalaryWFH = () => {
     "October",
     "November",
     "December",
-  ];
-  const yearValue = [
-    2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030,
   ];
 
   useEffect(() => {
@@ -137,6 +136,14 @@ const SalaryWFH = () => {
     fetchData();
   }, [department]);
 
+  function gettingSliderData() {
+    axios
+      .get("http://192.168.1.83:8080/api/get_month_year_data")
+      .then((res) => {
+        setCompletedYearsMonths(res.data.data);
+      });
+  }
+
   useEffect(() => {
     axios
       .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
@@ -145,12 +152,7 @@ const SalaryWFH = () => {
       });
 
     //harshal
-    axios
-      .get("http://34.93.135.33:8080/api/get_month_year_data")
-      .then((res) => {
-        setCompletedYearsMonths(res.data.data);
-      });
-    //harshal
+    gettingSliderData();
   }, []);
 
   useEffect(() => {
@@ -211,6 +213,21 @@ const SalaryWFH = () => {
     setYear(data.year);
     setMonth(data.month);
   };
+
+  //Create all Department Salary
+  function handleAllDepartmentSalary() {
+    axios
+      .post("http://192.168.1.83:8080/api/save_all_depts_attendance", {
+        month: month,
+        year: year,
+      })
+      .then(() => {
+        toastAlert("Submitted");
+        gettingSliderData();
+        handleSubmit();
+        gettingDepartmentSalaryExists();
+      });
+  }
 
   const handleSubmit = () => {
     const payload = {
@@ -288,13 +305,16 @@ const SalaryWFH = () => {
       );
   }, [department, month, year]);
 
-  useEffect(() => {
+  function gettingDepartmentSalaryExists() {
     axios
       .post("http://34.93.135.33:8080/api/get_distinct_depts", {
         month: month,
         year: year,
       })
       .then((res) => setDeptSalary(res.data));
+  }
+  useEffect(() => {
+    gettingDepartmentSalaryExists();
   }, [month, year]);
 
   const handleAttendence = () => {
@@ -567,6 +587,79 @@ const SalaryWFH = () => {
       sortable: true,
     },
     {
+      name: "Action",
+      cell: (row) => (
+        <>
+          {/* {row?.invoice_template_no !== "0" && (
+            <PDFDownloadLink
+              document={templateMap[row?.invoice_template_no]}
+              fileName={row?.user_name + " " + row?.month + " " + row?.year}
+              style={{
+                color: "#4a4a4a",
+              }}
+            >
+              <button
+                className="btn btn-outline-primary btn-sm"
+                title="Download Invoice"
+                type="button"
+                onClick={() => handleInvoice(row)}
+              >
+                <CloudDownloadIcon />
+              </button>
+            </PDFDownloadLink>
+          )} */}
+          {!row?.invoice_template_no ? (
+            <button
+              type="button"
+              title="Select Invoice"
+              className="btn btn-primary btn-sm"
+              data-toggle="modal"
+              data-target="#exampleModalCenter"
+              onClick={() => handleInvoice(row)}
+            >
+              {/* select invoice */}
+              <FileOpenIcon />
+            </button>
+          ) : (
+            !row?.sendToFinance && (
+              <button
+                title="Send to Finance"
+                className="btn-outline-primary btn-sm ml-2"
+                onClick={(e) => handleSendToFinance(e, row)}
+              >
+                <IosShareIcon />
+              </button>
+            )
+          )}
+
+          {row.sendToFinance == 1 && row.status_ == 1 && (
+            <button
+              className="btn btn-outline-primary ml-2"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => setRowDataModal(row)}
+            >
+              Paid
+            </button>
+          )}
+          {row.sendToFinance == 1 && row.status_ == 0 && (
+            <button className="btn btn-danger ml-2">Pending</button>
+          )}
+
+          {row?.invoice_template_no !== "0" && row?.digital_signature_image && (
+            <button
+              className="btn btn-outline-primary btn-sm"
+              title="Download Invoice"
+              type="button"
+              onClick={() => generatePDF(row)}
+            >
+              <CloudDownloadIcon />
+            </button>
+          )}
+        </>
+      ),
+    },
+    {
       name: "Employee Name",
       cell: (row) => row.user_name,
       width: "150px",
@@ -649,79 +742,6 @@ const SalaryWFH = () => {
       name: "To Pay",
       cell: (row) => row.toPay + " ₹",
     },
-    {
-      name: "Action",
-      cell: (row) => (
-        <>
-          {/* {row?.invoice_template_no !== "0" && (
-            <PDFDownloadLink
-              document={templateMap[row?.invoice_template_no]}
-              fileName={row?.user_name + " " + row?.month + " " + row?.year}
-              style={{
-                color: "#4a4a4a",
-              }}
-            >
-              <button
-                className="btn btn-outline-primary btn-sm"
-                title="Download Invoice"
-                type="button"
-                onClick={() => handleInvoice(row)}
-              >
-                <CloudDownloadIcon />
-              </button>
-            </PDFDownloadLink>
-          )} */}
-          {!row?.invoice_template_no ? (
-            <button
-              type="button"
-              title="Select Invoice"
-              className="btn btn-primary btn-sm"
-              data-toggle="modal"
-              data-target="#exampleModalCenter"
-              onClick={() => handleInvoice(row)}
-            >
-              {/* select invoice */}
-              <FileOpenIcon />
-            </button>
-          ) : (
-            !row?.sendToFinance && (
-              <button
-                title="Send to Finance"
-                className="btn-outline-primary btn-sm ml-2"
-                onClick={(e) => handleSendToFinance(e, row)}
-              >
-                <IosShareIcon />
-              </button>
-            )
-          )}
-
-          {row.sendToFinance == 1 && row.status_ == 1 && (
-            <button
-              className="btn btn-outline-primary ml-2"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => setRowDataModal(row)}
-            >
-              Paid
-            </button>
-          )}
-          {row.sendToFinance == 1 && row.status_ == 0 && (
-            <button className="btn btn-danger ml-2">Pending</button>
-          )}
-
-          {row?.invoice_template_no !== "0" && row?.digital_signature_image && (
-            <button
-              className="btn btn-outline-primary btn-sm"
-              title="Download Invoice"
-              type="button"
-              onClick={() => generatePDF(row)}
-            >
-              <CloudDownloadIcon />
-            </button>
-          )}
-        </>
-      ),
-    },
   ];
 
   const handleExport = () => {
@@ -787,6 +807,9 @@ const SalaryWFH = () => {
                 {data.month} <span>{data.year}</span>
               </h2>
               <h3>
+                {data.deptCount}/{departmentdata.length}
+              </h3>
+              <h3>
                 {data?.atdGenerated == 1 ? (
                   <span>
                     <i className="bi bi-check2-circle" />
@@ -812,8 +835,18 @@ const SalaryWFH = () => {
       </div>
 
       <div className="card mb24">
-        <div className="card-header">
+        <div className="card-header d-flex justify-content-between">
           <h4>Department</h4>
+          {deptSalary.length !== departmentdata.length && (
+            <span>
+              <button
+                className="btn btn-primary"
+                onClick={handleAllDepartmentSalary}
+              >
+                Create All Department Salary
+              </button>
+            </span>
+          )}
         </div>
         <div className="card-body">
           <div className="d-flex gap4 h_scroller mb24">
