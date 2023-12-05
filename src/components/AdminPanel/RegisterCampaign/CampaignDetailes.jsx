@@ -20,8 +20,8 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
         console.log(err);
       });
   };
-  console.log(campaignData);
-  console.log(commitData)
+  // console.log(campaignData);
+  // console.log(commitData)
   const getBrandInfo = async () => {
     const brand = await axios.get(`http://34.93.135.33:8080/api/get_brands`);
     const myBrand = brand.data.data.find(
@@ -30,13 +30,17 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
     setBrandData(myBrand);
   };
 
+// useEffect(()=>{
+//   getCampaign()
+// },[getCampaign])
+
   const getCampaignName = async () => {
     const camp = await axios.get(`http://34.93.135.33:8080/api/exe_campaign`);
     const mycamp = camp.data.data.find(
       (camp) => camp.exeCmpId == campaignData.exeCmpId
     );
     setCmpName(mycamp);
-    getCampaign(mycamp)
+    // getCampaign(mycamp)
   };
   useEffect(() => {
     getData();
@@ -50,6 +54,13 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
       commInfo.includes(comm.cmtId)
     );
     setCommitData(myComm);
+    console.log(myComm);
+    let data=[]
+    myComm.forEach((x)=>{
+      data.push({commitment:x.cmtName,value:'0'})
+    })
+    console.log(cmpName)
+    getCampaign(data,cmpName.exeCmpName);
   };
   
   useEffect(() => {
@@ -115,7 +126,7 @@ const CampaignDetailes = ({ cid,getCampaign }) => {
                     disabled
                     fullWidth
                     label="value"
-                    value={campaignData?.commitment[index].textValue}
+                    value={campaignData?.commitment[index]?.textValue}
                   />
                 </Grid>
               </>
