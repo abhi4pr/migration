@@ -51,12 +51,8 @@ const Accordioan = ({ data }) => {
       width: 300,
       renderCell: (params) => {
         return (
-          <a
-            href={params.row.page_link}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <p style={{color:"blue"}}> {params.row.page_link}</p>
+          <a href={params.row.page_link} target="_blank" rel="noreferrer">
+            <p style={{ color: "blue" }}> {params.row.page_link}</p>
           </a>
         );
       },
@@ -69,38 +65,40 @@ const Accordioan = ({ data }) => {
           label="Plan Name"
           disabled
           value={data.planName}
-          sx={{ m: 2 }}
+          // sx={{ m: 2 }}
         />
         <TextField
           label="Phase Name"
           disabled
           value={data.phaseName}
-          sx={{ m: 2 }}
+          // sx={{ m: 2 }}
         />
         <TextField
           label="description"
           disabled
           value={data.description}
-          sx={{ m: 2 }}
+          // sx={{ m: 2 }}
         />
       </Box>
       {data.commitment.map((item, ind) => (
-        <Box key={ind} sx={{ display: "flex",ml:5}}>
+        <Box key={ind} sx={{ display: "flex"}}>
           <TextField
             label="commitMent"
             disabled
             value={item.commitment}
-            sx={{ m: 2 }}
+            // sx={{ m: 2 }}
           />
-          <TextField label="value" disabled value={item.value} sx={{ m: 2 }} />
+          <TextField label="value" disabled value={item.value}  />
         </Box>
       ))}
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        getRowId={(row) => row.p_id}
-        pageSizeOptions={[5]}
-      />
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          getRowId={(row) => row.p_id}
+          pageSizeOptions={[5]}
+        />
+      </Box>
     </>
   );
 };
