@@ -16,6 +16,7 @@ export default function EditCity({
   handleEditCity,
   handleSaveEditCityName,
 }) {
+  const [open, setOpen] = useState(true);
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     "& .MuiDialogContent-root": {
       padding: theme.spacing(2),
@@ -26,10 +27,10 @@ export default function EditCity({
   }));
   return (
     <div>
-      <BootstrapDialog
+      <Dialog
         onClose={handleCloseEditCityName}
         aria-labelledby="customized-dialog-title"
-        open={openEditCity}
+        open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           Modal title
@@ -60,7 +61,7 @@ export default function EditCity({
             Save changes
           </Button>
         </DialogActions>
-      </BootstrapDialog>
+      </Dialog>
     </div>
   );
 }
