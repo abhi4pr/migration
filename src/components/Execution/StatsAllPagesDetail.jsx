@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import FormContainer from "../AdminPanel/FormContainer";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridColumnMenu, GridToolbar } from "@mui/x-data-grid";
 import { useState } from "react";
 import { set } from "date-fns";
 import { Button } from "antd";
@@ -18,6 +18,8 @@ export default function StatsAllPagesDetail() {
   const [openDeleteHistoryConFirmation, setOpenDeleteHistoryConFirmation] =
   useState(false);
   const [updatePercentage, setSetUpdatePercentage] = useState([]);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const [copiedData, setCopiedData] = useState("");
 
   const apiCall = () => {
     axios
@@ -80,6 +82,16 @@ export default function StatsAllPagesDetail() {
     setOpenDeleteHistoryConFirmation(false);
   };
  
+  function CustomColumnMenu(props) {
+    return (
+      <GridColumnMenu
+        {...props}
+        slots={{
+          columnMenuColumnsItem: null,
+        }}
+      />
+    );
+  }
   const columns = [
     {
       field: "S.No",
@@ -635,15 +647,33 @@ export default function StatsAllPagesDetail() {
     //   },
     // },
   ];
+  
   return (
     <div>
       <div style={{ width: "100%", margin: "0 0 0 0" }}>
-        <FormContainer mainTitle="All Pages Detail" link="/ip-master" />
+        <FormContainer mainTitle="All Pages Detailed" link="/ip-master" />
         <DataGrid
           rows={allPagesDetail}
           columns={columns}
-          pageSize={10}
+          // pageSize={10}
           getRowId={(row) => row._id}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 50,
+              },
+            },
+          }}
+          slots={{ toolbar: GridToolbar, columnMenu: CustomColumnMenu }}
+          pageSizeOptions={[5, 25, 50, 100, 500]}
+          checkboxSelection
+          disableRowSelectionOnClick
+          onRowSelectionModelChange={(newRowSelectionModel) => {
+            setRowSelectionModel(newRowSelectionModel);
+          }}
+          rowSelectionModel={rowSelectionModel}
+          onClipboardCopy={(copiedString) => setCopiedData(copiedString)}
+          unstable_ignoreValueFormatterDuringExport
         />
       </div>
       <DeleteHistoryConfirmation
