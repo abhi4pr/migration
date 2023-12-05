@@ -41,16 +41,20 @@ const BalancePaymentList = () => {
     formData.append("sim_id", sim_id);
     formData.append("uploaded_by",userID );
     formData.append("type", type);
+    
     await axios.post("http://34.93.135.33:8080/api/add_assets_images", formData, {
-            headers: {
+          headers: {
               "Content-Type": "multipart/form-data",
-            },
-          });
-          setImageModalOpen(false)
+          },
+        });
+      setImageModalOpen(false)
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_payment_bal_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_bal_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -59,9 +63,11 @@ const BalancePaymentList = () => {
   useEffect(() => {
     getData();
   }, []);
+
   const handleImageClick = (row) => {
     setImageModalOpen(true);
   };
+
   const handleCloseImageModal = () => {
     setImageModalOpen(false);
   };
@@ -69,7 +75,7 @@ const BalancePaymentList = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       return (
-        d.assetsName?.toLowerCase().match(search.toLowerCase())
+        d.cust_name?.toLowerCase().match(search.toLowerCase())
       );
     });
     setFilterData(result);
@@ -84,7 +90,7 @@ const BalancePaymentList = () => {
     },
     {
       name: "Customer Name",
-      selector: (row) => "Testing ",
+      selector: (row) => row.cust_name,
       sortable: true,
     },
     {
@@ -94,16 +100,16 @@ const BalancePaymentList = () => {
     },
     {
       name: "Sale Booking Date",
-      selector: (row) =>"07-11-2023",
+      selector: (row) => row.sale_booking_date,
 
     },
     {
       name: "Campaign Amount",
-      selector: (row) => "4000",
+      selector: (row) => row.campaign_amount,
     },
     {
       name: "Paid Amount",
-      selector: (row) => "2600",
+      selector: (row) => row.total_paid_amount,
     },
     {
       name: "Balance Amount",
