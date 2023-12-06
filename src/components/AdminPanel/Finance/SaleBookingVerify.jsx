@@ -33,7 +33,10 @@ const SaleBookingVerify = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_sale_booking_tds_verification_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_sale_booking_tds_verification_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -45,7 +48,7 @@ const SaleBookingVerify = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.assetsName?.toLowerCase().match(search.toLowerCase());
+      return d.cust_name?.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -59,55 +62,55 @@ const SaleBookingVerify = () => {
     },
     {
       name: "Customer Name",
-      selector: (row) => row.sub_category_name,
+      selector: (row) => row.cust_name,
     },
     {
       name: "Sales Executive Name",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.sales_exe_name,
     },
     {
       name: "Booking Date",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.sale_booking_date,
     },
     {
       name: "Campaign Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.campaign_amount,
     },
     {
       name: "Base Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.base_amount,
     },
     {
       name: "GST Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.gst_amount,
     },
     {
       name: "Net Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.net_amount,
     },
     {
       name: "Paid Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.total_paid_amount,
     },
     {
-      name: "Paid Amount",
-      selector: (row) => row.vendor_name,
+      name: "Refund Amount",
+      selector: (row) => row.total_refund_amount,
     },
     {
       name: "Refund Balance Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.balance_refund_amount,
     },
     {
-      name: "Net Balance Customer To Pay Amount",
-      selector: (row) => row.vendor_name,
+      name: "Net Bal Cust To Pay Amt",
+      selector: (row) => row.net_balance_amount_to_pay_percentage,
     },
     {
-      name: "Net Balance Customer to pay Amount (In %)",
+      name: "Net Bal Cust to pay Amt (%)",
       selector: (row) => row.vendor_name,
     },
     {
       name: "Booking Created Date",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.booking_created_date,
     },
     {
       name: "Action",

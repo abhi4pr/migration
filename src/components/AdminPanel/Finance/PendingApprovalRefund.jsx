@@ -80,28 +80,28 @@ const PendingApprovalRefund = () => {
     },
     {
       name: "Customer Name",
-      selector: (row) => row.assetsName,
+      selector: (row) => row.cust_name,
       sortable: true,
     },
     {
       name: "Refund Amount",
-      selector: (row) => row.sub_category_name,
+      selector: (row) => row.refund_amount,
     },
     {
-      name: "Finance Refund Reason",
-      selector: (row) => row.category_name,
+      name: "Finance refund reason",
+      selector: (row) => row.finance_refund_reason,
     },
     {
       name: "Refund Request Date",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.creation_date,
     },
     {
       name: "Refund Updated Date",
-      selector: (row) =>row.dateOfPurchase 
+      selector: (row) =>row.last_updated_date 
     },
     {
       name: "Refund Payment Image",
-      selector: (row) => row.paymentAmount
+      selector: (row) => row.refund_files
     },
     {
       name: "Action",

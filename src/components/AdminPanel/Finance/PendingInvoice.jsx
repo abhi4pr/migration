@@ -34,7 +34,10 @@ const PendingInvoice = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_pending_invoice_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_pending_invoice_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -46,7 +49,7 @@ const PendingInvoice = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.assetsName?.toLowerCase().match(search.toLowerCase());
+      return d.cust_name?.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -64,35 +67,35 @@ const PendingInvoice = () => {
     },
     {
       name: "Requested On Date",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.sale_booking_date,
     },
     {
       name: "Sale Booking Description",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.description,
     },
     {
       name: "Customer Name",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.cust_name,
     },
     {
       name: "Invoice particular",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.invoice_particular_name,
     },
     {
       name: "Upload Invioce",
       selector: (row) => row.vendor_name,
     },
     {
-      name: "Request Amount",
-      selector: (row) => row.vendor_name,
+      name: "Base Amount",
+      selector: (row) => row.base_amount,
     },
     {
       name: "GST Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.gst_amount,
     },
     {
       name: "Net Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.net_amount,
     },
     {
       name: "Action",
@@ -102,7 +105,7 @@ const PendingInvoice = () => {
             className="btn btn-primary"
             onClick={() => navigate("customer-details")}
           >
-            Customer Details Icon
+            Customer Details
           </button>
         </>
       ),

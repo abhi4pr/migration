@@ -941,35 +941,6 @@ const SidebarLinks = () => {
               <Link
                 className="nav-link collapsed"
                 data-toggle="collapse"
-                data-target="#collapsInnerSixFinance"
-                aria-expanded="true"
-                aria-controls="collapsInnerSixFinance"
-              >
-                <span>Pending Payment Followups</span>
-              </Link>
-              <div
-                id="collapsInnerSixFinance"
-                className="collapse"
-                aria-labelledby="headingTwo"
-                // data-parent="#accordionSidebar"
-              >
-                <div className="bg-white collapse-inner">
-                  <>
-                    <Link
-                      className="collapse-item"
-                      to="/admin/finance-pendingpaymentslist"
-                    >
-                      Pending Payments List
-                    </Link>
-                  </>
-                </div>
-              </div>
-            </li>
-
-            <li className="nav-item">
-              <Link
-                className="nav-link collapsed"
-                data-toggle="collapse"
                 data-target="#collapsInnerSevenFinance"
                 aria-expanded="true"
                 aria-controls="collapsInnerSevenFinance"
