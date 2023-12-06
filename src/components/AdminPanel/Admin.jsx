@@ -161,6 +161,7 @@ import PendingInvoiceCustomerDeatils from "./Finance/PendingInvoiceCustomerDeati
 import InvoiceCreated from "./Finance/InvoiceCreated";
 import PendingPaymentsList from "./Finance/PendingPaymentsList";
 import CityMaster from "../Execution/cityMast/CityMaster";
+import Expertise from "./RegisterCampaign/Expertise";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -640,6 +641,7 @@ const Admin = () => {
                   <Route path="/planOverview/:id" element={<PlanOverview />} />
                   <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
+                  <Route path="/expertise" element={<Expertise />} />
 
                   <Route
                     path="/checkPageFollowers"

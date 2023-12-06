@@ -617,11 +617,18 @@ const SidebarLinks = () => {
                           >
                            PhaseCreation
                           </Link> */}
+
                           <Link
                             className="collapse-item"
                             to="/admin/checkPageFollowers"
                           >
                             Check Page Follower
+                          </Link>
+                          <Link
+                            className="collapse-item"
+                            to="/admin/expertise"
+                          >
+                           Expertise Master
                           </Link>
                           <Link
                             className="collapse-item"
