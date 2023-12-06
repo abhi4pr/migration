@@ -138,7 +138,7 @@ const SalaryWFH = () => {
 
   function gettingSliderData() {
     axios
-      .get("http://192.168.1.83:8080/api/get_month_year_data")
+      .get("http://34.93.135.33:8080/api/get_month_year_data")
       .then((res) => {
         setCompletedYearsMonths(res.data.data);
       });
@@ -217,7 +217,7 @@ const SalaryWFH = () => {
   //Create all Department Salary
   function handleAllDepartmentSalary() {
     axios
-      .post("http://192.168.1.83:8080/api/save_all_depts_attendance", {
+      .post("http://34.93.135.33:8080/api/save_all_depts_attendance", {
         month: month,
         year: year,
       })
@@ -748,13 +748,20 @@ const SalaryWFH = () => {
     const formattedData = filterData?.map((row, index) => ({
       "S.No": index + 1,
       "Employee Name": row.user_name,
+      Department: row.dept_name,
+      Designation: row.designation_name,
+      DOJ: row.joining_date,
       "Work Days": 26,
       Month: row.month,
+      salary: row.salary + " ₹",
       "Absent Days": row.noOfabsent,
       "Present Days": 26 - Number(row.noOfabsent),
       "Total Salary": `${row.total_salary} ₹`,
-      TDS: `${row.tds_deduction} ₹`,
+      Bonus: row.bonus + " ₹",
+      Deductions: row.salary_deduction,
       "Net Salary": `${row.net_salary} ₹`,
+      TDS: `${row.tds_deduction} ₹`,
+      "To Pay": row.toPay + " ₹",
     }));
 
     const fileName = "data.xlsx";
