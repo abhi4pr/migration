@@ -37,6 +37,7 @@ const PhaseCreation = () => {
   const [phaseDcripation, setPhaseDcripation] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const [actualPlanData,setActualPlanData] = useState([])
   //state related to filtering and modal
   const [filterdPages, setFilteredPages] = useState([]);
   const [searchedPages, setSearchedPages] = useState([]);
@@ -67,6 +68,7 @@ const PhaseCreation = () => {
       `http://34.93.135.33:8080/api/campaignplan/${id}`
     );
     setFilteredPages(pageD.data.data);
+    setActualPlanData(pageD.data.data);
 
     const allpage = await axios.get(
       `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
@@ -206,10 +208,89 @@ const PhaseCreation = () => {
   }, [selectedCategory]);
 
   //useEffect for follower selection change events
+  // useEffect(() => {
+  //   //
+  //   if (selectedFollower) {
+  //     const page = filterdPages.filter((pages) => {
+  //       if (selectedFollower == "<10k") {
+  //         if (selectedCategory.length > 0) {
+  //           return (
+  //             Number(pages.follower_count) <= 10000 &&
+  //             selectedCategory.includes(pages.cat_name)
+  //           );
+  //         } else {
+  //           return Number(pages.follower_count) <= 10000;
+  //         }
+  //       }
+  //       if (selectedFollower == "10k to 100k ") {
+  //         if (selectedCategory.length > 0) {
+  //           return (
+  //             Number(pages.follower_count) <= 100000 &&
+  //             Number(pages.follower_count) > 10000 &&
+  //             selectedCategory.includes(pages.cat_name)
+  //           );
+  //         } else {
+  //           return (
+  //             Number(pages.follower_count) <= 100000 &&
+  //             Number(pages.follower_count) > 10000
+  //           );
+  //         }
+  //       }
+  //       if (selectedFollower == "100k to 1M ") {
+  //         if (selectedCategory.length > 0) {
+  //           return (
+  //             Number(pages.follower_count) <= 1000000 &&
+  //             Number(pages.follower_count) > 100000 &&
+  //             selectedCategory.includes(pages.cat_name)
+  //           );
+  //         } else {
+  //           return (
+  //             Number(pages.follower_count) <= 1000000 &&
+  //             Number(pages.follower_count) > 100000
+  //           );
+  //         }
+  //       }
+  //       if (selectedFollower == "1M to 5M ") {
+  //         if (selectedCategory.length > 0) {
+  //           return (
+  //             Number(pages.follower_count) <= 5000000 &&
+  //             Number(pages.follower_count) > 1000000 &&
+  //             selectedCategory.includes(pages.cat_name)
+  //           );
+  //         } else {
+  //           return (
+  //             Number(pages.follower_count) <= 5000000 &&
+  //             Number(pages.follower_count) > 1000000
+  //           );
+  //         }
+  //       }
+  //       if (selectedFollower == ">5M ") {
+  //         if (selectedCategory.length > 0) {
+  //           return (
+  //             Number(pages.follower_count) > 5000000 &&
+  //             selectedCategory.includes(pages.cat_name)
+  //           );
+  //         } else {
+  //           return Number(pages.follower_count) > 5000000;
+  //         }
+  //       }
+  //     });
+  //     setFilteredPages(page);
+  //   } else {
+  //     if (selectedCategory.length > 0) {
+  //       const page = filterdPages.filter((pages) => {
+  //         return selectedCategory.includes(pages.cat_name);
+  //       });
+  //       setFilteredPages(page);
+  //     } else setFilteredPages(filterdPages);
+  //   }
+    
+  // }, [selectedFollower]);
+
   useEffect(() => {
     //
     if (selectedFollower) {
-      const page = filterdPages.filter((pages) => {
+      const page = actualPlanData.filter((pages) => {
         if (selectedFollower == "<10k") {
           if (selectedCategory.length > 0) {
             return (
@@ -272,20 +353,22 @@ const PhaseCreation = () => {
             return Number(pages.follower_count) > 5000000;
           }
         }
+        // return selectedCategory.includes(pages.cat_name)
       });
       setFilteredPages(page);
     } else {
       if (selectedCategory.length > 0) {
-        const page = filterdPages.filter((pages) => {
+        const page = allPhaseData.filter((pages) => {
           return selectedCategory.includes(pages.cat_name);
         });
         setFilteredPages(page);
-      } else setFilteredPages(filterdPages);
-    }
-    if (selectedCategory.length == 0) {
-      console.log("hello");
+      } else setFilteredPages(actualPlanData);
+    }if(selectedCategory.length == 0 && !selectedFollower ) {
+    setFilteredPages(actualPlanData);
+
     }
   }, [selectedFollower]);
+
 
   const categoryChangeHandler = (e, op) => {
     setSelectedCategory(op);
