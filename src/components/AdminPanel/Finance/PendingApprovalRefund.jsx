@@ -38,7 +38,7 @@ const PendingApprovalRefund = () => {
     axios.post("http://34.93.135.33:8080/api/add_php_payment_refund_data_in_node").then((res)=>{
       console.log('data save in local success')
     })
-    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_refund_data").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_refund_data_pending").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
