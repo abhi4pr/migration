@@ -16,7 +16,7 @@ export default function ForgetPassword() {
     // console.log(email);
     if (email.trim() === "") {
       // alert("Please enter email");
-      setErrMessage('Please enter Email !')
+      setErrMessage("Please enter Email !");
       return;
     } else {
       axios
@@ -117,7 +117,11 @@ export default function ForgetPassword() {
                   <button className="btn btn-icon btn_primary" type="submit">
                     <i className="fas fa-arrow-right" />
                   </button>
-                  <button type="button" class="btn btn-warning btn-xs" style={{float:"right"}}>
+                  <button
+                    type="button"
+                    className="btn btn-warning btn-xs"
+                    style={{ float: "right" }}
+                  >
                     <Link to={`/login`}>Login</Link>
                   </button>
                 </div>
