@@ -79,7 +79,7 @@ const PageDetaling = ({
   };
 
   const handlePostPerPageChange = (e, params) => {
-    const updatedValue = e.target.value;
+    let updatedValue = e.target.value;
     if (e.target.value > Number(params.row.postRemaining)) {
       updatedValue = params.row.postRemaining
     }
@@ -264,7 +264,7 @@ if(phaseInfo.phaseDataError === ""){
       };
       try {
         const result = await axios.post(
-          "http://192.168.29.110:8080/api/campaignphase",
+          "http://34.93.135.33:8080/api/campaignphase",
           newdata
         );
         console.log(result);
