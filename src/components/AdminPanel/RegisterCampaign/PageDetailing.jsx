@@ -79,7 +79,7 @@ const PageDetaling = ({
   };
 
   const handlePostPerPageChange = (e, params) => {
-    const updatedValue = e.target.value;
+    let updatedValue = e.target.value;
     if (e.target.value > Number(params.row.postRemaining)) {
       updatedValue = params.row.postRemaining;
     }
