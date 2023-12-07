@@ -28,7 +28,7 @@ const PageDetaling = ({
   data,
   setFilteredPages,
   phaseInfo,
-  setPhaseDataError
+  setPhaseDataError,
 }) => {
   const { toastAlert, toastError } = useGlobalContext();
 
@@ -56,7 +56,7 @@ const PageDetaling = ({
       }
     } else {
       if (searchedpages?.length > 0) {
-        console.log("first");
+        // console.log("first");
         const addPost = searchedpages.map((page) => {
           return { ...page, postPerPage: 0 };
         });
@@ -81,18 +81,20 @@ const PageDetaling = ({
   const handlePostPerPageChange = (e, params) => {
     let updatedValue = e.target.value;
     if (e.target.value > Number(params.row.postRemaining)) {
-      updatedValue = params.row.postRemaining
+      updatedValue = params.row.postRemaining;
     }
 
     // Check if the input value is being set or cleared
-    if (updatedValue !== params.value || updatedValue === '') {
+    if (updatedValue !== params.value || updatedValue === "") {
       const updatedPages = allPages.map((page) =>
-        page.p_id === params.row.p_id ? { ...page, postPerPage: updatedValue, value: null } : page
+        page.p_id === params.row.p_id
+          ? { ...page, postPerPage: updatedValue, value: null }
+          : page
       );
       setAllPages(updatedPages);
     }
   };
-  console.log(allPages);
+  // console.log(allPages);
   const columns = [
     {
       field: "S.NO",
@@ -152,8 +154,12 @@ const PageDetaling = ({
           <input
             style={{ width: "60%" }}
             type="number"
-            value={params.row.postPerPage !== null ? params.row.postPerPage : params.value || ''}
-            placeholder={params.row.postPerPage || ''}
+            value={
+              params.row.postPerPage !== null
+                ? params.row.postPerPage
+                : params.value || ""
+            }
+            placeholder={params.row.postPerPage || ""}
             onChange={(e) => handlePostPerPageChange(e, params)}
           />
         );
@@ -172,11 +178,9 @@ const PageDetaling = ({
             // value={}
             disabled
             placeholder={params.row.postRemaining}
-
           />
         );
       },
-
     },
     // {
     //   field: "platform",
@@ -218,7 +222,6 @@ const PageDetaling = ({
   };
 
   const submitPlan = async (e) => {
-
     if (pageName == "planCreation") {
       const planName = data.campaignName + "plan";
 
@@ -227,14 +230,13 @@ const PageDetaling = ({
         campaignName: data.campaignName,
         campaignId: data.campaignId,
         pages: allPages,
-
       };
       try {
         const result = await axios.post(
           "http://34.93.135.33:8080/api/campaignplan",
           newdata
         );
-        console.log(result);
+        // console.log(result);
         toastAlert("Plan Created SuccessFully");
         setTimeout(() => {
           navigate("/admin/registered-campaign");
@@ -245,14 +247,17 @@ const PageDetaling = ({
     }
     if (pageName == "phaseCreation") {
       // console.log("phase creation")
-if(phaseInfo.phaseDataError === ""){
-  setPhaseDataError("Phase ID is Required")
-}
+      if (phaseInfo.phaseDataError === "") {
+        setPhaseDataError("Phase ID is Required");
+      }
       const planName = data.campaignName + "plan";
       e.preventDefault();
       const finalPages = allPages.map((page) => {
-        return { ...page, postRemaining: page.postRemaining - page.postPerPage }
-      })
+        return {
+          ...page,
+          postRemaining: page.postRemaining - page.postPerPage,
+        };
+      });
       const newdata = {
         planName,
         campaignName: data.campaignName,
@@ -260,14 +265,14 @@ if(phaseInfo.phaseDataError === ""){
         pages: finalPages,
         phaseName: phaseInfo.phaseName,
         desciption: phaseInfo.description,
-        commitment: phaseInfo.commitment
+        commitment: phaseInfo.commitment,
       };
       try {
         const result = await axios.post(
           "http://34.93.135.33:8080/api/campaignphase",
           newdata
         );
-        console.log(result);
+        // console.log(result);
         toastAlert("Plan Created SuccessFully");
         setTimeout(() => {
           navigate("/admin/registered-campaign");
@@ -277,7 +282,7 @@ if(phaseInfo.phaseDataError === ""){
       }
     }
   };
-  console.log(allPages);
+  // console.log(allPages);
   return (
     <Paper>
       <Box sx={{ p: 2 }}>

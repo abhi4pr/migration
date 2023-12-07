@@ -34,7 +34,10 @@ const InvoiceCreated = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_pending_invoice_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_pending_invoice_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -46,7 +49,7 @@ const InvoiceCreated = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
-      return d.assetsName?.toLowerCase().match(search.toLowerCase());
+      return d.cust_name?.toLowerCase().match(search.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -60,15 +63,15 @@ const InvoiceCreated = () => {
     },
     {
       name: "Customer name",
-      selector: (row) => row.sub_category_name,
+      selector: (row) => row.cust_name,
     },
     {
       name: "Invoice Particular",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.invoice_particular_name,
     },
     {
       name: "Campaign Amount",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.campaign_amount,
     },
     {
       name: "Download Invoice",
@@ -80,7 +83,7 @@ const InvoiceCreated = () => {
     },
     {
       name: "Remark",
-      selector: (row) => row.vendor_name,
+      selector: (row) => row.remarks,
     },
   ];
 
@@ -100,7 +103,7 @@ const InvoiceCreated = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Pending Invoice Creation"
+            title="Invoice Created"
             columns={columns}
             data={filterData}
             fixedHeader

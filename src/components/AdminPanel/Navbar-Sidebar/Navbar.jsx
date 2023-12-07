@@ -3,8 +3,8 @@ import jwtDecode from "jwt-decode";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import imageTest1 from "../../../assets/img/product/Avtrar1.png";
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import DoneIcon from '@mui/icons-material/Done';
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import DoneIcon from "@mui/icons-material/Done";
 
 const Navbar = () => {
   const [count, setCount] = useState(0);
@@ -31,16 +31,16 @@ const Navbar = () => {
 
   const fetchData = async () => {
     await axios
-    .get("http://34.93.135.33:8080/api/get_all_unreden_notifications")
-    .then((res) => {
-      setNotificationData(res.data.data)
-      setCount(res.data.data.length);
-    });
+      .get("http://34.93.135.33:8080/api/get_all_unreden_notifications")
+      .then((res) => {
+        setNotificationData(res.data.data);
+        setCount(res.data.data.length);
+      });
   };
 
   useEffect(() => {
     fetchData();
-    
+
     const intervalId = setInterval(() => {
       fetchData();
     }, 60000);
@@ -49,11 +49,11 @@ const Navbar = () => {
 
   const NotificationsOff = async (_id) => {
     // e.preventDefault();
-    await axios.put(`http://34.93.135.33:8080/api/update_notification/`,{
+    await axios.put(`http://34.93.135.33:8080/api/update_notification/`, {
       _id: _id,
-      readen: true
+      readen: true,
     });
-    fetchData()
+    fetchData();
   };
 
   return (
@@ -98,23 +98,35 @@ const Navbar = () => {
             </div>
           </li>
           <li>
-            <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <NotificationsActiveIcon /><span>{count}</span>
+            <div className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <NotificationsActiveIcon />
+                <span>{count}</span>
               </a>
-              <div class="dropdown-menu">
-                
-                 {notificationData.map((notification) => (
+              <div className="dropdown-menu">
+                {notificationData.map((notification) => (
                   <div>
-                      <div id={notificationData._id} aria-labelledby="headingOne">
-                          {' - ' + notification.notification_message}
-                          <DoneIcon onClick={()=>NotificationsOff(notification._id)} />
-                      </div>
+                    <div id={notificationData._id} aria-labelledby="headingOne">
+                      {" - " + notification.notification_message}
+                      <DoneIcon
+                        onClick={() => NotificationsOff(notification._id)}
+                      />
+                    </div>
                   </div>
-                 ))}
-                
-                <button type="button" class="btn btn-success btn-xs">
-                  <Link to={`/admin/pre-onboard-all-notifications/`}>See All</Link>
+                ))}
+
+                <button type="button" className="btn btn-success btn-xs">
+                  <Link to={`/admin/pre-onboard-all-notifications/`}>
+                    See All
+                  </Link>
                 </button>
               </div>
             </div>

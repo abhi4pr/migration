@@ -35,7 +35,10 @@ const AllTransactions = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.post("http://34.93.135.33:8080/api/add_php_payment_acc_data_in_node").then((res)=>{
+      console.log('data save in local success')
+    })
+    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_acc_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -69,51 +72,55 @@ const AllTransactions = () => {
     },
     {
       name:<div style={{ whiteSpace: 'normal' }}>Customer Name</div>,
-      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Arvind Kejriwal| 2023-11-28| 1200 </div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>{row.cust_name}</div>,
       width: "8%",
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Campaign Amount</div>,
-      selector: (row) => <div style={{ whiteSpace: 'normal' }}>1200 </div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>{row.campaign_amount} </div>,
       width: "6%",
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Campaign Amount Without Gst</div>,
-      selector: (row) => "2800",
+      selector: (row) => row.campaign_amount_without_gst,
       width: "6%",
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Payment On Date</div>,
-      selector: (row) => "28-11-2023",
+      selector: (row) => row.payment_date,
       width: "7%",
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Payment Amount</div>,
-      selector: (row) => "2100",
+      selector: (row) => row.payment_amount,
       width: "6%",
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Payment Mode</div>,
-      selector: (row) => "UPI",
+      selector: (row) => row.payment_mode,
       width: "6%",
     },
     {
+      name: <div style={{ whiteSpace: 'normal' }}>Payment View</div>,
+      selector: (row) => row.payment_approval_status,
+    },
+    {
       name: "Bank Name",
-      selector: (row) => <div style={{ whiteSpace: 'normal' }}>GST Payment Details </div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}>{row.gst_bank} </div>,
     },
     {
       name: "Bank Detail",
-      selector: (row) => <div style={{ whiteSpace: 'normal' }}>Bank Name: Kotak Mahindra Bank Account Name: Creativefuel Pvt Ltd Account No: 2814216875 IFSE Code: KKBK0005915 Branch: Vijay Nagar, Indore (M.P.) </div>,
+      selector: (row) => <div style={{ whiteSpace: 'normal' }}> Indore (M.P.) </div>,
       width: "12%",
     },
     {
       name: <div style={{ whiteSpace: 'normal' }}>Reference No</div>,
-      selector: (row) => "mdfklkb",
+      selector: (row) => row.payment_ref_no,
       width: "5%",
     },
     {
       name: "Remarks",
-      selector: (row) => "test remarks",
+      selector: (row) => row.remarks,
       width: "8%",
     },
     {

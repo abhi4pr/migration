@@ -6,13 +6,13 @@ import { saveAs } from "file-saver";
 import { Typography } from "antd";
 import axios from "axios";
 
-export default function AddPage({setXlxsData}) {
+export default function AddPage({ setXlxsData }) {
   const [gridRows, setGridRows] = useState([]);
-  const [followerData, setFollowerData] =useState([])
-  console.log(gridRows, "---->gridRows");
-  console.log(followerData, "---->followerData");
+  const [followerData, setFollowerData] = useState([]);
+  // console.log(gridRows, "---->gridRows");
+  // console.log(followerData, "---->followerData");
 
-//  ------> add addSerialNumber---
+  //  ------> add addSerialNumber---
   const addSerialNumber = (rows) => {
     return rows.map((row, index) => ({
       ...row,
@@ -40,14 +40,16 @@ export default function AddPage({setXlxsData}) {
 
   //  Interagation of followerData api ----- ** start ** ------------------
   useEffect(() => {
-    console.log( "gridRows");
-    axios.get('http://34.93.135.33:8080/api/getallprojectx').then((response) => {
-      const data = response.data;
-      console.log(data,"<--------");
-      // if (gridRows.length > 0) {
+    // console.log( "gridRows");
+    axios
+      .get("http://34.93.135.33:8080/api/getallprojectx")
+      .then((response) => {
+        const data = response.data;
+        // console.log(data,"<--------");
+        // if (gridRows.length > 0) {
         // const filteredData = [];
         // for (const item of data) {
-        //   for (const gridRow of gridRows) { 
+        //   for (const gridRow of gridRows) {
         //     if (gridRow.page_name === item.page_name) {
         //       filteredData.push(item);
         //       break;
@@ -55,15 +57,16 @@ export default function AddPage({setXlxsData}) {
         //   }
         // }
         const filteredData = data.filter((item) => {
-          return gridRows.map((gridRow) => gridRow.Page_name).includes(item.page_name);
+          return gridRows
+            .map((gridRow) => gridRow.Page_name)
+            .includes(item.page_name);
         });
-        console.log(filteredData, "filteredData meeee");
+        // console.log(filteredData, "filteredData meeee");
         setFollowerData(filteredData);
-      }
-  )}, [gridRows]);
-  
-  // Interagation of followerData api ----- ** End ** ------------------
+      });
+  }, [gridRows]);
 
+  // Interagation of followerData api ----- ** End ** ------------------
 
   // upload file --********* start *******************---
   const fileInputRef = useRef(null);
@@ -74,7 +77,7 @@ export default function AddPage({setXlxsData}) {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       const reader = new FileReader();
-      console.log(reader,"<-----reader");
+      // console.log(reader,"<-----reader");
 
       reader.onload = (event) => {
         const fileData = event.target.result;
@@ -82,10 +85,9 @@ export default function AddPage({setXlxsData}) {
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const parsedData = XLSX.utils.sheet_to_json(sheet);
-        console.log(parsedData,"<-----parsedData");
+        // console.log(parsedData,"<-----parsedData");
         setGridRows(parsedData);
-        setXlxsData(parsedData)
-        
+        setXlxsData(parsedData);
       };
       reader.readAsArrayBuffer(selectedFile);
     }
@@ -94,11 +96,7 @@ export default function AddPage({setXlxsData}) {
 
   // Template file --*************** start*---
   const createExcelTemplate = () => {
-    const headers = [
-      "s_no",
-      "Page_name",
-      "followers_count",
-          ];
+    const headers = ["s_no", "Page_name", "followers_count"];
     const data = [];
 
     const ws = XLSX.utils.json_to_sheet(data, { header: headers });
@@ -123,8 +121,6 @@ export default function AddPage({setXlxsData}) {
     return buf;
   };
   // Template file --* End*---
-
-
 
   return (
     <Paper sx={{ height: 400, width: "100%" }}>
@@ -156,15 +152,15 @@ export default function AddPage({setXlxsData}) {
         >
           Upload
         </Button>
-          <Button
-            size="md"
-            onClick={createExcelTemplate}
-            variant="contained"
-            color="success"
-            style={{ marginRight: "16px", margin: "8px", color: "#fff" }}
-          >
-            Template
-          </Button>
+        <Button
+          size="md"
+          onClick={createExcelTemplate}
+          variant="contained"
+          color="success"
+          style={{ marginRight: "16px", margin: "8px", color: "#fff" }}
+        >
+          Template
+        </Button>
       </Paper>
 
       <input
