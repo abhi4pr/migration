@@ -74,7 +74,7 @@ const PlanCreation = () => {
     );
     setRemainingPages(remainingData);
   }, [filterdPages]);
-  console.log(remainingPages);
+  // console.log(remainingPages);
   //this function will feed the category data to categories option array
   const categorySet = () => {
     allPageData.forEach((data) => {
@@ -288,27 +288,27 @@ const PlanCreation = () => {
           );
         });
 
-        console.log(searched);
+        // console.log(searched);
         setSearchedPages(searched);
         setSearched(true);
       }, 500);
     } else {
-      console.log("empty");
+      // console.log("empty");
       setSearched(false);
       // if(e.targe)
     }
   };
 
-  const getCampaignName = (data,cmpName) => {
+  const getCampaignName = (data, cmpName) => {
     setCampaignName(cmpName);
-    console.log(cmpName)
+    // console.log(cmpName)
   };
   // console.log(allPageData)
-  console.log(selectedFollower);
+  // console.log(selectedFollower);
 
   //all logic related to add new page modal
 
-  console.log(isModalOpen, "dasdas");
+  // console.log(isModalOpen, "dasdas");
   const handleClick = () => {
     setIsModalOpen(true);
   };
@@ -320,7 +320,7 @@ const PlanCreation = () => {
     if (!e.target.value.length == 0) {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         const searched = remainingPages.filter((page) => {
           return (
             page.page_name
@@ -329,7 +329,7 @@ const PlanCreation = () => {
             page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
           );
         });
-        console.log(searched);
+        // console.log(searched);
         setModalSearchPage(searched);
         setModalSearchPageStatus(true);
       }, 500);
@@ -341,7 +341,7 @@ const PlanCreation = () => {
     const selectedRowData = selectedRows.map((rowId) =>
       remainingPages.find((row) => row.p_id === rowId)
     );
-    console.log(selectedRowData);
+    // console.log(selectedRowData);
     setFilteredPages([...filterdPages, ...selectedRowData]);
     setModalSearchPageStatus(false);
     setIsModalOpen(false);
@@ -367,7 +367,7 @@ const PlanCreation = () => {
     text = e.target.value;
   };
   const handleModalPageCP = () => {
-    console.log(text.split(/\s+/));
+    // console.log(text.split(/\s+/));
     const pageInfo = text.split(/\s+/);
     let x = [];
     const remainingData = allPageData.filter((item) =>
@@ -384,9 +384,9 @@ const PlanCreation = () => {
       return { page_name: element, status: false, p_id: String(pid) };
     });
     setFilteredPages([...remainingData, ...falsepage]);
-    console.log(x);
-    console.log(differenceArray);
-    console.log(remainingData);
+    // console.log(x);
+    // console.log(differenceArray);
+    // console.log(remainingData);
   };
 
   const blue = {
@@ -506,7 +506,7 @@ const PlanCreation = () => {
         </div>
       </div>
       <CampaignDetailes cid={id} getCampaign={getCampaignName} />
-    
+
       <Paper sx={{ display: "flex", justifyContent: "space-around" }}>
         <Autocomplete
           multiple
