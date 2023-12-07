@@ -161,7 +161,7 @@ import PendingInvoiceCustomerDeatils from "./Finance/PendingInvoiceCustomerDeati
 import InvoiceCreated from "./Finance/InvoiceCreated";
 import PendingPaymentsList from "./Finance/PendingPaymentsList";
 import CityMaster from "../Execution/cityMast/CityMaster";
-import Expertise from "./RegisterCampaign/Expertise";
+import Experties from "./RegisterCampaign/Experties/Experties";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -629,6 +629,7 @@ const Admin = () => {
                     path="/register-campaign"
                     element={<RegisterCampaign />}
                   />
+                  <Route path="/experties" element={<Experties />} />
                   <Route
                     path="/registered-campaign"
                     element={<RegisteredCampaign />}
@@ -641,7 +642,6 @@ const Admin = () => {
                   <Route path="/planOverview/:id" element={<PlanOverview />} />
                   <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
-                  <Route path="/expertise" element={<Expertise />} />
 
                   <Route
                     path="/checkPageFollowers"
@@ -695,7 +695,10 @@ const Admin = () => {
 
                   {/*------------------------ Execution --------------------------------*/}
                   <Route path="/cityMsater" element={<CityMaster />} />
-                    <Route path="/exeexecution/dashboard" element={<ExecutionDashboard />} />
+                  <Route
+                    path="/exeexecution/dashboard"
+                    element={<ExecutionDashboard />}
+                  />
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />
