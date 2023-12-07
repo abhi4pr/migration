@@ -282,7 +282,7 @@ const SimOverview = () => {
           className="btn btn-outline-success"
           onClick={() => handleImageClick(row.sim_id)}
         >
-          <i class="bi bi-images"></i>
+          <i className="bi bi-images"></i>
         </button>
       ),
     },
@@ -292,7 +292,7 @@ const SimOverview = () => {
       cell: (row) => (
         <>
           {/* <button className="btn btn-outline-success">
-            <i class="bi bi-images"></i>
+            <i className="bi bi-images"></i>
           </button> */}
           <Link to={`/sim-update/${row.sim_id}`}>
             <button
