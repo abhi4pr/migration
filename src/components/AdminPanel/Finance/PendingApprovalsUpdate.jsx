@@ -18,34 +18,24 @@ const PendingApprovalUpdate = () => {
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [status, setStatus] = useState("")
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
   const handleStatusChange = (row, selectedStatus) => {
-  console.log(selectedStatus)
-  toastAlert("Status Update Successfully");
-      axios
-        .put("http://34.93.135.33:8080/api", {
-          status: selectedStatus
-        })
-        .then(() => {
-          getData();
-          toastAlert("Status Update Successfully");
-        });
-    
+    setStatus(selectedStatus)
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
       await axios.post("http://34.93.135.33:8080/api/",{
-        display_sequence: displaySeq,
+        status: status,
       });
 
-      toastAlert("Coc created");
+      toastAlert("Data updated");
       setIsFormSubmitted(true);
   };
 

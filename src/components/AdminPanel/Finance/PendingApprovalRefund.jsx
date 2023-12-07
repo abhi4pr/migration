@@ -18,6 +18,8 @@ const PendingApprovalRefund = () => {
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [status, setStatus] = useState("");
+  const [refundImage, setRefundImage] = useState(null);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -25,12 +27,16 @@ const PendingApprovalRefund = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/",{
-        display_sequence: displaySeq,
+      const formData = new FormData();
+      formData.append("status",status)
+      formData.append("refund_image",refundImage)
+      await axios.post("http://34.93.135.33:8080/api/", formData ,{
+        headers:{
+          "Content-Type":"multipart/form-data"
+        }
       });
 
-      toastAlert("Coc created");
+      toastAlert("Data updated");
       setIsFormSubmitted(true);
   };
 
@@ -49,18 +55,8 @@ const PendingApprovalRefund = () => {
   }, []);
 
   const handleStatusChange = (row, selectedStatus) => {
-    console.log(selectedStatus)
-    toastAlert("Status Update Successfully");
-        axios
-          .put("http://34.93.135.33:8080/api", {
-            status: selectedStatus
-          })
-          .then(() => {
-            getData();
-            toastAlert("Status Update Successfully");
-          });
-      
-    };
+    setStatus(selectedStatus)
+  };
 
   useEffect(() => {
     const result = datas.filter((d) => {
@@ -101,7 +97,12 @@ const PendingApprovalRefund = () => {
     },
     {
       name: "Refund Payment Image",
-      selector: (row) => row.refund_files
+      selector: (row) => (
+        <form>
+            <input type="file" name="refund_image" onChange={(e)=>setRefundImage(e.target.files[0])} />
+            <button type="submit" value="upload">Upload</button>
+        </form>
+      )
     },
     {
       name: "Action",

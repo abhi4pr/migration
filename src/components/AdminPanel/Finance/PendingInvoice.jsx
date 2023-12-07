@@ -17,20 +17,23 @@ const PendingInvoice = () => {
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [uploadImage, setUploadImage] = useState(null);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    const formData = new FormData();
+      formData.append("refund_image",refundImage)
+      await axios.post("http://34.93.135.33:8080/api/", formData ,{
+        headers:{
+          "Content-Type":"multipart/form-data"
+        }
+      });
 
-    await axios.post("http://34.93.135.33:8080/api/", {
-      display_sequence: displaySeq,
-    });
-
-    toastAlert("Coc created");
-    setIsFormSubmitted(true);
+      toastAlert("Data updated");
+      setIsFormSubmitted(true);
   };
 
   function getData() {
@@ -83,7 +86,12 @@ const PendingInvoice = () => {
     },
     {
       name: "Upload Invioce",
-      selector: (row) => row.vendor_name,
+      selector: (row) => (
+      <form>
+        <input type="file" name="upload_image" onChange={(e)=>setUploadImage(e.target.files[0])} />
+        <button type="submit" value="upload">Upload</button>
+      </form>
+    ),
     },
     {
       name: "Base Amount",

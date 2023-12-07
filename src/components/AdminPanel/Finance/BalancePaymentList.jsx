@@ -34,19 +34,18 @@ const BalancePaymentList = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("img1",image1 );
-    formData.append("img2", image2);
-    formData.append("img3", image3);
-    formData.append("img4", image4);
-    formData.append("sim_id", sim_id);
-    formData.append("uploaded_by",userID );
-    formData.append("type", type);
+    formData.append("balance_amount", balAmount);
+    formData.append("payment_ref_no", paymentRefNo);
+    formData.append("payment_ref_image", paymentRefImg);
+    formData.append("payment_type", paymentType);
+    formData.append("payment_detail", paymentDetails);
+    formData.append("payment_mode", paymentMode);
     
     await axios.post("http://34.93.135.33:8080/api/add_assets_images", formData, {
-          headers: {
-              "Content-Type": "multipart/form-data",
-          },
-        });
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       setImageModalOpen(false)
   };
 
@@ -184,7 +183,7 @@ const BalancePaymentList = () => {
       >
         <div>
           <div className="d-flex justify-content-between mb-2">
-            <h2>Assets Images</h2>
+            <h2>Balance Payment Update</h2>
 
             <button
               className="btn btn-success float-left"
@@ -194,79 +193,77 @@ const BalancePaymentList = () => {
             </button>
           </div>               
         </div> 
-      <div className="row">
-        <div className="col-md-12 ">
-          <form onSubmit={handleSubmit}>
-            
-          <div className="form-group col-12">
-        <label className="form-label">
-          Type <sup style={{ color: "red" }}>*</sup>
-        </label>
-       
-      </div>
+        <div className="row">
+          <div className="col-md-12 ">
+            <form onSubmit={handleSubmit}>
+              
+            <div className="form-group col-12"></div>
 
-            {/* images */}
             <div className="form-group">
-              <label htmlFor="images">Image First</label>
+              <label htmlFor="images">Balance Amount</label>
               <input
-                type="file"
+                type="number"
                 className="form-control"
                 id="images"
                 name="images"
-                // onChange={(e) => {
-                //     setImage1(e.target.files[0]);
-                //   }}
-                accept="image/*"
+                value={balAmount}
+                onChange={(e)=>setBalAmount(e.target.value)}
                 required
               />
             </div>
 
-            {/* images */}
             <div className="form-group">
-              <label htmlFor="images">Image Secound</label>
+              <label htmlFor="images">Payment Reference Number:</label>
               <input
-                type="file"
+                type="text"
                 className="form-control"
                 id="images"
                 name="images"
-                // onChange={(e) => {
-                //     setImage2(e.target.files[0]);
-                //   }}
-                accept="image/*"
-             
+                value={paymentRefNo}
+                onChange={(e)=>setPaymentRefNo(e.target.value)}
               />
             </div>
 
-            {/* images */}
             <div className="form-group">
-              <label htmlFor="images">Image Third</label>
+              <label htmlFor="images">Payment Reference Image:</label>
               <input
                 type="file"
                 className="form-control"
                 id="images"
                 name="images"
-                // onChange={(e) => {
-                //     setImage3(e.target.files[0]);
-                //   }}
                 accept="image/*"
-               
+                onChange={(e)=>setRefImage(e.target.files[0])}
               />
             </div>
 
-            {/* images */}
             <div className="form-group">
-              <label htmlFor="images">Image Four</label>
-              <input
-                type="file"
-                className="form-control"
-                id="images"
-                name="images"
-                // onChange={(e) => {
-                //     setImage4(e.target.files[0]);
-                //   }}
-                accept="image/*"
-                
-              />
+              <label htmlFor="images">Payment Type</label>
+              <select name="payment_type" value={paymentType} onChange={(e) => setPaymentType(e.target.value)}>
+              <option value="full">full</option>
+              <option value="partial">partial</option>
+            </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="images">Payment Details</label>
+              <select name="payment_detail" value={paymentDetails} onChange={(e)=> setPaymentDetails(e.target.value)}>
+                <option value="Gst payment details">Gst payment details</option>
+                <option value="paypal">paypal</option>
+                <option value="other payment details">other payment details</option>
+                <option value="upi details for mmc">upi details for mmc</option>
+                <option value="bank details for sarcasm">bank details for sarcasm</option>
+                <option value="bank details for mmc">bank details for mmc</option>
+                <option value="upi mmc">upi mmc</option>
+                <option value="meta mask for ethereum">meta mask for ethereum</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="images">Payment Mode</label>
+              <select name="cars" value={paymentMode} onChange={(e)=> setPaymentMode(e.target.value)}>
+                <option value="cash">cash</option>
+                <option value="others">others</option>
+              </select>
             </div>
 
             <button type="submit" className="btn btn-primary">

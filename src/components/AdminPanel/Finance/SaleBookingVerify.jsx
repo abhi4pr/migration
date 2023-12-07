@@ -5,6 +5,7 @@ import FormContainer from "../FormContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
 
 const SaleBookingVerify = () => {
   const { toastAlert } = useGlobalContext();
@@ -16,6 +17,9 @@ const SaleBookingVerify = () => {
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [balAmount, setBalAmount] = useState("");
+  const [remark, setRemark] = useState("");
+  const [ImageModalOpen, setImageModalOpen] = useState(false);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -23,13 +27,25 @@ const SaleBookingVerify = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await axios.post("http://34.93.135.33:8080/api/", {
-      display_sequence: displaySeq,
+    const formData = new FormData()
+    formData.append("balance_amount", balAmount)
+    formData.append("remark", remark)
+    await axios.post("http://34.93.135.33:8080/api/", formData, {
+      headers:{
+        "application-type":"multipart/form-data"
+      }
     });
 
-    toastAlert("Coc created");
+    toastAlert("Data Updated");
     setIsFormSubmitted(true);
+  };
+
+  const handleImageClick = (row) => {
+    setImageModalOpen(true);
+  };
+
+  const handleCloseImageModal = () => {
+    setImageModalOpen(false);
   };
 
   function getData() {
@@ -114,7 +130,14 @@ const SaleBookingVerify = () => {
     },
     {
       name: "Action",
-      selector: (row) => row.vendor_name,
+      selector: (row) => (
+        <button
+          className="btn btn-sm btn-outline-info"
+          onClick={() => handleImageClick(row)}
+        >
+          Verify
+        </button>
+      ),
     },
   ];
 
@@ -154,6 +177,74 @@ const SaleBookingVerify = () => {
           />
         </div>
       </div>
+      
+      <Modal
+        isOpen={ImageModalOpen}
+        onRequestClose={handleCloseImageModal}
+        style={{
+          content: {
+            width: "80%",
+            height: "80%",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        <div>
+          <div className="d-flex justify-content-between mb-2">
+            <h2>Sale Booking Verify</h2>
+
+            <button
+              className="btn btn-success float-left"
+              onClick={handleCloseImageModal}
+            >
+              X
+            </button>
+          </div>               
+        </div> 
+        <div className="row">
+          <div className="col-md-12 ">
+            <form onSubmit={handleSubmit}>
+              
+            <div className="form-group col-12"></div>
+
+            <div className="form-group">
+              <label htmlFor="images">Amount:</label>
+              <input
+                type="number"
+                className="form-control"
+                id="images"
+                name="images"
+                value={balAmount}
+                onChange={(e)=>setBalAmount(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="images">Remark:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="images"
+                name="images"
+                value={remark}
+                onChange={(e)=>setRemark(e.target.value)}
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+
+      </Modal>
     </>
   );
 };
