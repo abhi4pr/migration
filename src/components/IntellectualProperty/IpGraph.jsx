@@ -24,7 +24,7 @@ const setFollowersDataY = {
     "Oct",
     "Nov",
     "Dec",
-  ],
+  ],  
   datasets: [
     {
       label: "# of Followers",

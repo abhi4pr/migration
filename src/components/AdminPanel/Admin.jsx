@@ -162,6 +162,7 @@ import InvoiceCreated from "./Finance/InvoiceCreated";
 import PendingPaymentsList from "./Finance/PendingPaymentsList";
 import CityMaster from "../Execution/cityMast/CityMaster";
 import Experties from "./RegisterCampaign/Experties/Experties";
+import PagePerformanceDashboard from "../Execution/PagePerformanceDashboard";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -695,10 +696,8 @@ const Admin = () => {
 
                   {/*------------------------ Execution --------------------------------*/}
                   <Route path="/cityMsater" element={<CityMaster />} />
-                  <Route
-                    path="/exeexecution/dashboard"
-                    element={<ExecutionDashboard />}
-                  />
+                    <Route path="/exeexecution/dashboard" element={<ExecutionDashboard />} />
+                    <Route path="/exeexecution/PagePerformanceDashboard" element={<PagePerformanceDashboard />} />
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />
