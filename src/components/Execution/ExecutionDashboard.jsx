@@ -18,7 +18,6 @@ export default function ExecutionDashboard() {
   const [pagemode, setPagemode] = useState(1);
   const [copiedData, setCopiedData] = useState("");
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const [updatePercentage, setSetUpdatePercentage] = useState([]);
   const [rows, setRows] = useState([]);
   const [alldata, setAlldata] = useState([]);
@@ -69,9 +68,22 @@ export default function ExecutionDashboard() {
               if (res.status == 200) {
                 setSetUpdatePercentage((prev) => [...prev, res.data]);
               }
+            })
+            .catch((err) => {
+              console.log(err, `err for ${tempdata[i].p_id}`);
+              setSetUpdatePercentage((prev) => [
+                ...prev,
+
+                {
+                  latestEntry: {
+                    p_id: +tempdata[i].p_id,
+                  },
+                  totalPercentage: 0,
+                },
+              ]);
             });
         }
-  
+
         for (let i = 0; i < tempdata.length; i++) {
           axios
             .get(
@@ -146,7 +158,6 @@ export default function ExecutionDashboard() {
     }
     setDataLessThan25(temp25);
 
-
     let temp50 = [];
     for (let i = 0; i < updatePercentage.length; i++) {
       if (
@@ -157,7 +168,6 @@ export default function ExecutionDashboard() {
       }
     }
 
-  
     setDataLessThan50(temp50);
 
     let temp75 = [];
@@ -169,7 +179,7 @@ export default function ExecutionDashboard() {
         temp75.push(updatePercentage[i]);
       }
     }
- 
+
     setDataLessThan75(temp75);
 
     let temp100 = [];
@@ -184,7 +194,6 @@ export default function ExecutionDashboard() {
     setDataLessThan100(temp100);
 
     return temp25;
-    
   };
 
   setTimeout(() => {
@@ -211,6 +220,16 @@ export default function ExecutionDashboard() {
           field: "page_name",
           headerName: "Page Name",
           width: 250,
+          renderCell: (params) => {
+            const date = params.row.page_link;
+            return (
+              <div style={{ color: "blue" }}>
+                <a href={date} target="blank">
+                  {date == "" ? "" : params.row.page_name}
+                </a>
+              </div>
+            );
+          }
         }
       : pagemode == 3 || pagemode == 4
       ? {
@@ -433,7 +452,6 @@ export default function ExecutionDashboard() {
   ];
 
   const handlesetTableDataByPercentage = (data) => {
-
     let a = data.map((e) => e.latestEntry.p_id);
     const matchingData = rows.filter((item) => a.includes(parseInt(item.p_id)));
     setTableData(matchingData);
@@ -461,7 +479,7 @@ export default function ExecutionDashboard() {
                 // variant="contained"
                 color="primary"
                 onClick={() => {
-                    handlesetTableDataByPercentage(dataLessThan25);
+                  handlesetTableDataByPercentage(dataLessThan25);
                 }}
               >
                 {dataLessThan25.length}
@@ -482,7 +500,9 @@ export default function ExecutionDashboard() {
             <p className="fs-5">
               {" "}
               Page Count :-{" "}
-              <Button onClick={() => handlesetTableDataByPercentage(dataLessThan50)}>
+              <Button
+                onClick={() => handlesetTableDataByPercentage(dataLessThan50)}
+              >
                 {dataLessThan50.length}
               </Button>
             </p>
@@ -501,7 +521,7 @@ export default function ExecutionDashboard() {
               {" "}
               Page Count :-{" "}
               <Button
-              onClick={() => handlesetTableDataByPercentage(dataLessThan75 )}
+                onClick={() => handlesetTableDataByPercentage(dataLessThan75)}
               >
                 {dataLessThan75.length}
               </Button>
@@ -522,7 +542,7 @@ export default function ExecutionDashboard() {
               {" "}
               Page Count :-{" "}
               <Button
-              onClick={() => handlesetTableDataByPercentage(dataLessThan100)}
+                onClick={() => handlesetTableDataByPercentage(dataLessThan100)}
               >
                 {dataLessThan100.length}
               </Button>
