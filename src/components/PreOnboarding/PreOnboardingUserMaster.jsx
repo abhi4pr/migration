@@ -193,6 +193,29 @@ const PreOnboardingUserMaster = () => {
   const [getNickName, setGetNickName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readyToOnboardModal, setReadyToOnboard] = useState(false);
+  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
+
+  useEffect(() => {
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setCoordinates({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+          }
+        );
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    };
+
+    getLocation();
+  }, []);
 
   const fetchCOCData = async () => {
     try {
@@ -527,6 +550,8 @@ const PreOnboardingUserMaster = () => {
     formData.append("gaurdian_number", Number(guardianContact));
     formData.append("relation_with_guardian", relationToGuardian);
     formData.append("guardian_address", guardianAddress);
+    formData.append("latitude", coordinates.latitude);
+    formData.append("longitude", coordinates.longitude);
 
     axios
       .put(`http://34.93.135.33:8080/api/update_user`, formData, {
