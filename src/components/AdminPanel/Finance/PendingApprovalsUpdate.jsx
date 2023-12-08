@@ -149,7 +149,7 @@ const PendingApprovalUpdate = () => {
     },
     {
       name: "Action",
-      selector: (row,index) => <><Link to={`/admin/payment-summary/${index + 1}`}>
+      selector: (row,index) => <><Link to={`/admin/payment-summary/${row.cust_id}`}>
       <button
         title="Summary"
         className="btn btn-outline-primary btn-sm user-button"
@@ -165,7 +165,7 @@ const PendingApprovalUpdate = () => {
    return (
     <>
       <FormContainer
-        mainTitle="All Transactions"
+        mainTitle="Pending approval for update"
         link="/admin/finance-alltransaction"
         buttonAccess={
           contextData &&
@@ -178,7 +178,7 @@ const PendingApprovalUpdate = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="All Refund Request"
+            title="Pending approval for update"
             columns={columns}
             data={filterData}
             fixedHeader

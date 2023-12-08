@@ -4,7 +4,7 @@ import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const PendingInvoice = () => {
   const navigate = useNavigate();
@@ -109,12 +109,11 @@ const PendingInvoice = () => {
       name: "Action",
       cell: (row) => (
         <>
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate("customer-details")}
-          >
+        <Link to={`/admin/finance-pendinginvoice/customer-details/${row.cust_id}`}>
+          <button className="btn btn-primary" >
             Customer Details
           </button>
+        </Link>
         </>
       ),
     },

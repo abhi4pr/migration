@@ -48,11 +48,7 @@ const PaymentSummary = () => {
   useEffect(() => {
     const result = datas.filter((d) => {
       return (
-        d.assetsName?.toLowerCase().match(search.toLowerCase()) ||
-        d.category_name?.toLowerCase().match(search.toLowerCase()) ||
-        d.vendor_name?.toLowerCase().match(search.toLowerCase()) ||
-        d.sub_category_name?.toLowerCase().match(search.toLowerCase())
-       
+        d.cust_name?.toLowerCase().match(search.toLowerCase())
       );
     });
     setFilterData(result);

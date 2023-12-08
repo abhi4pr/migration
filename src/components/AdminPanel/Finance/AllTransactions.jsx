@@ -129,7 +129,7 @@ const AllTransactions = () => {
     },
     {
       name: "Action",
-      selector: (row,index) => <><Link to={`/admin/payment-summary/${index + 1}`}>
+      selector: (row,index) => <><Link to={`/admin/payment-summary/${row.cust_id}`}>
       <button
         title="Summary"
         className="btn btn-outline-primary btn-sm user-button"

@@ -542,7 +542,7 @@ const Admin = () => {
                     element={<PendingInvoice />}
                   />
                   <Route
-                    path="/finance-pendinginvoice/customer-details"
+                    path="/finance-pendinginvoice/customer-details/:id"
                     element={<PendingInvoiceCustomerDeatils />}
                   />
                   <Route
