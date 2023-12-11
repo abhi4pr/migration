@@ -35,32 +35,26 @@ export default function StatsAllPagesDetail() {
     formData.append("loggedin_user_id", 36);
 
     axios
-      .post(
-        "https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
+      .get(
+        "http://34.93.135.33:8080/api/get_all_purchase_data",
       ).then((res) => {
-        console.log(res.data.body);
-        setPhpData(res.data.body);
-        let tempdata = res.data.body.filter((ele) => {
+        console.log(res.data.result);
+        setPhpData(res.data.result);
+        let tempdata = res.data.result.filter((ele) => {
           return ele.platform.toLowerCase() == "instagram";
         });
 
-        for (let i = 0; i < tempdata.length; i++) {
-          axios
-            .post(`http://34.93.135.33:8080/api/get_percentage`, {
-              p_id: tempdata[i].p_id,
-            })
-            .then((res) => {
-              if (res.status == 200) {
-                setSetUpdatePercentage((prev) => [...prev, res.data]);
-              }
-            });
-        }
+        // for (let i = 0; i < tempdata.length; i++) {
+        //   axios
+        //     .post(`http://34.93.135.33:8080/api/get_percentage`, {
+        //       p_id: tempdata[i].p_id,
+        //     })
+        //     .then((res) => {
+        //       if (res.status == 200) {
+        //         setSetUpdatePercentage((prev) => [...prev, res.data]);
+        //       }
+        //     });
+        // }
 
       });
     apiCall();
@@ -149,52 +143,28 @@ export default function StatsAllPagesDetail() {
         );
       }
     },
-    {
-      field:"acc_cat",
-      headerName:"Account Category",
-      width:150,
-      renderCell: (params) => {
-        return (
-          <div>
-            {params.row?.p_id ? (
-              <>{phpData.filter((e) => e.p_id == params.row.p_id)[0]?.cat_name}</>
-            ) : (
-              ""
-            )}
-          </div>
-        );
-      }
-    },
+      {
+        field:"acc_cat",
+        headerName:"Account Category",
+        width:150,
+        renderCell: (params) => {
+          return (
+            <div>
+              {params.row?.p_id ? (
+                <>{phpData?.filter((e) => e.p_id == params?.row.p_id)[0]?.cat_name}</>
+              ) : (
+                ""
+              )}
+            </div>
+          );
+        }
+      },
     {
       field: "Update percentage",
       width: 150,
       headerName: "Stats Update %",
       renderCell: (params) => {
-        console.log(
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry.isDeleted
-            : false,
-          params.row.p_id
-        );
-        const num =
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0].totalPercentage
-            : 0;
-        const a =
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry.isDeleted
-            : false;
-        const res = !a ? num : 0;
-        return Math.round(+res) + "%";
+        return Math.round(+phpData?.filter(e=>e.p_id==params?.row.p_id)[0]?.totalPercentage) + "%";
       },
     },
     {
