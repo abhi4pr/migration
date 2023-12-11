@@ -720,6 +720,12 @@ const SidebarLinks = () => {
                           >
                             Creater Dashborad
                           </Link>
+                          <Link
+                            className="collapse-item"
+                            to="/admin/excusionCampaign"
+                          >
+                            Excusion Campaign
+                          </Link>
                         </>
                       </div>
                     </div>
