@@ -491,7 +491,7 @@ const SidebarLinks = () => {
                           className="collapse-item"
                         >
                           Dashboard
-                        </Link> 
+                        </Link>
                         <Link
                           to="/admin/exeexecution/PagePerformanceDashboard"
                           className="collapse-item"
@@ -617,7 +617,10 @@ const SidebarLinks = () => {
                           >
                             Registered Campaign
                           </Link>
-                          <Link className="collapse-item" to="/admin/experties">
+                          <Link
+                            className="collapse-item"
+                            to="/admin/experties-overview"
+                          >
                             Experties
                           </Link>
                           {/* <Link

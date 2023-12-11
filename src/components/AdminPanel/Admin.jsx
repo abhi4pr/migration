@@ -164,6 +164,8 @@ import CityMaster from "../Execution/cityMast/CityMaster";
 import Experties from "./RegisterCampaign/Experties/Experties";
 import PagePerformanceDashboard from "../Execution/PagePerformanceDashboard";
 import ExcusionCampaign from "./RegisterCampaign/ExcusionCampaign";
+import ExpertiesOverview from "./RegisterCampaign/Experties/ExpertiesOverview";
+import ExpertiesUpdate from "./RegisterCampaign/Experties/ExpertUpdate";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -633,6 +635,15 @@ const Admin = () => {
                   />
                   <Route path="/experties" element={<Experties />} />
                   <Route
+                    path="/experties-overview"
+                    element={<ExpertiesOverview />}
+                  />
+                  <Route
+                    path="/expeties-update"
+                    element={<ExpertiesUpdate />}
+                  />
+
+                  <Route
                     path="/registered-campaign"
                     element={<RegisteredCampaign />}
                   />
@@ -659,7 +670,10 @@ const Admin = () => {
                   <Route path="/subcategory" element={<SubCategoryMaster />} />
 
                   <Route path="/contentcreater" element={<ContentCreater />} />
-                  <Route path="/excusionCampaign" element={<ExcusionCampaign />} />
+                  <Route
+                    path="/excusionCampaign"
+                    element={<ExcusionCampaign />}
+                  />
 
                   {/* ----------------------lead source routes -----------------------------*/}
                   <Route
@@ -698,8 +712,14 @@ const Admin = () => {
 
                   {/*------------------------ Execution --------------------------------*/}
                   <Route path="/cityMsater" element={<CityMaster />} />
-                    <Route path="/exeexecution/dashboard" element={<ExecutionDashboard />} />
-                    <Route path="/exeexecution/PagePerformanceDashboard" element={<PagePerformanceDashboard />} />
+                  <Route
+                    path="/exeexecution/dashboard"
+                    element={<ExecutionDashboard />}
+                  />
+                  <Route
+                    path="/exeexecution/PagePerformanceDashboard"
+                    element={<PagePerformanceDashboard />}
+                  />
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
                   <Route path="/exe-history/:id" element={<ExeHistory />} />
                   <Route path="/execution" element={<OverviewIndex />} />

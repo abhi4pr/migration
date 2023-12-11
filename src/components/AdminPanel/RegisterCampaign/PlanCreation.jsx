@@ -36,6 +36,7 @@ const PlanCreation = () => {
   const [modalSearchPage, setModalSearchPage] = useState([]);
   const [modalSearchPageStatus, setModalSearchPageStatus] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [postpage, setPostPage] = useState(0);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -138,6 +139,7 @@ const PlanCreation = () => {
             );
           }
         }
+        ok;
         if (selectedFollower == "1M to 5M ") {
           if (selectedCategory.length > 0) {
             return (
@@ -267,6 +269,7 @@ const PlanCreation = () => {
   //this functin will be called whenever category is changed
   const categoryChangeHandler = (e, op) => {
     setSelectedCategory(op);
+    setPostPage(0);
   };
 
   //this functin will be called whenever follower count is changed
@@ -320,7 +323,6 @@ const PlanCreation = () => {
     if (!e.target.value.length == 0) {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        // console.log(e.target.value);
         const searched = remainingPages.filter((page) => {
           return (
             page.page_name
@@ -329,7 +331,6 @@ const PlanCreation = () => {
             page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
           );
         });
-        // console.log(searched);
         setModalSearchPage(searched);
         setModalSearchPageStatus(true);
       }, 500);
@@ -479,7 +480,6 @@ const PlanCreation = () => {
       field: "post_page",
       headerName: "post / page",
       width: 150,
-
       renderCell: (params) => {
         return (
           <input
@@ -555,6 +555,8 @@ const PlanCreation = () => {
         pages={filterdPages}
         search={searched}
         searchedpages={searchedPages}
+        setPostPage={setPostPage}
+        postpage={postpage}
         setFilteredPages={setFilteredPages}
         data={{ campaignId: id, campaignName }}
       />

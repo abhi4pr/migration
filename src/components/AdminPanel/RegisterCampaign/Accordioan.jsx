@@ -7,7 +7,6 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const Accordioan = ({ data }) => {
   const rows = data?.pages;
-  console.log(rows, "newData come form accordian");
   // const param = useParams();
   // const id = param.id;
   const columns = [
@@ -79,16 +78,17 @@ const Accordioan = ({ data }) => {
           value={data.description}
           // sx={{ m: 2 }}
         />
+        {console.log(data.desciption, "hello description")}
       </Box>
       {data.commitment.map((item, ind) => (
-        <Box key={ind} sx={{ display: "flex"}}>
+        <Box key={ind} sx={{ display: "flex" }}>
           <TextField
             label="commitMent"
             disabled
             value={item.commitment}
             // sx={{ m: 2 }}
           />
-          <TextField label="value" disabled value={item.value}  />
+          <TextField label="value" disabled value={item.value} />
         </Box>
       ))}
       <Box sx={{ height: 400, width: "100%" }}>

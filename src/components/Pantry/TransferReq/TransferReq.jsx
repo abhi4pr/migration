@@ -45,7 +45,7 @@ const TransferReq = () => {
     },
     {
       name: "Sitting Area",
-      cell: (row) => row.sitting_area,
+      cell: (row) => row.Sitting_area,
       width: "15%",
     },
     {

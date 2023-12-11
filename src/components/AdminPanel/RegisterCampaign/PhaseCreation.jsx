@@ -30,14 +30,13 @@ let options = [];
 const PhaseCreation = () => {
   const param = useParams();
   const id = param.id;
-  console.log(id);
   const [allPageData, setAllPageData] = useState([]);
   const [phaseData, setPhaseData] = useState("");
-  const [phaseDataError, setPhaseDataError] = useState("")
+  const [phaseDataError, setPhaseDataError] = useState("");
   const [phaseDcripation, setPhaseDcripation] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [actualPlanData,setActualPlanData] = useState([])
+  const [actualPlanData, setActualPlanData] = useState([]);
   //state related to filtering and modal
   const [filterdPages, setFilteredPages] = useState([]);
   const [searchedPages, setSearchedPages] = useState([]);
@@ -52,6 +51,8 @@ const PhaseCreation = () => {
   const [cmpName, setCmpName] = useState("");
   const [allPhaseData, setAllPhaseData] = useState([]);
   const [showPageDetails, setShowPageDetails] = useState(false);
+
+  const [postpage, setPostPage] = useState(0);
 
   const Follower_Count = [
     "<10k",
@@ -81,17 +82,11 @@ const PhaseCreation = () => {
       `http://34.93.135.33:8080/api/campaignphase/${id}`
     );
     setAllPhaseData(data?.data?.result);
-    // console.log(data?.data?.result);
   };
-  // console.log(allPhaseData);
   useEffect(() => {
     getPageData();
     getPhaseData();
   }, []);
-
-
-  // console.log(filterdPages)
-  // console.log(allPageData)
 
   useEffect(() => {
     const remainingData = allPageData.filter(
@@ -100,7 +95,6 @@ const PhaseCreation = () => {
     );
     setRemainingPages(remainingData);
   }, [filterdPages]);
-  console.log(remainingPages);
 
   //this function will feed the category data to categories option array
   const categorySet = () => {
@@ -203,7 +197,6 @@ const PhaseCreation = () => {
       setFilteredPages(filterdPages);
     } else if (selectedCategory.length == 0 && selectedFollower) {
       setFilteredPages(filterdPages);
-      console.log();
     }
   }, [selectedCategory]);
 
@@ -284,7 +277,7 @@ const PhaseCreation = () => {
   //       setFilteredPages(page);
   //     } else setFilteredPages(filterdPages);
   //   }
-    
+
   // }, [selectedFollower]);
 
   useEffect(() => {
@@ -363,15 +356,15 @@ const PhaseCreation = () => {
         });
         setFilteredPages(page);
       } else setFilteredPages(actualPlanData);
-    }if(selectedCategory.length == 0 && !selectedFollower ) {
-    setFilteredPages(actualPlanData);
-
+    }
+    if (selectedCategory.length == 0 && !selectedFollower) {
+      setFilteredPages(actualPlanData);
     }
   }, [selectedFollower]);
 
-
   const categoryChangeHandler = (e, op) => {
     setSelectedCategory(op);
+    setPostPage(0);
   };
 
   const followerChangeHandler = (e, op) => {
@@ -392,12 +385,10 @@ const PhaseCreation = () => {
           );
         });
 
-        console.log(searched);
         setSearchedPages(searched);
         setSearched(true);
       }, 500);
     } else {
-      console.log("empty");
       setSearched(false);
     }
   };
@@ -419,7 +410,6 @@ const PhaseCreation = () => {
     if (!e.target.value.length == 0) {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        console.log(e.target.value);
         const searched = remainingPages.filter((page) => {
           return (
             page.page_name
@@ -428,7 +418,6 @@ const PhaseCreation = () => {
             page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
           );
         });
-        console.log(searched);
         setModalSearchPage(searched);
         setModalSearchPageStatus(true);
       }, 500);
@@ -441,7 +430,6 @@ const PhaseCreation = () => {
     const selectedRowData = selectedRows.map((rowId) =>
       remainingPages.find((row) => row.p_id === rowId)
     );
-    console.log(selectedRowData);
     setFilteredPages([...filterdPages, ...selectedRowData]);
     setModalSearchPageStatus(false);
     setIsModalOpen(false);
@@ -451,7 +439,6 @@ const PhaseCreation = () => {
     setSelectedRows(newSelection);
   };
 
-  console.log(selectedRows);
   // useEffect(()=>{
   //   setModalSearchPage
   // },[selectedRows])
@@ -520,10 +507,12 @@ const PhaseCreation = () => {
       <div className="form_heading_title">
         <h2 className="form-heading">Phase Creation</h2>
       </div>
-      {id && <CampaignDetailes cid={id} getCampaign={getCampaignName} />}
+      {/* {id && */}
+      <CampaignDetailes cid={id} getCampaign={getCampaignName} />
+      {/* } */}
 
-     {/* add Accordion for show phase------------------- */}
-     <Paper sx={{ pb: 4 }}>
+      {/* add Accordion for show phase------------------- */}
+      <Paper sx={{ pb: 4 }}>
         {allPhaseData?.map((item, index) => (
           <Paper key={index} sx={{ mb: 2 }}>
             <Accordion
@@ -533,8 +522,8 @@ const PhaseCreation = () => {
             >
               <AccordionSummary
                 expandIcon={<GridExpandMoreIcon />}
-              // aria-controls={`panel${index}bh-content`}
-              // id={`panel${index}bh-header`}
+                // aria-controls={`panel${index}bh-content`}
+                // id={`panel${index}bh-header`}
               >
                 <Typography>{`Phase ${index + 1}`}</Typography>
               </AccordionSummary>
@@ -547,9 +536,12 @@ const PhaseCreation = () => {
       </Paper>
       {/* add Accordion for show end phase------------------- */}
 
-
-      <Button variant="outlined" onClick={togglePageDetails} sx={{ mt: 2, mb: 4 }}>
-        {showPageDetails ? 'Hide Page Details' : 'Create New Phase'}
+      <Button
+        variant="outlined"
+        onClick={togglePageDetails}
+        sx={{ mt: 2, mb: 4 }}
+      >
+        {showPageDetails ? "Hide Page Details" : "Create New Phase"}
       </Button>
       {showPageDetails && (
         <>
@@ -562,16 +554,15 @@ const PhaseCreation = () => {
                 label="Phase"
                 value={phaseData}
                 onChange={(e) => {
-                  if ((phaseDataError)) {
+                  setPhaseData(e.target.value);
+                  if (phaseDataError) {
                     setPhaseDataError("");
                   }
-                  setPhaseData(e.target.value);
                 }}
                 sx={{ m: 2 }}
                 error={!!phaseDataError}
                 helperText={phaseDataError}
               />
-
 
               <TextField
                 label="Description"
@@ -598,13 +589,13 @@ const PhaseCreation = () => {
                 />
               </LocalizationProvider>
             </Box>
+            {console.log(campaignName[0].commitment, "camp name lalit")}
             {campaignName?.map((cmp, index) => {
               return (
                 <Box sx={{ p: 2, m: 2, display: "flex" }} key={index}>
                   <TextField disabled value={cmp?.commitment} sx={{ m: 2 }} />
                   <TextField
                     label="Value"
-                    defaultValue={"0"}
                     type="number"
                     onChange={(e) => {
                       let x = [...campaignName];
@@ -626,7 +617,10 @@ const PhaseCreation = () => {
               multiple
               id="combo-box-demo"
               options={options}
-              renderInput={(params) => <TextField {...params} label="Category" />}
+              sx={{ width: 200 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Category" />
+              )}
               onChange={categoryChangeHandler}
             />
             <Autocomplete
@@ -674,18 +668,19 @@ const PhaseCreation = () => {
           <PageDetaling
             pageName={"phaseCreation"}
             data={{ campaignName: cmpName, campaignId: id }}
-            pages={filterdPages?.filter(page => page.postRemaining > 0)}
+            pages={filterdPages?.filter((page) => page.postRemaining > 0)}
             search={searched}
             searchedpages={searchedPages}
             setFilteredPages={setFilteredPages}
             type={"plan"}
             setPhaseDataError={setPhaseDataError}
+            setPostPage={setPostPage}
+            postpage={postpage}
             phaseInfo={{
               phaseName: phaseData,
               description: phaseDcripation,
               commitment: campaignName,
-              phaseDataError: phaseDataError
-
+              phaseDataError: phaseDataError,
             }}
           />
         </>
