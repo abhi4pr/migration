@@ -10,7 +10,6 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { GridColumnMenu } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import { set } from "date-fns";
 
 export default function ExecutionDashboard() {
   const [contextData, setContextData] = useState(false);
@@ -43,58 +42,55 @@ export default function ExecutionDashboard() {
     formData.append("loggedin_user_id", 36);
 
     axios
-      .post(
-        "https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      )
+      .get("http://34.93.135.33:8080/api/get_all_purchase_data")
       .then((res) => {
-        setAlldata(res.data.body);
-        let tempdata = res.data.body.filter((ele) => {
+        setAlldata(res.data.result);
+        let tempdata = res.data.result.filter((ele) => {
           return ele.platform.toLowerCase() == "instagram";
         });
         setRows(tempdata);
         setTableData(tempdata);
-        for (let i = 0; i < tempdata.length; i++) {
-          axios
-            .post(`http://34.93.135.33:8080/api/get_percentage`, {
-              p_id: tempdata[i].p_id,
-            })
-            .then((res) => {
-              if (res.status == 200) {
-                setSetUpdatePercentage((prev) => [...prev, res.data]);
-              }
-            })
-            .catch((err) => {
-              console.log(err, `err for ${tempdata[i].p_id}`);
-              setSetUpdatePercentage((prev) => [
-                ...prev,
+        // for (let i = 0; i < tempdata.length; i++) {
+        //   axios
+        //     .post(`http://34.93.135.33:8080/api/get_percentage`, {
+        //       p_id: tempdata[i].p_id,
+        //     })
+        //     .then((res) => {
+        //       if (res.status == 200) {
+        //         setSetUpdatePercentage((prev) => [...prev, res.data]);
+        //       }
+        //     })
+        //     .catch((err) => {
+        //       console.log(err, `err for ${tempdata[i].p_id}`);
+        //       setSetUpdatePercentage((prev) => [
+        //         ...prev,
 
-                {
-                  latestEntry: {
-                    p_id: +tempdata[i].p_id,
-                  },
-                  totalPercentage: 0,
-                },
-              ]);
-            });
-        }
+        //         {
+        //           latestEntry: {
+        //             p_id: +tempdata[i].p_id,
+        //           },
+        //           totalPercentage: 0,
+        //         },
+        //       ]);
+        //     });
+        // }
 
-        for (let i = 0; i < tempdata.length; i++) {
-          axios
-            .get(
-              `http://34.93.135.33:8080/api/get_stats_update_flag/${tempdata[i].p_id}`
-            )
-            .then((res) => {
-              if (res.status == 200) {
-                setSetStatsUpdateFlag((prev) => [...prev, res.data]);
-              }
-            });
-        }
+        // for (let i = 0; i < tempdata.length; i++) {
+        //   axios
+        //     .get(
+        //       `http://34.93.135.33:8080/api/get_stats_update_flag/${tempdata[i].p_id}`
+        //     )
+        //     .then((res) => {
+        //       if (res.status == 200) {
+        //         setSetStatsUpdateFlag((prev) => [...prev, res.data]);
+        //       }
+        //     });
+        // }
+
+        // setTimeout(() => {
+        //   console.log("called");
+        //   percentageDataCal();
+        // }, 3000);
       });
   };
 
@@ -151,44 +147,46 @@ export default function ExecutionDashboard() {
     setDataLessThan50([]);
     setDataLessThan25([]);
     let temp25 = [];
-    for (let i = 0; i < updatePercentage.length; i++) {
-      if (updatePercentage[i].totalPercentage <= 25) {
-        temp25.push(updatePercentage[i]);
+
+    for (let i = 0; i < rows.length; i++) {
+
+      if (rows[i].totalPercentage <= 25) {
+        temp25.push(rows[i]);
       }
     }
     setDataLessThan25(temp25);
 
     let temp50 = [];
-    for (let i = 0; i < updatePercentage.length; i++) {
+    for (let i = 0; i < rows.length; i++) {
       if (
-        updatePercentage[i].totalPercentage > 25 &&
-        updatePercentage[i].totalPercentage <= 50
+        rows[i].totalPercentage > 25 &&
+        rows[i].totalPercentage <= 50
       ) {
-        temp50.push(updatePercentage[i]);
+        temp50.push(rows[i]);
       }
     }
 
     setDataLessThan50(temp50);
 
     let temp75 = [];
-    for (let i = 0; i < updatePercentage.length; i++) {
+    for (let i = 0; i < rows.length; i++) {
       if (
-        updatePercentage[i].totalPercentage > 50 &&
-        updatePercentage[i].totalPercentage <= 75
+        rows[i].totalPercentage > 50 &&
+        rows[i].totalPercentage <= 75
       ) {
-        temp75.push(updatePercentage[i]);
+        temp75.push(rows[i]);
       }
     }
 
     setDataLessThan75(temp75);
 
     let temp100 = [];
-    for (let i = 0; i < updatePercentage.length; i++) {
+    for (let i = 0; i < rows.length; i++) {
       if (
-        updatePercentage[i].totalPercentage > 75 &&
-        updatePercentage[i].totalPercentage <= 100
+        rows[i].totalPercentage > 75 &&
+        rows[i].totalPercentage <= 100
       ) {
-        temp100.push(updatePercentage[i]);
+        temp100.push(rows[i]);
       }
     }
     setDataLessThan100(temp100);
@@ -197,8 +195,9 @@ export default function ExecutionDashboard() {
   };
 
   setTimeout(() => {
+
     percentageDataCal();
-  }, 5000);
+  }, 1000);
 
   const columns = [
     {
@@ -229,7 +228,7 @@ export default function ExecutionDashboard() {
                 </a>
               </div>
             );
-          }
+          },
         }
       : pagemode == 3 || pagemode == 4
       ? {
@@ -321,22 +320,8 @@ export default function ExecutionDashboard() {
       headerName: "Update",
       width: 130,
       renderCell: (params) => {
-        const num =
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0].totalPercentage
-            : 0;
-
-        const a =
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry.isDeleted
-            : false;
-        const res = !a ? num : 0;
+  
+        const totalPercentage =params.row.totalPercentage
 
         return (
           <button
@@ -344,7 +329,7 @@ export default function ExecutionDashboard() {
             className="btn btn-primary"
             data-toggle="modal"
             data-target="#myModal1"
-            disabled={res == 0 || res == 100 ? false : true}
+            disabled={totalPercentage == 0 || totalPercentage == 100 ? false : true}
             onClick={() => handleRowClick(params.row)}
           >
             Set Stats
@@ -363,13 +348,7 @@ export default function ExecutionDashboard() {
             className="btn btn-primary"
             onClick={() => handleHistoryRowClick(params.row)}
             disabled={
-              statsUpdateFlag.filter(
-                (e) => e.latestEntry?.p_id == params.row.p_id
-              ).length > 0
-                ? !statsUpdateFlag.filter(
-                    (e) => e.latestEntry.p_id == params.row.p_id
-                  )[0].latestEntry.stats_update_flag
-                : true
+              params?.row?.latestEntry?.stats_update_flag?!params?.row?.latestEntry.stats_update_flag: true
             }
           >
             See History
@@ -388,13 +367,7 @@ export default function ExecutionDashboard() {
             className="btn btn-primary"
             onClick={() => handleUpdateRowClick(params.row)}
             disabled={
-              statsUpdateFlag.filter(
-                (e) => e.latestEntry?.p_id == params.row.p_id
-              ).length > 0
-                ? !statsUpdateFlag.filter(
-                    (e) => e.latestEntry.p_id == params.row.p_id
-                  )[0].latestEntry.stats_update_flag
-                : true
+              params?.row?.latestEntry?.stats_update_flag?!params?.row?.latestEntry.stats_update_flag: true
             }
           >
             Update
@@ -407,31 +380,7 @@ export default function ExecutionDashboard() {
       width: 150,
       headerName: "Stats Update %",
       renderCell: (params) => {
-        // console.log(
-        //   updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-        //     .length > 0
-        //     ? updatePercentage.filter(
-        //         (e) => e.latestEntry.p_id == params.row.p_id
-        //       )[0]?.latestEntry.isDeleted
-        //     : false,
-        //   params.row.p_id
-        // );
-        const num =
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0].totalPercentage
-            : 0;
-        const a =
-          updatePercentage.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? updatePercentage.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry.isDeleted
-            : false;
-        const res = !a ? num : 0;
-        return Math.round(+res) + "%";
+        return Math.round(+params.row.totalPercentage) + "%";
       },
     },
     {
@@ -440,21 +389,17 @@ export default function ExecutionDashboard() {
       headerName: "Stats Update Flag",
       renderCell: (params) => {
         const num =
-          statsUpdateFlag.filter((e) => e.latestEntry.p_id == params.row.p_id)
-            .length > 0
-            ? statsUpdateFlag.filter(
-                (e) => e.latestEntry.p_id == params.row.p_id
-              )[0]?.latestEntry?.stats_update_flag
-            : false;
+        params?.row?.latestEntry?.stats_update_flag?params?.row?.latestEntry.stats_update_flag: false
         return num ? "Yes" : "No";
-      },
+      }
     },
   ];
 
   const handlesetTableDataByPercentage = (data) => {
-    let a = data.map((e) => e.latestEntry.p_id);
-    const matchingData = rows.filter((item) => a.includes(parseInt(item.p_id)));
-    setTableData(matchingData);
+    // let a = data.map((e) => e.latestEntry.p_id);
+    // const matchingData = rows.filter((item) => a.includes(parseInt(item.p_id)));
+    // console.log(matchingData, "matchingData")
+    setTableData(data);
   };
 
   return (

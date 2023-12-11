@@ -7,7 +7,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import PerformanceGraphDialog from "./PerformanceGraphDialog";
 
 const FilterDataOptions = [
-  "Higest",
+  "Highest",
   "Lowest",
   "Avg",
   "Avg Male Percnet",
@@ -17,7 +17,7 @@ const FilterDataOptions = [
 
 export default function PagePerformanceDashboard() {
   const [pageHistory, setPageHistory] = React.useState([]);
-  const [filterDataVal, setFilterDataVal] = useState("Higest");
+  const [filterDataVal, setFilterDataVal] = useState("Highest");
   const [openPerformanceGraphDialog, setOpenPerformanceGraphDialog] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function PagePerformanceDashboard() {
     { field: "page_name", headerName: "Page Name", width: 200 },
   ];
 
-  if (filterDataVal === "Higest") {
+  if (filterDataVal === "Highest") {
     columns.push(
       { field: "maxReach", headerName: "Highest Reach", width: 200 },
       { field: "maxImpression", headerName: "Hightest Impression", width: 200 },
