@@ -61,18 +61,7 @@ const PreOnboardingOverview = () => {
       width: "5%",
       sortable: true,
     },
-    // {
-    //   name: "User Name",
-    //   selector: (row) => (
-    //     <>
-    //       <Link to={`/preOnboard-user-details-profile/${row.user_id}`}>
-    //         <span style={{ color: "blue" }}>{row.user_name}</span>
-    //       </Link>
-    //     </>
-    //   ),
-    //   width: "10%",
-    //   sortable: true,
-    // },
+    
     {
       name: "User Name",
       selector: (row) => (

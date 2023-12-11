@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import Logo from "../../../assets/img/logo/logo.png";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import { FcDownload } from "react-icons/fc";
 import DateFormattingComponent from "../../DateFormator/DateFormared";
+
 const PreOnboardUserDetailsProfile = () => {
   const { id } = useParams();
   const [subDeptId, setSubDeptId] = useState([]);
-  const [subDept, setSubDept] = useState();
   const [otherDocuments, setOtherDocuments] = useState("");
-  const [defaultSeatData, setDefaultSeatData] = useState([]);
   const [roomId, setRoomId] = useState();
 
   function userOtherDocuments() {
@@ -20,17 +18,8 @@ const PreOnboardUserDetailsProfile = () => {
         setOtherDocuments(res.data.data);
       });
   }
-  // const subDep = async (dept_id) => {
-  //   await axios
-  //     .get(`http://34.93.135.33:8080/api/subdept/${dept_id}`)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setSubDept(res.data);
-  //     });
-  // };
 
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
-
   const [user, setUser] = useState([]);
 
   useEffect(() => {

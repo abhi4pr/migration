@@ -4,10 +4,8 @@ import { Navigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
-import { AiOutlineReload } from "react-icons/ai";
+
 import { useGlobalContext } from "../../../Context/Context";
-import Select from "react-select";
-import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 
 const CocUpdate = () => {
   const { id } = useParams();
@@ -68,10 +66,6 @@ const CocUpdate = () => {
   if (isFormSubmitted) {
     return <Navigate to="/admin/pre-onboard-coc-overview" />
   }
-
-  const handleDateChange = (e) => {
-    
-  };
 
   return (
     <>

@@ -11,7 +11,6 @@ const OnboardExtendDateOverview = () => {
   const [data, setData] = useState([]);
   const [filterdata, setFilterData] = useState([]);
   const [contextData, setDatas] = useState([]);
-  const [extendStatus, setExtendStatus] = useState("");
 
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
@@ -114,9 +113,7 @@ const OnboardExtendDateOverview = () => {
       name: "Action",
       cell: (row) => (
         <>
-          {/* {contextData &&
-            contextData[10] &&
-            contextData[10].update_value === 1 && ( */}
+          
           <button
             title="Approve"
             className="btn btn-outline-primary btn-md user-button"
@@ -126,9 +123,7 @@ const OnboardExtendDateOverview = () => {
           >
             Approve
           </button>
-          {/* {contextData &&
-            contextData[10] &&
-            contextData[10].update_value === 1 && ( */}
+          
           <button
             title="Reject"
             className="btn btn-outline-primary btn-md user-button"

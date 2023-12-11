@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import FormContainer from "../FormContainer";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import { Text, StyleSheet, PDFDownloadLink } from "@react-pdf/renderer";
+
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import MyTemplate1 from "../WFH/SalaryGeneration/Template";
 import MyTemplate2 from "../WFH/SalaryGeneration/Template2";
 import MyTemplate3 from "../WFH/SalaryGeneration/Template3";
 import MyTemplate4 from "../WFH/SalaryGeneration/Template4";
 import MyTemplate5 from "../WFH/SalaryGeneration/Template5";
-import { set } from "date-fns";
-import CheckableTag from "antd/es/tag/CheckableTag";
+
 import { generatePDF } from "../WFH/SalaryGeneration/pdfGenerator";
 import { useGlobalContext } from "../../../Context/Context";
 
@@ -166,23 +165,7 @@ const AccountsOverviewWFH = () => {
           >
             Pay
           </button>
-          {/* <PDFDownloadLink
-            document={templateMap[row?.invoice_template_no]}
-            fileName={row?.user_name + " " + row?.month + " " + row?.year}
-            style={{
-              color: "#4a4a4a",
-            }}
-          >
-            <button
-              className="btn btn-outline-primary btn-sm"
-              title="Download Invoice"
-              type="button"
-              onClick={() => handleInvoice(row)}
-            >
-              <CloudDownloadIcon />
-            </button>
-          </PDFDownloadLink> */}
-
+          
           {row?.invoice_template_no !== "0" && (
             <button
               className="btn btn-outline-primary btn-sm"

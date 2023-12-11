@@ -4,11 +4,7 @@ import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
-import { AiOutlineReload } from "react-icons/ai";
 import { useGlobalContext } from "../../../Context/Context";
-import Select from "react-select";
-import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
-import { TextField } from "@mui/material";
 
 const CocMaster = () => {
   
@@ -56,10 +52,6 @@ const CocMaster = () => {
   if (isFormSubmitted) {
     return <Navigate to="/admin/pre-onboard-coc-overview" />;
   }
-
-  const handleDateChange = (e) => {
-    
-  };
 
   return (
     <>

@@ -47,18 +47,7 @@ const PreOnboardVerifyDetails = () => {
       width: "5%",
       sortable: true,
     },
-    // {
-    //   name: "User Name",
-    //   selector: (row) => (
-    //     <>
-    //       <Link to={`/preOnboard-user-details-profile/${row.user_id}`}>
-    //         <span style={{ color: "blue" }}>{row.user_name}</span>
-    //       </Link>
-    //     </>
-    //   ),
-    //   width: "10%",
-    //   sortable: true,
-    // },
+    
     {
       name: "User Name",
       selector: (row) => (
@@ -105,15 +94,7 @@ const PreOnboardVerifyDetails = () => {
       name: "Status",
       selector: (row) => row.user_status,
       width: "4%",
-      // cell: (row) => (
-      //   <>
-      //     {row.user_status === "Active" ? (
-      //       <span className="badge badge-success">Active</span>
-      //     ) : (
-      //       <span className="badge badge-warning">Inactive</span>
-      //     )}
-      //   </>
-      // ),
+      
       cell: (row) => (
         <>
           {row.user_status === "Active" ? (

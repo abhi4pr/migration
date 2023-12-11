@@ -7,8 +7,6 @@ import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
-import Modal from "react-modal";
-import FieldContainer from "../FieldContainer";
 
 const OnboardExtendDateOverview = () => {
   const whatsappApi = WhatsappAPI();
@@ -89,10 +87,7 @@ const OnboardExtendDateOverview = () => {
           email: "lalit@creativefuel.io",
           subject: "Extend Date Status",
           text: status,
-          attachment: "",
-          // login_id: loginId,
-          // name: username,
-          // password: password,
+          attachment: ""
         });
         whatsappApi.callWhatsAPI(
           "CF_Extend_status_update",
