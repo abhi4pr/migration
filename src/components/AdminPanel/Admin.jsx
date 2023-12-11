@@ -163,6 +163,7 @@ import PendingPaymentsList from "./Finance/PendingPaymentsList";
 import CityMaster from "../Execution/cityMast/CityMaster";
 import Experties from "./RegisterCampaign/Experties/Experties";
 import PagePerformanceDashboard from "../Execution/PagePerformanceDashboard";
+import ExcusionCampaign from "./RegisterCampaign/ExcusionCampaign";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -658,6 +659,7 @@ const Admin = () => {
                   <Route path="/subcategory" element={<SubCategoryMaster />} />
 
                   <Route path="/contentcreater" element={<ContentCreater />} />
+                  <Route path="/excusionCampaign" element={<ExcusionCampaign />} />
 
                   {/* ----------------------lead source routes -----------------------------*/}
                   <Route
