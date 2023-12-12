@@ -4,14 +4,10 @@ import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
 const SaleBookingVerify = () => {
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -25,12 +21,15 @@ const SaleBookingVerify = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, row) => {
     e.preventDefault();
     const formData = new FormData()
-    formData.append("balance_amount", balAmount)
-    formData.append("remark", remark)
-    await axios.post("http://34.93.135.33:8080/api/", formData, {
+    formData.append("loggedin_user_id",36)
+    formData.append("sale_booking_id",row.sale_booking_id)
+    formData.append("verified_amount",balAmount)
+    formData.append("verified_remark",remark)
+
+    await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=verifybooking", formData, {
       headers:{
         "application-type":"multipart/form-data"
       }

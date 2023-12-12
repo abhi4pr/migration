@@ -9,24 +9,22 @@ import { useNavigate, Link } from "react-router-dom";
 const PendingInvoice = () => {
   const navigate = useNavigate();
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [uploadImage, setUploadImage] = useState(null);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
+  const handleReject = async (row) => {
     const formData = new FormData();
-      formData.append("refund_image",refundImage)
-      await axios.post("http://34.93.135.33:8080/api/", formData ,{
+      formData.append("loggedin_user_id",36)
+      formData.append("sale_booking_id",row.sale_booking_id)
+
+      await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=invoice_reject", formData ,{
         headers:{
           "Content-Type":"multipart/form-data"
         }
@@ -35,6 +33,20 @@ const PendingInvoice = () => {
       toastAlert("Data updated");
       setIsFormSubmitted(true);
   };
+
+  const handleImageUpload = async(row, fileData) => {
+    const formData = new FormData();
+      formData.append("loggedin_user_id",36)
+      formData.append("sale_booking_id",row.sale_booking_id)
+      formData.append("invoiceFormSubmit",1)
+      formData.append("invoice",fileData)
+
+      await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=invoice_upload_file", formData,{
+        headers:{
+          "Content-Type": "multipart/form-data"
+        }
+      })
+  }
 
   function getData() {
     axios.post("http://34.93.135.33:8080/api/add_php_pending_invoice_data_in_node").then((res)=>{
@@ -87,10 +99,14 @@ const PendingInvoice = () => {
     {
       name: "Upload Invioce",
       selector: (row) => (
-      <form>
-        <input type="file" name="upload_image" onChange={(e)=>setUploadImage(e.target.files[0])} />
-        <button type="submit" value="upload">Upload</button>
-      </form>
+        <div>
+          <form>
+            <input type="file" name="upload_image" onChange={(e)=>handleImageUpload(row,e.target.files[0])} />
+            <button type="submit" value="upload">Upload</button>
+          </form>
+          <br/>
+          <button type="button" className="btn btn-success" onClick={()=>handleReject(row)}>Reject</button>
+        </div>
     ),
     },
     {

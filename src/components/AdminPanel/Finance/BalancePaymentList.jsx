@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 import Modal from "react-modal";
@@ -11,9 +9,6 @@ import Modal from "react-modal";
 const BalancePaymentList = () => {
   
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -31,22 +26,28 @@ const BalancePaymentList = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
+  const handleSubmit = async(row) => {
+    // e.preventDefault();
+
     const formData = new FormData();
-    formData.append("balance_amount", balAmount);
+    formData.append("loggedin_user_id",36);
+    formData.append("sale_booking_id", row.sale_booking_id);
+    formData.append("payment_update_id",row.payment_update_id);
     formData.append("payment_ref_no", paymentRefNo);
-    formData.append("payment_ref_image", paymentRefImg);
+    formData.append("payment_detail_id", paymentDetails);
+    formData.append("payment_screenshot", paymentRefImg);
     formData.append("payment_type", paymentType);
-    formData.append("payment_detail", paymentDetails);
     formData.append("payment_mode", paymentMode);
     
-    await axios.post("http://34.93.135.33:8080/api/add_assets_images", formData, {
+    await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=balance_payment_update", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       setImageModalOpen(false)
+
+    toastAlert("Data updated");
+    setIsFormSubmitted(true);
   };
 
   function getData() {
@@ -232,7 +233,7 @@ const BalancePaymentList = () => {
                 id="images"
                 name="images"
                 accept="image/*"
-                onChange={(e)=>setRefImage(e.target.files[0])}
+                onChange={(e)=>setPaymentRefImg(e.target.files[0])}
               />
             </div>
 

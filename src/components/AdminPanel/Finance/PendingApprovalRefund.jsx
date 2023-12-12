@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 
 const PendingApprovalRefund = () => {
   
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -24,21 +19,6 @@ const PendingApprovalRefund = () => {
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-      const formData = new FormData();
-      formData.append("status",status)
-      formData.append("refund_image",refundImage)
-      await axios.post("http://34.93.135.33:8080/api/", formData ,{
-        headers:{
-          "Content-Type":"multipart/form-data"
-        }
-      });
-
-      toastAlert("Data updated");
-      setIsFormSubmitted(true);
-  };
 
   function getData() {
     axios.post("http://34.93.135.33:8080/api/add_php_payment_refund_data_in_node").then((res)=>{
@@ -54,9 +34,45 @@ const PendingApprovalRefund = () => {
     getData();
   }, []);
 
-  const handleStatusChange = (row, selectedStatus) => {
+  const handleStatusChange = async(row, selectedStatus) => {
     setStatus(selectedStatus)
+
+    const formData = new FormData();
+      formData.append("loggedin_user_id",36)
+      formData.append("sale_booking_refund_id",row.sale_booking_refund_id)
+      formData.append("sale_booking_id",row.sale_booking_id)
+      formData.append("refund_approval_status",selectedStatus)
+      formData.append("refund_reason","")
+      formData.append("refund_finance_approval",1)
+      
+      await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=refund_finance_approval", formData ,{
+        headers:{
+          "Content-Type":"multipart/form-data"
+        }
+      });
+
+      toastAlert("Data updated");
+      setIsFormSubmitted(true);
   };
+
+  const uploadImage = async(e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("loggedin_user_id",36)
+    formData.append("sale_booking_refund_id",row.sale_booking_refund_id)
+    formData.append("sale_booking_id",row.sale_booking_id)
+    formData.append("refund_files",refundImage)
+    
+    await axios.post("https://prrrroduction.sales.creativefuel.io/webservices/RestController.php?view=refund_payment_upload_file", formData ,{
+      headers:{
+        "Content-Type":"multipart/form-data"
+      }
+    });
+
+    toastAlert("Data updated");
+    setIsFormSubmitted(true);
+  }
 
   useEffect(() => {
     const result = datas.filter((d) => {
@@ -98,9 +114,10 @@ const PendingApprovalRefund = () => {
     {
       name: "Refund Payment Image",
       selector: (row) => (
-        <form>
+        <form method="POST" encType="multipart/form-data" action="">
             <input type="file" name="refund_image" onChange={(e)=>setRefundImage(e.target.files[0])} />
-            <button type="submit" value="upload">Upload</button>
+            <br/>
+            <input type="submit" value="upload" disabled={!refundImage} onClick={(e)=>uploadImage()} />
         </form>
       )
     },
@@ -113,8 +130,8 @@ const PendingApprovalRefund = () => {
           onChange={(e) => handleStatusChange(row, e.target.value)}
         >
           <option value="">Select</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
+          <option value="1">Approved</option>
+          <option value="2">Rejected</option>
         </select>
       ),
       width: "7%",

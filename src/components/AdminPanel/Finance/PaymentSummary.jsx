@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 
 const PaymentSummary = () => {
-  
+  const { id } = useParams();
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
@@ -23,21 +18,18 @@ const PaymentSummary = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/",{
-        display_sequence: displaySeq,
-      });
-
-      toastAlert("Coc created");
-      setIsFormSubmitted(true);
-  };
-
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
+    const formData = new FormData();
+    formData.append("loggedin_user_id",36)
+    formData.append("cust_id",id)
+
+    axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=sales-customer_purchase_finance_approval", formData, {
+      headers:{
+        "Content-Type":"multipart/form-data"
+      }
+    }).then((res) => {
+      setData(res.data.body);
+      setFilterData(res.data.body);
     });
   }
 
@@ -63,36 +55,36 @@ const PaymentSummary = () => {
     },
     {
       name: "Customer Name",
-      selector: (row) => "Arvind Kejriwal",
+      selector: (row) => row.cust_name,
       sortable: false,
     },
     {
       name: "Sales Booking Date",
-      selector: (row) => "28-11-2023",
+      selector: (row) => row.sale_booking_date,
     },
     {
       name: "Campaign Amount",
-      selector: (row) => "1200",
+      selector: (row) => row.campaign_amount,
     },
     {
       name: "Total Paid Amount",
-      selector: (row) => "120",
+      selector: (row) => row.payment_amount_show,
     },
     {
       name: "Reason",
-      selector: (row) => "",
+      selector: (row) => row.action_reason,
     },
     {
       name: "Credit Approval Reason",
-      selector: (row) => "",
+      selector: (row) => row.reason_credit_approval,
     },
     {
       name: "Balance Payment Ondate",
-      selector: (row) => "",
+      selector: (row) => row.balance_payment_ondate,
     },
     {
       name: "Status",
-      selector: (row) => "Pending",
+      selector: (row) => row.payment_approval_status,
     }
   ];
 

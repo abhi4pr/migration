@@ -4,13 +4,10 @@ import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
-import { useNavigate } from "react-router-dom";
 
 const SaleBookingClose = () => {
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -21,14 +18,19 @@ const SaleBookingClose = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleVerify = async (row) => {
+    
+    const formData = new FormData();
+    formData.append("loggedin_user_id",36)
+    formData.append("close_booking",1)
+    formData.append("tds_status",1)
+    formData.append("sale_booking_id",row.sale_booking_id)
 
-    await axios.post("http://34.93.135.33:8080/api/", {
+    await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=close_booking", {
       display_sequence: displaySeq,
     });
 
-    toastAlert("Coc created");
+    toastAlert("Data Updated");
     setIsFormSubmitted(true);
   };
 
@@ -37,9 +39,32 @@ const SaleBookingClose = () => {
       console.log('data save in local success')
     })
     axios.get("http://34.93.135.33:8080/api/get_all_php_sale_booking_tds_data").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
+      const allData = res.data.data;
+      const filteredData = allData.filter((item) => item.show_fstatus == 'Open');
+      setData(allData);
+      setFilterData(filteredData);
     });
+  }
+
+  const aboutClose = () => {
+    const allData = datas;
+    const filteredData = allData.filter((item) => item.show_fstatus == 'About To Close');
+    setData(allData);
+    setFilterData(filteredData);
+  }
+
+  const open = () => {
+    const allData = datas;
+    const filteredData = allData.filter((item) => item.show_fstatus == 'Open');
+    setData(allData);
+    setFilterData(filteredData);
+  }
+
+  const close = () => {
+    const allData = datas;
+    const filteredData = allData.filter((item) => item.show_fstatus == 'Closed Link');
+    setData(allData);
+    setFilterData(filteredData);
   }
 
   useEffect(() => {
@@ -114,7 +139,19 @@ const SaleBookingClose = () => {
     },
     {
       name: "Action",
-      selector: (row) => row.vendor_name,
+      selector: (row) => 
+      {
+        return row.show_fstatus === 'About To Close' ? (
+          <button
+            className="btn btn-sm btn-outline-info"
+            onClick={() => handleVerify(row)}
+          >
+            Verify
+          </button>
+        ) : (
+          <span>{row.show_fstatus}</span>
+        );
+      },
     },
   ];
 
@@ -131,10 +168,14 @@ const SaleBookingClose = () => {
         }
       />
 
+      <button className="btn btn-success" onClick={open}>Open</button>
+      <button className="btn btn-warning" onClick={close}>Closed</button>
+      <button className="btn btn-primary" onClick={aboutClose}>About to close</button>
+
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Sale Booking Verify"
+            title="Sale Booking"
             columns={columns}
             data={filterData}
             fixedHeader

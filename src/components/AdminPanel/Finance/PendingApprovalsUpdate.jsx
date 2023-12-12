@@ -3,16 +3,12 @@ import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 
 const PendingApprovalUpdate = () => {
    
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -24,15 +20,20 @@ const PendingApprovalUpdate = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleStatusChange = (row, selectedStatus) => {
+  const handleStatusChange = async(row, selectedStatus) => {
     setStatus(selectedStatus)
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/",{
-        status: status,
+    const formData = new FormData();
+      formData.append("loggedin_user_id",36)
+      formData.append("payment_update_id",row.payment_update_id)
+      formData.append("payment_approval_status",selectedStatus)
+      formData.append("sale_booking_id",row.sale_booking_id)
+      formData.append("action_reason","")
+
+      await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=change_payment_update_status", formData ,{
+        headers:{
+          "Content-Type":"multipart/form-data"
+        }
       });
 
       toastAlert("Data updated");
@@ -40,10 +41,10 @@ const PendingApprovalUpdate = () => {
   };
 
   function getData() {
-    axios.post("http://34.93.135.33:8080/api/add_php_payment_acc_data_in_node").then((res)=>{
+    axios.post("http://34.93.135.33:8080/api/add_php_finance_data_in_node").then((res)=>{
       console.log('data save in local success')
     })
-    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_acc_data_pending").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_php_finance_data_pending").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });
@@ -136,8 +137,8 @@ const PendingApprovalUpdate = () => {
           onChange={(e) => handleStatusChange(row, e.target.value)}
         >
           <option value="">Select</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
+          <option value="1">Approved</option>
+          <option value="0">Rejected</option>
         </select>
       ),
       width: "7%",

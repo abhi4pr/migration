@@ -3,7 +3,6 @@ import axios from "axios";
 import { Link, Navigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 
@@ -11,8 +10,6 @@ const AllTransactions = () => {
   
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -23,22 +20,11 @@ const AllTransactions = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-                
-      await axios.post("http://34.93.135.33:8080/api/",{
-        display_sequence: displaySeq,
-      });
-
-      toastAlert("Coc created");
-      setIsFormSubmitted(true);
-  };
-
   function getData() {
     axios.post("http://34.93.135.33:8080/api/add_php_payment_acc_data_in_node").then((res)=>{
       console.log('data save in local success')
     })
-    axios.get("http://34.93.135.33:8080/api/get_all_php_payment_acc_data").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_php_finance_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

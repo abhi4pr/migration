@@ -57,11 +57,13 @@ const UserOverview = () => {
   const [separationLWD, setSeparationLWD] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [KRIData, setKRIData] = useState([]);
+  const [map1, setMap1] = useState({})
+
   const handleKRA = (userId) => {
-    console.log(userId, "user is is here");
     setIsModalOpen(true);
     KRAAPI(userId);
   };
+
   const KRAAPI = (userId) => {
     axios
       .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
@@ -158,7 +160,6 @@ const UserOverview = () => {
     axios
       .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
-        console.log(res.data, "Res.data.data");
         setDepartmentData(res.data);
         getData();
       });
@@ -171,14 +172,7 @@ const UserOverview = () => {
         setDesiOrgData(res.data.data);
       });
   };
-  // const handleDelete = (userId) => {
-  //   axios
-  //     .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
-  //     .then(() => {
-  //       getData();
-  //       toastAlert("User Deleted Successfully");
-  //     });
-  // };
+
   const handleDelete = (userId) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -234,10 +228,7 @@ const UserOverview = () => {
       (d) => d.dept_id == departmentFilter
     );
     setDesignationData(deptWiseDesi);
-    console.log(designationFilter);
-    console.log(
-      deptWiseDesi.map((dept) => dept.desi_id === designationFilter)?.desi_name
-    );
+    
   }, [departmentFilter]);
 
   useEffect(() => {
@@ -452,6 +443,24 @@ const UserOverview = () => {
         </>
       ),
     },
+    {
+      field: "User Map",
+      headerName: "User Map",
+      width: 100,
+      renderCell: (params) => (
+        <Button
+          className="btn btn-success"
+          data-toggle="modal"
+          data-target="#mapModal"
+          size="small"
+          variant="contained"
+          color="success"
+          onClick={()=>setMap1(params.row)}
+          >
+          Open Map
+        </Button>
+      ),
+    }
   ];
 
   const handleTransfer = (userId) => {
@@ -538,6 +547,9 @@ const UserOverview = () => {
   //   ? options.find((option) => option.value === designationFilter)
   //   : null;
 
+  const apiKey = "AIzaSyCRv0hz37kV5Oa-2Pz-D3JEReg1snhU4S0";
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${map1?.latitude?.$numberDecimal},${map1?.longitude?.$numberDecimal}`;
+
   return (
     <>
       <div className="action_heading">
@@ -603,6 +615,30 @@ const UserOverview = () => {
                 </button>
               </Link>
             )}
+        </div>
+      </div>
+
+      <div class="modal fade" id="mapModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+            <iframe
+              width="600"
+              height="450"
+              frameborder="0"
+              style={{border:"0"}}
+              src= {mapUrl}
+              allowfullscreen
+            ></iframe>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
         </div>
       </div>
 

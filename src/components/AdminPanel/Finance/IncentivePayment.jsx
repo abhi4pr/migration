@@ -7,27 +7,38 @@ import DataTable from "react-data-table-component";
 
 const IncentivePayment = () => {
   const { toastAlert } = useGlobalContext();
-  const [displaySeq, setDisplaySeq] = useState("");
-  const [heading, setHeading] = useState("");
-  const [headingDesc, setHeadingDesc] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [datas, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [contextData, setDatas] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [accountNo, setAccountNo] = useState("");
+  const [remarks, setRemarks] = useState("");
+  const [paymentRef, setPaymentRef] = useState("");
+  const [selectedData, setSelectedData] = useState({})
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async() => {
+    // e.preventDefault();
 
-    await axios.post("http://34.93.135.33:8080/api/", {
-      display_sequence: displaySeq,
-    });
+    const formData = new FormData();
+    formData.append("loggedin_user_id",36);
+    formData.append("incentive_request_id",selectedData.incentive_request_id);
+    formData.append("account_number",accountNo);
+    formData.append("remarks",remarks);
+    formData.append("payment_ref_no",paymentRef);
+    
+    await axios.post("https://production.sales.creativefuel.io/webservices/RestController.php?view=release_incentive_submit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setImageModalOpen(false)
 
-    toastAlert("Coc created");
+    toastAlert("Data updated");
     setIsFormSubmitted(true);
   };
 
@@ -70,7 +81,21 @@ const IncentivePayment = () => {
 
     {
       name: "Status",
-      selector: (row) => row.finance_status,
+      selector: (row) => 
+      {
+        return row.finance_status == 0 ? (
+          <button
+            className="btn btn-sm btn-outline-info"
+            data-toggle="modal"
+            data-target="#incentiveModal"
+            onClick={(e)=>setSelectedData(row)}
+          >
+            Complete Release
+          </button>
+        ) : (
+          <span>{row.finance_status}</span>
+        ) 
+      },
     },
   ];
 
@@ -86,6 +111,54 @@ const IncentivePayment = () => {
           false
         }
       />
+
+      <div class="modal fade" id="incentiveModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+            <form onSubmit={handleSubmit}>
+              <label>Last 4 digit of account Number</label>
+              <input
+                type="number"
+                className="form-control"
+                id="images"
+                name="images"
+                value={accountNo}
+                onChange={(e)=>setAccountNo(e.target.value)}
+                required
+              />
+              <label>Payment ref number</label>
+              <input
+                type="number"
+                className="form-control"
+                id="images"
+                name="images"
+                value={accountNo}
+                onChange={(e)=>setPaymentRef(e.target.value)}
+                required
+              />
+              <label>Remarks</label>
+              <input 
+                type="text"
+                className="form-control"
+                value={remarks}
+                onChange={(e)=>setRemarks(e.target.value)}
+              />
+              <button type="submit" className="btn btn-primary" style={{marginTop:"15px"}}>
+                Submit
+              </button>
+            </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="card">
         <div className="data_tbl table-responsive">

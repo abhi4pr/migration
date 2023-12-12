@@ -3,24 +3,29 @@ import axios from "axios";
 import { Navigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
-import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
-import DataTable from "react-data-table-component";
 
 const PendingInvoiceCustomerDeatils = () => {
-  
-  const {cust_id} = useParams();
+
+  const {id} = useParams();
   const { toastAlert } = useGlobalContext();
   const [datas, setData] = useState([]);
-  const [contextData, setDatas] = useState([]);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
   function getData() {
-    axios.get(`http://34.93.135.33:8080/api/get_all_php_payment_acc_data_customers/${cust_id}`).then((res) => {
-      setData(res.data.data);
+    const formData = new FormData();
+    formData.append("loggedin_user_id",36)
+    formData.append("cust_id",id)
+
+    axios.post(`https://production.sales.creativefuel.io/webservices/RestController.php?view=sales-customer_detail`, formData, {
+      headers:{
+        "Content-Type":"multipart/form-data"
+      }
+    }).then((res) => {
+      setData(res.data.body);
       // setFilterData(res.data.data);
     });
   }
@@ -36,18 +41,18 @@ const PendingInvoiceCustomerDeatils = () => {
         title="Customer Detail"
         submitButton={false}
       >
-        <div>Customer Type: {'data'} </div>
-        <div>Customer Name: {'data'} </div>
-        <div>Company Name: {'data'} </div>
-        <div>GST Number: {'data'} </div>
-        <div>Mobile: {'data'} </div>
-        <div>Alternate Number: {'data'} </div>
-        <div>Email: {'data'} </div>
-        <div>Country: {'data'} </div>
-        <div>State: {'data'} </div>
-        <div>City: {'data'} </div>
-        <div>Website: {'data'} </div>
-        <div>Instagram username: {'data'} </div>
+        <div>Customer Type: {datas.cust_type} </div>
+        <div>Customer Name: {datas.cust_name} </div>
+        <div>Company Name: {datas.company_name} </div>
+        <div>GST Number: {datas.gst_no} </div>
+        <div>Mobile: {datas.mobile_no} </div>
+        <div>Alternate Number: {datas.alternative_no} </div>
+        <div>Email: {datas.email_id} </div>
+        <div>Country: {datas.country} </div>
+        <div>State: {datas.state} </div>
+        <div>City: {datas.city} </div>
+        <div>Website: {datas.website} </div>
+        <div>Instagram username: {datas.instagram_username} </div>
         <div>Category: {'data'} </div>
       </FormContainer>
     
