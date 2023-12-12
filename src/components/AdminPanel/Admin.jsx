@@ -639,7 +639,7 @@ const Admin = () => {
                     element={<ExpertiesOverview />}
                   />
                   <Route
-                    path="/expeties-update"
+                    path="/expeties-update/:id"
                     element={<ExpertiesUpdate />}
                   />
 
