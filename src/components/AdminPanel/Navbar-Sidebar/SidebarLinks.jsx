@@ -212,7 +212,7 @@ const SidebarLinks = () => {
                 contextData[19] &&
                 contextData[19].view_value === 1 && (
                   <Link className="collapse-item" to="/admin/salaryWFH">
-                    Salary
+                    Payroll
                   </Link>
                 )}
             </div>
@@ -315,7 +315,7 @@ const SidebarLinks = () => {
             aria-controls="collapseFive"
           >
             <i className="bi bi-person-gear" />
-            <span>Onboarding</span>
+            <span>Org</span>
           </Link>
           <div
             id="collapseFive"

@@ -38,6 +38,51 @@ const DashboardWFHUser = () => {
         </div>
         <div className="card-body">
           <div className="row gap_24_0">
+            <div className="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+              <div className="salary_dtlCard">
+                <div className="salary_dtlCard_head">
+                  <div className="d-flex justify-content-between">
+                    <Link>
+                      <h2>Details</h2>
+                    </Link>
+                  </div>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>Total Employees</li>
+                    {totalUserCount}
+                  </ul>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>Total Salary</li>
+                  </ul>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>Yet To Register</li>
+                  </ul>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>
+                      <Link to="/admin/user">Add New Employee</Link>
+                    </li>
+                  </ul>
+                </div>
+                <div className="salary_dtlCard_info">
+                  <ul>
+                    <li>
+                      <Link to="/admin/user-overview">All Employees</Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="card-body">
+          <div className="row gap_24_0">
             {departmentData?.map((item) => (
               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div className="salary_dtlCard">
@@ -77,6 +122,11 @@ const DashboardWFHUser = () => {
                       <li>
                         <span>Employee Left</span>
                       </li>
+                    </ul>
+                  </div>
+                  <div className="salary_dtlCard_info">
+                    <ul>
+                      <li>Yet To Register</li>
                     </ul>
                   </div>
                 </div>

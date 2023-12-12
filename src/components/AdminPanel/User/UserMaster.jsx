@@ -92,7 +92,7 @@ const UserMaster = () => {
   const [otherUpload, setOtherUpload] = useState("");
   const [joiningDate, setJoiningDate] = useState("");
   const [releavingDate, setReleavingDate] = useState("");
-  const [salary, setSalary] = useState(0);
+  const [salary, setSalary] = useState(null);
   const [allUsersSittings, setAllUsersSittings] = useState([]);
 
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
@@ -103,7 +103,7 @@ const UserMaster = () => {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [nationality, setNationality] = useState("Indian");
 
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState("");
 
   const [FatherName, setFatherName] = useState("");
   const [motherName, setMotherName] = useState("");
@@ -119,9 +119,9 @@ const UserMaster = () => {
 
   const [bankName, setBankName] = useState("");
   const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [beneficiary, setBeneficiary] = useState("");
   const [IFSC, setIFSC] = useState("");
 
-  const [isEmptyRequiredField, setIsEmptyRequiredField] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -291,7 +291,7 @@ const UserMaster = () => {
     formData.append("Gender", gender);
     formData.append("Nationality", nationality);
     formData.append("DOB", dateOfBirth);
-    formData.append("Age", age);
+    formData.append("Age", Number(age));
     formData.append("FatherName", FatherName);
     formData.append("MotherName", motherName);
     formData.append("Hobbies", hobbies);
@@ -307,6 +307,7 @@ const UserMaster = () => {
     formData.append("tds_per", tdsPercentage);
     formData.append("bank_name", bankName);
     formData.append("ifsc_code", IFSC);
+    formData.append("beneficiary", beneficiary);
     formData.append("account_no", bankAccountNumber);
     formData.append("uid_no", UIDNumber);
     formData.append("pan_no", PANNumber);
@@ -853,35 +854,6 @@ const UserMaster = () => {
           </div>
         </div>
       </div>
-      <div className="form-group col-3">
-        <label className="form-label">
-          Seat Number <sup style={{ color: "red" }}>*</sup>
-        </label>
-        <Select
-          className=""
-          options={refrenceData.map((option) => ({
-            value: `${option?.sitting_id}`,
-            label: `${option?.sitting_ref_no} | ${option?.sitting_area}`,
-          }))}
-          value={{
-            value: `${sitting ? sitting : ""}`,
-            label: `${roomId?.sitting_ref_no ? roomId?.sitting_ref_no : ""} ${
-              roomId ? "|" : ""
-            } ${roomId?.sitting_area ? roomId?.sitting_area : ""}`,
-          }}
-          onChange={(e) => {
-            const selectedSittingId = e.value;
-            setSitting(selectedSittingId);
-            const selectedOption = refrenceData.find(
-              (option) => option.sitting_id === Number(selectedSittingId)
-            );
-            // console.log(selectedSittingId, "selectedSittingId")
-            // console.log(selectedOption.room_id, "selectedOption")
-            setRoomId(selectedOption);
-          }}
-          required={true}
-        />
-      </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
@@ -891,31 +863,6 @@ const UserMaster = () => {
           <ArrowForwardIosIcon />
         </button>
       </div>
-
-      {/* <FieldContainer
-        label="Seat Number"
-        Tag="select"
-        value={sitting}
-        fieldGrid={3}
-        required={false}
-        onChange={(e) => {
-          const selectedSittingId = e.target.value;
-          setSitting(selectedSittingId);
-          const selectedOption = refrenceData.find(
-            (option) => option.Sitting_id === Number(selectedSittingId)
-          );
-          setRoomId(selectedOption ? selectedOption.room_id : "");
-        }}
-      >
-        <option selected disabled value="">
-          Choose...
-        </option>
-        {refrenceData.map((option) => (
-          <option key={option.Sitting_id} value={option.Sitting_id}>
-            {option.Sitting_ref_no} | {option.Sitting_area}
-          </option>
-        ))}
-      </FieldContainer> */}
     </>
   );
 
@@ -1011,6 +958,37 @@ const UserMaster = () => {
           )}
         </>
       )}
+      {jobType == "WFO" && (
+        <div className="form-group col-3">
+          <label className="form-label">
+            Seat Number <sup style={{ color: "red" }}>*</sup>
+          </label>
+          <Select
+            className=""
+            options={refrenceData.map((option) => ({
+              value: `${option?.sitting_id}`,
+              label: `${option?.sitting_ref_no} | ${option?.sitting_area}`,
+            }))}
+            value={{
+              value: `${sitting ? sitting : ""}`,
+              label: `${roomId?.sitting_ref_no ? roomId?.sitting_ref_no : ""} ${
+                roomId ? "|" : ""
+              } ${roomId?.sitting_area ? roomId?.sitting_area : ""}`,
+            }}
+            onChange={(e) => {
+              const selectedSittingId = e.value;
+              setSitting(selectedSittingId);
+              const selectedOption = refrenceData.find(
+                (option) => option.sitting_id === Number(selectedSittingId)
+              );
+              // console.log(selectedSittingId, "selectedSittingId")
+              // console.log(selectedOption.room_id, "selectedOption")
+              setRoomId(selectedOption);
+            }}
+            required={true}
+          />
+        </div>
+      )}
       <div className="form-group col-3">
         <label className="form-label">
           Status <sup style={{ color: "red" }}>*</sup>
@@ -1035,19 +1013,23 @@ const UserMaster = () => {
         label="Bank Name"
         value={bankName}
         onChange={(e) => setBankName(e.target.value)}
-        required={false}
       />
       <FieldContainer
         label="Bank Account Number"
         value={bankAccountNumber}
         onChange={(e) => setBankAccountNumber(e.target.value)}
-        required={false}
       />
+
       <FieldContainer
         label="IFSC"
         value={IFSC}
         onChange={(e) => setIFSC(e.target.value.toUpperCase())}
-        required={false}
+      />
+
+      <FieldContainer
+        label="Beneficiary"
+        value={beneficiary}
+        onChange={(e) => setBeneficiary(e.target.value)}
       />
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -1081,14 +1063,12 @@ const UserMaster = () => {
         onChange={handleUIDInputChange}
         fieldGrid={3}
         type="text"
-        required={false}
       />
       <FieldContainer
         label="UID"
         onChange={(e) => setUID(e.target.files[0])}
         fieldGrid={3}
         type="file"
-        required={false}
       />
       {/* <div>
         <label>PAN Number</label>

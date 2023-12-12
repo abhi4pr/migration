@@ -32,6 +32,7 @@ const images = [
 const SalaryWFH = () => {
   const location = useLocation();
   const { toastAlert } = useGlobalContext();
+  const [allWFHUsers, setAllWFHUsers] = useState(0);
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [error, setError] = useState(null);
@@ -117,6 +118,7 @@ const SalaryWFH = () => {
           "http://34.93.135.33:8080/api/get_all_wfh_users"
         );
         const data = res.data.data;
+        setAllWFHUsers(data.length);
         const filteredUser = data.filter((d) => d.dept_id === department);
         const filteredActive = data.filter(
           (d) => d.dept_id === department && d.user_status
@@ -451,14 +453,6 @@ const SalaryWFH = () => {
       fontWeight: "bold",
     },
   });
-  const formatDate = (isoDate) => {
-    const date = new Date(isoDate);
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear().toString();
-    return `${day}-${month}-${year}`;
-  };
-
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
@@ -930,6 +924,10 @@ const SalaryWFH = () => {
                       <span>Total TDS Deducted</span>
                       {thisMonthTDS}
                     </li>
+                    <li>
+                      <span>Total Payroll Cost</span>
+                      {thisMonthTotalBonus - thisMonthTotalDeductions}
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -969,8 +967,16 @@ const SalaryWFH = () => {
                 <div className="salary_dtlCard_info">
                   <ul>
                     <li>
+                      <span>Total Employees:</span>
+                      {allWFHUsers}
+                    </li>
+                    <li>
                       <span>Active Mark :</span>
                       {activeusers?.length}
+                    </li>
+                    <li>
+                      <span>Calander Days</span>
+                      30
                     </li>
                     <li
                       className="color_primary"

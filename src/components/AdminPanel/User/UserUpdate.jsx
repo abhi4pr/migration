@@ -120,6 +120,7 @@ const UserUpdate = () => {
   const [bankName, setBankName] = useState("");
   const [bankAccountNumber, setBankAccountNumber] = useState("");
   const [IFSC, setIFSC] = useState("");
+  const [beneficiary, setBeneficiary] = useState("");
 
   const higestQualificationData = [
     "10th",
@@ -312,6 +313,7 @@ const UserUpdate = () => {
           other_upload_url,
           bank_name,
           ifsc_code,
+          beneficiary,
           account_no,
           permanent_city,
           permanent_address,
@@ -352,10 +354,10 @@ const UserUpdate = () => {
         setReleavingDate(releaving_date?.split("T")?.[0]);
         setSalary(salary);
         // console.log("SpokenLanguages", SpokenLanguages.split(","));
-        let lang  = SpokenLanguages.split(",");
+        let lang = SpokenLanguages.split(",");
         let modifiedLang = lang
-        .filter(item => item.trim() !== '') 
-        .map(item => ({ value: item, label: item }));
+          .filter((item) => item.trim() !== "")
+          .map((item) => ({ value: item, label: item }));
         setTempLanguage(modifiedLang);
         setGender(Gender);
         setNationality(Nationality);
@@ -373,12 +375,12 @@ const UserUpdate = () => {
         setHigestQualification(highest_qualification_name);
         setBankName(bank_name);
         setIFSC(ifsc_code);
+        setBeneficiary(beneficiary);
         setBankAccountNumber(account_no);
         setCity(permanent_city);
         setAddress(permanent_address);
         setState(permanent_state);
         setPincode(permanent_pin_code);
-        // set;
       })
       .then(() => {});
     getOtherDocument();
@@ -1108,19 +1110,21 @@ const UserUpdate = () => {
         label="Bank Name"
         value={bankName}
         onChange={(e) => setBankName(e.target.value)}
-        required={false}
       />
       <FieldContainer
         label="Bank Account Number"
         value={bankAccountNumber}
         onChange={(e) => setBankAccountNumber(e.target.value)}
-        required={false}
       />
       <FieldContainer
         label="IFSC"
         value={IFSC}
         onChange={(e) => setIFSC(e.target.value.toUpperCase())}
-        required={false}
+      />
+      <FieldContainer
+        label="Beneficiary"
+        value={beneficiary}
+        onChange={(e) => setBeneficiary(e.target.value)}
       />
       {/*       
       <FieldContainer

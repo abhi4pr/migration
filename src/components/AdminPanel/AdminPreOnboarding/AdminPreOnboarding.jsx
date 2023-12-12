@@ -8,6 +8,7 @@ import { AiOutlineReload } from "react-icons/ai";
 import { useGlobalContext } from "../../../Context/Context";
 import Select from "react-select";
 import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
+import { City } from "country-state-city";
 
 const onBoardStatus = 2;
 
@@ -465,25 +466,27 @@ const AdminPreOnboarding = () => {
           />
         )}
 
-        <div className="form-group col-3">
-          <label className="form-label">
-            Letter send <sup style={{ color: "red" }}>*</sup>
-          </label>
-          <Select
-            options={offerLetter.map((option) => ({
-              value: `${option.value}`,
-              label: `${option.label}`,
-            }))}
-            value={{
-              value: sendLetter.value,
-              label: sendLetter.label || "", // Fallback to empty string if label is undefined
-            }}
-            onChange={(e) => {
-              setSendLetter(e);
-            }}
-            required
-          />
-        </div>
+        {jobType == "WFO" && (
+          <div className="form-group col-3">
+            <label className="form-label">
+              Letter send <sup style={{ color: "red" }}>*</sup>
+            </label>
+            <Select
+              options={offerLetter.map((option) => ({
+                value: `${option.value}`,
+                label: `${option.label}`,
+              }))}
+              value={{
+                value: sendLetter.value,
+                label: sendLetter.label || "", // Fallback to empty string if label is undefined
+              }}
+              onChange={(e) => {
+                setSendLetter(e);
+              }}
+              required
+            />
+          </div>
+        )}
 
         {sendLetter.label == "Yes" && (
           <FieldContainer
