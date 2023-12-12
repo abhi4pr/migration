@@ -29,12 +29,13 @@ const PageDetaling = ({
   setFilteredPages,
   phaseInfo,
   setPhaseDataError,
+  setPostPage,
+  postpage,
 }) => {
   const { toastAlert, toastError } = useGlobalContext();
 
   const navigate = useNavigate();
   const [allPages, setAllPages] = useState([]);
-  const [postpage, setPostPage] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [deletingPageId, setDeletingPageId] = useState(null);
   const [remainingPages, setRemainingPages] = useState([]);
@@ -288,8 +289,10 @@ const PageDetaling = ({
       <Box sx={{ p: 2 }}>
         <TextField
           id="outlined-basic"
+          InputLabelProps={{ shrink: true }}
           label="Post/pages"
           variant="outlined"
+          value={postpage}
           onChange={handlePost}
         />
       </Box>

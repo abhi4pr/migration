@@ -255,12 +255,12 @@ export default function BrandMaster() {
   const handleEditClick = (id, row) => () => {
     setLoading(true);
     setEditData(row);
-    console.log(row);
-    console.log(
-      subcategoryOptions.find(
-        (option) => option.sub_category_id == row.sub_category_id
-      )
-    );
+    // console.log(row);
+    // console.log(
+    //   subcategoryOptions.find(
+    //     (option) => option.sub_category_id == row.sub_category_id
+    //   )
+    // );
     setIsPutOpen(true);
 
     setPostData(row);

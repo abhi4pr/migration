@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 let options = [];
 let plateformvar = [];
 
-const Experties = () => {
+const ExpertiesUpdate = () => {
   const [allPageData, setAllPageData] = useState([]);
   const [getUserData, setGetUserData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
@@ -31,28 +31,6 @@ const Experties = () => {
   ];
   const page_health = ["Active", "nonActive"];
 
-  //   console.log(expertiesusername.user_id, "res");
-  //   const getExperties = () => {
-  //     axios
-  //       .get("http://192.168.29.110:8080/api/expertise")
-  //       .then((res) => {
-  //         console.log(res.data.data.user_id, "expert");
-  //         const matchdata = res.data.data.map(
-  //           item.user_id === expertiesusername.user_id
-  //         );
-  //         console.log(matchdata, "yha match hia");
-  //         if (matchdata) {
-  //           alert("User ID matches!");
-  //         } else {
-  //           console.log("Not match");
-  //         }
-  //         console.log(matchdata, "experties");
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data:", error);
-  //       });
-  //   };
-
   const getPageData = async () => {
     const pageData = await axios.get(
       `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
@@ -65,25 +43,11 @@ const Experties = () => {
       "http://34.93.135.33:8080/api/get_all_users"
     );
     setGetUserData(alluser.data.data);
-    // const expert = await axios.get("http://192.168.29.110:8080/api/expertise");
-    // console.log(expert.data.data);
-    // const difference = alluser?.data?.data?.filter(
-    //   (obj1) =>
-    //     !expert?.data?.data.some((obj2) => obj2.user_id === obj1.user_id)
-    // );
-    // console.log(difference, "diffrence here");
   };
-  // const getExpertData = () => {
-  //   const expertdata = axios.get("http://192.168.29.110:8080/api/expertise");
-  //   const expert = expertdata.data.data;
-  //   setExpertData(expert);
-  //   console.log(expert, "all expet data");
-  // };
 
   useEffect(() => {
     getPageData();
     getAllUsers();
-    // getExpertData();
   }, []);
 
   const categorySet = () => {
@@ -122,10 +86,9 @@ const Experties = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         "http://192.168.29.110:8080/api/expertise",
         {
-          // exp_name: "ok",
           user_id: expertiesusername.user_id,
           area_of_expertise: {
             category: selectedCategory,
@@ -219,9 +182,6 @@ const Experties = () => {
           </div>
         </div>
         <div className="col-sm-12 col-lg-3 mt-2">
-          {/* <button className="btn btn-primary" onClick={handleSubmit}>
-            Submit
-          </button> */}
           <Button onClick={handleSubmit} variant="contained" color="primary">
             Submit
           </Button>
@@ -231,4 +191,4 @@ const Experties = () => {
   );
 };
 
-export default Experties;
+export default ExpertiesUpdate;

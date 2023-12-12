@@ -4,13 +4,19 @@ import { useEffect, useState } from "react";
 
 let commInfo = [];
 // eslint-disable-next-line react/prop-types
-const CampaignDetailes = ({ cid, getCampaign }) => {
+const CampaignDetailes = ({
+  cid,
+  getCampaign,
+  // setCampaignData,
+  // campaignData,
+}) => {
   const [campaignData, setCampaignData] = useState({});
   const [brandData, setBrandData] = useState([]);
   const [cmpName, setCmpName] = useState({});
   const [commitData, setCommitData] = useState([]);
   const [commitmentCompleteData, setCommitmentCompleteData] = useState([]);
 
+  console.log(campaignData, "cmpdata");
   const getData = async () => {
     try {
       const res = await axios.get(
