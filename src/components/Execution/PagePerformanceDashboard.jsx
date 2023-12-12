@@ -15,20 +15,46 @@ const FilterDataOptions = [
   "Top 5 Age Group",
 ];
 
+const intervalFlagOptions = [
+  {label: "Current Month", value: 1},
+  {label: "Last Three months", value: 3},
+  {label: "Last six months", value:6},
+
+  {label: "Last one year", value: 10},
+  {label: "All Data", value: 2},
+];
 export default function PagePerformanceDashboard() {
   const [pageHistory, setPageHistory] = React.useState([]);
   const [filterDataVal, setFilterDataVal] = useState("Highest");
   const [openPerformanceGraphDialog, setOpenPerformanceGraphDialog] = useState(false);
+  const [rowData, setRowData] = useState([]);
+  const [intervalFlag, setIntervalFlag] = useState({label: "Current Month", value: "1"});
+
+
 
   useEffect(() => {
     callApi();
   }, []);
 
+  useEffect(() => {
+    callApi();
+  }, [intervalFlag]);
+
   const callApi = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/page_health_dashboard")
+      // axios
+      //   .get("http://34.93.135.33:8080/api/page_health_dashboard")
+      //   .then((res) => {
+
+      //     setPageHistory(res.data.data);
+      //   });
+      axios
+      .post("http://34.93.135.33:8080/api/page_health_dashboard",
+      {
+        "intervalFlag" : intervalFlag.value,
+      }
+      )
       .then((res) => {
-        console.log(res.data.data);
+
         setPageHistory(res.data.data);
       });
   };
@@ -233,16 +259,38 @@ export default function PagePerformanceDashboard() {
   }
 
   const handleRowClick = (params) => {
-    console.log("Row clicked!", params.row);
     setOpenPerformanceGraphDialog(true);
-    
+    setRowData(params.row);
   };
 
   return (
     <>
       <FormContainer mainTitle="Page Performance Dashboard" link="/ip-master" />
-      <div>
+      <div className="d-flex">
+      <Autocomplete
+          disablePortal
+          va lue={intervalFlag.label}
+          defaultValue={intervalFlagOptions[0].label}
+          id="combo-box-demo"
+          options={intervalFlagOptions.map((option) => ({
+            label: option.label,
+            value: option.value
+          }))}
+          
+          onChange={(event, newValue) => {
+            if (newValue === null) {
+              return setIntervalFlag({label:"Current Month", value: 1});
+            }
+          console.log(newValue);
+            setIntervalFlag(newValue);
+          }}
+          sx={{ width: 300 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Filter Date" />
+          )}
+        />
         <Autocomplete
+        className="ms-3"
           disablePortal
           value={filterDataVal}
           defaultChecked="Higest"
@@ -251,7 +299,7 @@ export default function PagePerformanceDashboard() {
           options={FilterDataOptions}
           onChange={(event, newValue) => {
             if (newValue === null) {
-              return setFilterDataVal("Higest");
+              return setFilterDataVal("Highest");
             }
             setFilterDataVal(newValue);
           }}
@@ -270,7 +318,7 @@ export default function PagePerformanceDashboard() {
         disableSelectionOnClick
         getRowId={(row) => row._id}
       />
-     {openPerformanceGraphDialog && <PerformanceGraphDialog setOpenPerformanceGraphDialog={setOpenPerformanceGraphDialog} />}
+     {openPerformanceGraphDialog && <PerformanceGraphDialog setOpenPerformanceGraphDialog={setOpenPerformanceGraphDialog} rowData={rowData} />}
     </>
   );
 }

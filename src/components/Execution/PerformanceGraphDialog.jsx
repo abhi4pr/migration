@@ -1,91 +1,152 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
+  Paper,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
-import { Chart } from "chart.js";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 
-const setFollowersDataY = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  datasets: [
-    {
-      label: "# of Followers",
-      data: [100, 20, 33, 24, 5, 61, 7, 48, 9, 10, 91, 112],
-      backgroundColor: "rgb(242, 31, 12)",
-      borderColor: "rgb(255, 165, 0)",
-      borderWidth: 1,
-    },
-    {
-      label: "# of Post Counts",
-      data: [10, 120, 33, 244, 50, 1, 70, 48, 90, 10, 91, 12],
-      backgroundColor: "rgb(23, 3, 252)",
-      borderColor: "rgb(255, 165, 0)",
-      borderWidth: 1,
-    },
-  ],
-};
-
-const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const xLabels = [
-  "Page A",
-  "Page B",
-  "Page C",
-  "Page D",
-  "Page E",
-  "Page F",
-  "Page G",
-];
 export default function PerformanceGraphDialog({
   setOpenPerformanceGraphDialog,
+  rowData,
 }) {
   const [open, setOpen] = useState(true);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const [filterDataVal, setFilterDataVal] = useState("Current Month");
 
   const handleClose = () => {
-    //   setOpen(false);
     setOpenPerformanceGraphDialog(false);
   };
 
+  useEffect(() => {
+    console.log(rowData);
+    console.log(rowData.maxEngagement);
+  }, []);
 
-
+  const GraphAutoCompSelectdata = [
+    "Current Month",
+    "Last six months",
+    "Last one year",
+  ];
+ 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
+
+      <Dialog open={open} onClose={handleClose}  maxWidth={'xl'} >
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
-
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={GraphAutoCompSelectdata}
+            sx={{ width: 250 }}
+            className="mt-2"
+            value={filterDataVal}
+            onChange={(event, newValue) => {
+              if (newValue === null) {
+                return setFilterDataVal("Current Month");
+              }
+              setFilterDataVal(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Choose Option" />
+            )}
+          />
+          <Paper>
+            <h6 className="fs-5 mx-2 pt-3">Highest</h6>
+            <LineChart
+              xAxis={[
+                filterDataVal === "Current Month"
+                  ? { data: [1] }
+                  : filterDataVal === "Last six months"
+                  ? { data: [1, 2, 3, 4, 5, 6] }
+                  : filterDataVal === "Last one year"
+                  ? { data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
+                  : null,
+              ]}
+              series={[
+                {
+                  label: "Engagement",
+                  data:
+                    filterDataVal === "Current Month"
+                      ? [rowData?.maxEngagement] // Assuming rowData?.maxEngagement is a number
+                      : filterDataVal === "Last six months"
+                      ? [583, 4854, 7885, 444, 455, 8624] // Array for last six months
+                      : filterDataVal === "Last one year"
+                      ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] // Array for last one year
+                      : null, // Default case
+                  // data: [rowData?.maxEngagement],
+                },
+                {
+                  label: "Impression",
+                  data:
+                    filterDataVal === "Current Month"
+                      ? [rowData?.maxImpression] // Assuming rowData?.maxImpression is a number for "Current Month"
+                      : filterDataVal === "Last six months"
+                      ? [47526, 12547, 2562, 4789, 3657, 85478] // Replace with actual data for last six months
+                      : filterDataVal === "Last one year"
+                      ? [
+                          47526, 12547, 2562, 4789, 3657, 85478, 2547, 1256,
+                          258, 147, 357, 1489,
+                        ] // Replace with actual data for last one year
+                      : null, // Default case
+                },
+                {
+                  label: "Reach",
+                  data:
+                    filterDataVal === "Current Month"
+                      ? [rowData?.maxReach] // Assuming rowData?.maxReach is a number for "Current Month"
+                      : filterDataVal === "Last six months"
+                      ? [474526, 128547, 25562, 47389, 36457, 875478] // Replace with actual data for last six months
+                      : filterDataVal === "Last one year"
+                      ? [
+                          47526, 12547, 2562, 4789, 3657, 85478, 2547, 1256,
+                          258, 147, 357, 1489,
+                        ] // Replace with actual data for last one year
+                      : null, // Default case
+                },
+              ]}
+              width={500}
+              height={250}
+            />
+          </Paper>
+          <Paper>
+            <h6 className="fs-5 mx-2 pt-3">Average</h6>
+            <LineChart
+              xAxis={[{ data: [1] }]}
+              series={[
+                {
+                  data: [rowData?.avgEngagement],
+                },
+                {
+                  data: [rowData?.avgImpression], // Second line data
+                },
+                {
+                  data: [rowData?.avgReach], // Third line data
+                },
+              ]}
+              width={500}
+              height={250}
+            />
+          </Paper>
 
           <LineChart
-            xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+            xAxis={[{ data: [1] }]}
             series={[
               {
-                data: [2, 5.5, 2, 8.5, 1.5, 5],
+                data: [rowData?.maxEngagement],
+              },
+              {
+                data: [rowData?.maxImpression], // Second line data
+              },
+              {
+                data: [rowData?.maxReach], // Third line data
               },
             ]}
             width={500}
@@ -93,8 +154,8 @@ export default function PerformanceGraphDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose}>Close</Button>
+
         </DialogActions>
       </Dialog>
     </React.Fragment>
