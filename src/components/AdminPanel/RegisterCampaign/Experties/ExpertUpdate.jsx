@@ -6,12 +6,14 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 let options = [];
 let plateformvar = [];
 
 const ExpertiesUpdate = () => {
+  const { id } = useParams();
   const [allPageData, setAllPageData] = useState([]);
   const [getUserData, setGetUserData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
@@ -21,6 +23,7 @@ const ExpertiesUpdate = () => {
   const [expertdata, setExpertData] = useState([]);
 
   const [expertiesusername, setExpertiesUserName] = useState("");
+  const [expertiessingledata, setExpertiesSingleData] = useState([]);
 
   const Follower_Count = [
     "<10k",
@@ -44,8 +47,18 @@ const ExpertiesUpdate = () => {
     );
     setGetUserData(alluser.data.data);
   };
+  const ExsingleData = async () => {
+    const singledata = await axios.get(
+      `http://192.168.29.110:8080/api/expertise/${id}`
+    );
+    const fetcheData = singledata.data.data;
+    console.log(fetcheData, "single data ");
+    const { exp_name, user_id } = fetcheData;
+    setExpertiesUserName(exp_name);
+  };
 
   useEffect(() => {
+    ExsingleData();
     getPageData();
     getAllUsers();
   }, []);
@@ -87,7 +100,7 @@ const ExpertiesUpdate = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.put(
-        "http://192.168.29.110:8080/api/expertise",
+        `http://192.168.29.110:8080/api/expertise/${expertiesusername.user_id}`,
         {
           user_id: expertiesusername.user_id,
           area_of_expertise: {
@@ -96,6 +109,7 @@ const ExpertiesUpdate = () => {
             platform: platform,
             pageHealth: pageHealth,
           },
+          updated_by: "hello",
         }
       );
     } catch {}
@@ -115,6 +129,7 @@ const ExpertiesUpdate = () => {
             <Autocomplete
               fullWidth={true}
               disablePortal
+              value={expertiesusername}
               id="combo-box-demo"
               options={getUserData.map((user) => ({
                 label: user.user_name,
@@ -137,6 +152,7 @@ const ExpertiesUpdate = () => {
             <Autocomplete
               multiple
               id="combo-box-demo"
+              value={selectedCategory}
               options={options}
               renderInput={(params) => (
                 <TextField {...params} label="Category" />
@@ -144,6 +160,7 @@ const ExpertiesUpdate = () => {
               onChange={categoryChangeHandler}
             />
           </div>
+
           <div className="col-sm-12 col-lg-3">
             <Autocomplete
               multiple

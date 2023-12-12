@@ -556,8 +556,14 @@ export default function RegisteredCampaign() {
                 <SendTwoToneIcon />
               </Button>
             ) : (
-              <div style={{ display:"flex",alignItems:"center",justifyContent:"center" }}>
-                <parseInt style={{width:"5em",color:"red"}}>N/A</parseInt>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <parseInt style={{ width: "5em", color: "red" }}>N/A</parseInt>
               </div>
             )}
 

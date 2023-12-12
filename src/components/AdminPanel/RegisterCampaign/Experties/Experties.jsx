@@ -125,7 +125,7 @@ const Experties = () => {
       const response = await axios.post(
         "http://192.168.29.110:8080/api/expertise",
         {
-          // exp_name: "ok",
+          exp_name: expertiesusername.label,
           user_id: expertiesusername.user_id,
           area_of_expertise: {
             category: selectedCategory,

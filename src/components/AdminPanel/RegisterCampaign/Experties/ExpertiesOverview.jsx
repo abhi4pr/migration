@@ -7,21 +7,50 @@ import { Link } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import Swal from "sweetalert2";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ModeCommentTwoToneIcon from "@mui/icons-material/ModeCommentTwoTone";
+import { Box, Button, Modal } from "@mui/material";
 
+// var desturctureData;
 const ExpertiesOverview = () => {
   const [getExpertiesData, setGetExpertiesData] = useState([]);
+  console.log(getExpertiesData, "desturctureData");
+  // const handleClose = () => setOpen(false);
+  const [open2, setOpen2] = React.useState(false);
+  const [expertieareadata, setExpertieAreaData] = useState([]);
+  const [platform, setPlatform] = useState([]);
+  const [followercount, setFollowerCount] = useState([]);
+  const handleOpen2 = (params) => {
+    setOpen2(true);
+    setExpertieAreaData(params.row.area_of_expertise.category);
+    setFollowerCount(params.row.area_of_expertise.follower_count);
+    setPlatform(params.row.area_of_expertise.platform);
+  };
+
+  const handleClose2 = () => setOpen2(false);
+
   const ExpertiesData = async () => {
     const Experties = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_departments"
+      "http://192.168.29.110:8080/api/expertise"
     );
-    const setexdata = Experties.data;
+    const setexdata = Experties.data.data;
     setGetExpertiesData(setexdata);
-    console.log(getExpertiesData, "exdata here");
   };
 
   useEffect(() => {
     ExpertiesData();
   }, []);
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "60%",
+    borderRadius: "10px",
+    transform: "translate(-50%, -50%)",
+    width: "70%",
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 1,
+  };
 
   const handleDelete = (userId) => {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -45,7 +74,7 @@ const ExpertiesOverview = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
+            .delete(`http://192.168.29.110:8080/api/expertise/${userId}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(
@@ -53,7 +82,7 @@ const ExpertiesOverview = () => {
                 "Your file has been deleted.",
                 "success"
               );
-              getData();
+              ExpertiesData();
             })
             .catch(() => {
               showErrorAlert();
@@ -78,21 +107,33 @@ const ExpertiesOverview = () => {
       },
     },
     {
-      field: "dept_name",
+      field: "exp_name",
       headerName: "Expert Name",
       width: 180,
       sortable: true,
     },
+    {
+      field: "action",
+      headerName: "Area Of Expertise",
+      width: 150,
+      renderCell: (params) => {
+        return (
+          <div>
+            <Button onClick={() => handleOpen2(params)} variant="text">
+              <ModeCommentTwoToneIcon />
+            </Button>
+          </div>
+        );
+      },
+    },
+
     {
       field: "actions",
       headerName: "Action",
       width: 150,
       renderCell: (params) => (
         <>
-          {/* <Link to={`/admin/expeties-update/${params.row.dept_id}`}>
-            <EditIcon sx={{ gap: "4px", margin: "5px", color: "blue" }} />
-          </Link> */}
-          <Link to={`/admin/expeties-update`}>
+          <Link to={`/admin/expeties-update/${params.row.exp_id}`}>
             <EditIcon sx={{ gap: "4px", margin: "5px", color: "blue" }} />
           </Link>
 
@@ -105,6 +146,7 @@ const ExpertiesOverview = () => {
       ),
     },
   ];
+
   return (
     <div>
       <FormContainer
@@ -116,16 +158,30 @@ const ExpertiesOverview = () => {
         <DataGrid
           rows={getExpertiesData}
           columns={columns}
-          // pageSize={10}
-          // rowsPerPageOptions={[10]}
-          // disableColumnMenu
-          // disableSelectionOnClick
-          getRowId={(row) => row.dept_id}
-          // slots={{
-          //   toolbar: GridToolbar,
-          // }}
+          getRowId={(row) => row.exp_id}
         />
       </div>
+      <Modal
+        open={open2}
+        onClose={handleClose2}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <h2>Category</h2>
+          {expertieareadata.map((d) => (
+            <h4>{d}</h4>
+          ))}
+          <h2>Follower Count</h2>
+          {followercount.map((d) => (
+            <h4>{d}</h4>
+          ))}
+          <h2>Platform</h2>
+          {platform.map((d) => (
+            <h4>{d}</h4>
+          ))}
+        </Box>
+      </Modal>
     </div>
   );
 };
