@@ -76,7 +76,6 @@ const SalaryDashboard = () => {
     });
   }, []);
 
-  // ----------------------------------------------------------------------
   const getAttendanceData = () => {
     axios
       .post("http://34.93.135.33:8080/api/get_salary_by_filter", {

@@ -48,6 +48,8 @@ import ContactNumber from "../ReusableComponents/ContactNumber";
 import DocumentTab from "./DocumentTab";
 import FAQTab from "./FAQTab";
 import ReadyToOnboardContent from "./ReadyToOnboardContent";
+import { City, State } from "country-state-city";
+import IndianCitiesMui from "../ReusableComponents/IndianCitiesMui";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -160,13 +162,13 @@ const PreOnboardingUserMaster = () => {
   const [permanentAddress, setPermanentAddress] = useState("");
   const [permanentCity, setPermanentCity] = useState("");
   const [permanentState, setPermanentState] = useState("");
-  const [permanentPincode, setPermanentPincode] = useState(null);
+  const [permanentPincode, setPermanentPincode] = useState("");
 
   //Current Address
   const [currentAddress, setCurrentAddress] = useState("");
   const [currentCity, setcurrentCity] = useState("");
   const [currentState, setcurrentState] = useState("");
-  const [currentPincode, setcurrentPincode] = useState(null);
+  const [currentPincode, setcurrentPincode] = useState("");
 
   const [sameAsCurrent, setSameAsCurrent] = useState(false);
 
@@ -184,6 +186,10 @@ const PreOnboardingUserMaster = () => {
   const [relationToGuardian, setRelationToGuardian] = useState("");
   const [guardianAddress, setGuardianAddress] = useState("");
 
+  //coc
+  const [acceptCoc, setAcceptCoc] = useState(false);
+  const [cocFlag, setCocFlag] = useState(false);
+
   const [showModal, setShowModal] = useState(true);
   const [showImageSelector, setShowImageSelector] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
@@ -193,7 +199,10 @@ const PreOnboardingUserMaster = () => {
   const [getNickName, setGetNickName] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readyToOnboardModal, setReadyToOnboard] = useState(false);
-  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
+  const [coordinates, setCoordinates] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
 
   useEffect(() => {
     const getLocation = () => {
@@ -206,15 +215,18 @@ const PreOnboardingUserMaster = () => {
             });
           },
           (error) => {
-            console.error('Error getting location:', error);
+            console.error("Error getting location:", error);
           }
         );
       } else {
-        console.error('Geolocation is not supported by this browser.');
+        console.error("Geolocation is not supported by this browser.");
       }
     };
 
     getLocation();
+    // console.log(State.getStatesOfCountry("IN"));
+    // console.log(City.getCitiesOfCountry("IN"));
+    // console.log(City.getCitiesOfState("IN", "CT"));
   }, []);
 
   const fetchCOCData = async () => {
@@ -376,6 +388,7 @@ const PreOnboardingUserMaster = () => {
           nick_name,
           showOnboardingModal,
           image,
+          coc_flag,
         } = fetchedData;
         setAllUserData(fetchedData);
         setUserName(user_name);
@@ -456,15 +469,14 @@ const PreOnboardingUserMaster = () => {
         setGuardianAddress(guardian_address);
         setGetProfile(image_url);
         setGetNickName(nick_name);
-        console.log(showOnboardingModal, image);
         {
           showOnboardingModal
             ? openReadyToOnboardModal()
             : !image && setShowImageSelector(true);
         }
+        setCocFlag(coc_flag);
       });
   };
-
   useEffect(() => {
     gettingData();
     fetchCOCData();
@@ -747,6 +759,20 @@ const PreOnboardingUserMaster = () => {
       },
     });
     setShowModal(false);
+    gettingData();
+  };
+
+  const handleCOC = async () => {
+    const formData = new FormData();
+    formData.append("user_id", id);
+    formData.append("coc_flag", true);
+
+    await axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    toastAlert("Success");
     gettingData();
   };
 
@@ -1309,20 +1335,10 @@ const PreOnboardingUserMaster = () => {
                                 }
                               />
                             </div>
-                            <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="City"
-                                variant="outlined"
-                                type="text"
-                                value={currentCity}
-                                onChange={(e) => setcurrentCity(e.target.value)}
-                              />
-                            </div>
 
                             <div className="form-group">
                               <IndianStatesMui
-                                newValue={currentState}
+                                selectedState={currentState}
                                 onChange={(option) =>
                                   setcurrentState(option ? option : null)
                                 }
@@ -1330,7 +1346,18 @@ const PreOnboardingUserMaster = () => {
                             </div>
 
                             <div className="form-group">
+                              <IndianCitiesMui
+                                selectedState={currentState}
+                                selectedCity={currentCity}
+                                onChange={(option) =>
+                                  setcurrentCity(option ? option : null)
+                                }
+                              />
+                            </div>
+
+                            <div className="form-group">
                               <TextField
+                                required
                                 id="outlined-basic"
                                 label="Current Pincode"
                                 variant="outlined"
@@ -1360,6 +1387,7 @@ const PreOnboardingUserMaster = () => {
                             <h2>Permanent Address</h2>
                             <div className="form-group">
                               <TextField
+                                required
                                 id="outlined-basic"
                                 label="Permanent Address"
                                 variant="outlined"
@@ -1370,22 +1398,10 @@ const PreOnboardingUserMaster = () => {
                                 }
                               />
                             </div>
-                            <div className="form-group">
-                              <TextField
-                                id="outlined-basic"
-                                label="Permanent City"
-                                variant="outlined"
-                                type="text"
-                                value={permanentCity}
-                                onChange={(e) =>
-                                  setPermanentCity(e.target.value)
-                                }
-                              />
-                            </div>
 
                             <div className="form-group">
                               <IndianStatesMui
-                                newValue={permanentState}
+                                selectedState={permanentState}
                                 onChange={(option) =>
                                   setPermanentState(option ? option : "")
                                 }
@@ -1393,7 +1409,18 @@ const PreOnboardingUserMaster = () => {
                             </div>
 
                             <div className="form-group">
+                              <IndianCitiesMui
+                                selectedState={permanentState}
+                                selectedCity={permanentCity}
+                                onChange={(option) =>
+                                  setPermanentCity(option ? option : null)
+                                }
+                              />
+                            </div>
+
+                            <div className="form-group">
                               <TextField
+                                required
                                 id="outlined-basic"
                                 label="Pincode"
                                 variant="outlined"
@@ -1412,6 +1439,17 @@ const PreOnboardingUserMaster = () => {
                               className="btn btn_pill btn_cmn btn_white"
                               onClick={handleSubmit}
                               type="button"
+                              disabled={
+                                !currentAddress &&
+                                !currentState &&
+                                !permanentCity &&
+                                !currentPincode &&
+                                !permanentAddress &&
+                                !permanentState &&
+                                !permanentCity &&
+                                !permanentPincode &&
+                                true
+                              }
                             >
                               submit
                             </button>
@@ -1453,6 +1491,31 @@ const PreOnboardingUserMaster = () => {
                           </p>
                         </div>
                         {renderList()}
+                        {
+                          <>
+                            <div className="board_form form_checkbox">
+                              <label className="cstm_check">
+                                I accept Agreement
+                                <input
+                                  className="form-control"
+                                  name="COC"
+                                  type="checkbox"
+                                  checked={acceptCoc}
+                                  onChange={(e) =>
+                                    setAcceptCoc(e.target.checked)
+                                  }
+                                />
+                                <span className="checkmark"></span>
+                              </label>
+                            </div>
+                            <button
+                              className="btn btn-primary"
+                              onClick={handleCOC}
+                            >
+                              Accept
+                            </button>
+                          </>
+                        }
                         {/* <div className="thm_textbx">
                           <h3>A. Cyber security and digital devices</h3>
                           <p>
@@ -1474,11 +1537,7 @@ const PreOnboardingUserMaster = () => {
                           </p>
                         </div> */}
                       </div>
-                      <div className="ml-auto mr-auto text-center">
-                        {/* <button className="btn btn_pill btn_cmn btn_white">
-                          Submit
-                        </button> */}
-                      </div>
+                      <div className="ml-auto mr-auto text-center"></div>
                     </div>
                   </div>
                 )}

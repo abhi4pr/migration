@@ -2177,7 +2177,6 @@
 
 // export default ExecutionAll;
 
-
 import React from "react";
 import Stack from "@mui/material/Stack";
 import {
@@ -2318,7 +2317,7 @@ function ExecutionAll() {
   const [ageImgSrc, setAgeImgSrc] = useState(null);
   const [reachImgSrc, setReachImgSrc] = useState(null);
   const [reachImg, setReachImg] = useState(null);
-const [loading,setLoading]=useState(true);
+  const [loading, setLoading] = useState(true);
   const handlePercentageChange = (value, setter) => {
     const newValue = parseFloat(value);
     if (!isNaN(newValue) && newValue >= 0 && newValue <= 100) {
@@ -2361,7 +2360,6 @@ const [loading,setLoading]=useState(true);
 
   const cityCopyValidation = (selectedCity, city) => {
     setTimeout(() => {
-
       // Early exit if the selected city is null
       if (selectedCity === null) {
         let temp = cityListTemp.filter(
@@ -2481,19 +2479,17 @@ const [loading,setLoading]=useState(true);
   });
 
   const callDataForLoad = () => {
-  setLoading(true);
+    setLoading(true);
     axios
-      .get(
-        "http://34.93.135.33:8080/api/get_all_purchase_data"
-      )
+      .get("http://34.93.135.33:8080/api/get_all_purchase_data")
       .then((res) => {
         setLoading(false);
-        console.log(res.data.result)
+        console.log(res.data.result);
         setAlldata(res.data.result);
         let tempdata = res.data.result.filter((ele) => {
           return ele.platform.toLowerCase() == "instagram";
         });
-        console.log(tempdata)
+        console.log(tempdata);
         setRows(tempdata);
 
         // for (let i = 0; i < tempdata.length; i++) {
@@ -2770,8 +2766,7 @@ const [loading,setLoading]=useState(true);
       headerName: "Update",
       width: 130,
       renderCell: (params) => {
-        
-const totalPercentage =params.row.totalPercentage
+        const totalPercentage = params.row.totalPercentage;
 
         return (
           <button
@@ -2779,7 +2774,9 @@ const totalPercentage =params.row.totalPercentage
             className="btn btn-primary"
             data-toggle="modal"
             data-target="#myModal1"
-            disabled={totalPercentage == 0 || totalPercentage == 100 ? false : true}
+            disabled={
+              totalPercentage == 0 || totalPercentage == 100 ? false : true
+            }
             onClick={() => handleRowClick(params.row)}
           >
             Set Stats
@@ -2790,16 +2787,22 @@ const totalPercentage =params.row.totalPercentage
     {
       field: "history",
       width: 150,
-      headerName: "History",  
+      headerName: "History",
       renderCell: (params) => {
-        console.log(params?.row?.latestEntry?.stats_update_flag?params?.row?.latestEntry.stats_update_flag: "")
+        console.log(
+          params?.row?.latestEntry?.stats_update_flag
+            ? params?.row?.latestEntry.stats_update_flag
+            : ""
+        );
         return (
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => handleHistoryRowClick(params.row)}
             disabled={
-             params?.row?.latestEntry?.stats_update_flag?!params?.row?.latestEntry.stats_update_flag: true
+              params?.row?.latestEntry?.stats_update_flag
+                ? !params?.row?.latestEntry.stats_update_flag
+                : true
             }
           >
             See History
@@ -2818,8 +2821,10 @@ const totalPercentage =params.row.totalPercentage
             className="btn btn-primary"
             onClick={() => handleUpdateRowClick(params.row)}
             disabled={
-              params?.row?.latestEntry?.stats_update_flag?!params?.row?.latestEntry.stats_update_flag: true
-             }
+              params?.row?.latestEntry?.stats_update_flag
+                ? !params?.row?.latestEntry.stats_update_flag
+                : true
+            }
           >
             Update
           </button>
@@ -2831,7 +2836,6 @@ const totalPercentage =params.row.totalPercentage
       width: 150,
       headerName: "Stats Update %",
       renderCell: (params) => {
-        
         return Math.round(+params.row.totalPercentage) + "%";
       },
     },
@@ -2840,8 +2844,9 @@ const totalPercentage =params.row.totalPercentage
       width: 150,
       headerName: "Stats Update Flag",
       renderCell: (params) => {
-        const num =
-        params?.row?.latestEntry?.stats_update_flag?params?.row?.latestEntry.stats_update_flag: false
+        const num = params?.row?.latestEntry?.stats_update_flag
+          ? params?.row?.latestEntry.stats_update_flag
+          : false;
         return num ? "Yes" : "No";
       },
     },
@@ -3186,22 +3191,20 @@ const totalPercentage =params.row.totalPercentage
                 },
               }}
               unstable_headerFilters
-              
             />
           ) : (
             // <CircularWithValueLabel />
             <ContentLoader
-            width={2000}
-            height={700}
-            viewBox="0 30 2000 700"
-            backgroundColor="#f0f0f0"
-            foregroundColor="#dedede"
-
-          >
-            {/* <rect x="43" y="304" rx="4" ry="4" width="271" height="9" /> */}
-            {/* <rect x="44" y="323" rx="3" ry="3" width="119" height="6" /> */}
-            <rect x="42" y="77" rx="10" ry="10" width="1100" height="600" />
-          </ContentLoader>
+              width={2000}
+              height={700}
+              viewBox="0 30 2000 700"
+              backgroundColor="#f0f0f0"
+              foregroundColor="#dedede"
+            >
+              {/* <rect x="43" y="304" rx="4" ry="4" width="271" height="9" /> */}
+              {/* <rect x="44" y="323" rx="3" ry="3" width="119" height="6" /> */}
+              <rect x="42" y="77" rx="10" ry="10" width="1100" height="600" />
+            </ContentLoader>
           )}
         </Paper>
       </ThemeProvider>
@@ -3705,7 +3708,7 @@ const totalPercentage =params.row.totalPercentage
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity2(value);
-                        cityCopyValidation(value,city2);
+                        cityCopyValidation(value, city2);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 2" />
@@ -3734,7 +3737,7 @@ const totalPercentage =params.row.totalPercentage
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity3(value);
-                        cityCopyValidation(value,city3);
+                        cityCopyValidation(value, city3);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 3" />
@@ -3763,7 +3766,7 @@ const totalPercentage =params.row.totalPercentage
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity4(value);
-                        cityCopyValidation(value,city4);
+                        cityCopyValidation(value, city4);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 4" />
@@ -3792,7 +3795,7 @@ const totalPercentage =params.row.totalPercentage
                       options={cityList.map((city) => city)}
                       onChange={(e, value) => {
                         setCity5(value);
-                        cityCopyValidation(value,city5);
+                        cityCopyValidation(value, city5);
                       }}
                       renderInput={(params) => (
                         <TextField {...params} label="City 5" />
