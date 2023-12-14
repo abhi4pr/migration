@@ -7,6 +7,7 @@ import { FaProductHunt } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+
 function Dashboard() {
   const [renderCount, setRenderCount] = useState(0);
   const [allsimData, getAllSimData] = useState([]);
@@ -28,9 +29,11 @@ function Dashboard() {
   function handleIP() {
     navigate("/ip-overview");
   }
+
   const conditionToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(conditionToken);
   const userId = decodedToken.id;
+
   useEffect(() => {
     if (userId && contextData.length === 0) {
       axios
@@ -49,15 +52,16 @@ function Dashboard() {
         });
     }
   }, []);
+
   useEffect(() => {
     setRenderCount(renderCount + 1);
-    axios.get("http://34.93.135.33:8080/api/alldataofsimmast").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
       getAllSimData(res.data.data);
     });
-    axios.get("http://34.93.135.33:8080/api/logodata").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_logo_brands").then((res) => {
       getLogoBrandData(res.data);
     });
-    axios.get("http://34.93.135.33:8080/api/alldataofipregis").then((res) => {
+    axios.get("http://34.93.135.33:8080/api/get_all_instapages").then((res) => {
       getIntellectualProperty(res.data);
     });
     axios.get("http://34.93.135.33:8080/api/get_finances").then((res) => {
@@ -67,7 +71,7 @@ function Dashboard() {
       );
     });
   }, []);
-  console.log(accountsPendingPaymentsCount);
+
   const AllSimData = allsimData.length;
   const AllLogoBrandData = logoBrandData.length;
   const AllIntellectualProperty = IntellectualProperty.length;
@@ -155,8 +159,8 @@ function Dashboard() {
                     <div className="card-body" onClick={handleSim}>
                       <div className="d_infocard_txt">
                         <h3>Assets</h3>
-                        {/* <h2>{AllSimData}</h2> */}
-                        <h2>Assets</h2>
+                        <h2>{AllSimData}</h2>
+                        
                       </div>
                       <div className="d_infocard_icon">
                         <span>
@@ -217,7 +221,7 @@ function Dashboard() {
                   <div className="d_infocard card shadow">
                     <div className="card-body">
                       <div className="d_infocard_txt">
-                        <h3>WFH</h3>
+                        {/* <h3>WFH</h3> */}
 
                         <h2>WFH Single User</h2>
                       </div>

@@ -31,7 +31,7 @@ const OfficeMastOverview = () => {
   async function getData() {
     try {
       const res = await axios.get("http://34.93.135.33:8080/api/get_all_rooms");
-      console.log(res.data.data, "hjukjkh");
+      
       setData(res.data.data);
       setFilterData(res.data.data);
     } catch (error) {

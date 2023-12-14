@@ -174,26 +174,6 @@ const UserUpdate = () => {
   };
   // const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
 
-  // const [speakingLanguage, setSpeakingLanguage] = useState("");
-  // const [gender, setGender] = useState("");
-  // const [dateOfBirth, setDateOfBirth] = useState("");
-  // const [nationality, setNationality] = useState("Indian");
-
-  // const [age, setAge] = useState(0);
-
-  // const [FatherName, setFatherName] = useState("");
-  // const [motherName, setMotherName] = useState("");
-  // const [hobbies, setHobbies] = useState("");
-  // const [bloodGroup, setBloodGroup] = useState("");
-  // const [maritialStatus, setMaritialStatus] = useState("");
-  // const [dateOfMarraige, setDateOfMarraige] = useState("");
-  // const [error, setError] = useState("");
-
-  // // TDS State
-  // const [tdsApplicable, setTdsApplicable] = useState("No");
-  // const [tdsPercentage, setTdsPercentage] = useState(0);
-  // const [showTdsPercentage, setShowTdsPercentage] = useState(false);
-
   useEffect(() => {
     const selectedOption = defaultSeatData?.find(
       (option) => option?.sitting_id === Number(sitting)
@@ -586,22 +566,6 @@ const UserUpdate = () => {
     // }
   };
 
-  // const handleFileChange = (e) => {
-  //   if (e.target.files.length > 0) {
-  //     setProfile(e.target.files[0]);
-  //     setUID(e.target.files[0]);
-  //     setPanUpload(e.target.files[0]);
-  //     setHighestUpload(e.target.files[0]);
-  //     setOtherUpload(e.target.files[0]);
-  //   } else {
-  //     setProfile(null);
-  //     setUID(null);
-  //     setPanUpload(null);
-  //     setHighestUpload(null);
-  //     setOtherUpload(null);
-  //   }
-  // };
-
   // Number validation
   function handleEmailChange(e) {
     const newEmail = e.target.value;
@@ -987,13 +951,7 @@ const UserUpdate = () => {
 
   const salaryFields = (
     <>
-      {/* <FieldContainer
-        type="date"
-        label="Joining Date"
-        fieldGrid={3}
-        value={joiningDate}
-        onChange={(e) => setJoiningDate(e.target.value)}
-      /> */}
+
       <div className="from-group col-3">
         <label className="form-label">
           Joining Date <sup style={{ color: "red" }}>*</sup>
@@ -1005,14 +963,7 @@ const UserUpdate = () => {
           onChange={(e) => setJoiningDate(e.target.value)}
         />
       </div>
-      {/* <FieldContainer
-        type="date"
-        label=" Releaving Date "
-        fieldGrid={3}
-        value={releavingDate}
-        required={false}
-        onChange={(e) => setReleavingDate(e.target.value)}
-      /> */}
+
       <div className="form-group col-3">
         <label className="form-label">
           Job Type <sup style={{ color: "red" }}>*</sup>
@@ -1126,14 +1077,6 @@ const UserUpdate = () => {
         value={beneficiary}
         onChange={(e) => setBeneficiary(e.target.value)}
       />
-      {/*       
-      <FieldContainer
-      type="date"
-        label="Date of Resign"
-        fieldGrid={3}
-        value={dateOfBirth}
-        // onChange={handleDateChange}
-      /> */}
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <button
@@ -1154,13 +1097,6 @@ const UserUpdate = () => {
 
   const documentsFields = (
     <>
-      {/* <FieldContainer
-        label="Profile Picture"
-        onChange={(e)=>setProfile(e.target.files[0]}
-        fieldGrid={3}
-        type="file"
-        required={false}
-      /> */}
 
       <FieldContainer
         label="UID Number"
@@ -1170,14 +1106,6 @@ const UserUpdate = () => {
         required={false}
         value={uidNo}
       />
-      {/* <FieldContainer
-        label="UID Number"
-        onChange={(e) => setUidNo(e.target.value)}
-        fieldGrid={3}
-        type="text"
-       
-        required={false}
-      /> */}
 
       <FieldContainer
         label="UID"
@@ -1205,14 +1133,7 @@ const UserUpdate = () => {
         required={false}
         value={panNo}
       />
-      {/* <FieldContainer
-        label="PAN Number"
-        onChange={(e) => setPanNo(e.target.value.toUpperCase())}
-        fieldGrid={3}
-        type="text"
-        value={panNo}
-        required={false}
-      /> */}
+
       <FieldContainer
         label="Pan Image"
         onChange={(e) => setPanUpload(e.target.files[0])}
@@ -1368,29 +1289,13 @@ const UserUpdate = () => {
           required
         />
       </div>
-      {/* <FieldContainer
-        label="Gender *"
-        Tag="select"
-        value={ }
-        onChange={(e) => setGender(e.target.value)}
-        required
-      >
-        <option value="">Chooose...</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </FieldContainer> */}
+      
       <FieldContainer
         label="Nationality"
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
-      {/* <FieldContainer
-        label="DOB"
-        type="date"
-        value={dateOfBirth}
-        onChange={handleDateChange} */}
-      {/* /> */}
+      
       <div className="from-group col-6">
         <label className="form-label">
           DOB <sup style={{ color: "red" }}>*</sup>

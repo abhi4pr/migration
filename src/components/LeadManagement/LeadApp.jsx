@@ -1,31 +1,21 @@
 import { createContext, useEffect, useState } from "react";
-// import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import EditLead from "./EditLead";
-import LeadHome from "./LeadHome";
 import axios from "axios";
 import LeadHeader from "./LeadHeader";
-import SELeadTable from "./SELeadTable";
-import { memo } from "react";
-// import PlusSign from "./PlusSign";
-import LeadManagement from "./LeadManagement";
 export const UserContext = createContext();
 
 function LeadApp({ children }) {
-  // console.log("my api called");
   const [datalead, setDatalead] = useState([]);
   const [newdata, setNewData] = useState([]);
   const [se, setSE] = useState([]);
   const [seEmpID, setSeEmpID] = useState(null);
   const [reload, setReload] = useState(false);
-  // var newseEmpID = 0;
   let ftrse = [];
 
   useEffect(() => {
     (async () => {
       try {
         const leadres = await axios.get(
-          "http://34.93.135.33:8080/api/allleadmastdata"
+          "http://34.93.135.33:8080/api/get_all_leads"
         );
         const userres = await axios.get(
           "http://34.93.135.33:8080/api/get_all_users"
@@ -37,7 +27,6 @@ function LeadApp({ children }) {
           }
         });
         const tempse = [];
-        // console.log("data get");
         userres.data.data.map((ele) => {
           if (ele.dept_id == 11) {
             tempse.push(ele);

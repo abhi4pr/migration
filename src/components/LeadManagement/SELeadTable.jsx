@@ -12,9 +12,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-// import { useState } from "react";
 
 function SELeadTable(props) {
   // preventDefault();
@@ -26,7 +24,6 @@ function SELeadTable(props) {
   const [snackbar, setSnackbar] = useState(null);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
   const [transfer, setTransfer] = useState(true);
-  // const [isLoading, setIsLoading] = useState(false);
   let tranreqcount = 0;
 
   const executivename = [];
@@ -35,7 +32,6 @@ function SELeadTable(props) {
     let temp = [ele.user_id, " - " + ele.user_name];
     executivename.push(temp);
   });
-  // useEffect(() => {
   // seassignLeads = datalead.filter((ele) => ele.assign_to == localseEmpID);
   for (let i = 0; i < datalead.length; i++) {
     if (datalead[i].assign_to == id) {
@@ -45,16 +41,11 @@ function SELeadTable(props) {
       }
     }
   }
-  // setIsLoading(true);
-  console.log(id);
-  console.log(seassignLeads);
-  console.log(datalead);
-  // }, []);
-  // const localseEmpID = localStorage.getItem("seEmpID");
 
   const handleCheckBox = () => {
-    console.log(rowSelectionModel);
+    // console.log(rowSelectionModel);
   };
+
   const useFakeMutation = () => {
     return useCallback(
       (user) =>
@@ -72,9 +63,6 @@ function SELeadTable(props) {
   };
 
   function computeMutation(newInputValue, index, oldRow) {
-    console.log(newInputValue);
-    console.log(newInputValue);
-    // console.log(oldRow);
     return newInputValue;
   }
 
@@ -84,15 +72,12 @@ function SELeadTable(props) {
   const processRowUpdate = useCallback(
     (newRow, oldRow) =>
       new Promise((resolve, reject) => {
-        // console.log("Hitted processRowUpdate");
         const mutation = computeMutation(newRow, oldRow);
         if (mutation) {
-          // console.log("mutation there");
           // Save the arguments to resolve or reject the promise later
           setPromiseArguments({ resolve, reject, newRow, oldRow });
         } else {
-          // console.log("undefined mutation there");
-          resolve(oldRow); // Nothing was changed
+          resolve(oldRow); 
         }
       }),
     []
@@ -101,7 +86,7 @@ function SELeadTable(props) {
   const handleNo = () => {
     const { oldRow, resolve } = promiseArguments;
     setInputValue("");
-    resolve(oldRow); // Resolve with the old row to not update the internal state
+    resolve(oldRow); 
     setPromiseArguments(null);
   };
 
@@ -109,9 +94,7 @@ function SELeadTable(props) {
     const { newRow, oldRow, reject, resolve } = promiseArguments;
 
     try {
-      // Make the HTTP request to save in the backend
       const response = await mutateRow(newRow);
-      console.log(newRow);
       setSnackbar({
         children: "Lead successfully assign",
         severity: "success",
@@ -128,10 +111,7 @@ function SELeadTable(props) {
     }
   };
 
-  // const handleEntered = () => {};
-
   const renderConfirmDialog = () => {
-    // console.log("render confirmation called");
     if (!promiseArguments) {
       return null;
     }

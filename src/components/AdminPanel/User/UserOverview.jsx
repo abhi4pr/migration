@@ -618,25 +618,25 @@ const UserOverview = () => {
         </div>
       </div>
 
-      <div class="modal fade" id="mapModal" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title"></h4>
+      <div className="modal fade" id="mapModal" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              <h4 className="modal-title"></h4>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
             <iframe
               width="600"
               height="450"
-              frameborder="0"
+              frameBorder="0"
               style={{border:"0"}}
               src= {mapUrl}
-              allowfullscreen
+              allowFullScreen
             ></iframe>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
