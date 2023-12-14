@@ -166,6 +166,7 @@ import PagePerformanceDashboard from "../Execution/PagePerformanceDashboard";
 import ExcusionCampaign from "./RegisterCampaign/ExcusionCampaign";
 import ExpertiesOverview from "./RegisterCampaign/Experties/ExpertiesOverview";
 import ExpertiesUpdate from "./RegisterCampaign/Experties/ExpertUpdate";
+import WFHUserOverview from "./WFH/WFHUserOverview";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -303,6 +304,11 @@ const Admin = () => {
                   <Route
                     path="/wfh-dashboard-overview/:id"
                     element={<DashboardWFHCardDetails />}
+                  />
+
+                  <Route
+                    path="/wfh-users-overview"
+                    element={<WFHUserOverview />}
                   />
 
                   {/* <Route
