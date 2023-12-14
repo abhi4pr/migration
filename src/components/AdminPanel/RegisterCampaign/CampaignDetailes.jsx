@@ -16,7 +16,7 @@ const CampaignDetailes = ({
   const [commitData, setCommitData] = useState([]);
   const [commitmentCompleteData, setCommitmentCompleteData] = useState([]);
 
-  console.log(campaignData, "cmpdata");
+  // console.log(campaignData, "cmpdata");
   const getData = async () => {
     try {
       const res = await axios.get(
@@ -28,7 +28,7 @@ const CampaignDetailes = ({
     }
   };
 
-  // console.log(campaignData);
+  // console.log(cid, "mycid");
   // console.log(commitData)
   const getBrandInfo = async () => {
     const brand = await axios.get(`http://34.93.135.33:8080/api/get_brands`);
@@ -52,7 +52,7 @@ const CampaignDetailes = ({
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [cid]);
 
   const getCommitments = async () => {
     const comm = await axios.get(
