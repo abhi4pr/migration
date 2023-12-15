@@ -166,6 +166,7 @@ import PagePerformanceDashboard from "../Execution/PagePerformanceDashboard";
 import ExcusionCampaign from "./RegisterCampaign/ExcusionCampaign";
 import ExpertiesOverview from "./RegisterCampaign/Experties/ExpertiesOverview";
 import ExpertiesUpdate from "./RegisterCampaign/Experties/ExpertUpdate";
+import PhaseDashboard from "./RegisterCampaign/PhaseDashboard/PhaseDashboard";
 import WFHUserOverview from "./WFH/WFHUserOverview";
 
 const Admin = () => {
@@ -639,6 +640,10 @@ const Admin = () => {
                     path="/register-campaign"
                     element={<RegisterCampaign />}
                   />
+
+                  {/* Phase Dashboard here  */}
+                  <Route path="/phase-dashboard" element={<PhaseDashboard />} />
+
                   <Route path="/experties" element={<Experties />} />
                   <Route
                     path="/experties-overview"
