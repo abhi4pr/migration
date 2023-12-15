@@ -168,6 +168,7 @@ import ExpertiesOverview from "./RegisterCampaign/Experties/ExpertiesOverview";
 import ExpertiesUpdate from "./RegisterCampaign/Experties/ExpertUpdate";
 import PhaseDashboard from "./RegisterCampaign/PhaseDashboard/PhaseDashboard";
 import WFHUserOverview from "./WFH/WFHUserOverview";
+import CreateAssign from "./RegisterCampaign/CreateAssign";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -666,6 +667,8 @@ const Admin = () => {
                   <Route path="/planOverview/:id" element={<PlanOverview />} />
                   <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
+                  <Route path="/createAssign/:id" element={<CreateAssign />} />
+
 
                   <Route
                     path="/checkPageFollowers"

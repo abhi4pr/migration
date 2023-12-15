@@ -651,6 +651,13 @@ const SidebarLinks = () => {
                           </Link>
                           <Link
                             className="collapse-item"
+                            to="/admin/createAssign"
+                          >
+                          createAssign
+                          </Link>
+
+                          <Link
+                            className="collapse-item"
                             to="/admin/brandmaster"
                           >
                             Brand Master
