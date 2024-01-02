@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { FaEdit } from "react-icons/fa";
 import FormContainer from "../AdminPanel/FormContainer";
 import DeleteButton from "../AdminPanel/DeleteButton";
 import UserNav from "../Pantry/UserPanel/UserNav";
-import FieldContainer from "../AdminPanel/FieldContainer";
 import jwtDecode from "jwt-decode";
 import * as XLSX from "xlsx";
 import Select from "react-select";
 import Modal from "react-modal";
 import { useGlobalContext } from "../../Context/Context";
+
 const SimOverview = () => {
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, categoryDataContext } = useGlobalContext();
   const [search, setSearch] = useState("");
   const [ImageModalOpen, setImageModalOpen] = useState(false);
 
@@ -22,12 +22,12 @@ const SimOverview = () => {
 
   const [userData, setUserData] = useState([]);
 
-  const [simTypeFilter, setSimTypeFilter] = useState("");
-  const [providerFilter, setProviderFilter] = useState("");
+  // const [simTypeFilter, setSimTypeFilter] = useState("");
+  // const [providerFilter, setProviderFilter] = useState("");
 
   const [simallocationdata, setSimAllocationData] = useState([]);
 
-  const [selectedStatus, setSelectedStatus] = useState("Allocated");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const [selectedUserTransfer, setSelectedUserTransfer] = useState("");
 
@@ -55,7 +55,13 @@ const SimOverview = () => {
   function getData() {
     axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
       const simAllData = res.data.data;
-      if (selectedStatus !== "") {
+      if (status != "") {
+        const AvailableData = simAllData.filter(
+          (data) => data.status.toLowerCase() == status
+        );
+        setData(AvailableData);
+        setFilterData(AvailableData);
+      } else if (selectedStatus !== "") {
         const AvailableData = simAllData.filter(
           (data) => data.status == selectedStatus
         );
@@ -78,28 +84,38 @@ const SimOverview = () => {
     setModalSelectedUserData(MSD);
   }, [selectedUserTransfer]);
 
-  const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState("");
   const [subcategoryData, setSubCategoryData] = useState([]);
   const [subcategory, setSubCategory] = useState("");
-  const getCategoryData = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_asset_category")
-      .then((res) => {
-        setCategoryData(res.data);
-      });
-  };
+
+  // i want to use context api this is replace
+
+  // const [categoryData, setCategoryData] = useState([]);
+  // const getCategoryData = () => {
+  //   axios
+  //     .get("http://34.93.135.33:8080/api/get_all_asset_category")
+  //     .then((res) => {
+  //       setCategoryData(res.data);
+  //     });
+  // };
   const getSubCategoryData = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_asset_sub_category")
-      .then((res) => {
-        setSubCategoryData(res.data);
-      });
+    if (category) {
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_asset_sub_category/${category}`
+        )
+        .then((res) => {
+          setSubCategoryData(res.data);
+        });
+    }
   };
   useEffect(() => {
-    getData();
-    getCategoryData();
     getSubCategoryData();
+  }, [category]);
+
+  useEffect(() => {
+    getData();
+    // getCategoryData();
   }, [selectedStatus]);
 
   useEffect(() => {
@@ -168,7 +184,7 @@ const SimOverview = () => {
         submitted_at: dateString,
       });
 
-      axios.post("http://192.168.29.116:8080/api/add_sim_allocation", {
+      axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         sim_id: Number(simAllocationTransferData[0].sim_id),
         // dept_id: Number(modalSelectedUserData[0].dept_id),
@@ -182,7 +198,7 @@ const SimOverview = () => {
 
   const handleSimAllocation = async () => {
     if (selectedUserTransfer !== "") {
-      await axios.post("http://192.168.29.116:8080/api/add_sim_allocation", {
+      await axios.post("http://34.93.135.33:8080/api/add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         status: "Allocated",
         sim_id: Number(modalData.sim_id),
@@ -275,6 +291,7 @@ const SimOverview = () => {
       name: "Status",
       selector: (row) => row.status,
     },
+
     {
       name: "img",
       selector: (row) => (
@@ -285,6 +302,21 @@ const SimOverview = () => {
           <i className="bi bi-images"></i>
         </button>
       ),
+    },
+    {
+      name: "Invoice",
+      selector: (row) => (
+        <>
+          <a style={{ cursor: "pointer" }} href={row.invoiceCopy_url} download>
+            <img
+              style={{ width: "100px" }}
+              src={row.invoiceCopy_url}
+              alt="invoice copy"
+            />
+          </a>
+        </>
+      ),
+      sortable: true,
     },
 
     {
@@ -350,7 +382,7 @@ const SimOverview = () => {
     },
   ];
 
-  const [buttonAccess, setButtonAccess] = useState(false);
+  // const [buttonAccess, setButtonAccess] = useState(false);
 
   const handleExport = () => {
     const fileName = "data.xlsx";
@@ -397,7 +429,6 @@ const SimOverview = () => {
                 <FormContainer
                   mainTitle="Assets"
                   link="/sim-master"
-                  // buttonAccess={true}
                   submitButton={false}
                 />
               </div>
@@ -476,6 +507,15 @@ const SimOverview = () => {
                     Return Assets
                   </button>
                 </Link>
+
+                <Link to="/repair-reason">
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm"
+                  >
+                    Repair Reason
+                  </button>
+                </Link>
                 <Link to="/sim-master">
                   <button
                     type="button"
@@ -496,7 +536,7 @@ const SimOverview = () => {
                     <Select
                       options={[
                         { value: "", label: "All" },
-                        ...categoryData.map((option) => ({
+                        ...categoryDataContext.map((option) => ({
                           value: option.category_id,
                           label: option.category_name,
                         })),
@@ -507,7 +547,7 @@ const SimOverview = () => {
                           : {
                               value: category,
                               label:
-                                categoryData.find(
+                                categoryDataContext.find(
                                   (dept) => dept.category_id === category
                                 )?.category_name || "Select...",
                             }
@@ -530,19 +570,30 @@ const SimOverview = () => {
                     </label>
                     <Select
                       className=""
-                      options={subcategoryData.map((option) => ({
-                        value: option.sub_category_id,
-                        label: `${option.sub_category_name}`,
-                      }))}
-                      value={{
-                        value: subcategory,
-                        label:
-                          subcategoryData.find(
-                            (user) => user.sub_category_id === subcategory
-                          )?.sub_category_name || "",
-                      }}
-                      onChange={(e) => {
-                        setSubCategory(e.value);
+                      options={[
+                        { value: "", label: "All" },
+                        ...subcategoryData.map((option) => ({
+                          value: option.sub_category_id,
+                          label: `${option.sub_category_name}`,
+                        })),
+                      ]}
+                      value={
+                        subcategory === ""
+                          ? { value: "", label: "All" }
+                          : {
+                              value: subcategory,
+                              label:
+                                subcategoryData.find(
+                                  (sub) => sub.sub_category_id === subcategory
+                                )?.sub_category_name || "Select...",
+                            }
+                      }
+                      onChange={(select) => {
+                        const selectsub = select ? select.value : "";
+                        setSubCategory(selectsub);
+                        if (selectsub === "") {
+                          getData();
+                        }
                       }}
                       required
                     />

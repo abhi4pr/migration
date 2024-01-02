@@ -35,6 +35,9 @@ import WhatsappAPI from "../../WhatsappAPI/WhatsappAPI";
 import IndianStates from "../../ReusableComponents/IndianStates";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ContactNumberReact from "../../ReusableComponents/ContactNumberReact";
 
 const colourOptions = [
   { value: "English", label: "English" },
@@ -42,9 +45,28 @@ const colourOptions = [
   { value: "Other", label: "Other" },
 ];
 
+const initialFamilyDetailsGroup = {
+  Name: "",
+  DOB: "",
+  Relation: "",
+  Contact: "",
+  Occupation: "",
+  Income: "",
+};
+
+const initialEducationDetailsGroup = {
+  title: "",
+  universityInstitute: "",
+  from: "",
+  to: "",
+  percentage: "",
+  stream: "",
+  specialization: "",
+};
+
 const UserMaster = () => {
   const whatsappApi = WhatsappAPI();
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, toastError } = useGlobalContext();
   const [username, setUserName] = useState("");
 
   const [activeTab, setActiveTab] = useState(1);
@@ -133,6 +155,12 @@ const UserMaster = () => {
   const [subDepartment, setSubDeparment] = useState([]);
   const [status, setStatus] = useState("");
   const [documents, setDocuments] = useState([]);
+  const [familyDetails, setFamilyDetails] = useState([
+    initialFamilyDetailsGroup,
+  ]);
+  const [educationDetails, setEducationDetails] = useState([
+    initialEducationDetailsGroup,
+  ]);
   const [UIDNumber, setUIDNumber] = useState("");
   const [PANNumber, setPANNumber] = useState("");
   const [spouseName, setSpouseName] = useState("");
@@ -141,7 +169,29 @@ const UserMaster = () => {
   const loginUserId = decodedToken.id;
   const [higestQualification, setHigestQualification] = useState("");
   const [isValidPAN, setIsValidPAN] = useState(true);
-  const [isValidUID, setIsValidUID] = useState(true); // State to track UID validation
+  const [isValidUID, setIsValidUID] = useState(true);
+  const [alternateContact, setAlternateContact] = useState("");
+  const [isValidcontact3, setValidContact3] = useState(false);
+  const [isAlternateTouched, setisAlternateTouched] = useState(false);
+  const [isAlternateTouched1, setisAlternateTouched1] = useState(false);
+  const [validAlternateContact, setValidAlternateContact] = useState(false);
+  const [validAlternateContact1, setValidAlternateContact1] = useState(false);
+  const [emergencyContact, setEmergencyContact] = useState("");
+  const [emergencyContactName, setEmergencyContactName] = useState("");
+  const [emergencyContactRelation, setEmergencyContactRelation] = useState("");
+  const [emergencyContact2, setEmergencyContact2] = useState("");
+  const [emergencyContactName2, setEmergencyContactName2] = useState("");
+  const [emergencyContactRelation2, setEmergencyContactRelation2] =
+    useState("");
+  const [isValidcontact4, setValidContact4] = useState(false);
+  const [isEmergencyContactTouched, setisEmergencyContactTouched] =
+    useState(false);
+  const [isEmergencyContactTouched1, setisEmergencyContactTouched1] =
+    useState(false);
+  const [validEmergencyContact, setValidEmergencyContact] = useState(false);
+  const [validEmergencyContact1, setValidEmergencyContact1] = useState(false);
+  const [cast, setCast] = useState("");
+
   const higestQualificationData = [
     "10th",
     "12th",
@@ -164,6 +214,8 @@ const UserMaster = () => {
     "O+ (O Positive)",
     "O- (O Negetive)",
   ];
+
+  const castOption = ["General", "OBC", "SC", "ST"];
   const maritialStatusData = ["Single", "Married"]; //,"Divorced","Widowed","Separated"
   const handlePANChange = (e) => {
     const inputPAN = e.target.value.toUpperCase();
@@ -201,7 +253,9 @@ const UserMaster = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
+        .get(
+          `http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`
+        )
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
@@ -259,6 +313,37 @@ const UserMaster = () => {
     //   setError("Please select All required Fields");
     //   return;
     // }
+    if (!jobType) {
+      return toastError("Job Type is Required");
+    } else if (!department || department == "") {
+      return toastError("Department is Required");
+    } else if (!designation || designation == "") {
+      return toastError("Designatoin is Required");
+    } else if (!gender || gender == "") {
+      return toastError("Gender is Required");
+    } else if (!reportL1 || reportL1 == "") {
+      return toastError("Report L1 Error Is Required");
+      // } else if (!sitting || sitting == "") {
+      //   return toastError("sitting Error is required");
+    } else if (!loginId || loginId == "") {
+      return toastError("Login Id Error is required");
+    } else if (!username || username == "") {
+      return toastError("User Name Error is required");
+    } else if (!roles || roles == "") {
+      return toastError("Roles Error is required");
+    } else if (!personalContact || personalContact == "") {
+      return toastError("Personal Contact Error is required");
+    } else if (!personalEmail || personalEmail == "") {
+      return toastError("Personal Email Error is required");
+    } else if (!joiningDate || joiningDate == "") {
+      return toastError("Joining Date Error is required");
+    } else if (!email || email == "") {
+      return toastError("Official Email Error is required");
+    }
+
+    if (jobType == "WFO" && sitting == "") {
+      return toastError("Sitting Error is required");
+    }
 
     const formData = new FormData();
     // const formDataa = new FormData();
@@ -271,7 +356,7 @@ const UserMaster = () => {
     formData.append("user_login_password", password);
     formData.append("user_contact_no", contact);
     formData.append("sitting_id", sitting);
-    formData.append("room_id", roomId.room_id);
+    formData.append("room_id", jobType == "WFH" ? "1" : roomId.room_id);
     formData.append("dept_id", department);
     formData.append("job_type", jobType);
     formData.append("personal_number", personalContact);
@@ -314,6 +399,21 @@ const UserMaster = () => {
     formData.append("spouse_name", spouseName);
     formData.append("sub_dept_id", subDepartment);
     formData.append("highest_qualification_name", higestQualification);
+    formData.append("alternate_contact", alternateContact);
+    formData.append("emergency_contact1", emergencyContact);
+    formData.append("emergency_contact_person_name1", emergencyContactName);
+    formData.append(
+      "emergency_contact_person_relation1",
+      emergencyContactRelation
+    );
+    formData.append("emergency_contact2", emergencyContact2);
+    formData.append("emergency_contact_person_name2", emergencyContactName2);
+    formData.append(
+      "emergency_contact_person_relation2",
+      emergencyContactRelation2
+    );
+
+    formData.append("cast_type", cast);
     if (isValidcontact == true && validEmail == true) {
       try {
         const isLoginIdExists = usersData.some(
@@ -324,11 +424,54 @@ const UserMaster = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post("http://34.93.135.33:8080/api/add_user", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
+          axios
+            .post("http://34.93.135.33:8080/api/add_user", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((res) => {
+              if (res.status == 200) {
+                setIsFormSubmitted(true);
+                toastAlert("User Registerd");
+              } else {
+                toastError("Sorry User is Not Created, Please try again later");
+              }
+            })
+            .catch((err) => {
+              // toastError("Sorry User is Not Created, Please try again later");
+              toastError(err.message);
+              console.log(err);
+            });
+
+          for (const elements of familyDetails) {
+            const response = axios.post(
+              "http://34.93.135.33:8080/api/add_family",
+              {
+                name: elements.Name,
+                DOB: elements.DOB,
+                relation: elements.Relation,
+                contact: elements.Contact,
+                occupation: elements.Occupation,
+                annual_income: elements.Income,
+              }
+            );
+          }
+
+          for (const elements of educationDetails) {
+            const response = axios.post(
+              "http://34.93.135.33:8080/api/add_education",
+              {
+                title: elements.title,
+                institute_name: elements.universityInstitute,
+                from_year: elements.from,
+                to_year: elements.to,
+                percentage: elements.percentage,
+                stream: elements.stream,
+                specialization: elements.specialization,
+              }
+            );
+          }
           if (reportL1 !== "") {
             axios
               .post("http://34.93.135.33:8080/api/add_send_user_mail", {
@@ -373,6 +516,7 @@ const UserMaster = () => {
               }
             );
           }
+
           axios
             .post("http://34.93.135.33:8080/api/add_send_user_mail", {
               email: email,
@@ -396,35 +540,28 @@ const UserMaster = () => {
             username,
             [username, loginId, password, "http://jarviscloud.in/"]
           );
-          toastAlert("User Registerd");
-          setIsFormSubmitted(true);
+          // toastAlert("User Registerd");
+          // setIsFormSubmitted(true);
+          setFamilyDetails([initialFamilyDetailsGroup]);
         }
       } catch (error) {
-        // console.log("Failed to submit form", error);
+        console.error("Failed to submit form", error);
       }
     } else {
       if (contact.length !== 10) {
         if (isValidcontact == false)
-          alert("Enter Phone Number in Proper Format");
+          toastError("Enter Phone Number in Proper Format");
+        // alert("Enter Phone Number in Proper Format");
       } else if (validEmail != true) {
         alert("Enter Valid Email");
       }
     }
   };
 
-  // const handleFileChange = (e) => {
-  //   if (e.target.files.length > 0) {
-  //     setUID(e.target.files[0]);
-  //     setPanUpload(e.target.files[0]);
-  //     setHighestUpload(e.target.files[0]);
-  //     setOtherUpload(e.target.files[0]);
-  //   } else {
-  //     setUID(null);
-  //     setPanUpload(null);
-  //     setHighestUpload(null);
-  //     setOtherUpload(null);
-  //   }
-  // };
+  if (isFormSubmitted) {
+    return <Navigate to="/admin/user-overview" />;
+  }
+
   // Email Validation
   function handleEmailChange(e) {
     const newEmail = e.target.value;
@@ -462,6 +599,31 @@ const UserMaster = () => {
       );
     }
   }
+  function handleAlternateContactChange(event) {
+    const newContact1 = event.target.value;
+    setAlternateContact(newContact1);
+
+    if (newContact1 === "") {
+      setValidContact3(false);
+    } else {
+      setValidContact3(
+        /^(\+91[ \-\s]?)?[0]?(91)?[6789]\d{9}$/.test(newContact1)
+      );
+    }
+  }
+
+  function handleEmergencyContactChange(event) {
+    const newContact1 = event.target.value;
+    setEmergencyContact(newContact1);
+
+    if (newContact1 === "") {
+      setValidContact4(false);
+    } else {
+      setValidContact4(
+        /^(\+91[ \-\s]?)?[0]?(91)?[6789]\d{9}$/.test(newContact1)
+      );
+    }
+  }
 
   function handleContentBlur() {
     setisContactTouched(true);
@@ -472,8 +634,22 @@ const UserMaster = () => {
     }
   }
 
-  if (isFormSubmitted) {
-    return <Navigate to="/admin/user-overview" />;
+  function handleAlternateBlur() {
+    setisAlternateTouched(true);
+    setisAlternateTouched1(true);
+    if (contact.length < 10) {
+      setValidAlternateContact(false);
+      setValidAlternateContact1(false);
+    }
+  }
+
+  function handleEmergencyBlur() {
+    setisEmergencyContactTouched(true);
+    setisEmergencyContactTouched1(true);
+    if (contact.length < 10) {
+      setValidEmergencyContact(false);
+      setValidEmergencyContact1(false);
+    }
   }
 
   // Password Auto Genrate
@@ -598,13 +774,63 @@ const UserMaster = () => {
     setDocuments(updatedDocuments);
   }
 
+  //familyDetails
+  const handleAddFamilyDetails = () => {
+    setFamilyDetails([...familyDetails, { ...initialFamilyDetailsGroup }]);
+  };
+
+  const handleFamilyDetailsChange = (index, event) => {
+    const updatedFamilyDetails = familyDetails.map((detail, idx) => {
+      if (idx === index) {
+        return { ...detail, [event.target.name]: event.target.value };
+      }
+      return detail;
+    });
+    setFamilyDetails(updatedFamilyDetails);
+  };
+
+  const handleRemoveFamilyDetails = (index) => {
+    const newFamilyDetails = familyDetails.filter((_, idx) => idx !== index);
+    setFamilyDetails(newFamilyDetails);
+  };
+
   function handleLanguageSelect(selectedOption) {
     setTempLanguage(selectedOption);
   }
 
+  //EducationDetailsAdd
+  const handleAddEducationDetails = () => {
+    setEducationDetails([
+      ...educationDetails,
+      { ...initialEducationDetailsGroup },
+    ]);
+  };
+
+  const handleEducationDetailsChange = (index, e) => {
+    const updatedEducationDetails = educationDetails.map((detail, i) => {
+      if (i === index) {
+        return { ...detail, [e.target.name]: e.target.value };
+      }
+      return detail;
+    });
+    setEducationDetails(updatedEducationDetails);
+  };
+
+  const handleRemoveEducationDetails = (index) => {
+    const newEducationDetails = educationDetails.filter((_, i) => i !== index);
+    setEducationDetails(newEducationDetails);
+  };
+
   const isPersonalEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalEmail);
 
-  const accordionButtons = ["General", "Personal", "Salary", "Documents"];
+  const accordionButtons = [
+    "General",
+    "Personal",
+    "Salary",
+    "Documents",
+    "Family",
+    "Education",
+  ];
 
   const genralFields = (
     <>
@@ -811,6 +1037,78 @@ const UserMaster = () => {
         !isValidcontact1 && (
           <p style={{ color: "red" }}>*Please enter a valid Number</p>
         )}
+      <FieldContainer
+        label="Alternate Contact *"
+        type="number"
+        fieldGrid={3}
+        value={alternateContact}
+        required={false}
+        onChange={handleAlternateContactChange}
+        onBlur={handleAlternateBlur}
+
+        // setValidAlternateContact1  setValidAlternateContact setisAlternateTouched1 setisAlternateTouched
+      />
+      {(isAlternateTouched1 || alternateContact.length >= 10) &&
+        !isValidcontact3 && (
+          <p style={{ color: "red" }}>*Please enter a valid Number</p>
+        )}
+
+      {/* <FieldContainer
+        label="Emergency Contact *"
+        type="number"
+        fieldGrid={3}
+        value={emergencyContact}
+        required={false}
+        onChange={handleEmergencyContactChange}
+        onBlur={handleEmergencyBlur}
+
+        // setValidAlternateContact1  setValidAlternateContact setisAlternateTouched1 setisAlternateTouched
+      />
+      {(isEmergencyContactTouched1 || emergencyContact.length >= 10) &&
+        !isValidcontact3 && (
+          <p style={{ color: "red" }}>*Please enter a valid Number</p>
+        )} */}
+
+      <ContactNumberReact
+        label="Emergency Contact *"
+        parentComponentContact={emergencyContact}
+        setParentComponentContact={setEmergencyContact}
+      />
+
+      <FieldContainer
+        label="Emergency Contact Person Name"
+        fieldGrid={3}
+        value={emergencyContactName}
+        onChange={(e) => setEmergencyContactName(e.target.value)}
+      />
+
+      <FieldContainer
+        label="Emergency Contact Person Relation"
+        fieldGrid={3}
+        value={emergencyContactRelation}
+        onChange={(e) => setEmergencyContactRelation(e.target.value)}
+      />
+
+      <ContactNumberReact
+        label="Emergency Contact2"
+        parentComponentContact={emergencyContact2}
+        setParentComponentContact={setEmergencyContact2}
+      />
+
+      <FieldContainer
+        label="Emergency Contact 2 Person Name"
+        fieldGrid={3}
+        value={emergencyContactName2}
+        onChange={(e) => setEmergencyContactName2(e.target.value)}
+      />
+
+      <FieldContainer
+        label="Emergency Contact 2 Person Relation"
+        fieldGrid={3}
+        value={emergencyContactRelation2}
+        onChange={(e) => setEmergencyContactRelation2(e.target.value)}
+      />
+
       <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
         <div className="form-group">
           <label>Login ID *</label>
@@ -1171,35 +1469,20 @@ const UserMaster = () => {
         {!isValidUID && (
           <p style={{ color: "red" }}>Invalid Aadhaar number format</p>
         )}
-        <div
-          style={{
-            display: "flex",
-            marginBottom: "10px",
-            // justifyContent:"space-between"
-            // marginRight:"10px"
-          }}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
         >
-          <button
-            className="btn btn-primary"
-            onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
-          >
-            <ArrowBackIosIcon />
-          </button>
-          <div className="d-flex mb-2" style={{ marginLeft: "20px" }}>
-            <button
-              type="button"
-              className="btn btn-outline-primary me-2"
-              onClick={addMore}
-            >
-              Add More
-            </button>
-            {documents.length > 0 && (
-              <button className="btn btn-outline-primary" onClick={reomveField}>
-                Remove Field
-              </button>
-            )}
-          </div>
-        </div>
+          <ArrowBackIosIcon />
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
       </div>
     </>
   );
@@ -1328,11 +1611,34 @@ const UserMaster = () => {
           required
         />
       </div>
+
+      <div className="form-group col-3">
+        <label className="form-label">
+          Caste <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <Select
+          className=""
+          options={castOption.map((option) => ({
+            value: option,
+            label: `${option}`,
+          }))}
+          value={{
+            value: cast,
+            label: cast,
+          }}
+          onChange={(e) => {
+            setCast(e.value);
+          }}
+          required
+        />
+      </div>
+
       <FieldContainer
         label="Nationality"
         value={nationality}
         onChange={(e) => setNationality(e.target.value)}
       />
+
       <div className="from-group col-6">
         <label className="form-label">
           DOB <sup style={{ color: "red" }}>*</sup>
@@ -1464,6 +1770,128 @@ const UserMaster = () => {
     </>
   );
 
+  const familyFields = (
+    <>
+      {familyDetails.map((detail, index) => (
+        <div key={index} mb={2}>
+          <div className="row">
+            {Object.keys(detail).map((key) =>
+              key === "DOB" ? (
+                <FieldContainer
+                  key={key}
+                  fieldGrid={3}
+                  type="date"
+                  name={key}
+                  label="Date of Birth"
+                  value={detail[key]}
+                  onChange={(e) => handleFamilyDetailsChange(index, e)}
+                />
+              ) : (
+                <FieldContainer
+                  key={key}
+                  fieldGrid={3}
+                  name={key}
+                  label={key}
+                  value={detail[key]}
+                  onChange={(e) => handleFamilyDetailsChange(index, e)}
+                />
+              )
+            )}
+            {familyDetails.length > 1 && (
+              <IconButton onClick={() => handleRemoveFamilyDetails(index)}>
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </div>
+        </div>
+      ))}
+      <div className="row">
+        <div className="col-12">
+          <button
+            onClick={handleAddFamilyDetails}
+            variant="contained"
+            className="btn btn-outline-primary me-2"
+          >
+            Add More Family Details
+          </button>
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev + 1)}
+        >
+          <ArrowForwardIosIcon />
+        </button>
+      </div>
+    </>
+  );
+
+  const educationFields = (
+    <>
+      {educationDetails.map((detail, index) => (
+        <div key={index} mb={2}>
+          <div className="row">
+            {Object.keys(detail).map((key) =>
+              key === "from" || key === "to" ? (
+                <FieldContainer
+                  key={key}
+                  fieldGrid={3}
+                  type="date"
+                  name={key}
+                  required={false}
+                  label={key}
+                  value={detail[key]}
+                  onChange={(e) => handleEducationDetailsChange(index, e)}
+                />
+              ) : (
+                <FieldContainer
+                  key={key}
+                  fieldGrid={3}
+                  name={key}
+                  required={false}
+                  label={key}
+                  value={detail[key]}
+                  onChange={(e) => handleEducationDetailsChange(index, e)}
+                />
+              )
+            )}
+            {educationDetails.length > 1 && (
+              <IconButton onClick={() => handleRemoveEducationDetails(index)}>
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </div>
+        </div>
+      ))}
+      <div className="row">
+        <div className="col-12">
+          <button
+            onClick={handleAddEducationDetails}
+            className="btn btn-outline-primary me-2"
+            variant="contained"
+          >
+            Add More Education Details
+          </button>
+        </div>
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => setActiveAccordionIndex((prev) => prev - 1)}
+        >
+          <ArrowBackIosIcon />
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <>
       <FormContainer
@@ -1478,6 +1906,8 @@ const UserMaster = () => {
         {activeAccordionIndex === 1 && personalFields}
         {activeAccordionIndex === 2 && salaryFields}
         {activeAccordionIndex === 3 && documentsFields}
+        {activeAccordionIndex === 4 && familyFields}
+        {activeAccordionIndex === 5 && educationFields}
       </FormContainer>
     </>
   );

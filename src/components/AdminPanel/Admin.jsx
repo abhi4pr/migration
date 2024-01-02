@@ -64,6 +64,9 @@ import KRA from "./KRA/KRA";
 import UserWiseResponsibility from "./UserResponsbility/UserWiseResponsibility/UserWiseResponsibility";
 import UserWiseDashboard from "./User/UserWIseDashboard/UserWiseDashboard";
 import SalaryWFH from "./WFH/SalaryGeneration/SalaryWFH";
+
+import SalarySummary from "./WFH/SalarySummary/SalarySummary";
+
 import UserHierarchy from "./User/UserHierarchy";
 import UserSingle from "./User/UserSingle";
 import DashboardWFHUser from "./WFH/DashboardWFHUser";
@@ -167,8 +170,22 @@ import ExcusionCampaign from "./RegisterCampaign/ExcusionCampaign";
 import ExpertiesOverview from "./RegisterCampaign/Experties/ExpertiesOverview";
 import ExpertiesUpdate from "./RegisterCampaign/Experties/ExpertUpdate";
 import PhaseDashboard from "./RegisterCampaign/PhaseDashboard/PhaseDashboard";
+import ReplacementDashobard from "./RegisterCampaign/ReplacementDashboard/ReplacementDashboard";
 import WFHUserOverview from "./WFH/WFHUserOverview";
 import CreateAssign from "./RegisterCampaign/CreateAssign";
+import PagePerformanceAnalytics from "../Execution/PagePerformanceAnalytics";
+import IncompleteProfileUsers from "./WFH/IncompleteProfileUsers";
+import UserGraphs from "./User/UserGraphs";
+import Hobbies from "./Hobbies/Hobbies";
+import HobbiesOverview from "./Hobbies/HobbiesOverview";
+import AddEmailTemp from "./User/AddEmailTemp";
+import EmailTempOverview from "./User/EmailTempOverview";
+import EditEmailTemp from "./User/EditEmailTemp";
+import ManagerDashboard from "./RegisterCampaign/ManagerDashboard/ManagerDashboard";
+import ManagerCampaign from "./RegisterCampaign/ManagerCampaignDashboard/ManagerCampaign";
+import AssetVisibleToTagedPerosn from "../Sim/AssetVisibleToTagedPerson/AssetVisibleToTagedPerosn";
+import AssetVisibleToHr from "../Sim/AssetVisibleToHr/AssetVisibleToHr";
+import WFHAllSalary from "./WFH/WFHAllSalary";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -266,6 +283,19 @@ const Admin = () => {
                           path="/user-single/:id"
                           element={<UserSingle />}
                         />
+                        <Route path="/user-graph" element={<UserGraphs />} />
+                        <Route
+                          path="/email-template"
+                          element={<AddEmailTemp />}
+                        />
+                        <Route
+                          path="/email-template-overview"
+                          element={<EmailTempOverview />}
+                        />
+                        <Route
+                          path="/email-template-update/:id"
+                          element={<EditEmailTemp />}
+                        />
                       </>
                     )}
 
@@ -291,6 +321,8 @@ const Admin = () => {
 
                   {/* Salary */}
                   <Route path="/salaryWFH" element={<SalaryWFH />} />
+                  <Route path="/all-salary" element={<WFHAllSalary />} />
+                  <Route path="/salary-summary" element={<SalarySummary />} />
                   {/* Accounts/Finance */}
                   <Route
                     path="/accounts-finance-overview"
@@ -309,7 +341,7 @@ const Admin = () => {
                   />
 
                   <Route
-                    path="/wfh-users-overview"
+                    path="/wfh-users-overview/:deptId"
                     element={<WFHUserOverview />}
                   />
 
@@ -321,6 +353,10 @@ const Admin = () => {
                     path="/wfh-dashboard-overview/:id"
                     element={<DashboardWFHCardDetails />}
                   /> */}
+                  <Route
+                    path="/wfh-incomplete-user-overview"
+                    element={<IncompleteProfileUsers />}
+                  />
 
                   {contextData &&
                     contextData[1] &&
@@ -415,10 +451,16 @@ const Admin = () => {
                     contextData[5].view_value === 1 && ( */}
                   <>
                     <Route path="/self-audit" element={<SelfAudit />} />
-                    {/* <Route
-                          path="/product-overview"
-                          element={<ProductOverview />}
-                        /> */}
+
+                    {/* Asset Section  */}
+                    <Route
+                      path="/asset-visible-to-hr"
+                      element={<AssetVisibleToHr />}
+                    />
+                    <Route
+                      path="/asset-visible-to-taged-person"
+                      element={<AssetVisibleToTagedPerosn />}
+                    />
                   </>
                   {/* )} */}
                   {contextData &&
@@ -642,9 +684,27 @@ const Admin = () => {
                     element={<RegisterCampaign />}
                   />
 
+                  {/* HOBBIES */}
+                  <Route path="/hobbies/:id" element={<Hobbies />} />
+                  <Route
+                    path="hobbies-overview"
+                    element={<HobbiesOverview />}
+                  />
+
                   {/* Phase Dashboard here  */}
                   <Route path="/phase-dashboard" element={<PhaseDashboard />} />
-
+                  <Route
+                    path="/replacement-dashboard"
+                    element={<ReplacementDashobard />}
+                  />
+                  <Route
+                    path="/manager-dashboard/:id"
+                    element={<ManagerDashboard />}
+                  />
+                  <Route
+                    path="/manager-campaign"
+                    element={<ManagerCampaign />}
+                  />
                   <Route path="/experties" element={<Experties />} />
                   <Route
                     path="/experties-overview"
@@ -668,7 +728,6 @@ const Admin = () => {
                   <Route path="/phase/:id" element={<PhaseCreation />} />
                   <Route path="/planCreation/:id" element={<PlanCreation />} />
                   <Route path="/createAssign/:id" element={<CreateAssign />} />
-
 
                   <Route
                     path="/checkPageFollowers"
@@ -733,6 +792,10 @@ const Admin = () => {
                   <Route
                     path="/exeexecution/PagePerformanceDashboard"
                     element={<PagePerformanceDashboard />}
+                  />
+                  <Route
+                    path="/exeexecution/PagePerformanceAnalytics"
+                    element={<PagePerformanceAnalytics />}
                   />
                   <Route path="/exe-update/:id" element={<ExeUPdate />} />
                   <Route path="/exe-history/:id" element={<ExeHistory />} />

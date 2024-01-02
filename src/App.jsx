@@ -34,6 +34,11 @@ import { APIContext } from "./components/AdminPanel/APIContext/APIContext";
 import AssetCategoryMaster from "./components/Sim/AssetCategory/AssetCategoryMaster";
 import AssetCategoryOverview from "./components/Sim/AssetCategory/AssetCategoryOverview";
 import AssetCategoryUpdate from "./components/Sim/AssetCategory/AssetCategoryUpdate";
+import BrandMast from "./components/Sim/Brand/BrandMast";
+import ModalMast from "./components/Sim/ModalName/ModalMast";
+import RepairReason from "./components/Sim/RepairReasonMast/RepairReason";
+import RepairRequest from "./components/Sim/RepairRequest/RepairRequest";
+
 import ForgetPassword from "./Login/Forget/ForgetPassword";
 import ExeHistory from "./components/Execution/ExeHistory";
 import AssetSubCategoryMaster from "./components/Sim/AssetCategory/AssetSubCategoryMaster";
@@ -43,10 +48,29 @@ import VenderOverView from "./components/Sim/Vender/VenderOverView";
 import VenderMaster from "./components/Sim/Vender/VenderMaster";
 import VendorUpdate from "./components/Sim/Vender/VendorUpdate";
 import SingleAssetUserDetails from "./components/Sim/SingleAssetUserDetails";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnlineStatusChange = () => {
+      setIsOnline(navigator.onLine);
+    };
+
+    window.addEventListener("online", handleOnlineStatusChange);
+    window.addEventListener("offline", handleOnlineStatusChange);
+
+    return () => {
+      window.removeEventListener("online", handleOnlineStatusChange);
+      window.removeEventListener("offline", handleOnlineStatusChange);
+    };
+  }, []);
+
   return (
     <>
+      <div>{isOnline ? <h1></h1> : alert("No Internet Connection")}</div>
+
       {/* <Notification /> */}
       <BrowserRouter>
         <Routes>
@@ -109,6 +133,11 @@ function App() {
             path="/asset/subCategory"
             element={<AssetSubCategoryMaster />}
           />
+          <Route path="/brand-mast" element={<BrandMast />} />
+          <Route path="/modal-mast" element={<ModalMast />} />
+          <Route path="/repair-reason" element={<RepairReason />} />
+          <Route path="/repair-request" element={<RepairRequest />} />
+
           <Route
             path="/asset/subCategory/overview"
             element={<AssetSubCategoryOverview />}

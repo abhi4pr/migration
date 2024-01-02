@@ -2,23 +2,35 @@ import React, { useEffect, useState } from "react";
 import FormContainer from "../FormContainer";
 import ExePageDetailes from "./ExePageDetailes";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
+
 
 const ExcusionCampaign = () => {
+  const storedToken = sessionStorage.getItem("token");
+  const decodedToken = jwtDecode(storedToken);
+  console.log(decodedToken);
+
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
   const [assignmentData, setAssignmentData] = useState([]);
   console.log(assignmentData, "new");
   const [pendingData, setPendingData] = useState([]);
   const [executedData, setExecutedData] = useState([]);
   const [verifiedData, setVerifiedData] = useState([]);
-  const [rejectedData, setRejectedData] = useState([]);
+  const [rejectedData, setRejectedData] = useState([]); 
 
-  const getAssignment = async () => {
+
+  const getExpertee=async ()=>{
+    const expert=await axios.get(`http://34.93.135.33:8080/api/expertise/user/${decodedToken.id}`);
+    getAssignment(expert.data.data.exp_id)
+    console.log(expert)
+  }
+
+  const getAssignment = async (id) => {
     const getData = await axios.get(
-      `http://34.93.135.33:8080/api/assignment/all/123456`
+      `http://34.93.135.33:8080/api/assignment/all/25`
     );
     const assigned = getData?.data?.data.filter(
-      (item) => item.ass_status == "assigned" 
-      || item.ass_status == "pending"
+      (item) => item.ass_status == "assigned" || item.ass_status == "pending"
     );
     const pending = getData?.data?.data.filter(
       (item) => item.ass_status == "pending"
@@ -39,8 +51,9 @@ const ExcusionCampaign = () => {
     setRejectedData(rejected);
   };
   useEffect(() => {
-    getAssignment();
-  }, []);
+    // getAssignment();
+    getExpertee()
+  }, [decodedToken]);
   const handleAccordionButtonClick = (index) => {
     setActiveAccordionIndex(index);
   };
@@ -52,6 +65,7 @@ const ExcusionCampaign = () => {
       // setActiveAccordionIndex={setActiveAccordionIndex}
       setActiveAccordionIndex={setActiveAccordionIndex}
       activeAccordion="1"
+      getAssignment={getAssignment}
     />
   );
   const tab2 = (
@@ -60,6 +74,7 @@ const ExcusionCampaign = () => {
       status={"assigned"}
       setActiveAccordionIndex={setActiveAccordionIndex}
       activeAccordion="2"
+      getAssignment={getAssignment}
     />
   );
   const tab3 = (
@@ -68,6 +83,7 @@ const ExcusionCampaign = () => {
       status={"executed"}
       setActiveAccordionIndex={setActiveAccordionIndex}
       activeAccordion="3"
+      getAssignment={getAssignment}
     />
   );
   const tab4 = (
@@ -76,6 +92,7 @@ const ExcusionCampaign = () => {
       status={"verified"}
       setActiveAccordionIndex={setActiveAccordionIndex}
       activeAccordion="4"
+      getAssignment={getAssignment}
     />
   );
   const tab5 = (
@@ -83,6 +100,7 @@ const ExcusionCampaign = () => {
       data={rejectedData}
       status={"rejected"}
       setActiveAccordionIndex={setActiveAccordionIndex}
+      getAssignment={getAssignment}
     />
   );
 
