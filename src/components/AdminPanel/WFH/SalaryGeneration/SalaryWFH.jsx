@@ -6,6 +6,8 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import FormContainer from "../../FormContainer";
 import { useGlobalContext } from "../../../../Context/Context";
+import { useAPIGlobalContext } from "../../APIContext/APIContext";
+
 import jwtDecode from "jwt-decode";
 import image1 from "./images/image1.png";
 import image2 from "./images/image2.png";
@@ -18,8 +20,8 @@ import { Document, PDFDownloadLink, Page, View } from "@react-pdf/renderer";
 import { Text, StyleSheet } from "@react-pdf/renderer";
 import { Button } from "@mui/material";
 import { generatePDF } from "./pdfGenerator";
-import { useParams } from "next/navigation";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+import FieldContainer from "../../FieldContainer";
 
 const images = [
   { temp_id: 1, image: image1 },
@@ -32,6 +34,8 @@ const images = [
 const SalaryWFH = () => {
   const location = useLocation();
   const { toastAlert } = useGlobalContext();
+  const { contextData } = useAPIGlobalContext();
+
   const [allWFHUsers, setAllWFHUsers] = useState(0);
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -74,6 +78,17 @@ const SalaryWFH = () => {
 
   //salary exits dept wise
   const [deptSalary, setDeptSalary] = useState([]);
+
+  const [separationReasonGet, setSeparationReasonGet] = useState([]);
+  const [separationStatus, setSeparationStatus] = useState("");
+  const [separationReason, setSeparationReason] = useState("");
+  const [separationRemark, setSeparationRemark] = useState("");
+  const [separationUserID, setSeparationUserID] = useState(null);
+  const [usercontact, setUserContact] = useState("");
+  const [separationResignationDate, setSeparationResignationDate] =
+    useState("");
+  const [separationLWD, setSeparationLWD] = useState("");
+  const [separationReinstateDate, setSeparationReinstateDate] = useState("");
 
   var settings = {
     dots: false,
@@ -211,10 +226,65 @@ const SalaryWFH = () => {
 
   const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
 
+
+const  monthNameToNumber=(monthName)=> {
+  const months = {
+    January: '01',
+    February: '02',
+    March: '03',
+    April: '04',
+    May: '05',
+    June: '06',
+    July: '07',
+    August: '08',
+    September: '09',
+    October: '10',
+    November: '11',
+    December: '12'
+  };
+
+  // Convert the input month name to title case for consistent matching
+  const titleCaseMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
+
+  return months[titleCaseMonth] || 'Invalid Month';
+}
+
+function monthNameToNumberAndEndDate(monthName) {
+  const months = {
+    January: { number: '01', days: 31 },
+    February: { number: '02', days: 28 },
+    March: { number: '03', days: 31 },
+    April: { number: '04', days: 30 },
+    May: { number: '05', days: 31 },
+    June: { number: '06', days: 30 },
+    July: { number: '07', days: 31 },
+    August: { number: '08', days: 31 },
+    September: { number: '09', days: 30 },
+    October: { number: '10', days: 31 },
+    November: { number: '11', days: 30 },
+    December: { number: '12', days: 31 }
+  };
+
+  const titleCaseMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
+  const monthInfo = months[titleCaseMonth];
+
+  if (monthInfo) {
+    return {
+      monthNumber: monthInfo.number,
+      endDate: monthInfo.days
+    };
+  } else {
+    return 'Invalid Month';
+  }
+}
+
+
   const handleCardSelect = (index, data) => {
     setSelectedCardIndex(index);
     setYear(data.year);
     setMonth(data.month);
+
+    console.log(data.year, data.month);
   };
 
   const handleMonthYearData = async () => {
@@ -256,7 +326,10 @@ const SalaryWFH = () => {
       year: Number(year),
     };
     axios
-      .post("http://34.93.135.33:8080/api/get_salary_by_id_month_year", payload)
+      .post(
+        "http://34.93.135.33:8080/api/get_salary_by_id_month_year",
+        payload
+      )
       .then((res) => {
         setFilterData(res.data.data);
         setData(res.data.data);
@@ -362,7 +435,6 @@ const SalaryWFH = () => {
       handleSubmit();
     } catch (error) {
       console.error("Error submitting data:", error);
-      toastAlert("Failed to submit data");
     }
   };
 
@@ -593,6 +665,34 @@ const SalaryWFH = () => {
 
   //--------------------------------------------------------------------------------------------------------------------
 
+  function handleSeprationReason(userId, username, user_contact_no) {
+    setSeparationUserID(userId);
+    setUserName(username);
+    setUserContact(user_contact_no);
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_reasons")
+      .then((res) => setSeparationReasonGet(res.data));
+  }
+
+  const today = new Date().toISOString().split("T")[0];
+  function handleSeparationDataPost() {
+    axios.post("http://34.93.135.33:8080/api/add_separation", {
+      user_id: separationUserID,
+      status: separationStatus,
+      created_by: userID,
+      resignation_date: separationResignationDate,
+      last_working_day: separationLWD,
+      remark: separationRemark,
+      reason: separationReason,
+    });
+    whatsappApi.callWhatsAPI(
+      "CF_Separation",
+      JSON.stringify(usercontact),
+      userName,
+      [userName, separationStatus]
+    );
+  }
+
   const columns = [
     {
       name: "S.No",
@@ -736,6 +836,28 @@ const SalaryWFH = () => {
     {
       name: "To Pay",
       cell: (row) => row.toPay + " ₹",
+    },
+    {
+      name: "separation",
+      cell: (row) => (
+        <Button
+          className="btn btn-primary"
+          data-toggle="modal"
+          data-target="#exampleModalSepration"
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={() =>
+            handleSeprationReason(
+              row.user_id,
+              row.user_name,
+              row.user_contact_no
+            )
+          }
+        >
+          Sep
+        </Button>
+      ),
     },
   ];
 
@@ -884,6 +1006,15 @@ const SalaryWFH = () => {
         <div className="card-header d-flex justify-content-between">
           <h4>Department</h4>
           <span>
+            {contextData &&
+              contextData[35] &&
+              contextData[35].view_value === 1 && (
+                <Link to="/admin/salary-summary">
+                  <button className="btn btn-warning mr-3">
+                    Salary Summary
+                  </button>
+                </Link>
+              )}
             <button
               className="btn btn-primary mr-3"
               onClick={handleAllDepartmentSalaryExcel}
@@ -1339,6 +1470,122 @@ const SalaryWFH = () => {
                 data-dismiss="modal"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* separation modal */}
+
+      <div
+        className="modal fade"
+        id="exampleModalSepration"
+        tabIndex={-1}
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Separation
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <FieldContainer
+                label="Status"
+                Tag="select"
+                value={separationStatus}
+                onChange={(e) => setSeparationStatus(e.target.value)}
+              >
+                <option value="" disabled>
+                  Choose...
+                </option>
+                <option value="Resigned">Resigned</option>
+                <option value="Resign Accepted">Resign Accepted</option>
+                <option value="On Long Leave">On Long Leave</option>
+                <option value="Subatical">Subatical</option>
+                <option value="Suspended">Suspended</option>
+              </FieldContainer>
+              <FieldContainer
+                label="Reason"
+                Tag="select"
+                value={separationReason ? separationReason : ""}
+                onChange={(e) => setSeparationReason(e.target.value)}
+              >
+                <option value="" disabled>
+                  {" "}
+                  choose
+                </option>
+                {separationReasonGet.map((option) => (
+                  <option value={option.id} key={option.id}>
+                    {" "}
+                    {option.reason}
+                  </option>
+                ))}
+              </FieldContainer>
+              <FieldContainer
+                label="Remark"
+                value={separationRemark}
+                onChange={(e) => setSeparationRemark(e.target.value)}
+              />
+              {(separationStatus === "On Long Leave" ||
+                separationStatus === "Subatical" ||
+                separationStatus === "Suspended") && (
+                <FieldContainer
+                  label="Reinstated Date"
+                  type="date"
+                  value={separationReinstateDate}
+                  onChange={(e) => setSeparationReinstateDate(e.target.value)}
+                />
+              )}
+              {separationStatus == "Resign Accepted" && (
+                <input
+                  label="Last Working Day"
+                  className="form-control"
+                  style={{ width: "220px" }}
+                  type="date"
+                  value={separationLWD}
+                  max={today}
+                  onChange={(e) => setSeparationLWD(e.target.value)}
+                />
+              )}
+              {separationStatus == "Resigned" && (
+                <FieldContainer
+                  label="Resignation Date"
+                  type="date"
+                  min={`${year}-${monthNameToNumber(month)}-01`} max={`${year}-${monthNameToNumber(month)}-31`}
+                  value={separationResignationDate}
+                  onChange={(e) => setSeparationResignationDate(e.target.value)}
+                />
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                disabled={!separationReason}
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSeparationDataPost()}
+                data-dismiss="modal"
+              >
+                Save changes
               </button>
             </div>
           </div>

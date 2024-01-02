@@ -1,15 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import AnniversaryBirthdayCard from "./AnniversaryBirthdayCard";
+import TabPanelCard from "./Components/TabPanelCard";
+import { useAPIGlobalContext } from "../APIContext/APIContext";
 
 const DashboardWFHUser = () => {
+  const { contextData } = useAPIGlobalContext();
   const [departmentData, setDepartmentData] = useState([]);
   const [wfhUsersCount, setWfhUsersCount] = useState(0);
   const [yetToOnBoardCount, setYetToOnBoardCount] = useState(0);
   const [totalSalary, setTotalSalary] = useState(0);
-  const [anniversaryBirthdays, setAnniversaryBirthdays] = useState([]);
+  const [birthdays, setBirthdays] = useState([]);
+  const [workAnniversary, setWorkAnniversary] = useState([]);
   const [thisMonthJoinee, setThisMonthJoinee] = useState([]);
+  const [IncompleteUserProfilesData, setIncompleteUserProfileData] = useState(
+    []
+  );
 
   const getDepartment = async () => {
     try {
@@ -51,10 +57,14 @@ const DashboardWFHUser = () => {
 
   const getAnniversaryBirthdays = async () => {
     try {
-      const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_users_with_dob_doj"
+      const responseDOB = await axios.get(
+        "http://34.93.135.33:8080/api/get_all_users_with_dob"
       );
-      setAnniversaryBirthdays(response.data.users);
+      const responseDOJ = await axios.get(
+        "http://34.93.135.33:8080/api/get_all_users_with_doj"
+      );
+      setBirthdays(responseDOB.data.users);
+      setWorkAnniversary(responseDOJ.data.users);
     } catch (error) {
       console.log("Api problem getanniversary", error);
     }
@@ -71,6 +81,17 @@ const DashboardWFHUser = () => {
     }
   };
 
+  const IncompleteUserProfiles = async () => {
+    try {
+      const response = await axios.get(
+        "http://34.93.135.33:8080/api/get_all_percentage"
+      );
+      setIncompleteUserProfileData(response.data.incompleteUsersDetails);
+    } catch (error) {
+      console.log("incomplete profile Api Problem", error);
+    }
+  };
+
   console.log("this month Joinee", thisMonthJoinee);
   useEffect(() => {
     getDepartment();
@@ -78,6 +99,7 @@ const DashboardWFHUser = () => {
     getTotalSalary();
     getAnniversaryBirthdays();
     getThisMonthJoinees();
+    IncompleteUserProfiles();
   }, []);
 
   return (
@@ -86,19 +108,26 @@ const DashboardWFHUser = () => {
         <div className="card-header d-flex justify-content-between">
           <h4>Dashboard</h4>
           <h4>
+            {contextData &&
+              contextData[35] &&
+              contextData[35].view_value === 1 && (
+                <Link to="/admin/salary-summary">
+                  <button className="btn btn-warning mr-3">
+                    Salary Summary
+                  </button>
+                </Link>
+              )}
             Total WFH User:{" "}
             <span className="color_primary"> {wfhUsersCount}</span>
           </h4>
         </div>
         <div className="card-body">
           <div className="row gap_24_0">
-            <div className="col-xl-9 col-lg-9 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="salary_dtlCard">
                 <div className="salary_dtlCard_head">
                   <div className="d-flex justify-content-between">
-                    <Link>
-                      <h2>Details</h2>
-                    </Link>
+                    <h2>Details</h2>
                     <button className="btn btn-primary">
                       <Link to="/admin/user">Add New Employee</Link>
                     </button>
@@ -108,33 +137,40 @@ const DashboardWFHUser = () => {
                   <ul>
                     <li>
                       <span>
-                        <Link to="/admin/wfh-users-overview">
+                        <Link to="/admin/wfh-users-overview/0">
                           All Employees
                         </Link>
                       </span>
                       {wfhUsersCount}
                     </li>
-                    <li>
-                      <span>Total Salary</span>₹ {totalSalary}
-                    </li>
+
                     <li>
                       <span>
                         <Link to="/admin/pre-onboarding-overview">
-                          Yet To Register
+                          Onboarding Pending
                         </Link>
                       </span>
                       {yetToOnBoardCount}
                     </li>
                     <li>
-                      <span>This Month Joinee</span>
-                      {thisMonthJoinee.length}
+                      <span>
+                        <Link to="/admin/wfh-incomplete-user-overview">
+                          Incomplete Profile
+                        </Link>
+                      </span>
+                      {IncompleteUserProfilesData.length}
+                    </li>
+                    <li>
+                      <span>Total Salary</span>₹ {totalSalary}
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            <AnniversaryBirthdayCard
-              anniversaryBirthdays={anniversaryBirthdays}
+            <TabPanelCard
+              birthdays={birthdays}
+              workAnniversary={workAnniversary}
+              thisMonthJoinee={thisMonthJoinee}
             />
           </div>
         </div>
@@ -170,20 +206,9 @@ const DashboardWFHUser = () => {
                   <div className="salary_dtlCard_info">
                     <ul>
                       <li>
-                        <span>New Joinee</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="salary_dtlCard_info">
-                    <ul>
-                      <li>
                         <span>Employee Left</span>
+                        {item.leftCount}
                       </li>
-                    </ul>
-                  </div>
-                  <div className="salary_dtlCard_info">
-                    <ul>
-                      <li>Yet To Register</li>
                     </ul>
                   </div>
                 </div>

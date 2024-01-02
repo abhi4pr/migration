@@ -50,6 +50,7 @@ import FAQTab from "./FAQTab";
 import ReadyToOnboardContent from "./ReadyToOnboardContent";
 import { City, State } from "country-state-city";
 import IndianCitiesMui from "../ReusableComponents/IndianCitiesMui";
+import GuardianFields from "./GuardianFields";
 
 const LanguageList = ["English", "Hindi", "Other"];
 
@@ -67,6 +68,24 @@ const bloodGroupData = [
 const maritialStatusData = ["Single", "Married"]; //,"Divorced","Widowed","Separated"
 
 const genderData = ["Male", "Female", "Other"];
+
+const initialGuardianDetailsGroup = {
+  guardian_name: "",
+  guardian_contact: "",
+  guardian_address: "",
+};
+
+const guardianDisplayFields = [
+  "guardian_name",
+  "guardian_contact",
+  "guardian_address",
+];
+
+const guardianFieldLabels = {
+  guardian_name: "Guardian Name",
+  guardian_contact: "Guardian Contact",
+  guardian_address: "Guardian Address",
+};
 
 const PreOnboardingUserMaster = () => {
   const [isTourOpen, setIsTourOpen] = useState(false);
@@ -86,14 +105,9 @@ const PreOnboardingUserMaster = () => {
 
   const [email, setEmail] = useState("");
   const [personalEmail, setPersonalEmail] = useState("");
-  const [validEmail, setValidEmail] = useState(true);
 
   const [contact, setContact] = useState("");
   const [personalContact, setPersonalContact] = useState("");
-  const [isValidcontact, setValidContact] = useState(false);
-  const [isValidcontact1, setValidContact1] = useState(false);
-  const [isContactTouched, setisContactTouched] = useState(false);
-  const [isContactTouched1, setisContactTouched1] = useState(false);
 
   const [backendSpeakingLanguage, setBackendSpeakingLanguage] = useState("");
   const [speakingLanguage, setSpeakingLanguage] = useState([]);
@@ -159,10 +173,10 @@ const PreOnboardingUserMaster = () => {
   const [documentPercentage, setDocumentPercentage] = useState(0);
 
   //Permanent Address
-  const [permanentAddress, setPermanentAddress] = useState("");
+  const [permanentAddress, setPermanentAddress] = useState();
   const [permanentCity, setPermanentCity] = useState("");
   const [permanentState, setPermanentState] = useState("");
-  const [permanentPincode, setPermanentPincode] = useState("");
+  const [permanentPincode, setPermanentPincode] = useState();
 
   //Current Address
   const [currentAddress, setCurrentAddress] = useState("");
@@ -181,10 +195,15 @@ const PreOnboardingUserMaster = () => {
   const [emergencyContact, setEmergencyContact] = useState(null);
 
   //Guardian Fields
-  const [guardianName, setGuardianName] = useState("");
-  const [guardianContact, setGuardianContact] = useState("");
-  const [relationToGuardian, setRelationToGuardian] = useState("");
-  const [guardianAddress, setGuardianAddress] = useState("");
+  // const [guardianName, setGuardianName] = useState("");
+  // const [guardianContact, setGuardianContact] = useState("");
+  // const [relationToGuardian, setRelationToGuardian] = useState("");
+  // const [guardianAddress, setGuardianAddress] = useState("");
+
+  //New Guardian Fields
+  const [guardianDetails, setGuardianDetails] = useState([
+    initialGuardianDetailsGroup,
+  ]);
 
   //coc
   const [acceptCoc, setAcceptCoc] = useState(false);
@@ -204,6 +223,8 @@ const PreOnboardingUserMaster = () => {
     longitude: 0,
   });
 
+  const [showMandotaryPer, setShowMandotaryPer] = useState(0);
+  const [showNonMandotaryPer, setShowNonMandotaryPer] = useState(0);
   useEffect(() => {
     const getLocation = () => {
       if (navigator.geolocation) {
@@ -241,6 +262,16 @@ const PreOnboardingUserMaster = () => {
     }
   };
 
+  useEffect(() => {
+    async function getGuardian() {
+      const response = await axios.get(
+        `http://34.93.135.33:8080/api/get_single_guardian/${id}`
+      );
+      setGuardianDetails(response.data.data);
+    }
+    if (id) getGuardian();
+  }, [id]);
+
   // Step 1: Group data by display_sequence
   const groupedData = cocData?.reduce((result, item) => {
     const displaySequence = item.display_sequence;
@@ -264,7 +295,6 @@ const PreOnboardingUserMaster = () => {
               {item.sub_heading_sequence} {item.sub_heading}
             </h5>
             <p>
-              {" "}
               {item.sub_heading_sequence} {item.sub_heading_desc}
             </p>
           </div>
@@ -332,6 +362,33 @@ const PreOnboardingUserMaster = () => {
     );
 
     setDocumentPercentage(documentPercentageTemp);
+
+    const mandatoryCount = documentData.filter(
+      (item) => item.document.isRequired == true
+    ).length;
+
+    const mandatoryFilledCount = documentData.filter(
+      (item) => item.document.isRequired == true && item.doc_image
+    ).length;
+
+    const mandoatoryPercentageTemp = Math.ceil(
+      (mandatoryFilledCount / mandatoryCount) * 100
+    );
+    setShowMandotaryPer(mandoatoryPercentageTemp);
+
+    const nonMandatoryCount = documentData.filter(
+      (item) => item.document.isRequired == false
+    ).length;
+
+    const nonMandatoryFilledCount = documentData.filter(
+      (item) => item.document.isRequired == false && item.doc_image
+    )?.length;
+
+    const nonMandoatoryPercentageTemp = Math.ceil(
+      (nonMandatoryFilledCount / nonMandatoryCount) * 100
+    );
+    setShowMandotaryPer(mandoatoryPercentageTemp);
+    setShowNonMandotaryPer(nonMandoatoryPercentageTemp);
   }, [getDocuments]);
 
   const gettingData = () => {
@@ -379,10 +436,6 @@ const PreOnboardingUserMaster = () => {
           current_state,
           current_pin_code,
           emergency_contact,
-          guardian_name,
-          gaurdian_number,
-          relation_with_guardian,
-          guardian_address,
           profileflag,
           image_url,
           nick_name,
@@ -463,10 +516,6 @@ const PreOnboardingUserMaster = () => {
         setcurrentState(current_state);
         setcurrentPincode(current_pin_code);
         setEmergencyContact(emergency_contact);
-        setGuardianName(guardian_name);
-        setGuardianContact(gaurdian_number);
-        setRelationToGuardian(relation_with_guardian);
-        setGuardianAddress(guardian_address);
         setGetProfile(image_url);
         setGetNickName(nick_name);
         {
@@ -483,7 +532,7 @@ const PreOnboardingUserMaster = () => {
     getDocuments();
   }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -557,15 +606,10 @@ const PreOnboardingUserMaster = () => {
     formData.append("current_state", currentState);
     formData.append("current_pin_code", Number(currentPincode));
 
-    //Guardian Details --------------->
-    formData.append("guardian_name", guardianName);
-    formData.append("gaurdian_number", Number(guardianContact));
-    formData.append("relation_with_guardian", relationToGuardian);
-    formData.append("guardian_address", guardianAddress);
     formData.append("latitude", coordinates.latitude);
     formData.append("longitude", coordinates.longitude);
 
-    axios
+    await axios
       .put(`http://34.93.135.33:8080/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -584,6 +628,28 @@ const PreOnboardingUserMaster = () => {
         setPassbookCheque(null);
       })
       .then(() => gettingData());
+
+    //Posting/Update Guardian Details
+    for (const elements of guardianDetails) {
+      let payload = {
+        user_id: id,
+        guardian_name: elements.guardian_name,
+        guardian_contact: elements.guardian_contact,
+        guardian_address: elements.guardian_address,
+      };
+      if (elements.guardian_id) {
+        payload.guardian_id = elements.guardian_id;
+      }
+
+      try {
+        const response = await axios.put(
+          "http://34.93.135.33:8080/api/update_guardian",
+          payload
+        );
+      } catch (error) {
+        console.error("Error Update/Creating Guardian", error);
+      }
+    }
 
     // After update send mail
     axios
@@ -608,6 +674,43 @@ const PreOnboardingUserMaster = () => {
 
     toastAlert("User Update");
   };
+
+  //Guardian
+  const handleAddGuardianDetails = () => {
+    setGuardianDetails([
+      ...guardianDetails,
+      { ...initialGuardianDetailsGroup },
+    ]);
+  };
+
+  const handleGuardianDetailsChange = (index, event) => {
+    const updatedGuardianDetails = guardianDetails?.map((detail, idx) => {
+      if (idx === index) {
+        return { ...detail, [event.target.name]: event.target.value };
+      }
+      return detail;
+    });
+    setGuardianDetails(updatedGuardianDetails);
+  };
+
+  async function handleRemoveGuardianDetails(index) {
+    const itemToRemove = guardianDetails[index];
+    if (itemToRemove && itemToRemove.guardian_id) {
+      try {
+        await axios.delete(
+          `http://34.93.135.33:8080/api/delete_guardian/${itemToRemove.guardian_id}`
+        );
+      } catch (error) {
+        console.error("Error Deleting Guardian", error);
+        return;
+      }
+    }
+
+    const newGuardianDetails = guardianDetails.filter(
+      (_, idx) => idx !== index
+    );
+    setGuardianDetails(newGuardianDetails);
+  }
 
   // Password Auto Genrate
   const generatePassword = () => {
@@ -667,9 +770,6 @@ const PreOnboardingUserMaster = () => {
     dateOfBirth,
     nationality,
     emergencyContact,
-    guardianName,
-    relationToGuardian,
-    guardianAddress,
     permanentAddress,
     permanentCity,
     permanentState,
@@ -791,7 +891,7 @@ const PreOnboardingUserMaster = () => {
     },
     {
       selector: "#sidebarDocumentBox",
-      content: "From here you can see our policies",
+      content: "From here you can submit your documents.",
     },
     {
       selector: "#sidebarPolicyBox",
@@ -844,6 +944,7 @@ const PreOnboardingUserMaster = () => {
             padding: "20px",
           },
         }}
+        shouldCloseOnOverlayClick={false}
       >
         <ReadyToOnboardContent
           handleIamReady={handleIamReady}
@@ -855,7 +956,9 @@ const PreOnboardingUserMaster = () => {
         <div className="page_wrapper">
           <div className="sidebar_wrapper">
             <div className="sidebar_header">
-              <h2>Home</h2>
+              <h2 onClick={() => setActiveTab(0)}>
+                Home <i className="bi bi-house-fill" />
+              </h2>
             </div>
             <div className="sidebar_items">
               <div
@@ -901,6 +1004,10 @@ const PreOnboardingUserMaster = () => {
                 </div>
                 <h2 className="document_tab_name">Documents</h2>
                 <h3>{documentPercentage}%</h3>
+                <h3>Mandotary{showMandotaryPer}%</h3>
+                <h3>
+                  Non Mandotary{showNonMandotaryPer ? showNonMandotaryPer : 0}%
+                </h3>
               </div>
 
               <div
@@ -972,7 +1079,7 @@ const PreOnboardingUserMaster = () => {
               <div className="user_box">
                 <div className="user_name">
                   <h3>
-                    <span>Welcome back,</span>
+                    <span>Welcome </span>
                     {getNickName}
                   </h3>
                 </div>
@@ -1054,6 +1161,7 @@ const PreOnboardingUserMaster = () => {
                                 onRequestClose={closeReactModal}
                                 contentLabel="Modal"
                                 appElement={document.getElementById("root")}
+                                shouldCloseOnOverlayClick={false}
                               >
                                 <ExtendJoining
                                   gettingData={gettingData}
@@ -1272,7 +1380,7 @@ const PreOnboardingUserMaster = () => {
                               />
                             </div>
 
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <TextField
                                 id="outlined-basic"
                                 label="Guardian Name"
@@ -1316,7 +1424,21 @@ const PreOnboardingUserMaster = () => {
                                   setGuardianAddress(e.target.value)
                                 }
                               />
-                            </div>
+                            </div> */}
+                            <GuardianFields
+                              guardianDetails={guardianDetails}
+                              guardianDisplayFields={guardianDisplayFields}
+                              guardianFieldLabels={guardianFieldLabels}
+                              handleGuardianDetailsChange={
+                                handleGuardianDetailsChange
+                              }
+                              handleAddGuardianDetails={
+                                handleAddGuardianDetails
+                              }
+                              handleRemoveGuardianDetails={
+                                handleRemoveGuardianDetails
+                              }
+                            />
                           </div>
                         </div>
 
@@ -1385,6 +1507,7 @@ const PreOnboardingUserMaster = () => {
 
                           <div className="board_form">
                             <h2>Permanent Address</h2>
+
                             <div className="form-group">
                               <TextField
                                 required
@@ -1420,6 +1543,7 @@ const PreOnboardingUserMaster = () => {
 
                             <div className="form-group">
                               <TextField
+                                key={permanentPincode}
                                 required
                                 id="outlined-basic"
                                 label="Pincode"

@@ -20,11 +20,10 @@ const AdminPreOnboarding = () => {
 
   const jobTypeData = ["WFO", "WFH"];
   const tdsApplicableData = ["Yes", "No"];
-
   const genderData = ["Male", "Female", "Other"];
 
   const whatsappApi = WhatsappAPI();
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, toastError } = useGlobalContext();
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -36,10 +35,12 @@ const AdminPreOnboarding = () => {
   const [reportL2, setReportL2] = useState("");
   const [reportL3, setReportL3] = useState("");
   const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(true);
   const [city, setCity] = useState("");
 
   const [personalEmail, setPersonalEmail] = useState("");
-  const [validEmail, setValidEmail] = useState(true);
+  const [validPersonalEmail, setValidPersonalEmail] = useState(true);
+
   const [annexurePdf, setAnnexurePdf] = useState("");
 
   //TDS fields
@@ -82,11 +83,18 @@ const AdminPreOnboarding = () => {
   const [designationData, setDesignationData] = useState([]);
 
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const [roledata, getRoleData] = useState([]);
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
 
+  const [isRequired, setIsRequired] = useState({
+    reportL1: false,
+  });
+
   useEffect(() => {
+    axios.get("http://34.93.135.33:8080/api/get_all_roles").then((res) => {
+      getRoleData(res.data.data);
+    });
     axios
       .get("http://34.93.135.33:8080/api/get_all_departments")
       .then((res) => {
@@ -105,6 +113,17 @@ const AdminPreOnboarding = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!jobType) {
+      return toastError("Job Type is Required");
+    } else if (!department || department == "") {
+      return toastError("Department is Required");
+    } else if (!designation || designation == "") {
+      return toastError("Designatoin is Required");
+    } else if (!gender || gender == "") {
+      return toastError("Gender is Required");
+    } else if (!reportL1 || reportL1 == "") {
+      return toastError("Report Error Is Required");
+    }
     const formData = new FormData();
     formData.append("created_by", loginUserId);
     formData.append("user_name", username);
@@ -113,12 +132,13 @@ const AdminPreOnboarding = () => {
     formData.append("user_email_id", email);
     formData.append("permanent_city", city);
     formData.append("ctc", userCtc);
-    formData.append("offer_letter_send", sendLetter.value);
+    formData.append(
+      "offer_letter_send",
+      sendLetter.value ? Boolean(sendLetter.value) : false
+    );
     formData.append("annexure_pdf", annexurePdf);
-
     formData.append("tds_applicable", tdsApplicable);
     formData.append("tds_per", tdsPercentage);
-
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
     formData.append("user_contact_no", contact);
@@ -177,6 +197,14 @@ const AdminPreOnboarding = () => {
             .then((res) => {
               console.log("Email sent successfully:", res.data);
             })
+            .then((res) => {
+              if (res.status == 200) {
+                toastAlert("User Registerd");
+                setIsFormSubmitted(true);
+              } else {
+                toastError("Sorry User is Not Created, Please try again later");
+              }
+            })
             .catch((error) => {
               console.log("Failed to send email:", error);
             });
@@ -202,7 +230,6 @@ const AdminPreOnboarding = () => {
           setReportL2("");
           setReportL3("");
           setDesignation("");
-          setSendLetter("");
           toastAlert("User Registerd");
           setIsFormSubmitted(true);
         }
@@ -222,7 +249,7 @@ const AdminPreOnboarding = () => {
   // Email Validation
   function handleEmailChange(e) {
     const newEmail = e.target.value;
-    setPersonalEmail(newEmail);
+    setEmail(newEmail);
 
     if (newEmail == "") {
       setValidEmail(false);
@@ -231,8 +258,41 @@ const AdminPreOnboarding = () => {
       setValidEmail(emailRegex.test(newEmail));
     }
   }
+  function handlePersonalEmailChange(e) {
+    const newEmail = e.target.value;
+    setPersonalEmail(newEmail);
 
-  // Number validation
+    if (newEmail == "") {
+      setValidPersonalEmail(false);
+    } else {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      setValidPersonalEmail(emailRegex.test(newEmail));
+    }
+  }
+
+  //user Contact validation
+  function handleContactChange(event) {
+    const newContact1 = event.target.value;
+    setContact(newContact1);
+
+    if (newContact1 === "") {
+      setValidContact(false);
+    } else {
+      setValidContact(
+        /^(\+91[ \-\s]?)?[0]?(91)?[6789]\d{9}$/.test(newContact1)
+      );
+    }
+  }
+
+  function handleContactBlur() {
+    setisContactTouched(true);
+    if (contact.length < 10) {
+      setValidContact(false);
+    }
+  }
+
+  //personal Contact validation
+
   function handlePersonalContactChange(event) {
     const newContact1 = event.target.value;
     setPersonalContact(newContact1);
@@ -246,11 +306,9 @@ const AdminPreOnboarding = () => {
     }
   }
 
-  function handleContentBlur() {
-    setisContactTouched(true);
+  function handlePersonalContactBlur() {
     setisContactTouched1(true);
-    if (contact.length < 10) {
-      setValidContact(false);
+    if (personalContact.length < 10) {
       setValidContact1(false);
     }
   }
@@ -298,6 +356,7 @@ const AdminPreOnboarding = () => {
         <FieldContainer
           label="Full Name"
           fieldGrid={3}
+          required
           value={username}
           onChange={(e) => setUserName(e.target.value)}
         />
@@ -353,6 +412,7 @@ const AdminPreOnboarding = () => {
             Report L1 <sup style={{ color: "red" }}>*</sup>
           </label>
           <Select
+            required={true}
             className=""
             options={usersData.map((option) => ({
               value: option.user_id,
@@ -366,20 +426,48 @@ const AdminPreOnboarding = () => {
             }}
             onChange={(e) => {
               setReportL1(e.value);
+              e.value &&
+                setIsRequired((prev) => {
+                  return { ...prev, reportL1: false };
+                });
             }}
-            required
+            onBlur={(e) => {
+              console.log(reportL1);
+              !reportL1 &&
+                setIsRequired((prev) => {
+                  return { ...prev, reportL1: true };
+                });
+              reportL1 &&
+                setIsRequired((prev) => {
+                  return { ...prev, reportL1: false };
+                });
+            }}
           />
+          {isRequired.reportL1 && (
+            <p style={{ color: "red" }}>*Please select Report L1</p>
+          )}
         </div>
 
+        <FieldContainer
+          label="Email"
+          type="email"
+          fieldGrid={3}
+          required
+          value={email}
+          onChange={handleEmailChange}
+        />
+        {!validEmail && (
+          <p style={{ color: "red" }}>*Please enter valid email</p>
+        )}
         <FieldContainer
           label="Personal Email"
           type="email"
           fieldGrid={3}
           required={false}
           value={personalEmail}
-          onChange={handleEmailChange}
+          onChange={handlePersonalEmailChange}
         />
-        {!validEmail && (
+        {!validPersonalEmail && (
           <p style={{ color: "red" }}>*Please enter valid email</p>
         )}
         <FieldContainer
@@ -499,13 +587,26 @@ const AdminPreOnboarding = () => {
         )}
 
         <FieldContainer
+          label="Contact"
+          type="number"
+          fieldGrid={3}
+          value={contact}
+          required={true}
+          onChange={handleContactChange}
+          onBlur={handleContactBlur}
+        />
+        {(isContactTouched || contact.length >= 10) && !isValidcontact && (
+          <p style={{ color: "red" }}>*Please enter a valid Number</p>
+        )}
+
+        <FieldContainer
           label="Personal Contact"
           type="number"
           fieldGrid={3}
           value={personalContact}
           required={false}
           onChange={handlePersonalContactChange}
-          onBlur={handleContentBlur}
+          onBlur={handlePersonalContactBlur}
         />
         {(isContactTouched1 || personalContact.length >= 10) &&
           !isValidcontact1 && (
@@ -519,6 +620,7 @@ const AdminPreOnboarding = () => {
               <input
                 className="form-control"
                 value={loginId}
+                required
                 onChange={handleLoginIdChange}
               />
               <div className="input-group-append">
@@ -542,6 +644,7 @@ const AdminPreOnboarding = () => {
                 type="text"
                 className="form-control"
                 value={password}
+                required
                 onChange={(e) => setPassword(e.target.value)}
               />
               <div className="input-group-append">
@@ -557,6 +660,27 @@ const AdminPreOnboarding = () => {
           </div>
         </div>
 
+        <div className="form-group col-3">
+        <label className="form-label">
+          Role <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <Select
+          options={roledata.map((option) => ({
+            value: option.role_id,
+            label: option.Role_name,
+          }))}
+          value={{
+            value: roles,
+            label:
+              roledata.find((role) => role.role_id === roles)?.Role_name || "",
+          }}
+          onChange={(e) => {
+            console.log(e.value);
+            setRoles(e.value);
+          }}
+        ></Select>
+      </div>
+
         <FieldContainer
           type="date"
           label="Joining Date"
@@ -568,6 +692,7 @@ const AdminPreOnboarding = () => {
         <FieldContainer
           label="DOB"
           type="date"
+          required
           value={dateOfBirth}
           onChange={handleDateChange}
         />

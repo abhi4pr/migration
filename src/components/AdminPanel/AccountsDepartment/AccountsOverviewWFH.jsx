@@ -76,6 +76,7 @@ const AccountsOverviewWFH = () => {
     formData.append("screenshot", screenshot);
     formData.append("reference_no", refrenceNumber);
     formData.append("pay_date", date);
+    formData.append("attendence_id", row.attendence_id);
 
     axios
       .put(`http://34.93.135.33:8080/api/edit_finance`, formData, {

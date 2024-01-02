@@ -1,7 +1,6 @@
 import { createContext, useEffect, useContext, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import jwtDecode from "jwt-decode";
 import axios from "axios";
 
 const AppContext = createContext();
@@ -10,6 +9,13 @@ const AppProvider = ({ children }) => {
   const [alertText, setAlertText] = useState("");
   const [data, setData] = useState([]);
   const [token, setToken] = useState("");
+
+  // Get All Categroy Data API State here
+  const [categoryDataContext, setCategoryData] = useState([]);
+  const [getBrandDataContext, setBrandDataContext] = useState([]);
+  const [getAssetDataContext, setAssetDataContext] = useState([]);
+  const [usersDataContext, setUsersContextData] = useState([]);
+
   const toastAlert = (text) => {
     toast.success(text);
     setShowAlert(true);
@@ -21,24 +27,49 @@ const AppProvider = ({ children }) => {
     setAlertText(text);
   };
 
-  const storedToken = sessionStorage.getItem("token");
-  useEffect(() => {
-    if (storedToken) {
-      const decodedToken = jwtDecode(storedToken);
-      const userID = decodedToken.id;
-      setToken(decodedToken);
-      axios
-        .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
-        )
-        .then((res) => {
-          setData(res.data);
-        });
-    }
-  }, [storedToken]);
+  const getAllCategoryContextFunction = () => {
+    axios
+      .get("http://34.93.135.33:8080/api/get_all_asset_category")
+      .then((res) => {
+        setCategoryData(res.data.data.asset_categories);
+      });
+  };
+  async function getBrandData() {
+    const res = await axios.get(
+      "http://34.93.135.33:8080/api/get_all_asset_brands"
+    );
+    setBrandDataContext(res.data.data);
+  }
+  async function getAssetData() {
+    const res = await axios.get("http://34.93.135.33:8080/api/get_all_sims");
+    setAssetDataContext(res.data.data);
+    console.log(res, "hello welcome");
+  }
+  async function getUserAPIData() {
+    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+      setUsersContextData(res.data.data);
+    });
+  }
 
+  useEffect(() => {
+    getAllCategoryContextFunction();
+    getBrandData();
+    getAssetData();
+    getUserAPIData();
+  }, []);
   return (
-    <AppContext.Provider value={{ toastAlert, data, token, toastError }}>
+    <AppContext.Provider
+      value={{
+        toastAlert,
+        data,
+        token,
+        toastError,
+        categoryDataContext,
+        getBrandDataContext,
+        getAssetDataContext,
+        usersDataContext,
+      }}
+    >
       {children}
       {showAlert && (
         <>

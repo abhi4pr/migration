@@ -9,27 +9,30 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
 const AssetSubCategoryMaster = () => {
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, categoryDataContext } = useGlobalContext();
   const navigate = useNavigate();
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
-  const [categoryName, setCategoryName] = useState([]);
   const [subCategoryName, setSubCategoryName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCat, setSelectedCat] = useState("");
+  const [inWarranty, setInWarranty] = useState("");
+  const warranty = ["Yes", "No"];
 
-  useEffect(() => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_asset_category")
-      .then((res) => {
-        setCategoryName(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  }, []);
+  console.log(categoryDataContext, "finaly");
 
+  // const [categoryName, setCategoryName] = useState([]);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://34.93.135.33:8080/api/get_all_asset_category")
+  //     .then((res) => {
+  //       setCategoryName(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching categories:", error);
+  //     });
+  // }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,13 +42,13 @@ const AssetSubCategoryMaster = () => {
         {
           sub_category_name: subCategoryName,
           category_id: selectedCat,
+          inWarranty: inWarranty,
           description: description,
           created_by: loginUserId,
           last_updated_by: loginUserId,
         }
       );
 
-      console.log(response.data);
       toastAlert("Data posted successfully!");
       setSubCategoryName("");
       setDescription("");
@@ -78,15 +81,16 @@ const AssetSubCategoryMaster = () => {
               Category Name <sup style={{ color: "red" }}>*</sup>
             </label>
             <Select
-              options={categoryName.map((opt) => ({
+              options={categoryDataContext.map((opt) => ({
                 value: opt.category_id,
                 label: opt.category_name,
               }))}
               value={{
                 value: selectedCat,
                 label:
-                  categoryName.find((user) => user.category_id === selectedCat)
-                    ?.category_name || "",
+                  categoryDataContext.find(
+                    (user) => user.category_id === selectedCat
+                  )?.category_name || "",
               }}
               onChange={(e) => {
                 setSelectedCat(e.value);
@@ -94,12 +98,32 @@ const AssetSubCategoryMaster = () => {
               required
             />
           </div>
+          <div className="form-group col-6">
+            <label className="form-label">
+              In Warranty <sup style={{ color: "red" }}>*</sup>
+            </label>
+            <Select
+              className=""
+              options={warranty.map((option) => ({
+                value: `${option}`,
+                label: `${option}`,
+              }))}
+              value={{
+                value: inWarranty,
+                label: `${inWarranty}`,
+              }}
+              onChange={(e) => {
+                setInWarranty(e.value);
+              }}
+              required
+            />
+          </div>
 
-          <FieldContainer
+          {/* <FieldContainer
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-          />
+          /> */}
         </FormContainer>
       </div>
     </>

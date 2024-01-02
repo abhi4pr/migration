@@ -18,17 +18,19 @@ const BillingOverview = () => {
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
 
+  //get_wfh_users/${dept_id}
+
   const getData = () => {
     axios
       .get("http://34.93.135.33:8080/api/get_all_billingheaders")
       .then((res) => {
-        setBillData(res.data);
-        setFilterData(res.data);
+        setBillData(res.data.result);
+        setFilterData(res.data.result);
       });
   };
   useEffect(() => {
     getData();
-    if (userID && contextData.length === 0) {
+    if (userID && contextData?.length === 0) {
       axios
         .get(
           `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
@@ -41,8 +43,8 @@ const BillingOverview = () => {
 
   const columns = [
     {
-      name: "s no",
-      cell: (row, index) => <div>{index + 1}</div>,
+      name: "S.NO",
+      selector: (row, index) => <div>{index + 1}</div>,
       sortable: true,
     },
     {
@@ -52,6 +54,14 @@ const BillingOverview = () => {
     {
       name: "Department",
       selector: (row) => row.department_name,
+    },
+    {
+      name: "WFH Employees Count",
+      selector: (row) => (
+        <Link className="text-primary" to={`/admin/wfh-users-overview/${row.dept_id}`}>
+          {row.wfhUserCount}
+        </Link>
+      ),
     },
     {
       name: "Action",
@@ -101,24 +111,28 @@ const BillingOverview = () => {
           "true"
         }
       />
-      <DataTable
-        title="Billing Overview"
-        columns={columns}
-        data={filterdata}
-        fixedHeader
-        fixedHeaderScrollHeight="64vh"
-        highlightOnHover
-        subHeader
-        subHeaderComponent={
-          <input
-            type="text"
-            placeholder="Search Here"
-            className="w-50 form-control"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+      <div className="card">
+        <div className="data_tbl table-responsive">
+          <DataTable
+            title="Billing Overview"
+            columns={columns}
+            data={filterdata}
+            fixedHeader
+            fixedHeaderScrollHeight="64vh"
+            highlightOnHover
+            subHeader
+            subHeaderComponent={
+              <input
+                type="text"
+                placeholder="Search Here"
+                className="w-50 form-control"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            }
           />
-        }
-      />
+        </div>
+      </div>
     </div>
   );
 };

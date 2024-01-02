@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useGlobalContext } from "../../Context/Context";
 import UserNav from "../Pantry/UserPanel/UserNav";
@@ -8,7 +8,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 
 const SimMaster = () => {
-  const { toastAlert, toastError } = useGlobalContext();
+  const { toastAlert, toastError, categoryDataContext, getBrandDataContext } =
+    useGlobalContext();
   const [assetsName, setAssetsName] = useState("");
 
   const [assetsID, setAssetsID] = useState("");
@@ -47,44 +48,104 @@ const SimMaster = () => {
   const [remark, setRemark] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-  const [categoryData, setCategoryData] = useState([]);
   const [subcategoryData, setSubCategoryData] = useState([]);
   const [vendorData, setVendorData] = useState([]);
+
+  const [finacialType, setFinacialType] = useState("");
+  const [depreciation, setDescription] = useState("");
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
 
-  const [imageType, setImageType] = useState("");
+  const [imageType, setImageType] = useState("HR");
   const inWarrantyOption = ["No", "Yes"];
   const IMGType = ["HR", "User"];
   const assettype = ["New", "Old"];
+  const FinacinalType = [
+    "Current assets",
+    "Fixed assets",
+    " Tangible assets",
+    "Intangible assets",
+    "Operating assets",
+    "Non-operating assets",
+  ];
+  const [modalData, setModalData] = useState([]);
+  const [modalName, setModalName] = useState("");
+  const [brandName, setBrandName] = useState("");
+  console.log(assetType, "asset type");
 
   // All Category , subcategory and vendor api here
-  const getAllCategory = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_asset_category")
-      .then((res) => {
-        setCategoryData(res.data);
-      });
-  };
+  // const [categoryData, setCategoryData] = useState([]);
+  // const getAllCategory = () => {
+  //   axios
+  //     .get("http://34.93.135.33:8080/api/get_all_asset_category")
+  //     .then((res) => {
+  //       setCategoryData(res.data);
+  //     });
+  // };
+
+  // const [brandData, setBrandData] = useState([]);
+  // async function getBrandData() {
+  //   const res = await axios.get(
+  //     "http://34.93.135.33:8080/api/get_all_asset_brands"
+  //   );
+  //   setBrandData(res.data.data);
+  // }
+
   const getAllSubCategory = () => {
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_asset_sub_category")
-      .then((res) => {
-        setSubCategoryData(res.data);
-      });
+    if (assetsCategory.category_id) {
+      axios
+        .get(
+          `http://34.93.135.33:8080/api/get_single_asset_sub_category/${assetsCategory.category_id}`
+        )
+        .then((res) => {
+          setSubCategoryData(res.data);
+        });
+    }
   };
+  useEffect(() => {
+    const selectedSubcat = subcategoryData.filter(
+      (d) => d.sub_category_id === subCategory.sub_category_id
+    );
+    if (selectedSubcat) {
+      setInWarranty(selectedSubcat[0]?.inWarranty);
+    }
+  }, [subCategory.sub_category_id, subcategoryData]);
+
   const getAllVendor = () => {
     axios.get("http://34.93.135.33:8080/api/get_all_vendor").then((res) => {
       setVendorData(res.data);
     });
   };
+  async function getModalData() {
+    const res = await axios.get(
+      "http://34.93.135.33:8080/api/get_all_asset_modals"
+    );
+    setModalData(res.data);
+  }
+
   useEffect(() => {
-    getAllCategory();
-    getAllSubCategory();
+    const selectedCategory = categoryDataContext.filter(
+      (d) => d.category_id === assetsCategory.category_id
+    );
+    if (selectedCategory) {
+      setSelfAuditPeriod(selectedCategory[0]?.selfAuditPeriod);
+      setSelfAuditUnit(selectedCategory[0]?.selfAuditUnit);
+      setHrSelfAuditPeriod(selectedCategory[0]?.hrAuditPeriod);
+      setHrSelfAuditUnit(selectedCategory[0]?.hrAuditUnit);
+    }
+  }, [assetsCategory.category_id, categoryDataContext]);
+  useEffect(() => {
+    getModalData();
+    // getBrandData();
+    // getAllCategory();
     getAllVendor();
   }, []);
+
+  useEffect(() => {
+    getAllSubCategory();
+  }, [assetsCategory]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,7 +166,9 @@ const SimMaster = () => {
       formData.append("assetsName", assetsName);
       formData.append("sim_no", assetsID);
       formData.append("assetsOtherID", assetsOtherID);
-      formData.append("s_type", assetType);
+      formData.append("s_type", String(assetType));
+      formData.append("asset_modal_id", modalName.asset_modal_id);
+      formData.append("asset_brand_id", brandName.asset_brand_id);
       formData.append("warrantyDate", warrantyDate);
       formData.append("inWarranty", inWarranty);
       formData.append("dateOfPurchase", dateOfPurchase);
@@ -121,6 +184,8 @@ const SimMaster = () => {
       formData.append("assetsCurrentValue", assetsCurrentValue);
       formData.append("remark", remark);
       formData.append("created_by", loginUserId);
+      formData.append("asset_financial_type", finacialType);
+      formData.append("depreciation_percentage", depreciation);
       formData.append("status", "Available");
 
       //There is asssets post data api
@@ -165,128 +230,57 @@ const SimMaster = () => {
     <div style={{ width: "80%", margin: "0 0 0 10%" }}>
       <UserNav />
       <div className="form-heading">
-        <div className="form_heading_title">
-          <h2>Assets Registration</h2>
+        <div className="action_heading">
+          <div className="form_heading_title">
+            <h2>Assets Registration</h2>
+          </div>
+        </div>
+        <div className="action_btns">
+          <Link to="/brand-mast">
+            <button type="button" className="btn btn-outline-primary btn-sm">
+              Brand Master
+            </button>
+          </Link>
+          <Link to="/modal-mast">
+            <button type="button" className="btn btn-outline-primary btn-sm">
+              Add Modal
+            </button>
+          </Link>
         </div>
       </div>
       <form mainTitle="Assets" title="Assets Register" onSubmit={handleSubmit}>
         <div className="formarea">
           <div className="row">
             <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-              <div className="form-group ">
-                <TextField
-                  id="outlined-basic"
-                  label="Assets Name"
-                  type="text"
-                  value={assetsName}
-                  onChange={(e) => setAssetsName(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-              <div className="form-group">
-                <TextField
-                  id="outlined-basic"
-                  label="Assets ID *"
-                  type="number"
-                  value={assetsID}
-                  // onChange={(e) => setAssetsID(e.target.value)}
-                  onChange={handleAssetsIDChange}
-                  error={!!assetsIDError}
-                  helperText={assetsIDError}
-                />
-              </div>
-            </div>
-            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-              <div className="form-group">
-                <TextField
-                  id="outlined-basic"
-                  label="Assets Other ID"
-                  type="number"
-                  value={assetsOtherID}
-                  onChange={(e) => setAssetsOtherID(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
-                  // sx={{ width: 600 }}
-                  id="combo-box-demo"
-                  options={inWarrantyOption}
-                  value={inWarranty}
-                  onChange={(e, newvalue) => setInWarranty(newvalue)}
-                  defaultValue={inWarrantyOption[0]}
-                  renderInput={(params) => (
-                    <TextField {...params} label="In Warranty" />
-                  )}
-                />
-              </div>
-            </div>
-
-            {inWarranty == "Yes" && (
-              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                <div className="form-group">
-                  <TextField
-                    id="outlined-basic"
-                    InputLabelProps={{ shrink: true }}
-                    label="Warranty Date"
-                    type="date"
-                    value={warrantyDate}
-                    onChange={(e) => setWarrantyDate(e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-              <div className="form-group form_select">
-                <Autocomplete
-                  disablePortal
-                  // sx={{ width: 600 }}
                   id="combo-box-demo"
                   options={assettype}
                   value={assetType}
                   onChange={(e, newvalue) => setAssetType(newvalue)}
-                  // defaultValue={assetcondition[0]}
                   renderInput={(params) => (
                     <TextField {...params} label="Asset Type" />
                   )}
                 />
               </div>
             </div>
-
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-              <div className="form-group">
-                <TextField
-                  id="outlined-basic"
-                  InputLabelProps={{ shrink: true }}
-                  label="Date of Purchase"
-                  type="date"
-                  value={dateOfPurchase}
-                  onChange={(e) => setDateOfPurchase(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  options={categoryData.map((cat) => ({
+                  options={categoryDataContext.map((cat) => ({
                     label: cat.category_name,
                     value: cat.category_id,
                   }))}
                   // value={assetsCategory}
                   onChange={(e, newvalue) => {
                     // if (newvalue != null) {
-                    setAssetsCategory((pre) => ({
+                    setAssetsCategory({
                       label: newvalue.label,
                       category_id: newvalue.value,
-                    }));
+                    });
                     // console.log(newvalue, "there is new value");
                     if (assetsCategoryError) {
                       setAssetsCategoryError("");
@@ -304,8 +298,7 @@ const SimMaster = () => {
                 />
               </div>
             </div>
-
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
@@ -336,7 +329,143 @@ const SimMaster = () => {
               </div>
             </div>
 
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={getBrandDataContext.map((cat) => ({
+                    label: cat.asset_brand_name,
+                    value: cat.asset_brand_id,
+                  }))}
+                  onChange={(e, newvalue) => {
+                    if (newvalue != null) {
+                      setBrandName((pre) => ({
+                        label: newvalue.label,
+                        asset_brand_id: newvalue.value,
+                      }));
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Brand Name" />
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group ">
+                <TextField
+                  fullWidth={true}
+                  id="outlined-basic"
+                  label="Assets Name"
+                  type="text"
+                  value={assetsName}
+                  onChange={(e) => setAssetsName(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={modalData.map((cat) => ({
+                    label: cat.asset_modal_name,
+                    value: cat.asset_modal_id,
+                  }))}
+                  onChange={(e, newvalue) => {
+                    if (newvalue != null) {
+                      setModalName((pre) => ({
+                        label: newvalue.label,
+                        asset_modal_id: newvalue.value,
+                      }));
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Add Modal" />
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group">
+                <TextField
+                  fullWidth={true}
+                  id="outlined-basic"
+                  label="Assets ID *"
+                  type="number"
+                  value={assetsID}
+                  // onChange={(e) => setAssetsID(e.target.value)}
+                  onChange={handleAssetsIDChange}
+                  error={!!assetsIDError}
+                  helperText={assetsIDError}
+                />
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group">
+                <TextField
+                  fullWidth={true}
+                  id="outlined-basic"
+                  label="Assets Other ID"
+                  type="number"
+                  value={assetsOtherID}
+                  onChange={(e) => setAssetsOtherID(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  disabled
+                  options={inWarrantyOption}
+                  value={inWarranty}
+                  onChange={(e, newvalue) => setInWarranty(newvalue)}
+                  defaultValue={inWarrantyOption[0]}
+                  renderInput={(params) => (
+                    <TextField {...params} label="In Warranty" />
+                  )}
+                />
+              </div>
+            </div>
+
+            {inWarranty == "Yes" && (
+              <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                <div className="form-group">
+                  <TextField
+                    fullWidth={true}
+                    id="outlined-basic"
+                    InputLabelProps={{ shrink: true }}
+                    label="Warranty Date"
+                    type="date"
+                    value={warrantyDate}
+                    onChange={(e) => setWarrantyDate(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+              <div className="form-group">
+                <TextField
+                  fullWidth={true}
+                  id="outlined-basic"
+                  InputLabelProps={{ shrink: true }}
+                  label="Date of Purchase"
+                  type="date"
+                  value={dateOfPurchase}
+                  onChange={(e) => setDateOfPurchase(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
@@ -367,9 +496,10 @@ const SimMaster = () => {
               </div>
             </div>
 
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   InputLabelProps={{ shrink: true }}
                   label="Invoice Copy"
@@ -384,9 +514,11 @@ const SimMaster = () => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   label="Self Audit Period in days"
                   type="number"
+                  disabled={true}
                   value={selfAuditPeriod}
                   onChange={(e) => setSelfAuditPeriod(e.target.value)}
                 />
@@ -395,9 +527,10 @@ const SimMaster = () => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
+                  disabled={true}
                   id="outlined-basic"
                   label="Self Audit Unit"
-                  type="number"
                   value={selfAuditUnit}
                   onChange={(e) => setSelfAuditUnit(e.target.value)}
                 />
@@ -410,9 +543,11 @@ const SimMaster = () => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   label="HR Self Audit Period in days"
                   type="number"
+                  disabled={true}
                   value={hrselfAuditPeriod}
                   onChange={(e) => setHrSelfAuditPeriod(e.target.value)}
                 />
@@ -422,9 +557,10 @@ const SimMaster = () => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
+                  disabled={true}
                   id="outlined-basic"
                   label="HR Self Audit Unit"
-                  type="number"
                   value={hrselfAuditUnit}
                   onChange={(e) => setHrSelfAuditUnit(e.target.value)}
                 />
@@ -435,6 +571,7 @@ const SimMaster = () => {
             <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   InputLabelProps={{ shrink: true }}
                   label="IMG 1"
@@ -446,6 +583,7 @@ const SimMaster = () => {
             <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   InputLabelProps={{ shrink: true }}
                   label="IMG 2"
@@ -457,6 +595,7 @@ const SimMaster = () => {
             <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   InputLabelProps={{ shrink: true }}
                   label="IMG 3"
@@ -468,6 +607,7 @@ const SimMaster = () => {
             <div className="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   InputLabelProps={{ shrink: true }}
                   label="IMG 4"
@@ -480,6 +620,7 @@ const SimMaster = () => {
               <div className="form-group form_select">
                 <Autocomplete
                   disablePortal
+                  disabled
                   // sx={{ width: 600 }}
                   id="combo-box-demo"
                   options={IMGType}
@@ -491,9 +632,10 @@ const SimMaster = () => {
                 />
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   label="Assets Value"
                   type="number"
@@ -502,9 +644,10 @@ const SimMaster = () => {
                 />
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   label="Assets Current Value"
                   type="number"
@@ -513,9 +656,37 @@ const SimMaster = () => {
                 />
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+              <div className="form-group form_select">
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={FinacinalType}
+                  value={finacialType}
+                  onChange={(e, newvalue) => setFinacialType(newvalue)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Assets Finacial Type" />
+                  )}
+                />
+              </div>
+            </div>
+            <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
               <div className="form-group">
                 <TextField
+                  fullWidth={true}
+                  id="outlined-basic"
+                  label="
+                  Depreciation Percentage"
+                  type="number"
+                  value={depreciation}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <div className="form-group">
+                <TextField
+                  fullWidth={true}
                   id="outlined-basic"
                   label="Remark"
                   Tag="textarea"
