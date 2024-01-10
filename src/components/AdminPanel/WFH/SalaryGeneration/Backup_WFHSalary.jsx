@@ -87,7 +87,7 @@ const Backup_WFHSalary = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_wfh_users"
+          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
@@ -107,19 +107,19 @@ const Backup_WFHSalary = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
   }, []);
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_all_users`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/get_all_users`).then((res) => {
       getUsersData(res.data.data);
     });
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/getuserdeptwise/${department}`)
+        .get(`https://node-dev-server.onrender.com/api/getuserdeptwise/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
@@ -142,7 +142,7 @@ const Backup_WFHSalary = () => {
     };
     axios
       .post(
-        "http://34.93.135.33:8080/api/get_salary_by_id_month_year",
+        "https://node-dev-server.onrender.com/api/get_salary_by_id_month_year",
         payload
       )
       .then((res) => {
@@ -160,7 +160,7 @@ const Backup_WFHSalary = () => {
     formData.append("id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
-    axios.put(`http://34.93.135.33:8080/api/userupdate`, formData, {
+    axios.put(`https://node-dev-server.onrender.com/api/userupdate`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -182,7 +182,7 @@ const Backup_WFHSalary = () => {
 
   const handleAttendence = () => {
     axios
-      .post("http://34.93.135.33:8080/api/attendencemastpost", {
+      .post("https://node-dev-server.onrender.com/api/attendencemastpost", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
@@ -328,11 +328,11 @@ const Backup_WFHSalary = () => {
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
-    axios.post(`http://34.93.135.33:8080/api/finance`, {
+    axios.post(`https://node-dev-server.onrender.com/api/finance`, {
       attendence_id: row.attendence_id,
     });
 
-    axios.put(`http://34.93.135.33:8080/api/updatesalary`, {
+    axios.put(`https://node-dev-server.onrender.com/api/updatesalary`, {
       attendence_id: row.attendence_id,
       sendToFinance: 1,
     });
@@ -874,7 +874,7 @@ const Backup_WFHSalary = () => {
               <div>
                 ScreenSort :
                 <img
-                  src={`${"http://34.93.135.33:8080/api/user_images/"}${
+                  src={`${"https://node-dev-server.onrender.com/api/user_images/"}${
                     rowDataModal?.screenshot
                   }`}
                   alt="Snap"

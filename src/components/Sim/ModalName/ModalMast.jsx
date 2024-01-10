@@ -27,7 +27,7 @@ const ModalMast = () => {
   // const [brandData, setBrandData] = useState([]);
   // async function getBrandData() {
   //   const res = await axios.get(
-  //     "http://34.93.135.33:8080/api/get_all_asset_brands"
+  //     "https://node-dev-server.onrender.com/api/get_all_asset_brands"
   //   );
   //   setBrandData(res.data.data);
   // }
@@ -40,7 +40,7 @@ const ModalMast = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_total_asset_in_category/${row}`
+        `https://node-dev-server.onrender.com/api/get_total_asset_in_category/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -55,7 +55,7 @@ const ModalMast = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_total_asset_in_category_allocated/${row}`
+        `https://node-dev-server.onrender.com/api/get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -104,17 +104,7 @@ const ModalMast = () => {
       ),
       sortable: true,
     },
-    {
-      name: "Add Modal",
-      cell: (row) => (
-        <>
-          <Link to="/modal-mast">
-            <button className="btn btn-outline-success">Add Modal</button>
-          </Link>
-        </>
-      ),
-      sortable: true,
-    },
+
     {
       name: "Action",
       cell: (row) => (
@@ -142,23 +132,30 @@ const ModalMast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://34.93.135.33:8080/api/add_asset_modal",
-        {
-          asset_modal_name: modalName,
-          asset_brand_id: brandName,
-        }
+      const isModalExists = modalData.some(
+        (d) => d.asset_modal_name === modalName
       );
-      setModalName("");
-      setBrandName("");
-      getModalData();
+      if (isModalExists) {
+        alert("Brand already Exists");
+      } else {
+        const response = await axios.post(
+          "https://node-dev-server.onrender.com/api/add_asset_modal",
+          {
+            asset_modal_name: modalName,
+            asset_brand_id: brandName,
+          }
+        );
+        setModalName("");
+        setBrandName("");
+        getModalData();
+      }
     } catch (error) {
       console.log(error);
     }
   };
   async function getModalData() {
     const res = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_asset_modals"
+      "https://node-dev-server.onrender.com/api/get_all_asset_modals"
     );
     setModalData(res.data);
     setModalFilter(res.data);
@@ -177,7 +174,7 @@ const ModalMast = () => {
   const handleModalUpdate = () => {
     console.log(modalId, "id");
     axios
-      .put("http://34.93.135.33:8080/api/update_asset_modal", {
+      .put("https://node-dev-server.onrender.com/api/update_asset_modal", {
         asset_modal_id: modalId,
         asset_brand_id: brandNameUpdate,
         asset_modal_name: modalNameUpdate,
@@ -217,15 +214,14 @@ const ModalMast = () => {
             </label>
             <Select
               options={getBrandDataContext.map((opt) => ({
-                value: opt.asset_brand_id,
+                value: opt._id,
                 label: opt.asset_brand_name,
               }))}
               value={{
                 value: brandName,
                 label:
-                  getBrandDataContext.find(
-                    (user) => user.asset_brand_id === brandName
-                  )?.asset_brand_name || "",
+                  getBrandDataContext.find((user) => user._id === brandName)
+                    ?.asset_brand_name || "",
               }}
               onChange={(e) => {
                 setBrandName(e.value);
@@ -296,14 +292,14 @@ const ModalMast = () => {
                 </label>
                 <Select
                   options={getBrandDataContext.map((opt) => ({
-                    value: opt.asset_brand_id,
+                    value: opt._id,
                     label: opt.asset_brand_name,
                   }))}
                   value={{
                     value: brandNameUpdate,
                     label:
                       getBrandDataContext.find(
-                        (user) => user.asset_brand_id === brandNameUpdate
+                        (user) => user._id === brandNameUpdate
                       )?.asset_brand_name || "",
                   }}
                   onChange={(e) => {

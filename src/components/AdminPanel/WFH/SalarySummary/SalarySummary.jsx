@@ -14,7 +14,7 @@ const SalarySummary = () => {
   const handleUserModal = async (row) => {
     try {
       const response = await axios.post(
-        `http://34.93.135.33:8080/api/get_users_count_by_dept`,
+        `https://node-dev-server.onrender.com/api/get_users_count_by_dept`,
         {
           dept_id: row.dept_id,
           month: row.month,
@@ -34,7 +34,7 @@ const SalarySummary = () => {
 
   const getData = async () => {
     const response = await axios.get(
-      "http://34.93.135.33:8080/api/get_salary_calculation_data"
+      "https://node-dev-server.onrender.com/api/get_salary_calculation_data"
     );
     setAllSalaryData(response.data.data);
     setSavedData(response.data.data);
@@ -161,8 +161,8 @@ const SalarySummary = () => {
           onRequestClose={handleCloseSubCat}
           style={{
             content: {
-              width: "80%",
-              height: "80%",
+              width: "60%",
+              height: "50%",
               top: "50%",
               left: "50%",
               right: "auto",
@@ -194,7 +194,7 @@ const SalarySummary = () => {
                 },
                 {
                   name: "User Name",
-                  width: "40%",
+                  width: "50%",
                   selector: "user_name",
                 },
                 // { name: "Category Name", selector: "category_name" },

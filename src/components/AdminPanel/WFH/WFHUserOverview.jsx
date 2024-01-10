@@ -29,7 +29,7 @@ const WFHUserOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -41,14 +41,14 @@ const WFHUserOverview = () => {
     try {
       if (deptId != 0) {
         const res = await axios.get(
-          `http://34.93.135.33:8080/api/get_wfh_user/${deptId}`
+          `https://node-dev-server.onrender.com/api/get_wfh_user/${deptId}`
         );
         console.log(res.data, "res");
         const data = res.data;
         setFilterData(data);
       } else {
         const res = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_wfh_users"
+          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         setFilterData(data);
@@ -82,7 +82,7 @@ const WFHUserOverview = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
+            .delete(`https://node-dev-server.onrender.com/api/delete_user/${userId}`)
             .then(() => {
               swalWithBootstrapButtons.fire(
                 "Deleted!",

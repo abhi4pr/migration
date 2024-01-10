@@ -20,10 +20,10 @@ const BillingMast = () => {
     async function fetchData() {
       try {
         const assignedDepartmentResponse = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_billingheaders"
+          "https://node-dev-server.onrender.com/api/get_all_billingheaders"
         );
         const wfhDepartmentsResponse = await axios.get(
-          "http://34.93.135.33:8080/api/dept_with_wfh"
+          "https://node-dev-server.onrender.com/api/dept_with_wfh"
         );
 
         const assignedDepartments = assignedDepartmentResponse.data.result;
@@ -68,7 +68,7 @@ const BillingMast = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/add_billingheader", {
+      .post("https://node-dev-server.onrender.com/api/add_billingheader", {
         billing_header_name: bilingName,
         dept_id: department,
       })

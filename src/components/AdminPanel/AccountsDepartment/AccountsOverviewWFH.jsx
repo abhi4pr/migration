@@ -33,7 +33,7 @@ const AccountsOverviewWFH = () => {
 
   const getData = async () => {
     try {
-      axios.get(`http://34.93.135.33:8080/api/get_finances`).then((res) => {
+      axios.get(`https://node-dev-server.onrender.com/api/get_finances`).then((res) => {
         const response = res.data;
         setData(response);
         setFilterData(
@@ -63,6 +63,7 @@ const AccountsOverviewWFH = () => {
   const handlePay = (row) => {
     setShowModal(true);
     setId(row.id);
+    setDataRow(row);
     setAmount("");
     setDate("");
   };
@@ -76,10 +77,10 @@ const AccountsOverviewWFH = () => {
     formData.append("screenshot", screenshot);
     formData.append("reference_no", refrenceNumber);
     formData.append("pay_date", date);
-    formData.append("attendence_id", row.attendence_id);
+    formData.append("attendence_id", rowData.attendence_id);
 
     axios
-      .put(`http://34.93.135.33:8080/api/edit_finance`, formData, {
+      .put(`https://node-dev-server.onrender.com/api/edit_finance`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -89,6 +90,7 @@ const AccountsOverviewWFH = () => {
         setAmount("");
         toastAlert("Paid");
         setShowModal(false);
+        getData();
       });
   }
 
@@ -158,15 +160,17 @@ const AccountsOverviewWFH = () => {
       name: "Action",
       cell: (row) => (
         <>
-          <button
-            className="btn btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-            onClick={() => handlePay(row)}
-          >
-            Pay
-          </button>
-          
+          {salaryStatusToggle == 0 && (
+            <button
+              className="btn btn-primary"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => handlePay(row)}
+            >
+              Pay
+            </button>
+          )}
+
           {row?.invoice_template_no !== "0" && (
             <button
               className="btn btn-outline-primary btn-sm"
@@ -310,6 +314,7 @@ const AccountsOverviewWFH = () => {
                   className="close"
                   data-dismiss="modal"
                   aria-label="Close"
+                  onClick={closeModal}
                 >
                   <span aria-hidden="true">×</span>
                 </button>

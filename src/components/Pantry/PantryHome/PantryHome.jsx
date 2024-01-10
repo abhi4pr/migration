@@ -16,7 +16,7 @@ const PantryHome = () => {
   // const userId = decodedToken.id;
   // useEffect(() => {
   //   if (userId && contextData.length === 0) {
-  //     axios.get(`http://34.93.135.33:8080/api/get_single_user_auth_detail/${userId}`).then((res) => {
+  //     axios.get(`https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userId}`).then((res) => {
   //       setDatas(res.data);
   //     });
   //   }
@@ -41,7 +41,7 @@ const PantryHome = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .get("https://node-dev-server.onrender.com/api/get_all_orderreqdata")
       .then((res) => {
         setAllOrderData(res.data.data);
       });
@@ -58,7 +58,7 @@ const PantryHome = () => {
 
   const allOrderCount = allOrderData?.length;
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_transreq").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_transreq").then((res) => {
       setTransferReq(res.data.data);
     });
   }, []);

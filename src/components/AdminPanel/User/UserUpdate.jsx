@@ -15,6 +15,7 @@ import ContactNumber from "../../ReusableComponents/ContactNumber";
 import ContactNumberReact from "../../ReusableComponents/ContactNumberReact";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DocumentTab from "../../PreOnboarding/DocumentTab";
 
 const castOption = ["General", "OBC", "SC", "ST"];
 const colourOptions = [
@@ -86,7 +87,6 @@ const UserUpdate = () => {
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
   const { id } = useParams();
-  const { toastAlert } = useGlobalContext();
   const [username, setUserName] = useState("");
 
   const [roles, setRoles] = useState("");
@@ -201,7 +201,10 @@ const UserUpdate = () => {
   const [emergencyContactRelation2, setEmergencyContactRelation2] =
     useState("");
 
+  const [documentData, setDocumentData] = useState([]);
+
   const [cast, setCast] = useState("");
+  const { toastAlert, toastError } = useGlobalContext();
 
   const higestQualificationData = [
     "10th",
@@ -255,16 +258,16 @@ const UserUpdate = () => {
   };
   // const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
 
-  useEffect(() => {
-    const selectedOption = defaultSeatData?.find(
-      (option) => option?.sitting_id === Number(sitting)
-    );
-    setRoomId(selectedOption);
-  }, [sitting, refrenceData, roomId]);
+  // useEffect(() => {
+  //   const selectedOption = defaultSeatData?.find(
+  //     (option) => option?.sitting_id === Number(sitting)
+  //   );
+  //   setRoomId(selectedOption);
+  // }, [sitting, refrenceData, roomId]);
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_subdept_from_dept/${department}`)
+      .get(`https://node-dev-server.onrender.com/api/get_subdept_from_dept/${department}`)
       .then((res) => setSubDepartmentData(res.data));
   }, [department]);
 
@@ -278,7 +281,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_roles")
+      .get("https://node-dev-server.onrender.com/api/get_all_roles")
       .then((res) => {
         getRoleData(res.data.data);
       })
@@ -287,25 +290,25 @@ const UserUpdate = () => {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("http://34.93.135.33:8080/api/not_alloc_sitting").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/not_alloc_sitting").then((res) => {
       setRefrenceData(res.data.data);
     });
 
-    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
 
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .get("https://node-dev-server.onrender.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -314,10 +317,10 @@ const UserUpdate = () => {
   useEffect(() => {
     async function getDetails() {
       const familyDataResponse = await axios.get(
-        `http://34.93.135.33:8080/api/get_single_family/${id}`
+        `https://node-dev-server.onrender.com/api/get_single_family/${id}`
       );
       const educationDataResponse = await axios.get(
-        `http://34.93.135.33:8080/api/get_single_education/${id}`
+        `https://node-dev-server.onrender.com/api/get_single_education/${id}`
       );
       setFamilyDetails(familyDataResponse.data.data);
       setEducationDetails(educationDataResponse.data.data);
@@ -327,15 +330,29 @@ const UserUpdate = () => {
 
   function getOtherDocument() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_user_other_fields/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
   }
 
+  async function getDocuments() {
+    const response = await axios.post(
+      "https://node-dev-server.onrender.com/api/get_user_doc",
+      {
+        user_id: id,
+      }
+    );
+    setDocumentData(response.data.data);
+  }
+
+  useEffect(() => {
+    getDocuments();
+  }, [id]);
+
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -400,9 +417,10 @@ const UserUpdate = () => {
           emergency_contact2,
           emergency_contact_person_name1,
           emergency_contact_person_name2,
-          emergency_contact_person_relation1,
-          emergency_contact_person_relation2,
+          emergency_contact_relation1,
+          emergency_contact_relation2,
         } = fetchedData;
+        console.log(room_id);
         setPanNo(pan_no);
         setUidNo(uid_no);
         setSpouseName(spouse_name);
@@ -469,16 +487,121 @@ const UserUpdate = () => {
         setEmergencyContact2(emergency_contact2);
         setEmergencyContactName(emergency_contact_person_name1);
         setEmergencyContactName2(emergency_contact_person_name2);
-        setEmergencyContactRelation(emergency_contact_person_relation1);
-        setEmergencyContactRelation2(emergency_contact_person_relation2);
+        setEmergencyContactRelation(emergency_contact_relation1);
+        setEmergencyContactRelation2(emergency_contact_relation2);
       });
 
     getOtherDocument();
   }, [id]);
 
   const handleSubmit = async (e) => {
+    console.log(roomId, "room id");
     e.preventDefault();
+    if (!jobType || jobType == "" || jobType.length === 0) {
+      return toastError("Job Type is Required");
+    } else if (!department || department == "" || department.length === 0) {
+      return toastError("Department is Required");
+    } else if (
+      !subDepartment ||
+      subDepartment == "" ||
+      subDepartment.length === 0
+    ) {
+      return toastError("Sub Department is Required");
+    } else if (!designation || designation == "" || designation.length == 0) {
+      return toastError("Designatoin is Required");
+    } else if (!reportL1 || reportL1 == "" || reportL1.length == 0) {
+      return toastError("Report L1 Is Required");
+    } else if (
+      !personalEmail ||
+      personalEmail == "" ||
+      personalEmail.length == 0
+    ) {
+      return toastError("Personal Email is Required");
+    } else if (
+      !personalContact ||
+      personalContact == "" ||
+      personalContact.length == 0
+    ) {
+      return toastError("Personal Contact is Required");
+    } else if (
+      !alternateContact ||
+      alternateContact == "" ||
+      alternateContact.length == 0
+    ) {
+      return toastError("Alternate Contact is Required");
+    } else if (
+      !emergencyContact ||
+      emergencyContact == "" ||
+      emergencyContact.length == 0
+    ) {
+      return toastError("Emergency Contact is Required");
+    } else if (
+      !emergencyContactName ||
+      emergencyContactName == "" ||
+      emergencyContactName.length == 0
+    ) {
+      return toastError("Emergency Contact Name is Required");
+    } else if (
+      !emergencyContactRelation ||
+      emergencyContactRelation == "" ||
+      emergencyContactRelation.length == 0
+    ) {
+      return toastError("Emergency Contact Relation is Required");
+    } else if (!loginId || loginId == "" || loginId.length == 0) {
+      return toastError("Login Id is Required");
+    } else if (!password || password == "" || password.length == 0) {
+      return toastError("Password is Required");
+    } else if (
+      !speakingLanguage ||
+      speakingLanguage == "" ||
+      speakingLanguage.length == 0
+    ) {
+      return toastError("Speaking Language is Required");
+    } else if (!gender || (gender == "" && gender.length == 0)) {
+      return toastError("Gender is Required");
+    } else if (!nationality || (nationality == "" && nationality.length == 0)) {
+      return toastError("Nationality is Required");
+    } else if (!dateOfBirth || (dateOfBirth == "" && dateOfBirth.length == 0)) {
+      return toastError("Date of Birth is Required");
+    } else if (!FatherName || (FatherName == "" && FatherName.length == 0)) {
+      return toastError("Father Name is Required");
+    } else if (!motherName || (motherName == "" && motherName.length == 0)) {
+      return toastError("Mother Name is Required");
+    } else if (!bloodGroup || (bloodGroup == "" && bloodGroup.length == 0)) {
+      return toastError("Blood Group is Required");
+    } else if (
+      !maritialStatus ||
+      maritialStatus == "" ||
+      maritialStatus.length == 0
+    ) {
+      return toastError("Maritial Status is Required");
+    } else if (!address || address == "") {
+      return toastError("Address is Required");
+    } else if (!city || city == "") {
+      return toastError("City is Required");
+    } else if (!state || state == "") {
+      return toastError("State/UT is Required");
+    } else if (!pincode || pincode == "") {
+      return toastError("Pincode is Required");
+    } else if (!joiningDate || joiningDate == "") {
+      return toastError("Joining Date is Required");
+    } else if (!userStatus || userStatus == "" || userStatus.length == 0) {
+      return toastError("Status is Required");
+    } else if (!bankName || bankName == "" || bankName.length == 0) {
+      return toastError("Bank Name is Required");
+    } else if (!bankAccountNumber || bankAccountNumber == "") {
+      return toastError("Bank Account Number is Required");
+    } else if (!username || username == "") {
+      return toastError("User Name Error is required");
+    } else if (!email || email == "") {
+      return toastError("Official Email Error is required");
+    }
+
+    if (jobType == "WFO" && sitting == "") {
+      return toastError("Sitting Error is required");
+    }
     const formData = new FormData();
+    console.log("came to submit");
     formData.append("user_status", userStatus);
     formData.append("user_id", id);
     formData.append("user_name", username);
@@ -488,8 +611,8 @@ const UserUpdate = () => {
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
     formData.append("user_contact_no", contact);
-    formData.append("sitting_id", sitting);
-    formData.append("room_id", roomId.room_id);
+    formData.append("sitting_id", jobType === "WFH" ? 0 : sitting);
+    formData.append("room_id", roomId.room_id ? roomId.room_id : roomId);
     // console.log("room id he yha", roomId);
     // formData.append("room_id", roomId);
     formData.append("dept_id", department);
@@ -536,13 +659,24 @@ const UserUpdate = () => {
     formData.append("tds_per", tdsPercentage);
     formData.append("pan_no", panNo);
     formData.append("uid_no", uidNo);
+
+    //Emergency Contact fields
+    formData.append("emergency_contact1", emergencyContact);
+    formData.append("emergency_contact_person_name1", emergencyContactName);
+    formData.append("emergency_contact_relation1", emergencyContactRelation);
+    formData.append("emergency_contact2", emergencyContact2);
+    formData.append("emergency_contact_person_name2", emergencyContactName2);
+    formData.append("emergency_contact_relation2", emergencyContactRelation2);
+
     // formData.append("spouse_name", spouseName);
     formData.append("sub_dept_id", subDepartment);
     formData.append("highest_qualification_name", higestQualification);
     formData.append("cast_type", cast);
+    console.log("other doc");
     const formDataa = new FormData();
     if (isValidcontact == true && validEmail == true) {
-      await axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
+      console.log("came to if");
+      await axios.put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -550,7 +684,7 @@ const UserUpdate = () => {
 
       if (reportL1 !== "") {
         axios
-          .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+          .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
             email: email,
             subject: "User Registration",
             text: "A new user has been registered.",
@@ -590,7 +724,7 @@ const UserUpdate = () => {
         }
         try {
           const response = await axios.put(
-            "http://34.93.135.33:8080/api/update_family",
+            "https://node-dev-server.onrender.com/api/update_family",
             payload
           );
         } catch (error) {
@@ -615,13 +749,54 @@ const UserUpdate = () => {
         }
         try {
           const response = await axios.put(
-            "http://34.93.135.33:8080/api/update_education",
+            "https://node-dev-server.onrender.com/api/update_education",
             payload
           );
           console.log(response.data);
         } catch (error) {
           console.error("Error Updating Education details:", error);
         }
+      }
+
+      const mandatoryDocTypes = ["10th", "12th", "Graduation"];
+
+      const isMandatoryDocMissing = documentData.some(
+        (doc) =>
+          mandatoryDocTypes.includes(doc.document.doc_type) &&
+          doc.doc_image &&
+          doc.file
+      );
+
+      if (isMandatoryDocMissing) {
+        toastAlert("Please fill all mandatory fields");
+        return;
+      } else {
+        for (const document of documentData) {
+          if (document.file) {
+            let formData = new FormData();
+            formData.append("doc_image", document.file);
+            formData.append("_id", document._id);
+            formData.append(
+              "status",
+              document.status == "Document Uploaded"
+                ? "Verification Pending"
+                : document.status
+            );
+            const response = await axios.put(
+              "https://node-dev-server.onrender.com/api/update_user_doc",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+          } else {
+            console.log(`No file uploaded for document ${document._id}`);
+          }
+        }
+        toastAlert("Documents Updated");
+        getDocuments();
       }
 
       if (incomingPassword !== password) {
@@ -649,7 +824,7 @@ const UserUpdate = () => {
         formDataa.append("lastupdated_by", loginUserId);
         formDataa.append("field_value", element.field_value);
         axios.put(
-          `http://34.93.135.33:8080/api/updateuserotherfielddata/${id}`,
+          `https://node-dev-server.onrender.com/api/updateuserotherfielddata/${id}`,
           // {
           //   id:element.id,
           //   field_name: element.field_name,
@@ -672,7 +847,7 @@ const UserUpdate = () => {
       // console.log(uid, "yha uid hai put ke bad");
       // console.log(panUpload, "pan hai yha");
       // axios
-      //   .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+      //   .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
       //     email: email,
       //     subject: "User Registration",
       //     text: "A new user has been registered.",
@@ -688,9 +863,10 @@ const UserUpdate = () => {
       //     console.log("Failed to send email:", error);
       //   });
     } else {
+      console.log("came to else");
       if (contact.length !== 10) {
         if (isValidcontact == false)
-          alert("Enter Phone Number in Proper Format");
+          toastError("Enter Phone Number in Proper Format");
       } else if (validEmail != true) {
         alert("Enter Valid Email");
       }
@@ -846,7 +1022,7 @@ const UserUpdate = () => {
     if (itemToRemove && itemToRemove.family_id) {
       try {
         await axios.delete(
-          `http://34.93.135.33:8080/api/delete_family/${itemToRemove.family_id}`
+          `https://node-dev-server.onrender.com/api/delete_family/${itemToRemove.family_id}`
         );
         toastAlert("Details Deleted");
       } catch (error) {
@@ -883,7 +1059,7 @@ const UserUpdate = () => {
     if (itemToRemove && itemToRemove.education_id) {
       try {
         await axios.delete(
-          `http://34.93.135.33:8080/api/delete_education/${itemToRemove.education_id}`
+          `https://node-dev-server.onrender.com/api/delete_education/${itemToRemove.education_id}`
         );
         console.log(
           "Deleted Education detail from server:",
@@ -906,6 +1082,7 @@ const UserUpdate = () => {
     "Documents",
     "Family Details",
     "Education Details",
+    "Documents Update",
   ];
 
   const genralFields = (
@@ -916,7 +1093,26 @@ const UserUpdate = () => {
         value={username}
         onChange={(e) => setUserName(e.target.value)}
       />
-
+      <div className="form-group col-3">
+        <label className="form-label">
+          Job Type <sup style={{ color: "red" }}>*</sup>
+        </label>
+        <Select
+          className=""
+          options={jobTypeData.map((option) => ({
+            value: `${option}`,
+            label: `${option}`,
+          }))}
+          value={{
+            value: jobType,
+            label: `${jobType}`,
+          }}
+          onChange={(e) => {
+            setJobType(e.value);
+          }}
+          required
+        />
+      </div>
       <div className="form-group col-3">
         <label className="form-label">
           Designation <sup style={{ color: "red" }}>*</sup>
@@ -1861,7 +2057,17 @@ const UserUpdate = () => {
       </div>
     </>
   );
-
+  const documentFieldsNew = (
+    <>
+      <DocumentTab
+        documentData={documentData}
+        setDocumentData={setDocumentData}
+        getDocuments={getDocuments}
+        submitButton={false}
+        normalUserLayout={true}
+      />
+    </>
+  );
   return (
     <>
       <FormContainer
@@ -1878,6 +2084,7 @@ const UserUpdate = () => {
         {activeAccordionIndex === 3 && documentsFields}
         {activeAccordionIndex === 4 && familyFields}
         {activeAccordionIndex === 5 && educationFields}
+        {activeAccordionIndex === 6 && documentFieldsNew}
       </FormContainer>
     </>
   );

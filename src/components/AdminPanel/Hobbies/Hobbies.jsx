@@ -18,7 +18,7 @@ const Hobbies = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_single_hobby/${id}`
+        `https://node-dev-server.onrender.com/api/get_single_hobby/${id}`
       );
       const hobbyName = response.data.data.hobby_name;
       setHobby(hobbyName);
@@ -32,14 +32,14 @@ const Hobbies = () => {
     try {
       if (id == 0) {
         const response = await axios.post(
-          "http://34.93.135.33:8080/api/add_hobby",
+          "https://node-dev-server.onrender.com/api/add_hobby",
           {
             hobby_name: hobby,
           }
         );
       } else {
         const response = await axios.put(
-          `http://34.93.135.33:8080/api/update_hobby`,
+          `https://node-dev-server.onrender.com/api/update_hobby`,
           {
             hobby_id: id,
             hobby_name: hobby,

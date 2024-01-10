@@ -62,7 +62,7 @@ const PreonboardingDocumentOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_docs"
+        "https://node-dev-server.onrender.com/api/get_all_docs"
       );
       const data = response.data.data;
       setData(data);

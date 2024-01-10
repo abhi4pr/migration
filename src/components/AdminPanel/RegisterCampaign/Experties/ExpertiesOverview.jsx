@@ -30,7 +30,7 @@ const ExpertiesOverview = () => {
 
   const ExpertiesData = async () => {
     const Experties = await axios.get(
-      "http://34.93.135.33:8080/api/expertise"
+      "https://node-dev-server.onrender.com/api/expertise"
     );
     const setexdata = Experties.data.data;
     setGetExpertiesData(setexdata);
@@ -74,7 +74,7 @@ const ExpertiesOverview = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://34.93.135.33:8080/api/expertise/${userId}`)
+            .delete(`https://node-dev-server.onrender.com/api/expertise/${userId}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(

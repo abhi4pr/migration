@@ -45,7 +45,7 @@ const PreonboardingDocuments = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/add_doc", {
+      .post("https://node-dev-server.onrender.com/api/add_doc", {
         doc_type: documentType,
         priority: priority,
         period: Number(period),

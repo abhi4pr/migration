@@ -24,7 +24,7 @@ const PendingPaymentsList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("http://34.93.135.33:8080/api/", {
+    await axios.post("https://node-dev-server.onrender.com/api/", {
       display_sequence: displaySeq,
     });
 
@@ -33,7 +33,7 @@ const PendingPaymentsList = () => {
   };
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_sims").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

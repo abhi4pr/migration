@@ -24,7 +24,7 @@ const ContentUploader = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/alldataofIptype")
+      .get("https://node-dev-server.onrender.com/api/alldataofIptype")
       .then((res) => setIpTypeData(res.data))
   }, []);
   
@@ -39,7 +39,7 @@ const ContentUploader = () => {
     formData.append("content", content);
     formData.append("user_id", userID);
 
-    await axios.post("http://34.93.135.33:8080/api/content_upload", formData, {
+    await axios.post("https://node-dev-server.onrender.com/api/content_upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }

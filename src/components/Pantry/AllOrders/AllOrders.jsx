@@ -11,7 +11,7 @@ const AllOrder = () => {
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .get("https://node-dev-server.onrender.com/api/get_all_orderreqdata")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

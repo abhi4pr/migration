@@ -21,7 +21,7 @@ const DashboardWFHCardDetails = () => {
   const [search, setSearch] = useState("");
   const getData = () => {
     axios
-      .post("http://34.93.135.33:8080/api/dept_id_with_wfh", {
+      .post("https://node-dev-server.onrender.com/api/dept_id_with_wfh", {
         dept_id: id,
       })
       .then((res) => {

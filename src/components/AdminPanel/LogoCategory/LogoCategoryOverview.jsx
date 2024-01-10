@@ -12,8 +12,8 @@ const LogoCategoryOverview = () => {
   const [filterData, setFilterData] = useState([]);
   // const [contextData, setDatas] = useState([]);
 
-  function getData() {
-    axios.get("http://34.93.135.33:8080/api/alllogocat").then((res) => {
+  async function getData() {
+    await axios.get("https://node-dev-server.onrender.com/api/get_all_logo_categories").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });
@@ -59,7 +59,7 @@ const LogoCategoryOverview = () => {
           </Link>
 
           <DeleteButton
-            endpoint="logocatdelete"
+            endpoint="delete_logo_category"
             id={row.id}
             getData={getData}
           />
@@ -73,7 +73,7 @@ const LogoCategoryOverview = () => {
   return (
     <>
       <FormContainer
-        mainTitle="Logo Category"
+        mainTitle="Data Category"
         link="/admin/logo-category-master"
         buttonAccess={true}
       />
@@ -81,7 +81,7 @@ const LogoCategoryOverview = () => {
       <div className="card">
         <div className="data_tbl table-responsive">
           <DataTable
-            title="Logo Category Overview"
+            title="Data Category Overview"
             columns={columns}
             data={filterData}
             fixedHeader

@@ -27,7 +27,7 @@ export default function DeleteCity({openDeleteCityName,handleCloseDeleteCityName
     const handleDeleteCityName = (rowData) => {
     
         axios
-            .delete(`http://34.93.135.33:8080/api/delete_city/${rowData._id}`)
+            .delete(`https://node-dev-server.onrender.com/api/delete_city/${rowData._id}`)
             .then((res) => {
                 console.log(res);
                 if (res.data.success) {

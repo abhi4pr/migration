@@ -12,25 +12,26 @@ const APIContext = ({ children }) => {
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
   const userID = decodedToken.id;
-
+  const ContextDept = decodedToken.dept_id;
+  const RoleIDContext = decodedToken.role_id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setContextData(res.data);
         });
     }
 
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
       setUserContextData(res.data.data);
       setLoading(true);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         setDepartmentContext(res.data);
       });
@@ -44,6 +45,8 @@ const APIContext = ({ children }) => {
         DepartmentContext,
         contextData,
         userID,
+        ContextDept,
+        RoleIDContext,
       }}
     >
       {children}

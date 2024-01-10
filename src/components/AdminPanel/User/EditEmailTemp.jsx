@@ -21,7 +21,7 @@ const EditEmailTemp = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_email_content/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/get_single_email_content/${id}`).then((res) => {
       const fetchedData = res.data.data;
       setEmailFor(fetchedData.email_for);
       setEmailForId(fetchedData.email_for_id);
@@ -34,7 +34,7 @@ const EditEmailTemp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.post("http://34.93.135.33:8080/api/update_email_content",{
+      await axios.post("https://node-dev-server.onrender.com/api/update_email_content",{
         _id: id,
         email_for: emailFor,
         email_for_id: emailForId,

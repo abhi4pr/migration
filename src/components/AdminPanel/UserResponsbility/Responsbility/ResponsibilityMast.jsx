@@ -19,7 +19,7 @@ const ResponsibilityMast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://34.93.135.33:8080/api/add_responsibility", {
+      await axios.post("https://node-dev-server.onrender.com/api/add_responsibility", {
         respo_name: responsibility,
         description: description,
         created_by: userId,

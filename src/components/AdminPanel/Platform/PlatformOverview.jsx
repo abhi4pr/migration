@@ -12,7 +12,7 @@ const PlatformOverview = () => {
   const [filterData, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/alldataofplatform").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/alldataofplatform").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

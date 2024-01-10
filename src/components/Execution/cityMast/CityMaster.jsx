@@ -38,7 +38,7 @@ export default function CityMaster() {
   };
   const handleSaveEditCityName = () => {
     axios
-      .put("http://34.93.135.33:8080/api/update_city", {
+      .put("https://node-dev-server.onrender.com/api/update_city", {
         _id: rowData._id,
         city_name: editCityName,
       })
@@ -67,7 +67,7 @@ export default function CityMaster() {
   };
 
   const callApi = () => {
-    axios.get("http://34.93.135.33:8080/api/get_all_cities").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_cities").then((res) => {
       console.log(res);
       setCity(res.data.data);
       setRow(res.data.data);
@@ -112,7 +112,7 @@ export default function CityMaster() {
 
   // const handleSaveEditCityName = () => {
   //   axios
-  //     .put("http://34.93.135.33:8080/api/update_city", {
+  //     .put("https://node-dev-server.onrender.com/api/update_city", {
   //       _id: rowData._id,
   //       city_name: editCityName,
   //     })
@@ -140,7 +140,7 @@ export default function CityMaster() {
 
   const handleClickAddCity = () => {
     axios
-      .post("http://34.93.135.33:8080/api/add_city", { city_name: addCity })
+      .post("https://node-dev-server.onrender.com/api/add_city", { city_name: addCity })
       .then((res) => {
         if (res.status === 200) {
           toastAlert(`${addCity} added successfully`);

@@ -7,9 +7,10 @@ import DataTable from "react-data-table-component";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+
 import Select from "react-select";
 import { useGlobalContext } from "../../../Context/Context";
+import Modal from "react-modal";
 
 const RepairReason = () => {
   const { categoryDataContext, toastAlert } = useGlobalContext();
@@ -29,19 +30,36 @@ const RepairReason = () => {
   // const [brandData, setBrandData] = useState([]);
   // async function getBrandData() {
   //   const res = await axios.get(
-  //     "http://34.93.135.33:8080/api/get_all_asset_brands"
+  //     "https://node-dev-server.onrender.com/api/get_all_asset_brands"
   //   );
   //   setBrandData(res.data.data);
   // }
   // useEffect(() => {
   //   getBrandData();
   // }, []);
+  const [totalRepariData, setTotalRepariData] = useState([]);
+  const [repairModal, setRepariModal] = useState(false);
+  const handleTotalRequest = async (row) => {
+    try {
+      const response = await axios.get(
+        `https://node-dev-server.onrender.com/api/get_all_repair_request_by_asset_reasonId/${row}`
+      );
+      setTotalRepariData(response.data.data);
+      console.log(response.data.data, "new data");
+      setRepariModal(true);
+    } catch (error) {
+      console.log("total asset not working", error);
+    }
+  };
+  const handleClosAssetCounteModal = () => {
+    setRepariModal(false);
+  };
 
   const getAllSubCategory = () => {
     if (categoryName) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_asset_sub_category/${categoryName}`
+          `https://node-dev-server.onrender.com/api/get_single_asset_sub_category/${categoryName}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -60,8 +78,25 @@ const RepairReason = () => {
       sortable: true,
     },
     {
-      name: "Category Name",
+      name: "Reason",
       selector: (row) => row.reason,
+      sortable: true,
+    },
+    // {
+    //   name: "Request",
+    //   selector: (row) => row.requestCount,
+    //   sortable: true,
+    // },
+    {
+      name: "Request",
+      cell: (row) => (
+        <button
+          className="btn btn-outline-warning"
+          onClick={() => handleTotalRequest(row.asset_reason_id)}
+        >
+          {row.requestCount}
+        </button>
+      ),
       sortable: true,
     },
     {
@@ -102,7 +137,7 @@ const RepairReason = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://34.93.135.33:8080/api/add_asset_reason",
+        "https://node-dev-server.onrender.com/api/add_asset_reason",
         {
           reason: reason,
           category_id: categoryName,
@@ -120,7 +155,7 @@ const RepairReason = () => {
   };
   async function getRepairReason() {
     const res = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_assetResons"
+      "https://node-dev-server.onrender.com/api/get_all_assetResons"
     );
     setModalData(res?.data.data);
     setModalFilter(res?.data.data);
@@ -143,7 +178,7 @@ const RepairReason = () => {
   const handleModalUpdate = () => {
     console.log(repairId, "id");
     axios
-      .put("http://34.93.135.33:8080/api/update_asset_reason", {
+      .put("https://node-dev-server.onrender.com/api/update_asset_reason", {
         asset_reason_id: repairId,
         category_id: categoryNameUpdate,
         sub_category_id: subCategoryNameUpdate,
@@ -162,19 +197,20 @@ const RepairReason = () => {
     setModalFilter(result);
   }, [search]);
 
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   return (
     <div>
       <div style={{ width: "80%", margin: "0 0 0 10%" }}>
         <UserNav />
-        <Link to="/repair-request">
-          <button
-            // style={{ marginRight: "200px", top: "90px" }}
-            type="button"
-            className="btn btn-outline-primary btn-sm"
-          >
-            Repair Request
-          </button>
-        </Link>
+
         <FormContainer
           mainTitle="Repair Reason"
           title="Add Reason"
@@ -353,6 +389,63 @@ const RepairReason = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={repairModal}
+        onRequestClose={handleClosAssetCounteModal}
+        style={{
+          content: {
+            width: "80%",
+            height: "80%",
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        {/* {selectedRow && ( */}
+        <div>
+          <div className="d-flex justify-content-between mb-2">
+            {/* <h2>Department: {selectedRow.dept_name}</h2> */}
+
+            <button
+              className="btn btn-success float-left"
+              onClick={handleClosAssetCounteModal}
+            >
+              X
+            </button>
+          </div>
+          <h1></h1>
+          <DataTable
+            columns={[
+              {
+                name: "S.No",
+                cell: (row, index) => <div>{index + 1}</div>,
+                width: "10%",
+              },
+              { name: "Reason Name", selector: "reason_name" },
+              { name: "Asset Name", selector: "asset_name" },
+              { name: "Priority", selector: "priority" },
+              { name: "Problem Detailing", selector: "problem_detailing" },
+            ]}
+            data={totalRepariData}
+            highlightOnHover
+            subHeader
+            // subHeaderComponent={
+            //   <input
+            //     type="text"
+            //     placeholder="Search..."
+            //     className="w-50 form-control"
+            //     value={modalSearch}
+            //     onChange={(e) => setModalSearch(e.target.value)}
+            //   />
+            // }
+          />
+        </div>
+        {/* )} */}
+      </Modal>
     </div>
   );
 };

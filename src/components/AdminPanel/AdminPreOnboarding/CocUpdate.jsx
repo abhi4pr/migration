@@ -25,7 +25,7 @@ const CocUpdate = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_coc/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/get_single_coc/${id}`).then((res) => {
       const fetchedData = res.data.data;
       setDisplaySeq(fetchedData.display_sequence);
       setHeading(fetchedData.heading);
@@ -41,7 +41,7 @@ const CocUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.put(`http://34.93.135.33:8080/api/update_coc/`,{
+      await axios.put(`https://node-dev-server.onrender.com/api/update_coc/`,{
         _id: id,
         display_sequence: displaySeq,
         heading: heading,

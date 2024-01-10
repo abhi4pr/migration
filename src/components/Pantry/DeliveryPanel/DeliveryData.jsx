@@ -23,7 +23,7 @@ const DeliveryData = () => {
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .get("https://node-dev-server.onrender.com/api/get_all_orderreqdata")
       .then((res) => {
         if (res.data.data?.length !== orderLength) {
           orderLength = res.data.data.length;
@@ -36,7 +36,7 @@ const DeliveryData = () => {
       });
 
     axios
-      .post("http://34.93.135.33:8080/api/add_orderreqs", {
+      .post("https://node-dev-server.onrender.com/api/add_orderreqs", {
         // Sitting_id: sittingID,
         Request_delivered_by: loginUserId,
         room_id: roomId,
@@ -62,7 +62,7 @@ const DeliveryData = () => {
     getData();
     axios
 
-      .get(`http://34.93.135.33:8080/api/get_delivery_user`)
+      .get(`https://node-dev-server.onrender.com/api/get_delivery_user`)
       .then((res) => {
         setDeliveryBoyData(res.data);
         // console.log(res.data);
@@ -79,7 +79,7 @@ const DeliveryData = () => {
   ) => {
     // console.log(productId, OrderReqId, userid, orderquantity, productmessage);
     axios
-      .put(`http://34.93.135.33:8080/api/update_orderrequest`, {
+      .put(`https://node-dev-server.onrender.com/api/update_orderrequest`, {
         product_id: productId,
         order_req_id: OrderReqId,
         order_quantity: orderquantity,
@@ -100,7 +100,7 @@ const DeliveryData = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/add_transreq", {
+      .post("https://node-dev-server.onrender.com/api/add_transreq", {
         from_id: roleId,
         to_id: transferTo,
         reason: reason,

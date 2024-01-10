@@ -9,7 +9,7 @@ const SingleAssetUserDetails = () => {
   const [data, setData] = useState([]);
   const getData = () => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_sim/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         setData(fetchedData);

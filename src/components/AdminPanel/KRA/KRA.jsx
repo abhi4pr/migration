@@ -16,7 +16,7 @@ const KRA = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`http://34.93.135.33:8080/api/get_user_job_responsibility`, {
+      .post(`https://node-dev-server.onrender.com/api/get_user_job_responsibility`, {
         user_id: Number(id),
       })
       .then((res) => {

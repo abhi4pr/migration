@@ -55,7 +55,7 @@ const Backup_Attendence = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/allwfhusers").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/allwfhusers").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -66,7 +66,7 @@ const Backup_Attendence = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
@@ -80,7 +80,7 @@ const Backup_Attendence = () => {
       year: selectedYear,
     };
     axios
-      .post("http://34.93.135.33:8080/api/salaryfromattendence", payload)
+      .post("https://node-dev-server.onrender.com/api/salaryfromattendence", payload)
       .then((res) => {
         console.log(res.data, "res");
         setAttendenceData(res.data.data);
@@ -102,7 +102,7 @@ const Backup_Attendence = () => {
     if (department) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/getuserdeptwisewfhdata/${department}`
+          `https://node-dev-server.onrender.com/api/getuserdeptwisewfhdata/${department}`
         )
         .then((res) => {
           getUsersData(res.data);
@@ -113,7 +113,7 @@ const Backup_Attendence = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/attendencemastpost", {
+      .post("https://node-dev-server.onrender.com/api/attendencemastpost", {
         dept: department,
         user_id: userName,
         noOfabsent: Number(noOfAbsent),

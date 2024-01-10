@@ -20,19 +20,19 @@ const UserOverview = () => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`http://34.93.135.33:8080/api/userauth/${userID}`).then((res) => {
+      axios.get(`https://node-dev-server.onrender.com/api/userauth/${userID}`).then((res) => {
         setData(res.data);
       });
     }
   }, [userID]);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
       setDatas(res.data.data);
       setBackupData(res.data.data);
     });
 
-    axios.get("http://34.93.135.33:8080/api/get_all_departments").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_departments").then((res) => {
       setDepartmentData(res.data)
     });
   }

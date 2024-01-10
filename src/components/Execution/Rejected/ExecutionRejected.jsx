@@ -36,7 +36,7 @@ export default function ExecutionRejected() {
       if (userID && contextData == false) {
         axios
           .get(
-            `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+            `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             console.log("this is res data", res.data)
@@ -52,7 +52,7 @@ export default function ExecutionRejected() {
       console.log(formData);
       axios
         .get(
-          "http://34.93.135.33:8080/api/get_exe_sum"
+          "https://node-dev-server.onrender.com/api/get_exe_sum"
           // formData
         )
         .then((res) => {
@@ -61,7 +61,7 @@ export default function ExecutionRejected() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    axios.post("http://34.93.135.33:8080/api/exe_sum_post", {
+    axios.post("https://node-dev-server.onrender.com/api/exe_sum_post", {
       loggedin_user_id: 52,
     });
   };

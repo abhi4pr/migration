@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGlobalContext } from "../../../Context/Context";
+import { useAPIGlobalContext } from "../APIContext/APIContext";
 import jwtDecode from "jwt-decode";
 import Slider from "react-slick";
 import {
@@ -15,6 +16,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 const Attendence = () => {
   const { toastAlert, toastError } = useGlobalContext();
+  const { ContextDept, RoleIDContext } = useAPIGlobalContext();
   const [department, setDepartment] = useState("");
   const [departmentdata, getDepartmentData] = useState([]);
   const [noOfAbsent, setNoOfAbsent] = useState(null);
@@ -42,16 +44,22 @@ const Attendence = () => {
     arrows: true,
     infinite: false,
     speed: 500,
-    initialSlide: new Date().getMonth() - 4,
     sliderToScroll: 1,
     // slidesToShow: 1,
+    initialSlide: 9,
     swipeToSlide: true,
     variableWidth: true,
   };
 
+  if (new Date().getMonth() > 3) {
+    settings.initialSlide = new Date().getMonth - 4;
+  } else {
+    settings.initialSlide = new Date().getMonth() + 8;
+  }
+
   function gettingSliderData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_month_year_data")
+      .get("https://node-dev-server.onrender.com/api/get_month_year_data")
       .then((res) => {
         setCompletedYearsMonths(res.data.data);
       });
@@ -59,9 +67,15 @@ const Attendence = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
+      .get("https://node-dev-server.onrender.com/api/all_departments_of_wfh")
       .then((res) => {
-        getDepartmentData(res.data.data);
+        if (RoleIDContext == 1 || RoleIDContext == 5) {
+          getDepartmentData(res.data.data);
+        } else {
+          getDepartmentData(
+            res.data.data?.filter((d) => d.dept_id == ContextDept)
+          );
+        }
       });
 
     gettingSliderData();
@@ -71,7 +85,7 @@ const Attendence = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_wfh_users"
+          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
@@ -141,7 +155,7 @@ const Attendence = () => {
 
   const handleAttendence = () => {
     axios
-      .post("http://34.93.135.33:8080/api/add_attendance", {
+      .post("https://node-dev-server.onrender.com/api/add_attendance", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
@@ -160,7 +174,7 @@ const Attendence = () => {
 
   function handleAllDepartmentAttendance() {
     axios
-      .post("http://34.93.135.33:8080/api/save_all_depts_attendance", {
+      .post("https://node-dev-server.onrender.com/api/save_all_depts_attendance", {
         month: selectedMonth,
         year: selectedYear,
       })
@@ -190,7 +204,7 @@ const Attendence = () => {
 
   function gettingDepartmentSalaryExists() {
     axios
-      .post("http://34.93.135.33:8080/api/get_distinct_depts", {
+      .post("https://node-dev-server.onrender.com/api/get_distinct_depts", {
         month: selectedMonth,
         year: selectedYear,
       })
@@ -204,7 +218,7 @@ const Attendence = () => {
   };
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_wfh_users").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -221,7 +235,7 @@ const Attendence = () => {
     };
     axios
       .post(
-        "http://34.93.135.33:8080/api/get_salary_by_id_month_year",
+        "https://node-dev-server.onrender.com/api/get_salary_by_id_month_year",
         payload
       )
       .then((res) => {
@@ -246,7 +260,7 @@ const Attendence = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_wfh_user/${department}`)
+        .get(`https://node-dev-server.onrender.com/api/get_wfh_user/${department}`)
         .then((res) => {
           getUsersData(res.data);
         });
@@ -256,7 +270,7 @@ const Attendence = () => {
   const handleCreateSalary = (e) => {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/update_attendence_status", {
+      .put("https://node-dev-server.onrender.com/api/update_attendence_status", {
         month: selectedMonth,
         year: Number(selectedYear),
         dept: department,
@@ -271,7 +285,7 @@ const Attendence = () => {
     } else {
       const updatedRow = { ...newRow, isNew: false };
       axios
-        .post("http://34.93.135.33:8080/api/add_attendance", {
+        .post("https://node-dev-server.onrender.com/api/add_attendance", {
           dept: updatedRow.dept,
           user_id: updatedRow.user_id,
           noOfabsent: updatedRow.noOfabsent,
@@ -464,14 +478,15 @@ const Attendence = () => {
         <div className="card-header d-flex justify-content-between">
           <h4>Department</h4>
           <span>
-            {deptSalary.length !== departmentdata.length && (
-              <button
-                className="btn btn-primary"
-                onClick={handleAllDepartmentAttendance}
-              >
-                Create All Department Attendance
-              </button>
-            )}
+            {deptSalary?.length !== departmentdata?.length &&
+              (RoleIDContext == 1 || RoleIDContext == 5) && (
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAllDepartmentAttendance}
+                >
+                  Create All Department Attendance
+                </button>
+              )}
           </span>
         </div>
         <div className="card-body">

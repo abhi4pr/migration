@@ -32,7 +32,7 @@ const AnnouncementPost = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://34.93.135.33:8080/api/annomastpost", {
+      .post("https://node-dev-server.onrender.com/api/annomastpost", {
         dept_id: department,
         desi_id: designation,
         onboard_status: announcementFor,
@@ -58,13 +58,13 @@ const AnnouncementPost = () => {
   };
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .get("https://node-dev-server.onrender.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });

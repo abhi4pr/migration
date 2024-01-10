@@ -22,17 +22,21 @@ const LogoCategoryUpdate = () => {
   useEffect(() => {
     if (id) {
       console.log(id);
-      axios.get(`http://34.93.135.33:8080/api/getlogodata/${id}`);
+      axios.get(`https://node-dev-server.onrender.com/api/get_single_category/${id}`).then((res)=>{
+        const fetchedData = res.data;
+        setCategoryName(fetchedData.cat_name)
+        setRemark(fetchedData.remark)
+      });
     }
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     axios
-      .put("http://34.93.135.33:8080/api/logocatupdate", {
+      .put("https://node-dev-server.onrender.com/api/update_logo_category", {
         id: id,
         cat_name: categoryName,
-        remarks: remark,
+        remark: remark,
         last_updated_by: loginUserID,
       })
       .then(() => {
@@ -57,8 +61,8 @@ const LogoCategoryUpdate = () => {
   return (
     <>
       <FormContainer
-        mainTitle="Logo Category"
-        title="Logo Category Master"
+        mainTitle="Data Category"
+        title="Data Category Master"
         handleSubmit={handleSubmit}
       >
         <FieldContainer

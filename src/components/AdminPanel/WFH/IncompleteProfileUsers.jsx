@@ -27,7 +27,7 @@ const IncompleteProfileUsers = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -38,7 +38,7 @@ const IncompleteProfileUsers = () => {
   async function getData() {
     try {
       const res = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_percentage"
+        "https://node-dev-server.onrender.com/api/get_all_percentage"
       );
 
       const data = res.data.incompleteUsersDetails;
@@ -72,7 +72,7 @@ const IncompleteProfileUsers = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
+            .delete(`https://node-dev-server.onrender.com/api/delete_user/${userId}`)
             .then(() => {
               swalWithBootstrapButtons.fire(
                 "Deleted!",

@@ -24,7 +24,7 @@ const IpCountUpdate = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/lastdataofipcount/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/lastdataofipcount/${id}`).then((res) => {
       const fetchedData = res.data[0];
       setIPID(fetchedData.ip_regist_id);
       setIpName(fetchedData.ip_name)
@@ -39,13 +39,13 @@ const IpCountUpdate = () => {
     let intervalId; 
   
     try {
-      const apiUrl = 'http://34.93.135.33:8080/api/instagram';
+      const apiUrl = 'https://node-dev-server.onrender.com/api/instagram';
       const response = await axios.post(apiUrl, { IPName: ipName });
       const dataRequestId = response.data.data_request_id;
   
       intervalId = setInterval(async () => {
         try {
-          const secondApiUrl = `http://34.93.135.33:8080/api/instagram2/${dataRequestId}`;
+          const secondApiUrl = `https://node-dev-server.onrender.com/api/instagram2/${dataRequestId}`;
           const secondApiResponse = await axios.get(secondApiUrl);
           const followers = secondApiResponse.data.response_entries[0].followers;
           const posts = secondApiResponse.data.response_entries[0].posts;
@@ -71,7 +71,7 @@ const IpCountUpdate = () => {
     const dateString = currDate.replace("T", " ").replace("Z", "");
     
     e.preventDefault();
-    axios.post("http://34.93.135.33:8080/api/ipcountpost", {
+    axios.post("https://node-dev-server.onrender.com/api/ipcountpost", {
       ip_id: Number(id),
       last_updated_by: userID,
       last_updated_at: dateString,

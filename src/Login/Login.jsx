@@ -17,7 +17,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/login_user", {
+      .post("https://node-dev-server.onrender.com/api/login_user", {
         user_login_id: email,
         user_login_password: password,
       })

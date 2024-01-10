@@ -11,8 +11,8 @@ const Pending = ({ pending }) => {
     const _id = params.row.ass_id;
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/assignment/commit/single/${_id}`
-        // `http://34.93.135.33:8080/api/assignment/commit/single/2`
+        `https://node-dev-server.onrender.com/api/assignment/commit/single/${_id}`
+        // `https://node-dev-server.onrender.com/api/assignment/commit/single/2`
       );
       setPendingCommit(response.data.data);
       setOpen2(true);

@@ -18,7 +18,7 @@ const ResponsibilityUpdate = () => {
   const userId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_single_responsibility/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/get_single_responsibility/${id}`).then((res) => {
       const fetchedData = res.data;
       setResponsibility(fetchedData.respo_name);
       setDescription(fetchedData.description);
@@ -28,7 +28,7 @@ const ResponsibilityUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://34.93.135.33:8080/api/edit_responsibility/${id}`, {
+      await axios.put(`https://node-dev-server.onrender.com/api/edit_responsibility/${id}`, {
         respo_name: responsibility,
         description: description,
         Last_updated_by: userId,

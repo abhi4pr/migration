@@ -23,7 +23,7 @@ const AccessTypeUpdate = () => {
     setError("");
 
     axios
-      .put(`http://34.93.135.33:8080/api/Iptypeupdate/`, {
+      .put(`https://node-dev-server.onrender.com/api/Iptypeupdate/`, {
         id: Number(id),
         name: accessTypeName,
         remark: remark,
@@ -43,7 +43,7 @@ const AccessTypeUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/Iptypedata/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/Iptypedata/${id}`).then((res) => {
       const fetchedData = res.data;
       const {
         name,
@@ -51,7 +51,7 @@ const AccessTypeUpdate = () => {
       } = fetchedData;
       setAccessTypeName(name);
       setRemark(remark);
-      setSimData(fetchedData);
+      // setSimData(fetchedData);
     });
   }, [id]);
 

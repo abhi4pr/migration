@@ -20,8 +20,8 @@ const BrandOverview = () => {
   const [countData, setCountData] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
 
-  function getData() {
-    axios.get("http://34.93.135.33:8080/api/logodata").then((res) => {
+  async function getData() {
+    await axios.get("https://node-dev-server.onrender.com/api/get_logo_data").then((res) => {
       setCountData(res.data);
       const responseData = res.data;
       const uniqueBrandName = new Set();
@@ -37,11 +37,11 @@ const BrandOverview = () => {
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/alllogocat")
+      .get("https://node-dev-server.onrender.com/api/get_all_logo_categories")
       .then((res) => setCategoryData(res.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("https://node-dev-server.onrender.com/api/get_all_users")
       .then((res) => setEmployeeData(res.data.data));
   }
 
@@ -71,7 +71,7 @@ const BrandOverview = () => {
 
   const deleteBrand = async (brand_name) => {
     await axios
-      .delete(`http://34.93.135.33:8080/api/logodeletenew/${brand_name}`)
+      .delete(`https://node-dev-server.onrender.com/api/delete_logo_based_brand/${brand_name}`)
       .then((res) => {
         getData();
       })
@@ -98,7 +98,7 @@ const BrandOverview = () => {
                 </Link>
                 <Link to="/admin/logo-category-overview">
                   <button type="button" className="btn btn-primary btn-sm">
-                    Logo Category
+                    Data Category
                   </button>
                 </Link>
               </div>
@@ -107,7 +107,7 @@ const BrandOverview = () => {
               <div className="card-body pb0 pb4">
                 <div className="row thm_form">
                   <FieldContainer
-                    label="Logo category"
+                    label="Data category"
                     Tag="select"
                     fieldGrid={4}
                     value={selectedCategory}

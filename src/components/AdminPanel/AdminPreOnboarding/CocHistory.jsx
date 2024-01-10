@@ -19,7 +19,7 @@ const CocHistory = () => {
 
   async function getData() {
     await axios
-      .get(`http://34.93.135.33:8080/api/get_coc_history/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_coc_history/${id}`)
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

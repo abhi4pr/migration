@@ -71,6 +71,7 @@ import UserHierarchy from "./User/UserHierarchy";
 import UserSingle from "./User/UserSingle";
 import DashboardWFHUser from "./WFH/DashboardWFHUser";
 import DashboardWFHCardDetails from "./WFH/DashboardWFHCardDetails";
+import WFHDOverview from "./WFH/WFHDOverview";
 import LeadApp from "../LeadManagement/LeadApp";
 import LeadManagement from "../LeadManagement/LeadManagement";
 import EditLead from "../LeadManagement/EditLead";
@@ -84,18 +85,18 @@ import ExecutionInventory from "../Execution/ExecutionInventory";
 import ExecutionPending from "../Execution/ExecutionPending";
 import OverviewIndex from "../Execution/overview/OverviewIndex";
 import ExecutionDetail from "../Execution/ExecutionDetail";
-import InstaAPIHome from "../InstaApi.jsx/InstaAPIHome";
-import InstaPageDashboard from "../InstaApi.jsx/InstaPageDashboard";
-import InstaPostDashboard from "../InstaApi.jsx/InstaPostDashboard";
-import InstaPageDetail from "../InstaApi.jsx/InstaPageDetail";
+// import InstaAPIHome from "../InstaApi.jsx/InstaAPIHome";
+// import InstaPageDashboard from "../InstaApi.jsx/InstaPageDashboard";
+// import InstaPostDashboard from "../InstaApi.jsx/InstaPostDashboard";
+// import InstaPageDetail from "../InstaApi.jsx/InstaPageDetail";
 // import ExecutionUpdate from "../Execution/ExecutionUpdate";
-import CronExpression from "../InstaApi.jsx/CronExpression";
-import InstaApiContext from "../InstaApi.jsx/InstaApiContext";
+// import CronExpression from "../InstaApi.jsx/CronExpression";
+// import InstaApiContext from "../InstaApi.jsx/InstaApiContext";
 import PreOnboardVerifyDetails from "./AdminPreOnboarding/PreOnboardVerifyDetails";
 import PreOnboardUserDetailsProfile from "./AdminPreOnboarding/PreOnboardUserDetailsProfile";
 import PreOnboardingOverview from "./AdminPreOnboarding/PreOnboardOverview";
 import OnboardExtendDateOverview from "./AdminPreOnboarding/OnboardExtendDateOverview";
-import AuditorTrack from "../InstaApi.jsx/Auditor/AuditorTrack";
+// import AuditorTrack from "../InstaApi.jsx/Auditor/AuditorTrack";
 import ExecutionDone from "../Execution/Done/ExecutionDone";
 import ExecutionAccepted from "../Execution/Accepted/ExecutionAccepted";
 import RegisterCampaign from "./RegisterCampaign/registerCampaign";
@@ -116,15 +117,15 @@ import BillingOverview from "./WFH/Billing/BillingOverview";
 import BillingMast from "./WFH/Billing/BillingMast";
 import BillingUpdate from "./WFH/Billing/BillingUpdate";
 // import InterpretorPage from "../InstaApi.jsx/Interpretor/InterpretorPage";
-import InterpretorPostDashboard from "../InstaApi.jsx/Interpretor/InterpretorPostDashboard";
-import InterpretorPageDashboard from "../InstaApi.jsx/Interpretor/InterpretorPageDashboard";
-import AdminPageView from "../InstaApi.jsx/InstaAdmin/AdminPageView";
-import AdminPostView from "../InstaApi.jsx/InstaAdmin/AdminPostView";
-import AuditorPageView from "../InstaApi.jsx/Auditor/AuditorPageView";
-import InterpretorContext from "../InstaApi.jsx/Interpretor/InterpretorContext";
+// import InterpretorPostDashboard from "../InstaApi.jsx/Interpretor/InterpretorPostDashboard";
+// import InterpretorPageDashboard from "../InstaApi.jsx/Interpretor/InterpretorPageDashboard";
+// import AdminPageView from "../InstaApi.jsx/InstaAdmin/AdminPageView";
+// import AdminPostView from "../InstaApi.jsx/InstaAdmin/AdminPostView";
+// import AuditorPageView from "../InstaApi.jsx/Auditor/AuditorPageView";
+// import InterpretorContext from "../InstaApi.jsx/Interpretor/InterpretorContext";
 import AccountsOverviewWFH from "./AccountsDepartment/AccountsOverviewWFH";
 import WFHSingleUser from "./WFH/WFHSingleUser/WFHSingleUser";
-import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
+// import AnalyticsDashboard from "../InstaApi.jsx/Analytics/AnalyticsDashboard";
 
 import ExecutionAll from "../Execution/ExecutionAll";
 import ExecutionOwn from "../Execution/ExecutionOwn";
@@ -184,8 +185,19 @@ import EditEmailTemp from "./User/EditEmailTemp";
 import ManagerDashboard from "./RegisterCampaign/ManagerDashboard/ManagerDashboard";
 import ManagerCampaign from "./RegisterCampaign/ManagerCampaignDashboard/ManagerCampaign";
 import AssetVisibleToTagedPerosn from "../Sim/AssetVisibleToTagedPerson/AssetVisibleToTagedPerosn";
+import AssetSingleUser from "../Sim/AssetSingeUser/AssetSingleUser";
 import AssetVisibleToHr from "../Sim/AssetVisibleToHr/AssetVisibleToHr";
 import WFHAllSalary from "./WFH/WFHAllSalary";
+import PendingPaymentRequest from "./Finance/PendingPaymentRequest";
+import PaymentDone from "./Finance/PaymentDone";
+import PurchaseManagementAllTransaction from "./Finance/PurchaseManagementAllTransaction";
+import Discard from "./Finance/Discard";
+import JobTypeMaster from "../JobType/JobTypeMaster";
+import FinanceWFHDashboard from "../Finance Dashboard/FinanceWFHDashboard";
+import WFHTemplateOverview from "./WFH/WFHSingleUser/WFHTemplateOverview";
+import ViewEditDigiSignature from "./WFH/DigitalSignature/ViewEditDigiSignature";
+import PlancreationNew from "./RegisterCampaign/PlancreationNew";
+import PhasecreationNew from "./RegisterCampaign/PhasecreationNew";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -197,7 +209,7 @@ const Admin = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -328,8 +340,20 @@ const Admin = () => {
                     path="/accounts-finance-overview"
                     element={<AccountsOverviewWFH />}
                   />
+                  <Route
+                    path="/accounts-finance-dashboard"
+                    element={<FinanceWFHDashboard />}
+                  />
 
                   <Route path="/wfh-single-user" element={<WFHSingleUser />} />
+                  <Route
+                    path="/wfh-template-overview"
+                    element={<WFHTemplateOverview />}
+                  />
+                  <Route
+                    path="view-edit-digital-signature"
+                    element={<ViewEditDigiSignature />}
+                  />
                   <Route
                     path="/wfh-user-dashboard"
                     element={<DashboardWFHUser />}
@@ -339,6 +363,7 @@ const Admin = () => {
                     path="/wfh-dashboard-overview/:id"
                     element={<DashboardWFHCardDetails />}
                   />
+                  <Route path="/wfhd-overview" element={<WFHDOverview />} />
 
                   <Route
                     path="/wfh-users-overview/:deptId"
@@ -460,6 +485,10 @@ const Admin = () => {
                     <Route
                       path="/asset-visible-to-taged-person"
                       element={<AssetVisibleToTagedPerosn />}
+                    />
+                    <Route
+                      path="/asset-single-user"
+                      element={<AssetSingleUser />}
                     />
                   </>
                   {/* )} */}
@@ -619,6 +648,22 @@ const Admin = () => {
                     element={<SaleBookingVerify />}
                   />
                   <Route
+                    path="/finance-pruchasemanagement-pendingpaymentrequest"
+                    element={<PendingPaymentRequest />}
+                  />
+                  <Route
+                    path="/finance-pruchasemanagement-paymentdone"
+                    element={<PaymentDone />}
+                  />
+                  <Route
+                    path="/finance-pruchasemanagement-alltransaction"
+                    element={<PurchaseManagementAllTransaction />}
+                  />
+                  <Route
+                    path="/finance-pruchasemanagement-discardpayment"
+                    element={<Discard />}
+                  />
+                  <Route
                     path="/payment-summary/:id"
                     element={<PaymentSummary />}
                   />
@@ -725,8 +770,8 @@ const Admin = () => {
                     element={<CreaterDashboard />}
                   />
                   <Route path="/planOverview/:id" element={<PlanOverview />} />
-                  <Route path="/phase/:id" element={<PhaseCreation />} />
-                  <Route path="/planCreation/:id" element={<PlanCreation />} />
+                  <Route path="/phase/:id" element={<PhasecreationNew />} />
+                  <Route path="/planCreation/:id" element={<PlancreationNew />} />
                   <Route path="/createAssign/:id" element={<CreateAssign />} />
 
                   <Route
@@ -782,6 +827,9 @@ const Admin = () => {
                       </LeadApp>
                     }
                   />
+
+                  {/* ------------------------Job Type ----------------------------- */}
+                  <Route path="/jobType" element={<JobTypeMaster />} />
 
                   {/*------------------------ Execution --------------------------------*/}
                   <Route path="/cityMsater" element={<CityMaster />} />
@@ -845,7 +893,7 @@ const Admin = () => {
                   />
 
                   {/* -------------------Insta Api--------------------------- */}
-                  <Route
+                  {/* <Route
                     path="/instaapi"
                     element={
                       <InstaApiContext>
@@ -955,7 +1003,7 @@ const Admin = () => {
                         </InterpretorContext>
                       </InstaApiContext>
                     }
-                  />
+                  /> */}
                 </Route>
               </Routes>
             </div>

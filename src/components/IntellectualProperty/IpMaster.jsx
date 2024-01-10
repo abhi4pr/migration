@@ -38,21 +38,21 @@ const IpMaster = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("https://node-dev-server.onrender.com/api/get_all_users")
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_platforms")
+      .get("https://node-dev-server.onrender.com/api/get_all_platforms")
       .then((res) => setPlatFormData(res.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_iptypes")
+      .get("https://node-dev-server.onrender.com/api/get_all_iptypes")
       .then((res) => setIpTypeData(res.data));
   }, []);
 
   const handleSelectChange = (e) => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${e.target.value}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_user/${e.target.value}`)
       .then((res) => setSingleUser(res.data));
   };
 
@@ -65,13 +65,13 @@ const IpMaster = () => {
     let intervalId;
 
     try {
-      const apiUrl = "http://34.93.135.33:8080/api/instagram";
+      const apiUrl = "https://node-dev-server.onrender.com/api/instagram";
       const response = await axios.post(apiUrl, { IPName: IPName });
       const dataRequestId = response.data.data_request_id;
 
       intervalId = setInterval(async () => {
         try {
-          const secondApiUrl = `http://34.93.135.33:8080/api/instagram2/${dataRequestId}`;
+          const secondApiUrl = `https://node-dev-server.onrender.com/api/instagram2/${dataRequestId}`;
           const secondApiResponse = await axios.get(secondApiUrl);
           const followers =
             secondApiResponse.data.response_entries[0].followers;
@@ -103,7 +103,7 @@ const IpMaster = () => {
       return;
     }
 
-    await axios.post("http://34.93.135.33:8080/api/add_instapage", {
+    await axios.post("https://node-dev-server.onrender.com/api/add_instapage", {
       ip_type: Number(IPType),
       platform: Number(platform),
       ip_name: IPName,

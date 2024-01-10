@@ -14,7 +14,7 @@ const PreOnboardingOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_users"
+        "https://node-dev-server.onrender.com/api/get_all_users"
       );
       const data = response.data.data;
       const onboarddata = data.filter((d) => d.onboard_status === 2);
@@ -36,7 +36,7 @@ const PreOnboardingOverview = () => {
     formData.append("user_id", row);
     formData.append("onboard_status", 1);
     axios
-      .put("http://34.93.135.33:8080/api/update_user", formData, {
+      .put("https://node-dev-server.onrender.com/api/update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -72,6 +72,25 @@ const PreOnboardingOverview = () => {
         </>
       ),
       width: "10%",
+      sortable: true,
+    },
+
+    {
+      name: "Total Documents Filled Percentage",
+      selector: (row) => row.document_percentage,
+      width: "5%",
+      sortable: true,
+    },
+    {
+      name: "Mandatory Documents Filled Percentage",
+      selector: (row) => row.document_percentage_mandatory,
+      width: "5%",
+      sortable: true,
+    },
+    {
+      name: "Non Mandatory Documents Filled Percentage",
+      selector: (row) => row.document_percentage_non_mandatory,
+      width: "5%",
       sortable: true,
     },
     {
@@ -118,6 +137,10 @@ const PreOnboardingOverview = () => {
           <Button
             sx={{ marginRight: "10px" }}
             size="small"
+            disabled={
+              row.document_percentage_mandatory < 70 ||
+              row.document_percentage_mandatory === undefined
+            }
             onClick={() => handleStatusChange(row.user_id, row.onboard_status)}
             variant="outlined"
             color="secondary"

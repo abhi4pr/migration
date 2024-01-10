@@ -26,7 +26,7 @@ const BrandMast = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_total_asset_in_category/${row}`
+        `https://node-dev-server.onrender.com/api/get_total_asset_in_category/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -41,7 +41,7 @@ const BrandMast = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_total_asset_in_category_allocated/${row}`
+        `https://node-dev-server.onrender.com/api/get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -123,20 +123,28 @@ const BrandMast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://34.93.135.33:8080/api/add_asset_brand",
-        {
-          asset_brand_name: brandName,
-        }
+      const isBrandExist = brnadData.some(
+        (d) => d.asset_brand_name === brandName
       );
-      getBrandData();
+      if (isBrandExist) {
+        alert("Brand already Exists");
+      } else {
+        const response = await axios.post(
+          "https://node-dev-server.onrender.com/api/add_asset_brand",
+          {
+            asset_brand_name: brandName,
+          }
+        );
+        setBrandName("");
+        getBrandData();
+      }
     } catch (error) {
       console.log(error);
     }
   };
   async function getBrandData() {
     const res = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_asset_brands"
+      "https://node-dev-server.onrender.com/api/get_all_asset_brands"
     );
     setBrandData(res.data.data);
     setBrnadFilter(res.data.data);
@@ -147,13 +155,12 @@ const BrandMast = () => {
   }, []);
 
   const handleBrandData = (row) => {
-    console.log(row, "data");
     setBrandId(row.asset_brand_id);
     setBrandNameUpdate(row.asset_brand_name);
   };
   const handleBrandUpdate = () => {
     axios
-      .put("http://34.93.135.33:8080/api/update_asset_brand", {
+      .put("https://node-dev-server.onrender.com/api/update_asset_brand", {
         asset_brand_id: brandId,
         asset_brand_name: brandNameUpdate,
       })

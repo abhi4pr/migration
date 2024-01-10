@@ -170,7 +170,7 @@
 //   useEffect(() => {
 //     setCountryList(Country.getAllCountries());
 
-//     axios.get("http://34.93.135.33:8080/api/get_all_cities").then((res) => {
+//     axios.get("https://node-dev-server.onrender.com/api/get_all_cities").then((res) => {
 //       setCityListTemp(res.data.data.map((city) => city.city_name));
 //       setCityList(res.data.data.map((city) => city.city_name));
 //     });
@@ -324,7 +324,7 @@
 
 //         for (let i = 0; i < tempdata.length; i++) {
 //           axios
-//             .post(`http://34.93.135.33:8080/api/get_percentage`, {
+//             .post(`https://node-dev-server.onrender.com/api/get_percentage`, {
 //               p_id: tempdata[i].p_id,
 //             })
 //             .then((res) => {
@@ -337,7 +337,7 @@
 //         for (let i = 0; i < tempdata.length; i++) {
 //           axios
 //             .get(
-//               `http://34.93.135.33:8080/api/get_stats_update_flag/${tempdata[i].p_id}`
+//               `https://node-dev-server.onrender.com/api/get_stats_update_flag/${tempdata[i].p_id}`
 //             )
 //             .then((res) => {
 //               if (res.status == 200) {
@@ -353,7 +353,7 @@
 //     if (userID && contextData == false) {
 //       axios
 //         .get(
-//           `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+//           `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
 //         )
 //         .then((res) => {
 //           if (res.data[33].view_value == 1) {
@@ -475,7 +475,7 @@
 
 //   const handleUpdateRowClick = (row) => {
 //     axios
-//       .get(`http://34.93.135.33:8080/api/get_exe_ip_count_history/${row.p_id}`)
+//       .get(`https://node-dev-server.onrender.com/api/get_exe_ip_count_history/${row.p_id}`)
 //       .then((res) => {
 //         let data = res.data.data.filter((e) => {
 //           return e.isDeleted !== true;
@@ -790,7 +790,7 @@
 //     formData.append("user_id", userID);
 
 //     axios
-//       .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
+//       .post(`https://node-dev-server.onrender.com/api/add_exe_pid_history`, formData, {
 //         headers: {
 //           "Content-Type": "multipart/form-data",
 //         },
@@ -2199,7 +2199,7 @@ import { DataGrid, GridColumnMenu, GridToolbar } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import CircularWithValueLabel from "../InstaApi.jsx/CircularWithValueLabel";
+// import CircularWithValueLabel from "../InstaApi.jsx/CircularWithValueLabel";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -2351,7 +2351,7 @@ function ExecutionAll() {
     setCountryList(Country.getAllCountries());
     setCountryListTemp(Country.getAllCountries());
 
-    axios.get("http://34.93.135.33:8080/api/get_all_cities").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_cities").then((res) => {
       setCityListTemp(res.data.data.map((city) => city.city_name));
       setCityList(res.data.data.map((city) => city.city_name));
     });
@@ -2501,7 +2501,7 @@ function ExecutionAll() {
   const callDataForLoad = () => {
     setLoading(true);
     axios
-      .get("http://34.93.135.33:8080/api/get_all_purchase_data")
+      .get("https://node-dev-server.onrender.com/api/get_all_purchase_data")
       .then((res) => {
         setLoading(false);
 
@@ -2514,7 +2514,7 @@ function ExecutionAll() {
 
         // for (let i = 0; i < tempdata.length; i++) {
         //   axios
-        //     .post(`http://34.93.135.33:8080/api/get_percentage`, {
+        //     .post(`https://node-dev-server.onrender.com/api/get_percentage`, {
         //       p_id: tempdata[i].p_id,
         //     })
         //     .then((res) => {
@@ -2527,7 +2527,7 @@ function ExecutionAll() {
         // for (let i = 0; i < tempdata.length; i++) {
         //   axios
         //     .get(
-        //       `http://34.93.135.33:8080/api/get_stats_update_flag/${tempdata[i].p_id}`
+        //       `https://node-dev-server.onrender.com/api/get_stats_update_flag/${tempdata[i].p_id}`
         //     )
         //     .then((res) => {
         //       if (res.status == 200) {
@@ -2543,7 +2543,7 @@ function ExecutionAll() {
     if (userID && contextData == false) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           if (res.data[33].view_value == 1) {
@@ -2665,7 +2665,7 @@ function ExecutionAll() {
 
   const handleUpdateRowClick = (row) => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_exe_ip_count_history/${row.p_id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_exe_ip_count_history/${row.p_id}`)
       .then((res) => {
         let data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
@@ -2965,7 +2965,7 @@ function ExecutionAll() {
     formData.append("user_id", userID);
 
     axios
-      .post(`http://34.93.135.33:8080/api/add_exe_pid_history`, formData, {
+      .post(`https://node-dev-server.onrender.com/api/add_exe_pid_history`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

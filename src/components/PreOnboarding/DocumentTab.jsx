@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
 
-const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
+const DocumentTab = ({
+  documentData,
+  setDocumentData,
+  getDocuments,
+  submitButton = true,
+  normalUserLayout = false,
+}) => {
   const { toastAlert } = useGlobalContext();
 
   const updateDocumentData = (documentId, key, value) => {
@@ -24,7 +30,7 @@ const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
 
   const handleSubmit = async () => {
     try {
-      const mandatoryDocTypes = ["10th", "12th", "Graduation"];
+      const mandatoryDocTypes = ["10th", "12th"];
 
       const isMandatoryDocMissing = documentData.some(
         (doc) =>
@@ -32,8 +38,6 @@ const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
           doc.doc_image &&
           doc.file
       );
-
-      console.log(isMandatoryDocMissing, "mnadlakdjfl");
 
       if (isMandatoryDocMissing) {
         toastAlert("Please fill all mandatory fields");
@@ -51,7 +55,7 @@ const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
                 : document.status
             );
             const response = await axios.put(
-              "http://34.93.135.33:8080/api/update_user_doc",
+              "https://node-dev-server.onrender.com/api/update_user_doc",
               formData,
               {
                 headers: {
@@ -73,11 +77,17 @@ const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
 
   return (
     <>
-      <div className="documentarea">
+      <div
+        className={`documentarea ${normalUserLayout && "documentareaLight"}`}
+      >
         <div className="document_box">
           <h2>Documents</h2>
 
-          <div className="docTable table-responsive">
+          <div
+            className={`docTable ${
+              normalUserLayout && "docTableLight"
+            } table-responsive`}
+          >
             <table className="table">
               <thead>
                 <tr>
@@ -141,14 +151,16 @@ const DocumentTab = ({ documentData, setDocumentData, getDocuments }) => {
               </tbody>
             </table>
           </div>
-          <div className="ml-auto mr-auto text-center">
-            <button
-              className="btn btn_pill btn_cmn btn_white"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
-          </div>
+          {submitButton && (
+            <div className="ml-auto mr-auto text-center">
+              <button
+                className="btn btn_pill btn_cmn btn_white"
+                onClick={handleSubmit}
+              >
+                Submit
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

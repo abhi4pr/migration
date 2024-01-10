@@ -23,12 +23,12 @@ const UserResponsbilityUpdate = () => {
   const [designation, setDesignation] = useState("");
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
       getUserData(res.data.data);
     });
   }, []);
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_responsibilitys").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_responsibilitys").then((res) => {
       setResponsibilityData(res.data);
     });
   }, []);
@@ -60,7 +60,7 @@ const UserResponsbilityUpdate = () => {
     for (const element of todos) {
       console.log(userName, "userid")
       axios
-      .put(`http://34.93.135.33:8080/api/update_jobresponsibility`, {
+      .put(`https://node-dev-server.onrender.com/api/update_jobresponsibility`, {
         Job_res_id: Number(id),
         user_id: Number(userName),
         job_responsi: element.responsbility,

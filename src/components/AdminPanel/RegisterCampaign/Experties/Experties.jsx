@@ -34,7 +34,7 @@ const Experties = () => {
   //   console.log(expertiesusername.user_id, "res");
   //   const getExperties = () => {
   //     axios
-  //       .get("http://34.93.135.33:8080/api/expertise")
+  //       .get("https://node-dev-server.onrender.com/api/expertise")
   //       .then((res) => {
   //         console.log(res.data.data.user_id, "expert");
   //         const matchdata = res.data.data.map(
@@ -62,10 +62,10 @@ const Experties = () => {
 
   const getAllUsers = async () => {
     const alluser = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_users"
+      "https://node-dev-server.onrender.com/api/get_all_users"
     );
     setGetUserData(alluser.data.data);
-    // const expert = await axios.get("http://34.93.135.33:8080/api/expertise");
+    // const expert = await axios.get("https://node-dev-server.onrender.com/api/expertise");
     // console.log(expert.data.data);
     // const difference = alluser?.data?.data?.filter(
     //   (obj1) =>
@@ -74,7 +74,7 @@ const Experties = () => {
     // console.log(difference, "diffrence here");
   };
   // const getExpertData = () => {
-  //   const expertdata = axios.get("http://34.93.135.33:8080/api/expertise");
+  //   const expertdata = axios.get("https://node-dev-server.onrender.com/api/expertise");
   //   const expert = expertdata.data.data;
   //   setExpertData(expert);
   //   console.log(expert, "all expet data");
@@ -123,7 +123,7 @@ const Experties = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "http://34.93.135.33:8080/api/expertise",
+        "https://node-dev-server.onrender.com/api/expertise",
         {
           exp_name: expertiesusername.label,
           user_id: expertiesusername.user_id,

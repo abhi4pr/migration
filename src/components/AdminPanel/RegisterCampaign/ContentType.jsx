@@ -57,7 +57,7 @@ export default function ContentType() {
   }
 
   const fff = () => {
-    axios.get("http://34.93.135.33:8080/api/content").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/content").then((res) => {
       const newData = res.data.data;
       console.log(newData);
       setRows(newData);
@@ -87,7 +87,7 @@ export default function ContentType() {
 
   const handleDeleteClick = (id) => {
     axios
-      .delete(`http://34.93.135.33:8080/api/content/${id}`)
+      .delete(`https://node-dev-server.onrender.com/api/content/${id}`)
       .then(() => {
         console.log(id, "Deleted successfully");
         fff();
@@ -110,7 +110,7 @@ export default function ContentType() {
     if (addrows) {
       setAddRows(false);
       try {
-        axios.post("http://34.93.135.33:8080/api/content", {
+        axios.post("https://node-dev-server.onrender.com/api/content", {
           // content_type_id:updatedRow.content_type_id,
           content_type: updatedRow.content_type,
           content_value: updatedRow.content_value,
@@ -124,7 +124,7 @@ export default function ContentType() {
     } else {
       try {
         axios
-          .put("http://34.93.135.33:8080/api/content", {
+          .put("https://node-dev-server.onrender.com/api/content", {
             content_type_id: updatedRow.content_type_id,
             content_type: updatedRow.content_type,
             content_value: updatedRow.content_value,

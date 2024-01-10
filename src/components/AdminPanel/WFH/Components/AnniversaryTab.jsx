@@ -6,7 +6,7 @@ const AnniversaryTab = ({ workAnniversary }) => {
       {workAnniversary?.map((item) => (
         <li key={item.user_id}>
           <img
-            src={`http://34.93.135.33:8080//api/${item.image}`}
+            src={`https://node-dev-server.onrender.com//api/${item.image}`}
             alt="user Image"
           />
           {item.user_name}

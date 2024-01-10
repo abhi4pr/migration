@@ -9,7 +9,7 @@ const DeclinedOrder = () => {
 
   function getData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_orderreqdata")
+      .get("https://node-dev-server.onrender.com/api/get_all_orderreqdata")
       .then((res) => {
         setData(res.data.data.filter((res) => res.Status === "declined"));
         setFilterData(res.data.data.filter((res) => res.Status === "declined"));

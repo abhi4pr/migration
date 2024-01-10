@@ -29,24 +29,23 @@ const AppProvider = ({ children }) => {
 
   const getAllCategoryContextFunction = () => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_asset_category")
+      .get("https://node-dev-server.onrender.com/api/get_all_asset_category")
       .then((res) => {
         setCategoryData(res.data.data.asset_categories);
       });
   };
   async function getBrandData() {
     const res = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_asset_brands"
+      "https://node-dev-server.onrender.com/api/get_all_asset_brands"
     );
     setBrandDataContext(res.data.data);
   }
   async function getAssetData() {
-    const res = await axios.get("http://34.93.135.33:8080/api/get_all_sims");
+    const res = await axios.get("https://node-dev-server.onrender.com/api/get_all_sims");
     setAssetDataContext(res.data.data);
-    console.log(res, "hello welcome");
   }
   async function getUserAPIData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
       setUsersContextData(res.data.data);
     });
   }

@@ -23,7 +23,7 @@ const ProductOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -36,7 +36,7 @@ const ProductOverview = () => {
   }, []);
 
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_products").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_products").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

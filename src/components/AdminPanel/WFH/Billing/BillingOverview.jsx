@@ -22,7 +22,7 @@ const BillingOverview = () => {
 
   const getData = () => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_billingheaders")
+      .get("https://node-dev-server.onrender.com/api/get_all_billingheaders")
       .then((res) => {
         setBillData(res.data.result);
         setFilterData(res.data.result);
@@ -33,7 +33,7 @@ const BillingOverview = () => {
     if (userID && contextData?.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);

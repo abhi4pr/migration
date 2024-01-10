@@ -21,7 +21,7 @@ const PlatformMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("http://34.93.135.33:8080/api/platform", {
+      .post("https://node-dev-server.onrender.com/api/platform", {
         name: platformName,
         remark: remark,
         created_by: userID

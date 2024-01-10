@@ -43,13 +43,13 @@ const ExpertiesUpdate = () => {
 
   const getAllUsers = async () => {
     const alluser = await axios.get(
-      "http://34.93.135.33:8080/api/get_all_users"
+      "https://node-dev-server.onrender.com/api/get_all_users"
     );
     setGetUserData(alluser.data.data);
   };
   const ExsingleData = async () => {
     const singledata = await axios.get(
-      `http://34.93.135.33:8080/api/expertise/${id}`
+      `https://node-dev-server.onrender.com/api/expertise/${id}`
     );
     const fetcheData = singledata?.data.data;
     console.log(fetcheData, "single data ");
@@ -102,7 +102,7 @@ const ExpertiesUpdate = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.put(
-        `http://34.93.135.33:8080/api/expertise/${expertiesusername.user_id}`,
+        `https://node-dev-server.onrender.com/api/expertise/${expertiesusername.user_id}`,
         {
           user_id: expertiesusername.user_id,
           area_of_expertise: {

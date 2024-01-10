@@ -37,7 +37,7 @@ const InvoiceTemplate1 = ({ data }) => {
                   <h3>
                     INVOICE DATE{" "}
                     <span>
-                      {data?.Creation_date.split("T")[0]
+                      {data?.Creation_date?.split("T")[0]
                         .split("-")
                         .reverse()
                         .join("-")}
@@ -86,7 +86,8 @@ const InvoiceTemplate1 = ({ data }) => {
               <div className="invoiceBodyFooter_left">
                 <div className="signBox">
                   <img
-                    src={data?.signatureImageUrl}
+                    // src={data?.signatureImageUrl}
+                    src="https://t4.ftcdn.net/jpg/03/17/25/45/240_F_317254576_lKDALRrvGoBr7gQSa1k4kJBx7O2D15dc.jpg"
                     alt="signatures"
                     onError={handleImageError}
                   />

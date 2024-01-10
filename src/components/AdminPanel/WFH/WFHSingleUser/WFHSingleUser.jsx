@@ -7,11 +7,11 @@ import axios from "axios";
 import FormContainer from "../../FormContainer";
 import { useGlobalContext } from "../../../../Context/Context";
 import jwtDecode from "jwt-decode";
-import image1 from "../SalaryGeneration/images/image1.png";
-import image2 from "../SalaryGeneration/images/image2.png";
-import image3 from "../SalaryGeneration/images/i3.png";
-import image4 from "../SalaryGeneration/images/i4.png";
-import image5 from "../SalaryGeneration/images/image5.png";
+// import image1 from "../SalaryGeneration/images/image1.png";
+// import image2 from "../SalaryGeneration/images/image2.png";
+// import image3 from "../SalaryGeneration/images/i3.png";
+// import image4 from "../SalaryGeneration/images/i4.png";
+// import image5 from "../SalaryGeneration/images/image5.png";
 import * as XLSX from "xlsx";
 import { generatePDF } from "../SalaryGeneration/pdfGenerator";
 import {
@@ -31,18 +31,22 @@ import MyTemplate4 from "../SalaryGeneration/Template4";
 import MyTemplate5 from "../SalaryGeneration/Template5";
 import Modal from "react-modal";
 import DigitalSignature from "../../../DigitalSignature/DigitalSignature";
-// import DateFormattingComponent from "../../../DateFormater/DateFormared";
+import useInvoiceTemplateImages from "../Templates/Hooks/useInvoiceTemplateImages";
+import InvoicePDF from "../Templates/Component/InvoicePdfGenerator";
+import PreviewInvoice from "./PreviewInvoice";
 
-const images = [
-  { temp_id: 1, image: image1 },
-  { temp_id: 2, image: image2 },
-  { temp_id: 3, image: image3 },
-  { temp_id: 4, image: image4 },
-  { temp_id: 5, image: image5 },
-];
+// const images = [
+//   { temp_id: 1, image: image1 },
+//   { temp_id: 2, image: image2 },
+//   { temp_id: 3, image: image3 },
+//   { temp_id: 4, image: image4 },
+//   { temp_id: 5, image: image5 },
+// ];
+
+const images = useInvoiceTemplateImages();
 
 const WFHSingleUser = () => {
-  const { toastAlert } = useGlobalContext();
+  const { toastAlert, toastError } = useGlobalContext();
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [error, setError] = useState(null);
@@ -68,6 +72,7 @@ const WFHSingleUser = () => {
   const [rowDataModal, setRowDataModal] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -77,29 +82,11 @@ const WFHSingleUser = () => {
     setIsModalOpen(false);
   };
 
-  const monthValue = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const yearValue = [
-    2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030,
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_wfh_users"
+          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
@@ -118,19 +105,19 @@ const WFHSingleUser = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
+      .get("https://node-dev-server.onrender.com/api/all_departments_of_wfh")
       .then((res) => {
         getDepartmentData(res.data.data);
       });
   }, []);
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_all_users`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/get_all_users`).then((res) => {
       getUsersData(res.data.data);
     });
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_user_by_deptid/${department}`)
+        .get(`https://node-dev-server.onrender.com/api/get_user_by_deptid/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
@@ -139,7 +126,7 @@ const WFHSingleUser = () => {
 
   const handleSubmit = () => {
     axios
-      .post("http://34.93.135.33:8080/api/get_attendance_by_userid", {
+      .post("https://node-dev-server.onrender.com/api/get_attendance_by_userid", {
         user_id: userID,
       })
       .then((res) => {
@@ -149,7 +136,7 @@ const WFHSingleUser = () => {
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
-        toastAlert("Failed to submit data");
+        toastError("Failed to submit data");
       });
   };
 
@@ -159,7 +146,7 @@ const WFHSingleUser = () => {
     formData.append("user_id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
-    axios.put(`http://34.93.135.33:8080/api/update_user`, formData, {
+    axios.put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -182,25 +169,25 @@ const WFHSingleUser = () => {
     }
   }, [department, month, year]);
 
-  const handleAttendence = () => {
-    axios
-      .post("http://34.93.135.33:8080/api/add_attendance", {
-        dept: department,
-        user_id: userName.user_id,
-        noOfabsent: 0,
-        month: month,
-        year: year,
-      })
-      .then(() => {
-        setNoOfAbsent("");
-        toastAlert("Submitted success");
-        handleSubmit();
-      })
-      .catch((error) => {
-        console.error("Error submitting data:", error);
-        toastAlert("Failed to submit data");
-      });
-  };
+  // const handleAttendence = () => {
+  //   axios
+  //     .post("https://node-dev-server.onrender.com/api/add_attendance", {
+  //       dept: department,
+  //       user_id: userName.user_id,
+  //       noOfabsent: 0,
+  //       month: month,
+  //       year: year,
+  //     })
+  //     .then(() => {
+  //       setNoOfAbsent("");
+  //       toastAlert("Submitted success");
+  //       handleSubmit();
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error submitting data:", error);
+  //       toastAlert("Failed to submit data");
+  //     });
+  // };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -317,22 +304,22 @@ const WFHSingleUser = () => {
   });
 
   //Send to finance
-  function handleSendToFinance(e, row) {
-    e.preventDefault();
-    axios.post(`http://34.93.135.33:8080/api/add_finance`, {
-      attendence_id: row.attendence_id,
-    });
+  // function handleSendToFinance(e, row) {
+  //   e.preventDefault();
+  //   axios.post(`https://node-dev-server.onrender.com/api/add_finance`, {
+  //     attendence_id: row.attendence_id,
+  //   });
 
-    axios
-      .put(`http://34.93.135.33:8080/api/update_salary`, {
-        attendence_id: row.attendence_id,
-        sendToFinance: 1,
-      })
-      .then(() => {
-        handleSubmit();
-      });
-    toastAlert("Sent To Finance");
-  }
+  //   axios
+  //     .put(`https://node-dev-server.onrender.com/api/update_salary`, {
+  //       attendence_id: row.attendence_id,
+  //       sendToFinance: 1,
+  //     })
+  //     .then(() => {
+  //       handleSubmit();
+  //     });
+  //   toastAlert("Sent To Finance");
+  // }
 
   //--------------------------------------------------------------------------------------------------------------------
 
@@ -505,6 +492,10 @@ const WFHSingleUser = () => {
       cell: (row) => row.toPay + " ₹",
     },
     {
+      name: "Status",
+      cell: (row) => row.attendence_status_flow,
+    },
+    {
       name: "Action",
       cell: (row) => (
         <>
@@ -539,7 +530,27 @@ const WFHSingleUser = () => {
               <FileOpenIcon />
             </button>
           )}
-          {!row?.sendToFinance && (
+          {!row.sendToFinance == 1 && (
+            <button
+              className="btn btn-secondary"
+              onClick={() => setIsPreviewModalOpen(true)}
+            >
+              Preview Invoice
+            </button>
+          )}
+          <Modal
+            isOpen={isPreviewModalOpen}
+            onRequestClose={() => setIsPreviewModalOpen(false)}
+            contentLabel="Preview Modal"
+            appElement={document.getElementById("root")}
+          >
+            <PreviewInvoice
+              data={row}
+              setIsPreviewModalOpen={setIsPreviewModalOpen}
+              handleSubmit={handleSubmit}
+            />
+          </Modal>
+          {/* {!row?.sendToFinance && (
             <button
               title="Send to Finance"
               className="btn-outline-primary btn-sm ml-2"
@@ -547,7 +558,7 @@ const WFHSingleUser = () => {
             >
               <IosShareIcon />
             </button>
-          )}
+          )} */}
           {row.sendToFinance == 1 && row.status_ == 1 && (
             <button
               className="btn btn-outline-primary ml-2"
@@ -558,9 +569,9 @@ const WFHSingleUser = () => {
               Paid
             </button>
           )}
-          {row.sendToFinance == 1 && row.status_ == 0 && (
+          {/* {row.sendToFinance == 1 && row.status_ == 0 && (
             <button className="btn btn-danger ml-2">Pending</button>
-          )}
+          )} */}
 
           {row?.invoice_template_no !== "0" && (
             <button
@@ -650,7 +661,9 @@ const WFHSingleUser = () => {
                     appElement={document.getElementById("root")}
                   >
                     <DigitalSignature userID={userID} closeModal={closeModal} />
-                    <button onClick={closeModal}>Close Modal</button>
+                    <button className="btn btn-secondary" onClick={closeModal}>
+                      Close Modal
+                    </button>
                   </Modal>
 
                   <Button
@@ -820,7 +833,7 @@ const WFHSingleUser = () => {
                 ScreenShot :
                 {rowDataModal?.screenshot ? (
                   <img
-                    src={`http://34.93.135.33:8080/api/uploads/${rowDataModal?.screenshot}`}
+                    src={`https://node-dev-server.onrender.com/api/uploads/${rowDataModal?.screenshot}`}
                   />
                 ) : (
                   "Null"

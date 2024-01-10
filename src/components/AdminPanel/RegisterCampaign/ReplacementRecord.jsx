@@ -28,14 +28,14 @@ const ReplacementRecord = ({ open, data, handleClose }) => {
 
   const getRecord = async () => {
     const record = await axios.get(
-      `http://34.93.135.33:8080/api/replacement/${data.replacement_id._id}`
+      `https://node-dev-server.onrender.com/api/replacement/${data.replacement_id._id}`
     );
     console.log(record.data.data, "<---------------------------------");
     setReplacementData(record?.data?.data);
   };
   const getPageData = async () => {
     const oldPageData = await axios.get(
-      `http://34.93.135.33:8080/api/replacement/${data.replacement_id._id}`
+      `https://node-dev-server.onrender.com/api/replacement/${data.replacement_id._id}`
     );
     seteNewPageData(oldPageData?.data?.data?.newPages);
     setOldData(oldPageData?.data?.data);
@@ -65,7 +65,10 @@ const ReplacementRecord = ({ open, data, handleClose }) => {
         <Box sx={{ display: "flex" }}>
           <TextField
             label="Page"
-            disabled
+            InputProps={{
+              readOnly: true,
+            }}
+            InputLabelProps={{ shrink: true }}
             fullWidth
             value={oldData.old?.page_name}
             sx={{ m: 1 }}
@@ -73,21 +76,30 @@ const ReplacementRecord = ({ open, data, handleClose }) => {
 
           <TextField
             label="Category"
-            disabled
+            InputProps={{
+              readOnly: true,
+            }}
+            InputLabelProps={{ shrink: true }}
             fullWidth
             value={oldData.old?.cat_name}
             sx={{ m: 1 }}
           />
           <TextField
             label="Follower"
-            disabled
+            InputProps={{
+              readOnly: true,
+            }}
+            InputLabelProps={{ shrink: true }}
             fullWidth
             value={oldData.old?.follower_count}
             sx={{ m: 1 }}
           />
           <TextField
-            label="Follower"
-            disabled
+            label="PlateForm"
+            InputProps={{
+              readOnly: true,
+            }}
+            InputLabelProps={{ shrink: true }}
             fullWidth
             value={oldData.old?.platform}
             sx={{ m: 1 }}
@@ -122,7 +134,7 @@ const ReplacementRecord = ({ open, data, handleClose }) => {
                 sx={{ m: 1 }}
               />
               <TextField
-                label="Follower"
+                label="PlateForm"
                 disabled
                 fullWidth
                 value={item?.platform}

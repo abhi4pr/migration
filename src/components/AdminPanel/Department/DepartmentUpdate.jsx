@@ -24,7 +24,7 @@ const DepartmentUpdate = () => {
     setError("");
 
     await axios
-      .put(`http://34.93.135.33:8080/api/update_department`, {
+      .put(`https://node-dev-server.onrender.com/api/update_department`, {
         dept_id: id,
         dept_name: departmentName,
         short_name: shortName,

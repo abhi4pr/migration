@@ -67,7 +67,7 @@ export default function CategoryMaster() {
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/projectxCategory", postData)
+      .post("https://node-dev-server.onrender.com/api/projectxCategory", postData)
       .then((response) => {
         setIsModalOpen(false);
         getData();
@@ -82,7 +82,7 @@ export default function CategoryMaster() {
 
   // get api ========>
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/projectxCategory").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/projectxCategory").then((res) => {
       console.log(res.data.data);
       const sortedData = res.data.data.sort(
         (a, b) => b.category_id - a.category_id
@@ -102,7 +102,7 @@ export default function CategoryMaster() {
   // put api =============>
   const handlePutData = () => {
     axios
-      .put(`http://34.93.135.33:8080/api/projectxCategory`, {
+      .put(`https://node-dev-server.onrender.com/api/projectxCategory`, {
         id: editData.category_id,
         category_name: editData.category_name,
         // brand_id: editData.brand_id,
@@ -125,7 +125,7 @@ export default function CategoryMaster() {
 
   // delete ======>
   // const handleDeleteClick = (id) => () => {
-  //   axios.delete(`http://34.93.135.33:8080/api/projectxCategory/${id}`).then((res) => {
+  //   axios.delete(`https://node-dev-server.onrender.com/api/projectxCategory/${id}`).then((res) => {
   //     getData();
   //     console.log("re data ", res.data);
   //   });
@@ -140,7 +140,7 @@ export default function CategoryMaster() {
     if (itemToDeleteId) {
       axios
         .delete(
-          `http://34.93.135.33:8080/api/projectxCategory/${itemToDeleteId}`
+          `https://node-dev-server.onrender.com/api/projectxCategory/${itemToDeleteId}`
         )
         .then(() => {
           getData();

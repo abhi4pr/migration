@@ -27,7 +27,7 @@ const PaymentMode = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("http://34.93.135.33:8080/api/", {
+    await axios.post("https://node-dev-server.onrender.com/api/", {
       display_sequence: displaySeq,
     });
 
@@ -37,12 +37,12 @@ const PaymentMode = () => {
 
   function getData() {
     axios
-      .post("http://34.93.135.33:8080/api/add_php_payment_acc_data_in_node")
+      .post("https://node-dev-server.onrender.com/api/add_php_payment_acc_data_in_node")
       .then((res) => {
         console.log("data save in local success");
       });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_php_payment_acc_data")
+      .get("https://node-dev-server.onrender.com/api/get_all_php_payment_acc_data")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

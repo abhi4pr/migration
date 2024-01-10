@@ -32,7 +32,7 @@ const AssetCategoryUpdate = () => {
 
   const getData = () => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_asset_category/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_asset_category/${id}`)
       .then((res) => {
         const response = res.data.data;
         setCategoryName(response.category_name);
@@ -48,7 +48,7 @@ const AssetCategoryUpdate = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "http://34.93.135.33:8080/api/update_asset_category",
+        "https://node-dev-server.onrender.com/api/update_asset_category",
         {
           category_id: id,
           category_name: categoryName,

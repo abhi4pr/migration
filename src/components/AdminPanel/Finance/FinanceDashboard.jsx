@@ -21,7 +21,7 @@ const FinanceDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.post("http://34.93.135.33:8080/api/",{
+      await axios.post("https://node-dev-server.onrender.com/api/",{
         display_sequence: displaySeq,
       });
 

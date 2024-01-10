@@ -20,7 +20,7 @@ const RoleMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://34.93.135.33:8080/api/add_role", {
+      await axios.post("https://node-dev-server.onrender.com/api/add_role", {
         created_by: loginUserId,
         role_name: roleName,
         remark: remark,

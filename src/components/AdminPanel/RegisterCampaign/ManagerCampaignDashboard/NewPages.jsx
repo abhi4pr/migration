@@ -3,14 +3,16 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import Loader from "../Loader/Loader";
 const NewPages = ({ pages }) => {
     const navigate=useNavigate()
   const [camp, setCamp] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const fetchCampaignData = async () => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/exe_campaign`
+        `https://node-dev-server.onrender.com/api/exe_campaign`
       );
       setCamp(response?.data?.data);
     } catch (error) {
@@ -20,13 +22,17 @@ const NewPages = ({ pages }) => {
 
   useEffect(() => {
     fetchCampaignData();
+    setTimeout(() => {
+      setIsLoading(false);
+  }, 500);
   }, []);
-
+  if (isLoading) {
+    return <Loader message="Manager DashBoard..." />;
+}
 
 const handleVerification = (param)=>{
     
     navigate(`/admin/manager-dashboard/${param.row._id}`)
-    // console.log(param.row,"hello");
 }
 
   const columns = [
@@ -72,14 +78,14 @@ const handleVerification = (param)=>{
     },
 
     {
-      field: "commits",
-      headerName: "Commits",
+      field: "action",
+      headerName: "Action",
       width: 150,
       renderCell: (params) => {
         return (
           <div>
-            <Button onClick={() => handleVerification(params)} variant="text">
-                Go
+            <Button onClick={() => handleVerification(params)} variant="text" color="secondary" title="Move to Manager Dashborad">
+                <ArrowCircleRightOutlinedIcon sx={{fontSize:"30px"}}/>
             </Button>
           </div>
         );

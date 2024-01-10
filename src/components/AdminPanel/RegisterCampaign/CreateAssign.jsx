@@ -19,6 +19,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import Loader from "./Loader/Loader";
 
 let options = [];
 const Follower_Count = [
@@ -46,55 +47,67 @@ const CreateAssign = () => {
   const [loading, setLoading] = useState(false);
   const [selectedFollower, setSelectedFollower] = useState(null)
   const [radioSelected, setRadioSelected] = useState('all')
+   const [isLoading, setIsLoading] = useState(false);
+
 
   const categoryAutocompleteRef = useRef();
-
   const getPhaseData = async () => {
     try {
-      let response = await axios.get(
-        `http://34.93.135.33:8080/api/campaignphase/singlephase/${id}`
+      setIsLoading(true)
+      const loadingTimeout = setTimeout(() => setIsLoading(false), 3000);
+  
+      //1.check if preAssignment Exist for particular phase
+      const isPreAss = await axios.post(
+        `http://192.168.29.110:3000/api/preassignment/phase`, {
+          phase_id: id
+        }
       );
-      const getPhaseAssignment=await axios.get(`http://34.93.135.33:8080/api/assignment/phase/${id}`)
-     
-
-      if (getPhaseAssignment?.data?.data.length > 0) {
-        const filter=getPhaseAssignment?.data?.data.filter((page)=>{
-          if(page.replacement_status=='pending' || page.replacement_status=="replacement" || page.replacement_status=="inactive"){
-            return page
-          }
+  
+      if (isPreAss?.data?.data?.length > 0) {
+        const assignment = await axios.get(`http://192.168.29.110:3000/api/assignment/phase/${id}`)
+        const filter = assignment?.data?.data.filter((page) => {
+          return page.replacement_status === 'pending' || page.replacement_status === "replacement" || page.replacement_status === "inactive";
         })
         setSinglePhaseData(filter);
         setFilteredPages(filter);
         setPayload(filter);
       } else {
-        const filter=response?.data?.data.pages.filter((page)=>{
-          if(page.replacement_status=='pending' || page.replacement_status=="replacement" || page.replacement_status=="inactive"){
-            return page
+        const createPreAssignment = await axios.post(
+          `http://192.168.29.110:3000/api/preassignment`, {
+            phase_id: id,
+            ass_by: "123"
           }
+        )
+  
+        const filter = createPreAssignment?.data?.ass.filter((page) => {
+          return page.replacement_status === 'pending' || page.replacement_status === "replacement" || page.replacement_status === "inactive";
         })
         setSinglePhaseData(filter);
         setFilteredPages(filter);
         setPayload(filter);
       }
-
-
-      setcampaignId(response?.data?.data?.pages[0].campaignId);
-      setCommit(response?.data?.data?.commitment);
+  
+      const pageData = await axios.get(
+        `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
+      );
+      setAllPageData(pageData.data.body);
+  
+      clearTimeout(loadingTimeout);
+      setIsLoading(false);
+  
     } catch (error) {
       console.error("Error fetching phase data:", error);
+      setIsLoading(false);
     }
-    const pageData = await axios.get(
-      `https://purchase.creativefuel.io/webservices/RestController.php?view=inventoryDataList`
-    );
-    setAllPageData(pageData.data.body);
   };
+  
 
   //getting all experties information 
 
   const ExpertiseDa = async () => {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/expertise"
+        "https://node-dev-server.onrender.com/api/expertise"
       );
       const res = response.data.data;
       setExpertiseData(res);
@@ -106,7 +119,7 @@ const CreateAssign = () => {
   //submiting the assignment
   const handleSubmitAssign = async () => {
     try {
-      const createAssignment = await axios.post(`http://34.93.135.33:8080/api/assignment/bulk`, { pages: payload });
+      const createAssignment = await axios.post(`https://node-dev-server.onrender.com/api/assignment/bulk`, { pages: payload });
       alert("assignment created successfully")
       // navigate("/admin/excusionCampaign");
     } catch (error) {
@@ -114,15 +127,24 @@ const CreateAssign = () => {
     }
   };
 
-  useEffect(() => {
-   setFilteredPages(payload)
-   setRadioSelected('all')
-  }, [externalExpert]);
+  // useEffect(() => {
+  //  setFilteredPages(payload)
+  //  if(radioSelected=='rejected'){
+
+  //    setRadioSelected('rejected')
+  //  }
+  //  if(radioSelected=='pending'){
+
+  //    setRadioSelected('pending')
+  //  }
+  // }, [externalExpert]);
 
   useEffect(() => {
     getPhaseData();
     ExpertiseDa();
   }, []);
+
+  //this will set the category oprions
 
   const categorySet = () => {
     singlePhaseData?.forEach((data) => {
@@ -131,6 +153,7 @@ const CreateAssign = () => {
       }
     });
   };
+//once single phase 
   useEffect(() => {
     if (singlePhaseData.length > 0) {
       categorySet();
@@ -235,7 +258,14 @@ const CreateAssign = () => {
     const radioData = payload?.filter(page => {
       if (radioSelected == 'all') {
         return page
-      } else {
+      }else if(radioSelected == 'rejected'){
+        if(page.preAssignedTo.length ==0 && page.rejected_by.length>0)  return page
+       
+      }else if(radioSelected=='unassigned'){
+        return page.preAssignedTo.length ==0 && page.rejected_by.length==0
+      }else if(radioSelected=='pending'){
+        return page.ass_status == 'unassigned'
+      }else{
 
         return page.ass_status == radioSelected
       }
@@ -325,7 +355,14 @@ const CreateAssign = () => {
     const radioData = payload?.filter(page => {
       if (radioSelected == 'all') {
         return page
-      } else {
+      }else if(radioSelected == 'rejected'){
+        if(page.preAssignedTo.length ==0 && page.rejected_by.length>0)  return page
+       
+      }else if(radioSelected=='unassigned'){
+        return page.preAssignedTo.length ==0 && page.rejected_by.length==0
+      }else if(radioSelected=='pending'){
+        return page.ass_status == 'unassigned'
+      }else{
 
         return page.ass_status == radioSelected
       }
@@ -343,11 +380,11 @@ const CreateAssign = () => {
 
 
   const handleExternalExpertChange = (event, newValue) => {
-    
+    // console.log(newValue)
     setLoading(true)
     const data=payload.map(page=>{
       if(selectedRows.includes(page.p_id)){
-        return {...page,ass_to:newValue.value,exp_name:newValue.label,ass_status:'assigned',
+        return {...page,ass_to:newValue.all._id,exp_name:newValue.label,
         expert:newValue?{label:newValue.label,value:newValue.value}:null
       }
     }else return page
@@ -367,7 +404,7 @@ const CreateAssign = () => {
     console.log(event, newValue, params);
     const data = payload.map(page => {
       if (page.p_id == params.row.p_id) {
-        return { ...page, ass_to: newValue.all.exp_id, exp_name: newValue.label, ass_status: newValue == null ? 'unassigned' : 'assigned' }
+        return { ...page, ass_to: newValue.all._id, exp_name: newValue.label, ass_status: newValue == null ? 'unassigned' : 'assigned' }
       } else return page
     })
 
@@ -402,7 +439,15 @@ const CreateAssign = () => {
 
 
         return page
-      } else {
+      } else if(e.target.value == 'rejected'){
+        if(page.preAssignedTo.length ==0 && page.rejected_by.length>0)  return page
+       
+      }else if(e.target.value=='unassigned'){
+        return page.preAssignedTo.length ==0 && page.rejected_by.length==0
+      }else if(e.target.value=='pending'){
+        return page.ass_status == 'unassigned'
+      }else{
+        console.log("first")
 
         return page.ass_status == e.target.value
       }
@@ -439,12 +484,46 @@ const CreateAssign = () => {
       width: 150,
       editable: true,
     },
+ 
     {
-      field: "page_link",
-      headerName: "Page Link",
+      field: "postPerPage",
+      headerName: "Post / Page",
       width: 150,
       editable: true,
     },
+  
+    {
+      field: "ass_to",
+      headerName: "assigned_to",
+      width: 150,
+      editable: true,
+      renderCell: (params) => {
+        
+        return <div>{params.row?.ass_to?.exp_name ? params.row?.ass_to?.exp_name :"unassigned"}</div>;
+      },
+    },
+
+    radioSelected!="rejected" &&
+    {
+      field: "preAssignedTo",
+      headerName: "preAssignedTo",
+      renderCell: (params) => (
+        <Autocomplete
+          fullWidth={true}
+          disablePortal
+          value={params.row.preAssignedTo[0]} // Set the initial value
+          getOptionDisabled={(option) => option !== params.row.preAssignedTo[0]}
+          renderInput={(paramss) => (
+            <TextField {...paramss} label={params.row.preAssignedTo[0]} />
+          )}
+          options={params.row.preAssignedTo.map((user) => ({
+            label: user,
+          }))}
+        />
+      ),
+      width: 150,
+    },
+    (radioSelected=="rejected" || radioSelected=="unassigned")  &&
     {
       field: "expert",
       headerName: "Experts",
@@ -474,20 +553,33 @@ const CreateAssign = () => {
       },
     },
     {
-      field: "postPerPage",
-      headerName: "Post / Page",
+      field: "rejected_by",
+      headerName: "rejected by",
+      renderCell: (params) => (
+        <Autocomplete
+          fullWidth={true}
+          disablePortal
+          value={params.row.rejected_by[0]} // Set the initial value
+          getOptionDisabled={(option) => option !== params.row.rejected_by[0]}
+          renderInput={(paramss) => (
+            <TextField {...paramss} label={params.row.rejected_by[0]} />
+          )}
+          options={params.row.rejected_by.map((user) => ({
+            label: user,
+          }))}
+        />
+      ),
       width: 150,
-      editable: true,
     },
-    {
-      field: "postRemaining",
-      headerName: "Post Remain",
-      width: 150,
-      editable: true,
-    },
+    
+  
   ];
-
-  return (
+     
+  if (isLoading) {
+    return <Loader  message="Auto Assignment in Progress..." />; 
+  }
+  
+ return (
     <>
       <div className="form-heading">
         <div className="form_heading_title">
@@ -558,8 +650,10 @@ const CreateAssign = () => {
           onChange={handleRadioChange}
         >
           <FormControlLabel value="all" control={<Radio />} label="all" />
+          <FormControlLabel value="pending" control={<Radio />} label="pending" />
           <FormControlLabel value="unassigned" control={<Radio />} label="unassigned" />
           <FormControlLabel value="assigned" control={<Radio />} label="assigned" />
+          <FormControlLabel value="rejected" control={<Radio />} label="rejected" />
 
         </RadioGroup>
       </FormControl>
@@ -639,7 +733,7 @@ const CreateAssign = () => {
       />
 
     </>
-  );
+  )
 };
 
 export default CreateAssign;

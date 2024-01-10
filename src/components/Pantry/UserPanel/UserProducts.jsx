@@ -29,10 +29,10 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   const [oldUserProduct, setOldUserProduct] = useState([]);
 
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_products").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_products").then((res) => {
       setProducts(res.data);
     });
-    axios.get("http://34.93.135.33:8080/api/get_all_rooms").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_rooms").then((res) => {
       setOffice(res.data.data);
     });
   }, []);
@@ -40,7 +40,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   // Single User Product Data
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_orderreqshistory/${userId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_orderreqshistory/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data);
       });
@@ -80,19 +80,19 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/get_user_pre_sitting", {
+      .post("https://node-dev-server.onrender.com/api/get_user_pre_sitting", {
         user_id: userId,
       })
       .then((res) => setSittingHistory(res.data));
 
     axios
-      .get("http://34.93.135.33:8080/api/get_all_sittings")
+      .get("https://node-dev-server.onrender.com/api/get_all_sittings")
       .then((res) => setSittingData(res.data.data));
   }, []);
   // new sitting api ---------------------------------------------
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_sitting/${sittingId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_sitting/${sittingId}`)
       .then((res) => {
         setSittingAreaData(res.data);
       });
@@ -101,7 +101,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   useEffect(() => {
     if (selectedSitting) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_single_sitting/${sittingId}`)
+        .get(`https://node-dev-server.onrender.com/api/get_single_sitting/${sittingId}`)
         .then((res) => {
           // handleSitting(res.data.sitting_area);
           //  104 sitting problem ke liye comment kiya

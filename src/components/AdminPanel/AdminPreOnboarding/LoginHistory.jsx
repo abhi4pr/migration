@@ -38,7 +38,7 @@ const LoginHistory = () => {
 
   async function getData() {
     await axios
-      .get("http://34.93.135.33:8080/api/get_all_login_history")
+      .get("https://node-dev-server.onrender.com/api/get_all_login_history")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

@@ -64,7 +64,7 @@ export default function RegisteredCampaign() {
 
   const handleDeleteRowConfirm = () => {
     axios
-      .delete(`http://34.93.135.33:8080/api/register_campaign/${deleteRowId}`)
+      .delete(`https://node-dev-server.onrender.com/api/register_campaign/${deleteRowId}`)
       .then((res) => {
         console.log(res);
         setReload(!reload);
@@ -217,14 +217,14 @@ export default function RegisteredCampaign() {
 
         try {
           const response = await axios
-            .post("http://34.93.135.33:8080/api/contentSectionReg", formData, {
+            .post("https://node-dev-server.onrender.com/api/contentSectionReg", formData, {
               headers: {
                 "Content-Type": "multipart/form-data", // Important for file uploads
               },
             })
             .then((response) => {
               axios
-                .put("http://34.93.135.33:8080/api/register_campaign", {
+                .put("https://node-dev-server.onrender.com/api/register_campaign", {
                   register_campaign_id: campaignId,
                   status: 1,
                 })
@@ -292,7 +292,7 @@ export default function RegisteredCampaign() {
   };
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/register_campaign")
+      .get("https://node-dev-server.onrender.com/api/register_campaign")
       .then((response) => {
         // console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -318,7 +318,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("https://node-dev-server.onrender.com/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -328,19 +328,19 @@ export default function RegisteredCampaign() {
         console.log(err);
       });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_commitments")
+      .get("https://node-dev-server.onrender.com/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<--------");
 
         setCommits(data);
       });
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("https://node-dev-server.onrender.com/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/exe_campaign")
+      .get("https://node-dev-server.onrender.com/api/exe_campaign")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<----data");
@@ -352,7 +352,7 @@ export default function RegisteredCampaign() {
   }, []);
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/register_campaign")
+      .get("https://node-dev-server.onrender.com/api/register_campaign")
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -378,7 +378,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("https://node-dev-server.onrender.com/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -489,88 +489,21 @@ export default function RegisteredCampaign() {
     {
       field: "plan_creation",
       headerName: "Plan Creation",
-      renderCell: (params) => {
-        const rowId = params.row._id;
-        const [planData, setPlanData] = useState([]);
-        let newdata;
-        useEffect(() => {
-          const fetchData = async () => {
-            try {
-              const newData = await axios.get(
-                `http://34.93.135.33:8080/api/campaignplan/${rowId}`
-              );
-              setPlanData(newData);
-            } catch (error) {
-              console.error("Error fetching plan data:", error);
-            }
-          };
-
-          fetchData();
-        }, [rowId]);
-        // console.log(planData.data.data)
-        return (
-          <div className="d-flex text-center align-item-center justify-content-center">
-            {!planData?.data?.data.length > 0 ? (
-              <Button type="button" onClick={() => handlePlan(params.row)}>
-                <SendTwoToneIcon />
-              </Button>
-            ) : (
-              <Button
-                variant="outlined"
-                onClick={() => handleShowPlan(params.row)}
-              >
-                Show plan
-              </Button>
-            )}
-          </div>
-        );
-      },
+      renderCell: (params) => (
+        <PlanCreationComponent
+          {...params}
+          handlePlan={handlePlan}
+          handleShowPlan={handleShowPlan}
+        />
+      ),
       width: 200,
     },
     {
       field: "phase_creation",
-      headerName: "phase creation",
-      renderCell: (params) => {
-        const rowId = params.row._id;
-        const [planData, setPlanData] = useState([]);
-
-        useEffect(() => {
-          const fetchData = async () => {
-            try {
-              const newData = await axios.get(
-                `http://34.93.135.33:8080/api/campaignplan/${rowId}`
-              );
-              setPlanData(newData);
-            } catch (error) {
-              console.error("Error fetching plan data:", error);
-            }
-          };
-
-          fetchData();
-        }, [rowId]);
-        return (
-          <div className="d-flex text-center align-item-center justify-content-center">
-            {/* <Link to={`/admin/planCreation`}> */}
-            {planData?.data?.data.length > 0 ? (
-              <Button type="button" onClick={() => handlePhase(params.row)}>
-                <SendTwoToneIcon />
-              </Button>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <parseInt style={{ width: "5em", color: "red" }}>N/A</parseInt>
-              </div>
-            )}
-
-            {/* </Link> */}
-          </div>
-        );
-      },
+      headerName: "Phase Creation",
+      renderCell: (params) => (
+        <PhaseCreationComponent {...params} handlePhase={handlePhase} />
+      ),
       width: 200,
     },
     {
@@ -866,11 +799,6 @@ export default function RegisteredCampaign() {
                                         index
                                       );
                                   }}
-                                  // options={contentTypeList.filter(
-                                  //   (e) => !fields.map((e) => e.selectValue).includes(e)
-                                  //     ,console.log(fields.map((e) => e.selectValue)),
-
-                                  // )}
                                   options={contentTypeList
                                     .filter(
                                       (option) =>
@@ -910,11 +838,7 @@ export default function RegisteredCampaign() {
                                 onChange={(event) =>
                                   handleUploadLinkChange(event, index)
                                 }
-                                // name="value"
-                                // error={!!errors.fields?.textValue}
-                                // helperText={errors.fields?.textValue}
                               />
-                              {/* <Typography variant="h6">File Upload Example</Typography> */}
                               <OutlinedInput
                                 // variant="outlined"
                                 type="file"
@@ -928,29 +852,6 @@ export default function RegisteredCampaign() {
                                   handleFileChange(event, index)
                                 }
                               />
-                              {/* <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleUpload}
-                      >
-                        Upload
-                      </Button> */}
-
-                              {/* <StyledTextarea
-                        required={true}
-                        aria-label="minimum height"
-                        minRows={1.5}
-                        sx={{
-                          marginRight: "2%",
-                          mt: "-2px",
-                          pb: "10px",
-                          pt: "20px",
-                          ml: "10px",
-                          width: "80%",
-                        }}
-                        placeholder="Brief *"
-                        onChange={(event) => handleBriefChange(event, index)}
-                      /> */}
                             </div>
                             <TextField
                               label="Brief"
@@ -1055,3 +956,76 @@ export default function RegisteredCampaign() {
     </div>
   );
 }
+
+const PlanCreationComponent = ({ row, handlePlan, handleShowPlan }) => {
+  const [planData, setPlanData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const newData = await axios.get(
+          `https://node-dev-server.onrender.com/api/campaignplan/${row._id}`
+        );
+        setPlanData(newData);
+      } catch (error) {
+        console.error("Error fetching plan data:", error);
+      }
+    };
+
+    fetchData();
+  }, [row._id]);
+
+  return (
+    <div className="d-flex text-center align-item-center justify-content-center">
+      {!planData?.data?.data.length > 0 ? (
+        <Button type="button" onClick={() => handlePlan(row)}>
+          <SendTwoToneIcon />
+        </Button>
+      ) : (
+        <Button variant="outlined" onClick={() => handleShowPlan(row)}>
+          Show plan
+        </Button>
+      )}
+    </div>
+  );
+};
+
+const PhaseCreationComponent = ({ row, handlePhase }) => {
+  const [planData, setPlanData] = useState([]);
+  const rowId = row._id;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const newData = await axios.get(
+          `https://node-dev-server.onrender.com/api/campaignplan/${rowId}`
+        );
+        setPlanData(newData);
+      } catch (error) {
+        console.error("Error fetching plan data:", error);
+      }
+    };
+
+    fetchData();
+  }, [rowId]);
+
+  return (
+    <div className="d-flex text-center align-item-center justify-content-center">
+      {planData?.data?.data.length > 0 ? (
+        <Button type="button" onClick={() => handlePhase(row)}>
+          <SendTwoToneIcon />
+        </Button>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span style={{ width: "5em", color: "red" }}>N/A</span>
+        </div>
+      )}
+    </div>
+  );
+};

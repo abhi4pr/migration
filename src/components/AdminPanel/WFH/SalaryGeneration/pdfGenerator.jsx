@@ -19,7 +19,7 @@ export const generatePDF = async (rowData) => {
   }
 
   console.log(rowData?.digital_signature_image, "image herere");
-  const signatureImageUrl = `http://34.93.135.33:8080/uploads/${rowData?.digital_signature_image}`;
+  const signatureImageUrl = `https://node-dev-server.onrender.com/uploads/${rowData?.digital_signature_image}`;
 
   const dataWithImage = {
     ...rowData,

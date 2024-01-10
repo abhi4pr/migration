@@ -212,7 +212,7 @@ export default function Assigned() {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/contentSectionReg")
+      .get("https://node-dev-server.onrender.com/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -223,7 +223,7 @@ export default function Assigned() {
       });
 
     axios
-      .get("http://34.93.135.33:8080/api/get_brands")
+      .get("https://node-dev-server.onrender.com/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -232,17 +232,17 @@ export default function Assigned() {
         console.log(err);
       });
 
-    axios.get("http://34.93.135.33:8080/api/content").then((response) => {
+    axios.get("https://node-dev-server.onrender.com/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_commitments")
+      .get("https://node-dev-server.onrender.com/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
 
         setCommits(data);
       });
-    axios.get("http://34.93.135.33:8080/api/get_all_users").then((response) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((response) => {
       const data = response.data.data.filter((e) => e.dept_id == 13);
       console.log(data);
       setAssignToList(data);

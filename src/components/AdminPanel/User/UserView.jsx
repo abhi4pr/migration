@@ -57,7 +57,7 @@ const UserView = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         setFetchedAlreadyData(res.data);
@@ -153,7 +153,7 @@ const UserView = () => {
     formData.append("onboard_status", fetchedAlreadyData.onboard_status);
 
     try {
-      await axios.put("http://34.93.135.33:8080/api/update_usernew", fromData, {
+      await axios.put("https://node-dev-server.onrender.com/api/update_usernew", fromData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

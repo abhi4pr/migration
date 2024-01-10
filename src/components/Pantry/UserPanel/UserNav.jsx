@@ -21,7 +21,7 @@ const UserNav = () => {
   const [loginUserData, setLoginUserData] = useState([]);
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/login_user_data", {
+      .post("https://node-dev-server.onrender.com/api/login_user_data", {
         user_id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));

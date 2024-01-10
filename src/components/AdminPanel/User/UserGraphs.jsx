@@ -12,7 +12,7 @@ const UserGraphs = () => {
 
   useEffect(() => {
     axios
-      .post("http://34.93.135.33:8080/api/get_user_graph_data",{
+      .post("https://node-dev-server.onrender.com/api/get_user_graph_data",{
         caseType:"gender"
       })
       .then((res) => {
@@ -24,7 +24,7 @@ const UserGraphs = () => {
     const newFilter = e.target ? e.target.value : e;
     setSelectedFilter(newFilter);
     await axios
-      .post("http://34.93.135.33:8080/api/get_user_graph_data",{
+      .post("https://node-dev-server.onrender.com/api/get_user_graph_data",{
         caseType:e.target.value
       })
       .then((res) => {

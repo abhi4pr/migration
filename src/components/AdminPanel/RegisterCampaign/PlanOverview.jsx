@@ -18,7 +18,7 @@ const PlanOverview = () => {
   console.log(selectData);
   const getSelectPage = async () => {
     const newPlan = await axios.get(
-      `http://34.93.135.33:8080/api/campaignplan/${id}`
+      `https://node-dev-server.onrender.com/api/campaignplan/${id}`
     );
 
     const x=newPlan.data.data.filter(page=>{

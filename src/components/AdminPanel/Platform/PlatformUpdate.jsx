@@ -23,7 +23,7 @@ const PlatformUpdate = () => {
     setError("");
 
     axios
-      .put(`http://34.93.135.33:8080/api/platformupdate/`, {
+      .put(`https://node-dev-server.onrender.com/api/platformupdate/`, {
         id: Number(id),
         name: platformName,
         remark: remark,
@@ -43,7 +43,7 @@ const PlatformUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/dataofplatform/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/dataofplatform/${id}`).then((res) => {
       const fetchedData = res.data[0];
       const {
         name,

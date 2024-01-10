@@ -53,21 +53,21 @@ export default function CreaterDashboard() {
 
   console.log(compData, "------------compData");
   const getBrand = () => {
-    axios.get("http://34.93.135.33:8080/api/get_brands").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_brands").then((res) => {
       const data = res.data.data;
       setBrandName(data);
       console.log(data, "this is by saimyual");
     });
   };
   function getContentType() {
-    axios.get("http://34.93.135.33:8080/api/content").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/content").then((res) => {
       const data = res.data.data;
       setContent(data);
       console.log(data, "this is by content");
     });
   }
   const getData = () => {
-    axios.get("http://34.93.135.33:8080/api/contentSectionReg").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/contentSectionReg").then((res) => {
       const pending = res.data.data.filter(
         (e) => e.status == "11" && e.stage == 2
       );
@@ -154,7 +154,7 @@ export default function CreaterDashboard() {
   const handleActive = (e) => {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
         content_section_id: contentSectionId,
         creator_dt: startData.selectedDate,
         creator_remark: startData.remark,
@@ -174,7 +174,7 @@ export default function CreaterDashboard() {
   };
   const handleActiveReject = () => {
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
         content_section_id: contentSectionId,
         creator_dt: startData.selectedDate,
         creator_remark: text,
@@ -203,7 +203,7 @@ export default function CreaterDashboard() {
 
       try {
         const response = await axios.put(
-          "http://34.93.135.33:8080/api/contentSectionReg",
+          "https://node-dev-server.onrender.com/api/contentSectionReg",
           formData,
           {
             headers: {
@@ -241,7 +241,7 @@ export default function CreaterDashboard() {
   // const handleSubmission = (e) => {
   //   e.preventDefault()
   //   axios
-  //     .put("http://34.93.135.33:8080/api/contentSectionReg", {
+  //     .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
   //       content_section_id: contentSectionId,
   //       creator_dt: startData.selectedDate,
   //       stage: 3,
@@ -266,7 +266,7 @@ export default function CreaterDashboard() {
   const handleExtend = (e) => {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
         content_section_id: contentSectionId,
         creator_dt: extendDeliveryDate,
         creator_remark: text,
@@ -289,7 +289,7 @@ export default function CreaterDashboard() {
   const handleTerminate = (e) => {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/contentSectionReg", {
+      .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
         content_section_id: contentSectionId,
         creator_remark: text,
         stage: 2,

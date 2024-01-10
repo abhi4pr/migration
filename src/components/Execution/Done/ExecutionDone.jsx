@@ -39,7 +39,7 @@ export default function ExecutionDone() {
       if (userID && contextData == false) {
         axios
           .get(
-            `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+            `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {
@@ -52,7 +52,7 @@ export default function ExecutionDone() {
       formData.append("loggedin_user_id", 36);
       console.log(formData);
       const response = axios
-        .get("http://34.93.135.33:8080/api/get_exe_sum", {
+        .get("https://node-dev-server.onrender.com/api/get_exe_sum", {
           loggedin_user_id: 52,
         })
         .then((res) => {

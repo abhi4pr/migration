@@ -19,14 +19,14 @@ const ObjectMaster = () => {
   const userId = decodedToken.id;
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => setDeptData(res.data));
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://34.93.135.33:8080/api/add_obj", {
+      .post("https://node-dev-server.onrender.com/api/add_obj", {
         obj_name: objectName,
         soft_name: softwareName,
         dept_id: selectedDepartment,

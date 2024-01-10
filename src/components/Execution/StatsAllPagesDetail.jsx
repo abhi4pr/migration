@@ -24,7 +24,7 @@ export default function StatsAllPagesDetail() {
   const [loading, setLoading] = useState(false);
   const apiCall = () => {
     axios
-      .get("http://34.93.135.33:8080/api/get_distinct_count_history")
+      .get("https://node-dev-server.onrender.com/api/get_distinct_count_history")
       .then((res) => {
         console.log(res.data);
         setAllPagesDetail(res.data.data);
@@ -37,7 +37,7 @@ export default function StatsAllPagesDetail() {
 setLoading(true);
     axios
       .get(
-        "http://34.93.135.33:8080/api/get_all_purchase_data",
+        "https://node-dev-server.onrender.com/api/get_all_purchase_data",
       ).then((res) => {
         setLoading(false);
         setPhpData(res.data.result);
@@ -48,7 +48,7 @@ setLoading(true);
        
       });
     apiCall();
-      axios.get("http://34.93.135.33:8080/api/get_all_users").then((res) => {
+      axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
       setAllUsers(res.data.data);
     });
   }, []);

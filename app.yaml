@@ -1,0 +1,12 @@
+runtime: nodejs16
+
+handlers:
+  - url: /(.*\.(json|ico|js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|xml|yaml))$
+    static_files: build/\1
+    upload: build/.*\.(json|ico|js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|map|xml|yaml)$
+    expiration: "1h"
+
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html
+    expiration: "1h"

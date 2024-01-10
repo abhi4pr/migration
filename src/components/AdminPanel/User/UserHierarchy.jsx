@@ -10,7 +10,7 @@ const UserHierarchy = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("https://node-dev-server.onrender.com/api/get_all_users")
       .then((res) => {
         setData(res.data.data);
         setAllUserData(res.data.data);
@@ -22,7 +22,7 @@ const UserHierarchy = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
@@ -33,7 +33,7 @@ const UserHierarchy = () => {
       setData(allUserData);
     } else {
       axios
-        .post("http://34.93.135.33:8080/api/l1l2l3usersbydept", {
+        .post("https://node-dev-server.onrender.com/api/l1l2l3usersbydept", {
           dept_id: selectedDepartment,
         })
         .then((res) => {

@@ -26,7 +26,7 @@ const ContentApprover = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/content_upload/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/content_upload/${id}`).then((res) => {
       const fetchedData = res.data[0];
       setPageName(fetchedData.pageName);
       setContentName(fetchedData.contentName);
@@ -38,7 +38,7 @@ const ContentApprover = () => {
     });
 
     axios
-      .get("http://34.93.135.33:8080/api/alldataofIptype")
+      .get("https://node-dev-server.onrender.com/api/alldataofIptype")
       .then((res) => setIpTypeData(res.data))
   }, []);
   
@@ -56,7 +56,7 @@ const ContentApprover = () => {
     formData.append("status", status);
     formData.append("caption", caption);
 
-    await axios.put("http://34.93.135.33:8080/api/content_upload", formData, {
+    await axios.put("https://node-dev-server.onrender.com/api/content_upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }

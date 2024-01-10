@@ -21,7 +21,7 @@ const ManagerDashboard = () => {
   const Assigndata = async () => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/assignment/campaign/${Cid}`
+        `https://node-dev-server.onrender.com/api/assignment/campaign/${Cid}`
       );
 
       const assigned = response.data?.data?.filter(
@@ -87,7 +87,7 @@ const ManagerDashboard = () => {
     <>
       <FormContainer
         submitButton={false}
-        mainTitle="Manager Dashboard"
+        mainTitle=" Campaign Progress Tab "
         accordionButtons={accordionButtons}
         activeAccordionIndex={activeAccordionIndex}
         onAccordionButtonClick={handleAccordionButtonClick}

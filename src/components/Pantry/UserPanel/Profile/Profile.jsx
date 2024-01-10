@@ -18,7 +18,7 @@ const Profile = () => {
 
   function handleGetData() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${loginUserId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_user/${loginUserId}`)
       .then((res) => {
         setUserData(res.data);
         // console.log(res.data, "user data");
@@ -27,7 +27,7 @@ const Profile = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`http://34.93.135.33:8080/api/get_user_job_responsibility`, {
+      .post(`https://node-dev-server.onrender.com/api/get_user_job_responsibility`, {
         user_id: Number(loginUserId),
       })
       .then((res) => {
@@ -45,8 +45,8 @@ const Profile = () => {
     formData.append("id", loginUserId);
     formData.append("image", profileUpdate);
     axios
-      // .put("http://34.93.135.33:8080/api/update_user", formData, {
-      .put("http://34.93.135.33:8080/api/userimageupdate", formData, {
+      // .put("https://node-dev-server.onrender.com/api/update_user", formData, {
+      .put("https://node-dev-server.onrender.com/api/userimageupdate", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

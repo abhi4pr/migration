@@ -20,12 +20,10 @@ const AssetSubCategoryMaster = () => {
   const [inWarranty, setInWarranty] = useState("");
   const warranty = ["Yes", "No"];
 
-  console.log(categoryDataContext, "finaly");
-
   // const [categoryName, setCategoryName] = useState([]);
   // useEffect(() => {
   //   axios
-  //     .get("http://34.93.135.33:8080/api/get_all_asset_category")
+  //     .get("https://node-dev-server.onrender.com/api/get_all_asset_category")
   //     .then((res) => {
   //       setCategoryName(res.data);
   //     })
@@ -38,7 +36,7 @@ const AssetSubCategoryMaster = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://34.93.135.33:8080/api/add_asset_sub_category",
+        "https://node-dev-server.onrender.com/api/add_asset_sub_category",
         {
           sub_category_name: subCategoryName,
           category_id: selectedCat,

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
 import WhatsappAPI from "../WhatsappAPI/WhatsappAPI";
 
-const url = "http://34.93.135.33:8080/api/";
+const url = "https://node-dev-server.onrender.com/api/";
 
 const ExtendJoining = ({
   gettingData,

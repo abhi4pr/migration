@@ -15,10 +15,10 @@ function LeadApp({ children }) {
     (async () => {
       try {
         const leadres = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_leads"
+          "https://node-dev-server.onrender.com/api/get_all_leads"
         );
         const userres = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_users"
+          "https://node-dev-server.onrender.com/api/get_all_users"
         );
         ftrse = [];
         leadres.data.map((ele) => {

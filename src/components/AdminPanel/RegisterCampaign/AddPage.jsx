@@ -42,7 +42,7 @@ export default function AddPage({ setXlxsData }) {
   useEffect(() => {
     // console.log( "gridRows");
     axios
-      .get("http://34.93.135.33:8080/api/getallprojectx")
+      .get("https://node-dev-server.onrender.com/api/getallprojectx")
       .then((response) => {
         const data = response.data;
         // console.log(data,"<--------");

@@ -91,7 +91,7 @@ const IpGraph = () => {
     setActiveButton("Year");
     const currentYear = new Date().getFullYear()?.toString();
     axios
-      .post(`http://34.93.135.33:8080/api/dataforgraph`, {
+      .post(`https://node-dev-server.onrender.com/api/dataforgraph`, {
         dateFormat: currentYear, // 2023
         ip_id: id,
       })
@@ -163,7 +163,7 @@ const IpGraph = () => {
     const currentYearMonth = `${year}-${month}`;
 
     axios
-      .post(`http://34.93.135.33:8080/api/dataforgraph`, {
+      .post(`https://node-dev-server.onrender.com/api/dataforgraph`, {
         dateFormat: currentYearMonth, // 2023-08
         ip_id: id,
       })
@@ -181,7 +181,7 @@ const IpGraph = () => {
     const year = currentDate.getFullYear();
 
     axios
-      .post(`http://34.93.135.33:8080/api/dataforgraph`, {
+      .post(`https://node-dev-server.onrender.com/api/dataforgraph`, {
         start_date: `${year}-${firstMonth}-${"01"}`,
         end_date: `${year}-${secondMonth}-${"30"}`,
         ip_id: id,
@@ -200,7 +200,7 @@ const IpGraph = () => {
 
   const saveStats = async (e) => {
     e.preventDefault();
-    axios.post(`http://34.93.135.33:8080/api/ip_stats_post`, {
+    axios.post(`https://node-dev-server.onrender.com/api/ip_stats_post`, {
       ip_id: id,
       story_view: storyView,
       month_reach: monthReach,
@@ -222,7 +222,7 @@ const IpGraph = () => {
 
   const saveIpPageResponsiblity = async (e) => {
     e.preventDefault();
-    axios.put(`http://34.93.135.33:8080/api/ipregiupdatenew`, {
+    axios.put(`https://node-dev-server.onrender.com/api/ipregiupdatenew`, {
       id: id,
       user_id: ipAllocateUser,
       user_response: ipAllocatePage?.map((option) => option.value).join(),
@@ -232,7 +232,7 @@ const IpGraph = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_users")
+      .get("https://node-dev-server.onrender.com/api/get_all_users")
       .then((res) => setUserData(res.data.data));
   }, []);
 
@@ -247,7 +247,7 @@ const IpGraph = () => {
       year: currentYear,
     };
 
-    axios.post("http://34.93.135.33:8080/api/show_stats", payload).then((res) => {
+    axios.post("https://node-dev-server.onrender.com/api/show_stats", payload).then((res) => {
       setStatsData(res.data.data);
 
       $("#donutChart").remove();
@@ -276,7 +276,7 @@ const IpGraph = () => {
       year: statsYear,
     };
 
-    axios.post("http://34.93.135.33:8080/api/show_stats", payload).then((res) => {
+    axios.post("https://node-dev-server.onrender.com/api/show_stats", payload).then((res) => {
       setStatsData(res.data.data);
 
       $("#donutChart").remove();

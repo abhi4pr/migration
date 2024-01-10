@@ -22,9 +22,9 @@ const LogoCategoryMaster = () => {
     e.preventDefault();
     setError("");
     await axios
-      .post("http://34.93.135.33:8080/api/logocat", {
+      .post("https://node-dev-server.onrender.com/api/add_logo_category", {
         cat_name: categoryName,
-        remarks: remark,
+        remark: remark,
         created_by: loginUserID,
       })
       
@@ -42,8 +42,8 @@ const LogoCategoryMaster = () => {
   return (
     <>
       <FormContainer
-        mainTitle="Logo Category"
-        title="Logo Category Master"
+        mainTitle="Data Category"
+        title="Data Category Master"
         handleSubmit={handleSubmit}
       >
         <FieldContainer

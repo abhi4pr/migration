@@ -7,6 +7,7 @@ const FieldContainer = ({
   cols,
   value,
   onChange,
+  onBlur,
   onKeyUp,
   required = true,
   disabled = false,
@@ -18,6 +19,7 @@ const FieldContainer = ({
   max,
   name,
   min,
+  astric=false
 }) => {
   return (
     <div
@@ -28,7 +30,7 @@ const FieldContainer = ({
       }
     >
       <div className="form-group">
-        <label className="form-label">{label}</label>
+        <label className="form-label">{label} {astric===true && <sup style={{ color: "red" }}>*</sup>}</label>
         <Tag
           step={step}
           className={Tag == "select" ? "form-select" : "form-control"}
@@ -46,6 +48,7 @@ const FieldContainer = ({
           max={max}
           name={name}
           min={min}
+          onBlur={onBlur}
         >
           {children}
         </Tag>

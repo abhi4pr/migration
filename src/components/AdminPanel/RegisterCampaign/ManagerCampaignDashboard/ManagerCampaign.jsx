@@ -11,7 +11,7 @@ const ManagerCampaign = () => {
     const Assigndata = async () => {
       try {
         const response = await axios.get(
-          `http://34.93.135.33:8080/api/register_campaign`
+          `https://node-dev-server.onrender.com/api/register_campaign`
         );
         console.log(response?.data?.data,"new camp data");
         setNewPages(response?.data?.data)
@@ -36,7 +36,7 @@ const ManagerCampaign = () => {
     <>
       <FormContainer
         submitButton={false}
-        mainTitle="Manager All Campaign"
+        mainTitle="Manager Dashboard"
         accordionButtons={accordionButtons}
         activeAccordionIndex={activeAccordionIndex}
         onAccordionButtonClick={handleAccordionButtonClick}

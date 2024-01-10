@@ -18,6 +18,7 @@ import axios from "axios";
 
 export default function BulkUpload({ setUpload }) {
   const { datalead } = useContext(UserContext);
+  console.log(datalead);
   const [open, setOpen] = useState(false);
   const [bulklead, setBulklead] = useState([]);
   const theme = useTheme();
@@ -94,7 +95,7 @@ export default function BulkUpload({ setUpload }) {
     const uniqueData = [];
     for (let i = 0; i < bulklead.length; i++) {
       try {
-        axios.post("http://34.93.135.33:8080/api/leadmastpost", {
+        axios.post("https://node-dev-server.onrender.com/api/leadmastpost", {
           lead_name: bulklead[i].lead_name,
           mobile_no: bulklead[i].mobile_no,
           alternate_mobile_no: bulklead[i].alternate_mobile_no,

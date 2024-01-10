@@ -19,7 +19,7 @@ const AssetSubCategoryOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_asset_sub_category"
+        "https://node-dev-server.onrender.com/api/get_all_asset_sub_category"
       );
       setFilterData(response.data.data);
       setData(response.data.data);
@@ -44,7 +44,7 @@ const AssetSubCategoryOverview = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_total_asset_in_category/${row}`
+        `https://node-dev-server.onrender.com/api/get_total_asset_in_category/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -59,7 +59,7 @@ const AssetSubCategoryOverview = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_total_asset_in_category_allocated/${row}`
+        `https://node-dev-server.onrender.com/api/get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);

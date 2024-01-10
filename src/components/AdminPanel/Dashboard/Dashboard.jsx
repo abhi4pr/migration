@@ -15,6 +15,7 @@ function Dashboard() {
   const [IntellectualProperty, getIntellectualProperty] = useState([]);
   const [contextData, setDatas] = useState([]);
   const [loginUserData, setLoginUserData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [accountsPendingPaymentsCount, setAccountsPendingPaymentsCount] =
     useState([]);
 
@@ -25,6 +26,9 @@ function Dashboard() {
   }
   function handleBrand() {
     navigate("/brand-overview");
+  }
+  function handleDataBrand() {
+    navigate("/data-brand-overview");
   }
   function handleIP() {
     navigate("/ip-overview");
@@ -38,7 +42,7 @@ function Dashboard() {
     if (userId && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userId}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userId}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -46,7 +50,7 @@ function Dashboard() {
     }
     if (userId) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_single_user/${userId}`)
+        .get(`https://node-dev-server.onrender.com/api/get_single_user/${userId}`)
         .then((res) => {
           setLoginUserData(res.data);
         });
@@ -55,20 +59,21 @@ function Dashboard() {
 
   useEffect(() => {
     setRenderCount(renderCount + 1);
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_sims").then((res) => {
       getAllSimData(res.data.data);
     });
+    axios.get("https://node-dev-server.onrender.com/api/get_logo_data").then((res) => {
+      getLogoBrandData(res.data);
+    });
+    axios.get("https://node-dev-server.onrender.com/api/get_all_datas").then((res) => {
+      setAllData(res.data);
+    });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_logo_brands")
-      .then((res) => {
-        getLogoBrandData(res.data);
-      });
-    axios
-      .get("http://34.93.135.33:8080/api/get_all_instapages")
+      .get("https://node-dev-server.onrender.com/api/get_all_instapages")
       .then((res) => {
         getIntellectualProperty(res.data);
       });
-    axios.get("http://34.93.135.33:8080/api/get_finances").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_finances").then((res) => {
       const response = res?.data;
       setAccountsPendingPaymentsCount(
         response?.filter((item) => item?.status_ == 0)
@@ -79,6 +84,7 @@ function Dashboard() {
   const AllSimData = allsimData.length;
   const AllLogoBrandData = logoBrandData.length;
   const AllIntellectualProperty = IntellectualProperty.length;
+  const AllData = allData.length;
   return (
     <>
       <div>
@@ -112,7 +118,6 @@ function Dashboard() {
               </div>
             </div>
           )}
-
           {contextData && contextData[9] && contextData[9].view_value === 1 && (
             <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
               <div className="d_infocard card shadow">
@@ -132,7 +137,6 @@ function Dashboard() {
               </div>
             </div>
           )}
-
           {contextData &&
             contextData[15] &&
             contextData[15].view_value === 1 && (
@@ -175,7 +179,6 @@ function Dashboard() {
                 </div>
               </>
             )}
-
           {contextData &&
             contextData[12] &&
             contextData[12].view_value === 1 && (
@@ -195,7 +198,25 @@ function Dashboard() {
                 </div>
               </div>
             )}
-
+          {contextData &&
+            contextData[39] &&
+            contextData[39].view_value === 1 && (
+              <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+                <div className="d_infocard card shadow">
+                  <div className="card-body" onClick={handleDataBrand}>
+                    <div className="d_infocard_txt">
+                      <h3>Data</h3>
+                      <h2>{AllData}</h2>
+                    </div>
+                    <div className="d_infocard_icon">
+                      <span>
+                        <TbBrandDenodo />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           {contextData &&
             contextData[13] &&
             contextData[13].view_value === 1 && (
@@ -215,30 +236,49 @@ function Dashboard() {
                 </div>
               </div>
             )}
-
           {contextData &&
-            contextData[30] &&
-            contextData[30].view_value === 1 && (
-              <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-                <Link className="collapse-item" to="/admin/wfh-single-user">
-                  <div className="d_infocard card shadow">
-                    <div className="card-body">
-                      <div className="d_infocard_txt">
-                        {/* <h3>WFH</h3> */}
+            contextData[17] &&
+            contextData[17].view_value === 1 && (
+          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+            <Link className="collapse-item" to="/admin/wfh-single-user">
+              <div className="d_infocard card shadow">
+                <div className="card-body">
+                  <div className="d_infocard_txt">
+                    {/* <h3>WFH</h3> */}
 
-                        <h2>WFH Single User</h2>
-                      </div>
-                      <div className="d_infocard_icon">
-                        <span>
-                          <FaProductHunt />
-                        </span>
-                      </div>
-                    </div>
+                    <h2>WFH Single User</h2>
                   </div>
-                </Link>
+                  <div className="d_infocard_icon">
+                    <span>
+                      <FaProductHunt />
+                    </span>
+                  </div>
+                </div>
               </div>
-            )}
+            </Link>
+          </div>
+           )} 
+          {contextData &&
+            contextData[40] &&
+            contextData[40].view_value === 1 && (
+          <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+            <Link className="collapse-item" to="/admin/asset-single-user">
+              <div className="d_infocard card shadow">
+                <div className="card-body">
+                  <div className="d_infocard_txt">
 
+                    <h2>Asset Single User</h2>
+                  </div>
+                  <div className="d_infocard_icon">
+                    <span>
+                      <FaProductHunt />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+          )}
           {loginUserData.department_name == "Accounts" && (
             <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
               <div className="d_infocard card shadow">
@@ -249,6 +289,26 @@ function Dashboard() {
                   <div className="d_infocard_txt">
                     <h3>Pending WFH Payments</h3>
                     <h2>{accountsPendingPaymentsCount?.length}</h2>
+                  </div>
+                  <div className="d_infocard_icon">
+                    <span>
+                      <FaProductHunt />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {loginUserData.department_name == "Accounts" && (
+            <div className="col-xxl-4 col-xl-3 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
+              <div className="d_infocard card shadow">
+                <div
+                  className="card-body"
+                  onClick={() => navigate("/admin/accounts-finance-dashboard")}
+                >
+                  <div className="d_infocard_txt">
+                    <h2>Finance Dashboard</h2>
+                    {/* <h2>{accountsPendingPaymentsCount?.length}</h2>  */}
                   </div>
                   <div className="d_infocard_icon">
                     <span>

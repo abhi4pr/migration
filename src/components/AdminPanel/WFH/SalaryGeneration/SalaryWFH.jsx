@@ -34,7 +34,7 @@ const images = [
 const SalaryWFH = () => {
   const location = useLocation();
   const { toastAlert } = useGlobalContext();
-  const { contextData } = useAPIGlobalContext();
+  const { contextData, ContextDept, RoleIDContext } = useAPIGlobalContext();
 
   const [allWFHUsers, setAllWFHUsers] = useState(0);
   const [data, setData] = useState([]);
@@ -93,14 +93,19 @@ const SalaryWFH = () => {
   var settings = {
     dots: false,
     arrows: true,
+    infinite: false,
     speed: 500,
     // slidesToShow: 8,
-    initialSlide: new Date().getMonth() - 4,
     slidesToScroll: 1,
     swipeToSlide: true,
     variableWidth: true,
-    infinite: false,
   };
+
+  if (new Date().getMonth() > 3) {
+    settings.initialSlide = new Date().getMonth - 4;
+  } else {
+    settings.initialSlide = new Date().getMonth() + 8;
+  }
 
   useEffect(() => {
     if (location.state) {
@@ -131,7 +136,7 @@ const SalaryWFH = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://34.93.135.33:8080/api/get_all_wfh_users"
+          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         setAllWFHUsers(data.length);
@@ -156,7 +161,7 @@ const SalaryWFH = () => {
 
   function gettingSliderData() {
     axios
-      .get("http://34.93.135.33:8080/api/get_month_year_data")
+      .get("https://node-dev-server.onrender.com/api/get_month_year_data")
       .then((res) => {
         setCompletedYearsMonths(res.data.data);
       });
@@ -164,9 +169,15 @@ const SalaryWFH = () => {
 
   useEffect(() => {
     axios
-      .get("http://34.93.135.33:8080/api/all_departments_of_wfh")
+      .get("https://node-dev-server.onrender.com/api/all_departments_of_wfh")
       .then((res) => {
-        getDepartmentData(res.data.data);
+        if (RoleIDContext === 1 || RoleIDContext === 5) {
+          getDepartmentData(res.data.data);
+        } else {
+          getDepartmentData(
+            res.data.data?.filter((d) => d.dept_id == ContextDept)
+          );
+        }
       });
 
     //harshal
@@ -174,12 +185,12 @@ const SalaryWFH = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/get_all_users`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/get_all_users`).then((res) => {
       getUsersData(res.data.data);
     });
     if (department) {
       axios
-        .get(`http://34.93.135.33:8080/api/get_user_by_deptid/${department}`)
+        .get(`https://node-dev-server.onrender.com/api/get_user_by_deptid/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
@@ -226,58 +237,58 @@ const SalaryWFH = () => {
 
   const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
 
-
-const  monthNameToNumber=(monthName)=> {
-  const months = {
-    January: '01',
-    February: '02',
-    March: '03',
-    April: '04',
-    May: '05',
-    June: '06',
-    July: '07',
-    August: '08',
-    September: '09',
-    October: '10',
-    November: '11',
-    December: '12'
-  };
-
-  // Convert the input month name to title case for consistent matching
-  const titleCaseMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
-
-  return months[titleCaseMonth] || 'Invalid Month';
-}
-
-function monthNameToNumberAndEndDate(monthName) {
-  const months = {
-    January: { number: '01', days: 31 },
-    February: { number: '02', days: 28 },
-    March: { number: '03', days: 31 },
-    April: { number: '04', days: 30 },
-    May: { number: '05', days: 31 },
-    June: { number: '06', days: 30 },
-    July: { number: '07', days: 31 },
-    August: { number: '08', days: 31 },
-    September: { number: '09', days: 30 },
-    October: { number: '10', days: 31 },
-    November: { number: '11', days: 30 },
-    December: { number: '12', days: 31 }
-  };
-
-  const titleCaseMonth = monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
-  const monthInfo = months[titleCaseMonth];
-
-  if (monthInfo) {
-    return {
-      monthNumber: monthInfo.number,
-      endDate: monthInfo.days
+  const monthNameToNumber = (monthName) => {
+    const months = {
+      January: "01",
+      February: "02",
+      March: "03",
+      April: "04",
+      May: "05",
+      June: "06",
+      July: "07",
+      August: "08",
+      September: "09",
+      October: "10",
+      November: "11",
+      December: "12",
     };
-  } else {
-    return 'Invalid Month';
-  }
-}
 
+    // Convert the input month name to title case for consistent matching
+    const titleCaseMonth =
+      monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
+
+    return months[titleCaseMonth] || "Invalid Month";
+  };
+
+  function monthNameToNumberAndEndDate(monthName) {
+    const months = {
+      January: { number: "01", days: 31 },
+      February: { number: "02", days: 28 },
+      March: { number: "03", days: 31 },
+      April: { number: "04", days: 30 },
+      May: { number: "05", days: 31 },
+      June: { number: "06", days: 30 },
+      July: { number: "07", days: 31 },
+      August: { number: "08", days: 31 },
+      September: { number: "09", days: 30 },
+      October: { number: "10", days: 31 },
+      November: { number: "11", days: 30 },
+      December: { number: "12", days: 31 },
+    };
+
+    const titleCaseMonth =
+      monthName.charAt(0).toUpperCase() + monthName.slice(1).toLowerCase();
+    const monthInfo = months[titleCaseMonth];
+
+    if (monthInfo) {
+      return {
+        monthNumber: monthInfo.number,
+        endDate: monthInfo.days,
+      };
+    } else {
+      return "Invalid Month";
+    }
+  }
 
   const handleCardSelect = (index, data) => {
     setSelectedCardIndex(index);
@@ -290,7 +301,7 @@ function monthNameToNumberAndEndDate(monthName) {
   const handleMonthYearData = async () => {
     try {
       const response = await axios.post(
-        "http://34.93.135.33:8080/api/get_salary_by_month_year",
+        "https://node-dev-server.onrender.com/api/get_salary_by_month_year",
         {
           month: month,
           year: Number(year),
@@ -306,7 +317,7 @@ function monthNameToNumberAndEndDate(monthName) {
   //Create all Department Salary
   function handleAllDepartmentSalary() {
     axios
-      .post("http://34.93.135.33:8080/api/save_all_depts_attendance", {
+      .post("https://node-dev-server.onrender.com/api/save_all_depts_attendance", {
         month: month,
         year: year,
       })
@@ -327,7 +338,7 @@ function monthNameToNumberAndEndDate(monthName) {
     };
     axios
       .post(
-        "http://34.93.135.33:8080/api/get_salary_by_id_month_year",
+        "https://node-dev-server.onrender.com/api/get_salary_by_id_month_year",
         payload
       )
       .then((res) => {
@@ -346,7 +357,7 @@ function monthNameToNumberAndEndDate(monthName) {
     formData.append("invoice_template_no", selectedTemplate);
 
     axios
-      .put(`http://34.93.135.33:8080/api/update_user`, formData, {
+      .put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -369,11 +380,11 @@ function monthNameToNumberAndEndDate(monthName) {
 
     if (department || month || year !== "") {
       axios
-        .get("http://34.93.135.33:8080/api/get_total_salary")
+        .get("https://node-dev-server.onrender.com/api/get_total_salary")
         .then((res) => setCard2Data(res.data.data[0]));
 
       axios
-        .post("http://34.93.135.33:8080/api/left_employees", {
+        .post("https://node-dev-server.onrender.com/api/left_employees", {
           dept_id: department,
           month: month,
           year: year,
@@ -382,7 +393,7 @@ function monthNameToNumberAndEndDate(monthName) {
     }
 
     axios
-      .post("http://34.93.135.33:8080/api/new_joiners", {
+      .post("https://node-dev-server.onrender.com/api/new_joiners", {
         dept_id: department,
         month: month,
         year: year,
@@ -390,7 +401,7 @@ function monthNameToNumberAndEndDate(monthName) {
       .then((res) => setNewJoineeCount(res.data));
 
     axios
-      .post("http://34.93.135.33:8080/api/check_salary_status", {
+      .post("https://node-dev-server.onrender.com/api/check_salary_status", {
         month: month,
         year: year,
         dept: department,
@@ -402,7 +413,7 @@ function monthNameToNumberAndEndDate(monthName) {
 
   function gettingDepartmentSalaryExists() {
     axios
-      .post("http://34.93.135.33:8080/api/get_distinct_depts", {
+      .post("https://node-dev-server.onrender.com/api/get_distinct_depts", {
         month: month,
         year: year,
       })
@@ -412,7 +423,7 @@ function monthNameToNumberAndEndDate(monthName) {
   const handleAttendance = async () => {
     try {
       const addAttendanceResponse = await axios.post(
-        "http://34.93.135.33:8080/api/add_attendance",
+        "https://node-dev-server.onrender.com/api/add_attendance",
         {
           dept: department,
           user_id: userName.user_id,
@@ -422,7 +433,7 @@ function monthNameToNumberAndEndDate(monthName) {
         }
       );
       const updateAttendanceStatusResponse = await axios.put(
-        "http://34.93.135.33:8080/api/update_attendence_status",
+        "https://node-dev-server.onrender.com/api/update_attendence_status",
         {
           month: month,
           year: Number(year),
@@ -548,12 +559,12 @@ function monthNameToNumberAndEndDate(monthName) {
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
-    axios.post(`http://34.93.135.33:8080/api/add_finance`, {
+    axios.post(`https://node-dev-server.onrender.com/api/add_finance`, {
       attendence_id: row.attendence_id,
     });
 
     axios
-      .put(`http://34.93.135.33:8080/api/update_salary`, {
+      .put(`https://node-dev-server.onrender.com/api/update_salary`, {
         attendence_id: row.attendence_id,
         sendToFinance: 1,
       })
@@ -670,13 +681,13 @@ function monthNameToNumberAndEndDate(monthName) {
     setUserName(username);
     setUserContact(user_contact_no);
     axios
-      .get("http://34.93.135.33:8080/api/get_all_reasons")
+      .get("https://node-dev-server.onrender.com/api/get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
 
   const today = new Date().toISOString().split("T")[0];
   function handleSeparationDataPost() {
-    axios.post("http://34.93.135.33:8080/api/add_separation", {
+    axios.post("https://node-dev-server.onrender.com/api/add_separation", {
       user_id: separationUserID,
       status: separationStatus,
       created_by: userID,
@@ -1007,8 +1018,8 @@ function monthNameToNumberAndEndDate(monthName) {
           <h4>Department</h4>
           <span>
             {contextData &&
-              contextData[35] &&
-              contextData[35].view_value === 1 && (
+              contextData[38] &&
+              contextData[38].view_value === 1 && (
                 <Link to="/admin/salary-summary">
                   <button className="btn btn-warning mr-3">
                     Salary Summary
@@ -1021,14 +1032,16 @@ function monthNameToNumberAndEndDate(monthName) {
             >
               Export Excel
             </button>
-            {deptSalary.length !== departmentdata.length && (
-              <button
-                className="btn btn-primary"
-                onClick={handleAllDepartmentSalary}
-              >
-                Create All Department Salary
-              </button>
-            )}
+
+            {deptSalary?.length !== departmentdata?.length &&
+              (RoleIDContext == 1 || RoleIDContext == 5) && (
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAllDepartmentSalary}
+                >
+                  Create All Department Salary
+                </button>
+              )}
           </span>
         </div>
         <div className="card-body">
@@ -1564,7 +1577,8 @@ function monthNameToNumberAndEndDate(monthName) {
                 <FieldContainer
                   label="Resignation Date"
                   type="date"
-                  min={`${year}-${monthNameToNumber(month)}-01`} max={`${year}-${monthNameToNumber(month)}-31`}
+                  min={`${year}-${monthNameToNumber(month)}-01`}
+                  max={`${year}-${monthNameToNumber(month)}-31`}
                   value={separationResignationDate}
                   onChange={(e) => setSeparationResignationDate(e.target.value)}
                 />

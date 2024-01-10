@@ -23,7 +23,7 @@ const LetterTab = ({ allUserData, gettingData }) => {
     formData.append("offer_later_reject_reason", reason);
 
     axios
-      .put(`http://34.93.135.33:8080/api/update_user`, formData, {
+      .put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

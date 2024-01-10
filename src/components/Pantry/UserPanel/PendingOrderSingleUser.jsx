@@ -19,7 +19,7 @@ const PendingOrderSingleUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_pendingorders/${userId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_pendingorders/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data.data);
         setFilterData(res.data.data);

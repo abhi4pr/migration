@@ -46,12 +46,12 @@ const PendingApprovalUpdate = () => {
 
   function getData() {
     axios
-      .post("http://34.93.135.33:8080/api/add_php_finance_data_in_node")
+      .post("https://node-dev-server.onrender.com/api/add_php_finance_data_in_node")
       .then((res) => {
         console.log("data save in local success");
       });
     axios
-      .get("http://34.93.135.33:8080/api/get_all_php_finance_data_pending")
+      .get("https://node-dev-server.onrender.com/api/get_all_php_finance_data_pending")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

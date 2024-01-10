@@ -28,7 +28,7 @@ const AssetCategoryMaster = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://34.93.135.33:8080/api/add_asset_category",
+        "https://node-dev-server.onrender.com/api/add_asset_category",
         {
           category_name: categoryName,
           description: description,

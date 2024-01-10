@@ -16,7 +16,7 @@ const IpHistory = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get(`http://34.93.135.33:8080/api/dataofiphistory/${id}`).then((res) => {
+    axios.get(`https://node-dev-server.onrender.com/api/dataofiphistory/${id}`).then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

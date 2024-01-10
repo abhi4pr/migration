@@ -54,7 +54,7 @@ export default function ExecutionAccepted() {
       if (userID && contextData == false) {
         axios
           .get(
-            `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+            `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {

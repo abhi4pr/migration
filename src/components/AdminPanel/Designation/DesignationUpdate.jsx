@@ -22,7 +22,7 @@ const DesignationUpdate = () => {
   useEffect(() => {
     const fetchDepartmentData = async () => {
       try {
-        const response = await axios.get("http://34.93.135.33:8080/api/get_all_departments");
+        const response = await axios.get("https://node-dev-server.onrender.com/api/get_all_departments");
         const departmentOptions = response.data.map((dept) => ({
           value: dept.dept_id,
           label: dept.dept_name,
@@ -36,7 +36,7 @@ const DesignationUpdate = () => {
 
     const fetchDesignationData = async () => {
       try {
-        const response = await axios.get(`http://34.93.135.33:8080/api/get_single_designation/${desi_id}`);
+        const response = await axios.get(`https://node-dev-server.onrender.com/api/get_single_designation/${desi_id}`);
         setDesignationData(response.data.data);
       } catch (error) {
         console.error("Error fetching designation: ", error);
@@ -53,7 +53,7 @@ const DesignationUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("http://34.93.135.33:8080/api/update_designation", designationData);
+      await axios.put("https://node-dev-server.onrender.com/api/update_designation", designationData);
       toastAlert("Updated success");
       setIsFormSubmitted(true);
     } catch (error) {

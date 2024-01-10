@@ -41,7 +41,7 @@ const typeData = ["Hr", "User"];
     formData.append("sim_id", sim_id);
     formData.append("uploaded_by",userID );
     formData.append("type", type);
-    await axios.post("http://34.93.135.33:8080/api/add_assets_images", formData, {
+    await axios.post("https://node-dev-server.onrender.com/api/add_assets_images", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -60,7 +60,7 @@ const typeData = ["Hr", "User"];
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -75,7 +75,7 @@ const typeData = ["Hr", "User"];
     setImageModalOpen(false);
   };
   function getData() {
-    axios.get("http://34.93.135.33:8080/api/get_all_sims").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_sims").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

@@ -17,7 +17,7 @@ const SidebarLinks = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -71,6 +71,15 @@ const SidebarLinks = () => {
     (index) => contextData[index]?.view_value === 1
   );
   const isInstaApiVisible = [25].some(
+    (index) => contextData[index]?.view_value === 1
+  );
+  const isWFHDManager = [37].some(
+    (index) => contextData[index]?.view_value === 1
+  );
+  const isWFHDHRPayrollManager = [38].some(
+    (index) => contextData[index]?.view_value === 1
+  );
+  const isAssetNotifierVisible = [40].some(
     (index) => contextData[index]?.view_value === 1
   );
 
@@ -165,6 +174,10 @@ const SidebarLinks = () => {
                     </Link>
                   </>
                 )}
+
+              <Link className="collapse-item" to="/admin/jobType">
+                Job Type
+              </Link>
               <Link className="collapse-item" to="/sim-overview">
                 Asset Management
               </Link>
@@ -176,6 +189,122 @@ const SidebarLinks = () => {
                 to="/admin/email-template-overview"
               >
                 Email Templates
+              </Link>
+            </div>
+          </div>
+        </li>
+      )}
+
+      {isWFHDManager && (
+        <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseFourdd"
+            aria-expanded="true"
+            aria-controls="collapseFourdd"
+          >
+            <i className="bi bi-person-gear" />
+            <span>WFHD Manager</span>
+          </Link>
+          <div
+            id="collapseFourdd"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              <Link className="collapse-item" to="/admin/user">
+                WFHD Register
+              </Link>
+
+              <Link className="collapse-item" to="/admin/wfhd-overview">
+                WFHD Overview
+              </Link>
+
+              <Link className="collapse-item" to="/admin/salaryWFH">
+                Payroll
+              </Link>
+
+              <Link className="collapse-item" to="/admin/attendence-mast">
+                Attendance
+              </Link>
+            </div>
+          </div>
+        </li>
+      )}
+
+{isAssetNotifierVisible && (
+      <li className="nav-item">
+        <Link
+          className="nav-link collapsed"
+          data-toggle="collapse"
+          data-target="#collapseFourdd"
+          aria-expanded="true"
+          aria-controls="collapseFourdd"
+        >
+          <i className="bi bi-person-gear" />
+          <span>WFH New Module</span>
+        </Link>
+        <div
+          id="collapseFourdd"
+          className="collapse"
+          aria-labelledby="headingTwo"
+          data-parent="#accordionSidebar"
+        >
+          <div className="bg-white collapse-inner">
+            <Link
+              className="collapse-item"
+              to="/admin/view-edit-digital-signature"
+            >
+              Digital Signature
+            </Link>
+
+            <Link className="collapse-item" to="/admin/wfh-template-overview">
+              Change/View Template
+            </Link>
+
+            <Link className="collapse-item" to="/admin/wfh-single-user">
+              Payout Summary
+            </Link>
+          </div>
+        </div>
+      </li>
+)}
+
+      {isWFHDHRPayrollManager && (
+        <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseFourcc"
+            aria-expanded="true"
+            aria-controls="collapseFourcc"
+          >
+            <i className="bi bi-person-gear" />
+            <span>HR/Payroll Manager</span>
+          </Link>
+          <div
+            id="collapseFourcc"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              <Link className="collapse-item" to="/admin/user">
+                WFHD Register
+              </Link>
+
+              <Link className="collapse-item" to="/admin/wfhd-overview">
+                WFHD Overview
+              </Link>
+
+              <Link className="collapse-item" to="/admin/salaryWFH">
+                Salary Related Report
+              </Link>
+
+              <Link className="collapse-item" to="/admin/attendence-mast">
+                Payroll Payout Genration
               </Link>
             </div>
           </div>
@@ -285,7 +414,7 @@ const SidebarLinks = () => {
         </li>
       )}
 
-      {/* {isAssetNotifierVisible && ( */}
+      {isAssetNotifierVisible && (
       <li className="nav-item">
         <Link
           className="nav-link collapsed"
@@ -331,7 +460,7 @@ const SidebarLinks = () => {
           </div>
         </div>
       </li>
-      {/* )} */}
+      )} 
 
       {isOnboardingVisible && (
         <li className="nav-item">
@@ -466,7 +595,7 @@ const SidebarLinks = () => {
         </li>
       )} */}
 
-      {/* {contextData && contextData[34] && contextData[34].view_value === 1 && (
+      {contextData && contextData[34] && contextData[34].view_value === 1 && (
         <li className="nav-item">
           <a
             className="nav-link collapsed"
@@ -484,7 +613,9 @@ const SidebarLinks = () => {
             aria-labelledby="headingTwo"
           >
             <div className="bg-white collapse-inner">
-              
+              {/* <Link className="collapse-item" to="/admin/exeinventory">
+                          Dashboard
+                        </Link> */}
               <Link className="collapse-item" to="/admin/cityMsater">
                 City Mast
               </Link>{" "}
@@ -551,7 +682,11 @@ const SidebarLinks = () => {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white collapse-inner">
-             
+              {/* {contextData &&
+                contextData[24] &&
+                contextData[24].view_value === 1 &&
+                ""} */}
+
               {contextData &&
                 contextData[24] &&
                 contextData[24].view_value === 1 && (
@@ -563,14 +698,14 @@ const SidebarLinks = () => {
                       aria-expanded="true"
                       aria-controls="collapsInnerOne"
                     >
-                     
+                      {/* <i className="bi bi-person-gear" /> */}
                       <span>Execution</span>
                     </a>
                     <div
                       id="collapsInnerOne"
                       className="collapse"
                       aria-labelledby="headingTwo"
-                      
+                      // data-parent="#accordionSidebar"
                     >
                       <div className="bg-white collapse-inner">
                         <Link className="collapse-item" to="/admin/execution">
@@ -588,6 +723,12 @@ const SidebarLinks = () => {
                         >
                           Executed
                         </Link>{" "}
+                        {/* <Link
+                          className="collapse-item"
+                          to="/admin/exeexecution/accepted"
+                        >
+                          In Progress
+                        </Link>{" "} */}
                         <Link
                           className="collapse-item"
                           to="/admin/exeexecution/rejected"
@@ -615,7 +756,7 @@ const SidebarLinks = () => {
                       id="collapsInnerTwo"
                       className="collapse"
                       aria-labelledby="headingTwo"
-                      
+                      // data-parent="#accordionSidebar"
                     >
                       <div className="bg-white collapse-inner">
                         <>
@@ -625,12 +766,7 @@ const SidebarLinks = () => {
                           >
                             Manager Campaign Dashboard
                           </Link>
-                          <Link
-                            className="collapse-item"
-                            to="/admin/manager-dashboard"
-                          >
-                            Manager Dashboard
-                          </Link>
+
                           <Link
                             className="collapse-item"
                             to="/admin/phase-dashboard"
@@ -662,19 +798,31 @@ const SidebarLinks = () => {
                           >
                             Experties
                           </Link>
-                          
+                          {/* <Link
+                            className="collapse-item"
+                            to="/admin/planOverview"
+                          >
+                            Plan Overview
+                          </Link> */}
+                          {/* <Link
+                            className="collapse-item"
+                            to="/admin/phase"
+                          >
+                           PhaseCreation
+                          </Link> */}
+
                           <Link
                             className="collapse-item"
                             to="/admin/checkPageFollowers"
                           >
                             Check Page Follower
                           </Link>
-                          <Link
+                          {/* <Link
                             className="collapse-item"
                             to="/admin/createAssign"
                           >
                             createAssign
-                          </Link>
+                          </Link> */}
 
                           <Link
                             className="collapse-item"
@@ -735,10 +883,22 @@ const SidebarLinks = () => {
                       id="collapsInnerTwo"
                       className="collapse"
                       aria-labelledby="headingTwo"
-                      
+                      // data-parent="#accordionSidebar"
                     >
                       <div className="bg-white collapse-inner">
                         <>
+                          {/* <Link
+                            className="collapse-item"
+                            to="/admin/register-campaign"
+                          >
+                            Add Campaign
+                          </Link>
+                          <Link
+                            className="collapse-item"
+                            to="/admin/registered-campaign"
+                          >
+                            Registered Campaign
+                          </Link> */}
                           <Link
                             className="collapse-item"
                             to="/admin/createrdashboard"
@@ -773,7 +933,7 @@ const SidebarLinks = () => {
                       id="collapsInnerThree"
                       className="collapse"
                       aria-labelledby="headingTwo"
-                      
+                      // data-parent="#accordionSidebar"
                     >
                       <div className="bg-white collapse-inner">
                         <>
@@ -858,14 +1018,14 @@ const SidebarLinks = () => {
                   aria-expanded="true"
                   aria-controls="collapsInnerOneFinanceSecound"
                 >
-                 
+                  {/* <i className="bi bi-person-gear" /> */}
                   <span>Payment Refund</span>
                 </a>
                 <div
                   id="collapsInnerOneFinanceSecound"
                   className="collapse"
                   aria-labelledby="headingTwo"
-                  
+                  // data-parent="#accordionSidebar"
                 >
                   <div className="bg-white collapse-inner">
                     <Link
@@ -898,7 +1058,7 @@ const SidebarLinks = () => {
                   id="collapsInnerThree"
                   className="collapse"
                   aria-labelledby="headingTwo"
-                  
+                  // data-parent="#accordionSidebar"
                 >
                   <div className="bg-white collapse-inner">
                     <>
@@ -927,7 +1087,7 @@ const SidebarLinks = () => {
                   id="collapsInnerFourFinance"
                   className="collapse"
                   aria-labelledby="headingTwo"
-                  
+                  // data-parent="#accordionSidebar"
                 >
                   <div className="bg-white collapse-inner">
                     <>
@@ -956,7 +1116,7 @@ const SidebarLinks = () => {
                   id="collapsInnerFiveFinance"
                   className="collapse"
                   aria-labelledby="headingTwo"
-                  
+                  // data-parent="#accordionSidebar"
                 >
                   <div className="bg-white collapse-inner">
                     <>
@@ -991,7 +1151,7 @@ const SidebarLinks = () => {
                   id="collapsInnerSevenFinance"
                   className="collapse"
                   aria-labelledby="headingTwo"
-                  
+                  // data-parent="#accordionSidebar"
                 >
                   <div className="bg-white collapse-inner">
                     <>
@@ -1011,11 +1171,105 @@ const SidebarLinks = () => {
                   </div>
                 </div>
               </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link collapsed"
+                  data-toggle="collapse"
+                  data-target="#collapsInnerEightFinance"
+                  aria-expanded="true"
+                  aria-controls="collapsInnerEightFinance"
+                >
+                  <span>Purchase Management</span>
+                </Link>
+                <div
+                  id="collapsInnerEightFinance"
+                  className="collapse"
+                  aria-labelledby="headingTwo"
+                  // data-parent="#accordionSidebar"
+                >
+                  <div className="bg-white collapse-inner">
+                    <>
+                      <Link
+                        className="collapse-item"
+                        to="/admin/finance-pruchasemanagement-pendingpaymentrequest"
+                      >
+                        Pending Payment Request
+                      </Link>
+                      <Link
+                        className="collapse-item"
+                        to="/admin/finance-pruchasemanagement-paymentdone"
+                      >
+                        Payment Done
+                      </Link>
+                      <Link
+                        className="collapse-item"
+                        to="/admin/finance-pruchasemanagement-alltransaction"
+                      >
+                        All Transaction
+                      </Link>
+                      <Link
+                        className="collapse-item"
+                        to="/admin/finance-pruchasemanagement-discardpayment"
+                      >
+                        Discard Payment
+                      </Link>
+                    </>
+                  </div>
+                </div>
+              </li>
+            </div>
+          </div>
+        </li>
+      )}
+
+      {/* )} */}
+
+      {/* {isInstaApiVisible && (
+        <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseEight"
+            aria-expanded="true"
+            aria-controls="collapseEight"
+          >
+            <i className="bi bi-person-gear" />
+            <span>Insta API</span>
+          </Link>
+          <div
+            id="collapseEight"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              {contextData &&
+                contextData[25] &&
+                contextData[25].view_value === 1 && (
+                  <>
+                    <Link
+                      className="collapse-item"
+                      to="/admin/instaapi/analytic"
+                    >
+                      Analytics
+                    </Link>
+                    <Link className="collapse-item" to="/admin/instaapi">
+                      Explore
+                    </Link>
+                  </>
+                )}
+              {contextData &&
+                contextData[29] &&
+                contextData[29].view_value === 1 && (
+                  <Link className="collapse-item" to="/admin/instaapi/track">
+                    Track Page
+                  </Link>
+                )}
+              
             </div>
           </div>
         </li>
       )} */}
-
     </>
   );
 };

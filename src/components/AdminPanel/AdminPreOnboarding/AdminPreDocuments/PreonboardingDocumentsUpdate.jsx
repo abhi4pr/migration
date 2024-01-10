@@ -36,7 +36,7 @@ const PreonboardingDocumentsUpdate = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `http://34.93.135.33:8080/api/get_doc/${id}`
+        `https://node-dev-server.onrender.com/api/get_doc/${id}`
       );
       const data = response.data.data;
       setDocumentType(data.doc_type);
@@ -52,7 +52,7 @@ const PreonboardingDocumentsUpdate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("http://34.93.135.33:8080/api/update_doc", {
+      .put("https://node-dev-server.onrender.com/api/update_doc", {
         _id: id,
         doc_type: documentType,
         priority: priority,

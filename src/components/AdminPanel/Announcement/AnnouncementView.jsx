@@ -13,7 +13,7 @@ const AnnouncementView = () => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          "http://34.93.135.33:8080/api/allannouncementdata"
+          "https://node-dev-server.onrender.com/api/allannouncementdata"
         );
         const allData = await res.data;
         setData(allData);

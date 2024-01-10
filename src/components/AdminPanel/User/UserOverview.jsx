@@ -66,7 +66,7 @@ const UserOverview = () => {
 
   const KRAAPI = (userId) => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_kra/${userId}`)
       .then((res) => {
         setKRIData(res.data);
       });
@@ -82,13 +82,13 @@ const UserOverview = () => {
     setUserName(username);
     setUserContact(user_contact_no);
     axios
-      .get("http://34.93.135.33:8080/api/get_all_reasons")
+      .get("https://node-dev-server.onrender.com/api/get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
   const today = new Date().toISOString().split("T")[0];
 
   function handleSeparationDataPost() {
-    axios.post("http://34.93.135.33:8080/api/add_separation", {
+    axios.post("https://node-dev-server.onrender.com/api/add_separation", {
       user_id: separationUserID,
       status: separationStatus,
       created_by: userID,
@@ -109,7 +109,7 @@ const UserOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `http://34.93.135.33:8080/api/get_single_user_auth_detail/${userID}`
+          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -120,7 +120,7 @@ const UserOverview = () => {
   // Admin Login from User
   const handleLogin = (user_id, user_login_id, user_login_password) => {
     axios
-      .post("http://34.93.135.33:8080/api/login_user", {
+      .post("https://node-dev-server.onrender.com/api/login_user", {
         user_id: user_id,
         user_login_id: user_login_id,
         user_login_password: user_login_password,
@@ -142,7 +142,7 @@ const UserOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "http://34.93.135.33:8080/api/get_all_users"
+        "https://node-dev-server.onrender.com/api/get_all_users"
       );
       const data = response.data.data;
       setDatas(data);
@@ -157,7 +157,7 @@ const UserOverview = () => {
 
   const departmentAPI = () => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_departments")
+      .get("https://node-dev-server.onrender.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
         getData();
@@ -166,7 +166,7 @@ const UserOverview = () => {
 
   const designationAPI = () => {
     axios
-      .get("http://34.93.135.33:8080/api/get_all_designations")
+      .get("https://node-dev-server.onrender.com/api/get_all_designations")
       .then((res) => {
         setDesiOrgData(res.data.data);
       });
@@ -194,7 +194,7 @@ const UserOverview = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`http://34.93.135.33:8080/api/delete_user/${userId}`)
+            .delete(`https://node-dev-server.onrender.com/api/delete_user/${userId}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(
@@ -306,6 +306,12 @@ const UserOverview = () => {
     {
       field: "department_name",
       headerName: "Department",
+      width: 120,
+      sortable: true,
+    },
+    {
+      field: "job_type",
+      headerName: "Job Type",
       width: 120,
       sortable: true,
     },
@@ -475,7 +481,7 @@ const UserOverview = () => {
 
   const handleTransfer = (userId) => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_kra/${userId}`)
       .then((res) => {
         setTransferResponsibilityData(res.data);
       });
@@ -512,13 +518,13 @@ const UserOverview = () => {
         Job_res_id: element.Job_res_id,
       };
       axios
-        .post("http://34.93.135.33:8080/api/add_kra", requestData)
+        .post("https://node-dev-server.onrender.com/api/add_kra", requestData)
         .then(() => {
           setRemark("");
           setTransferTo("");
           toastAlert("KRA Transfer Successfully");
           const MailUser = transferToUser.find((d) => d.user_id == transferTo);
-          axios.post("http://34.93.135.33:8080/api/add_send_user_mail", {
+          axios.post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
             email: MailUser.user_email_id,
             subject: "User Registration",
             text: "You Have Assign New KRA",

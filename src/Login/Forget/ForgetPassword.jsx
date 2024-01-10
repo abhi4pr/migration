@@ -20,7 +20,7 @@ export default function ForgetPassword() {
       return;
     } else {
       axios
-        .post("http://34.93.135.33:8080/api/forgot_pass", {
+        .post("https://node-dev-server.onrender.com/api/forgot_pass", {
           user_email_id: email,
         })
         .then((res) => {

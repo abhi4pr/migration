@@ -64,27 +64,27 @@ const UserSingle = () => {
 
   const KRAAPI = (userId) => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_kra/${userId}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_kra/${userId}`)
       .then((res) => {
         setKRIData(res.data);
       });
   };
   function userOtherDocuments() {
     axios
-      .get(`http://34.93.135.33:8080/api/get_user_other_fields/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
   }
   // const subDep = async (dept_id) => {
   //   await axios
-  //     .get(`http://34.93.135.33:8080/api/subdept/${dept_id}`)
+  //     .get(`https://node-dev-server.onrender.com/api/subdept/${dept_id}`)
   //     .then((res) => {
   //       setSubDept(res.data);
   //     });
   // };
   useEffect(() => {
-    axios.get("http://34.93.135.33:8080/api/get_all_sittings").then((res) => {
+    axios.get("https://node-dev-server.onrender.com/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
     KRAAPI(id);
@@ -96,7 +96,7 @@ const UserSingle = () => {
   let fetchedData;
   const getData = () => {
     axios
-      .get(`http://34.93.135.33:8080/api/get_single_user/${id}`)
+      .get(`https://node-dev-server.onrender.com/api/get_single_user/${id}`)
       .then((res) => {
         fetchedData = res.data;
         const { dept_id } = fetchedData;
@@ -126,7 +126,7 @@ const UserSingle = () => {
     "Professional",
     "KRA",
     "Documents",
-    "Documents",
+    // "Documents",
   ];
 
   const handleVerification = (
@@ -150,7 +150,7 @@ const UserSingle = () => {
 
     axios({
       method: "put",
-      url: "http://34.93.135.33:8080/api/update_user",
+      url: "https://node-dev-server.onrender.com/api/update_user",
       data: formData,
     }).then(() => {
       if (emptyState) emptyState("");
@@ -164,7 +164,7 @@ const UserSingle = () => {
       .then(() => getData())
       .then(() => {
         axios
-          .post("http://34.93.135.33:8080/api/add_send_user_mail", {
+          .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
             email: fetchedData[0].user_email_id,
             subject: "User Onboard",
             text: "Your Some Document is not clear Plzz Upload Again",
@@ -1151,10 +1151,10 @@ const UserSingle = () => {
             {activeAccordionIndex === 0 && <UserSingleTab1 user={user} />}
             {activeAccordionIndex === 1 && <UserSingleTab2 user={user} />}
             {activeAccordionIndex === 2 && <UserSingleTab3 KRIData={KRIData} />}
-            {activeAccordionIndex === 3 && (
+            {/* {activeAccordionIndex === 3 && (
               <UserSingleTab4 user={user} id={id} getData={getData} />
-            )}
-            {activeAccordionIndex == 4 && <DocumentTabUserSingle id={id} />}
+            )} */}
+            {activeAccordionIndex == 3 && <DocumentTabUserSingle id={id} />}
           </FormContainer>
         </div>
       </div>

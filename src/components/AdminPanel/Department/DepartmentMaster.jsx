@@ -24,7 +24,7 @@ const DepartmentMaster = () => {
     e.preventDefault();
     setError("");
     await axios
-      .post("http://34.93.135.33:8080/api/add_department", {
+      .post("https://node-dev-server.onrender.com/api/add_department", {
         dept_name: departmentName,
         short_name: shortName,
         remark: remark,

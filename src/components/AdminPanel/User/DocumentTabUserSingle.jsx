@@ -13,7 +13,7 @@ const DocumentTabUserSingle = (id) => {
   const getDocuments = async () => {
     try {
       const response = await axios.post(
-        "http://34.93.135.33:8080/api/get_user_doc",
+        "https://node-dev-server.onrender.com/api/get_user_doc",
         {
           user_id: id.id,
         }
@@ -42,7 +42,7 @@ const DocumentTabUserSingle = (id) => {
 
       console.log(payload);
       const response = await axios.put(
-        "http://34.93.135.33:8080/api/update_user_doc",
+        "https://node-dev-server.onrender.com/api/update_user_doc",
         payload
       );
       toastAlert("Approved");
@@ -60,7 +60,7 @@ const DocumentTabUserSingle = (id) => {
       <div className="documentCard_view">
         <div className="row align-items-baseline">
           {documentData
-            .filter((item) => item?.status !== "")
+            // .filter((item) => item?.status !== "")
             .map((data) => (
               <>
                 {console.log(data.status)}
@@ -78,11 +78,13 @@ const DocumentTabUserSingle = (id) => {
                       </div>
                       <div className="documentCard_text">
                         <h3>{data.document.doc_type}</h3>
-                        <div className="documentCard_download">
-                          <a href={data.doc_image_url} download>
-                            <FcDownload />
-                          </a>
-                        </div>
+                        {data.status !== "" && (
+                          <div className="documentCard_download">
+                            <a href={data.doc_image_url} download>
+                              <FcDownload />
+                            </a>
+                          </div>
+                        )}
                       </div>
                       {data.status == "Verification Pending" && (
                         <div className="documentCard_action">
@@ -104,6 +106,7 @@ const DocumentTabUserSingle = (id) => {
                           </button>
                         </div>
                       )}
+
                       <ApproveReject data={data.status} />
                       {rejectReasonActive == data._id && (
                         <div className="documentCard_input">
@@ -129,6 +132,7 @@ const DocumentTabUserSingle = (id) => {
                           </button>
                         </div>
                       )}
+                      {data.status == "" && "N/A"}
                     </div>
                   </div>
                 </div>

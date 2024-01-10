@@ -14,7 +14,7 @@ const ContentOverview = () => {
   const [filterdata, setFilterData] = useState([]);
 
   async function getData() {
-    await axios.get("http://34.93.135.33:8080/api/content_upload").then((res) => {
+    await axios.get("https://node-dev-server.onrender.com/api/content_upload").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

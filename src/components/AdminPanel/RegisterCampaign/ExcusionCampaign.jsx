@@ -3,38 +3,52 @@ import FormContainer from "../FormContainer";
 import ExePageDetailes from "./ExePageDetailes";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import RequestAssignPage from "./RequestAssignPage";
 
 
 const ExcusionCampaign = () => {
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
+  
   console.log(decodedToken);
+
 
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
   const [assignmentData, setAssignmentData] = useState([]);
   console.log(assignmentData, "new");
-  const [pendingData, setPendingData] = useState([]);
+  // const [pendingData, setPendingData] = useState([]);
   const [executedData, setExecutedData] = useState([]);
   const [verifiedData, setVerifiedData] = useState([]);
-  const [rejectedData, setRejectedData] = useState([]); 
+  const [rejectedData, setRejectedData] = useState([]);
+  const [requestAssign, SetRequestAssign] = useState([]);
 
-
-  const getExpertee=async ()=>{
-    const expert=await axios.get(`http://34.93.135.33:8080/api/expertise/user/${decodedToken.id}`);
-    getAssignment(expert.data.data.exp_id)
-    console.log(expert)
-  }
-
+  const getExpertee = async () => {
+    const expert = await axios.get(
+      `https://node-dev-server.onrender.com/api/expertise/user/${decodedToken.id}`
+    );
+    getAssignment(expert.data.data.exp_id);
+    console.log(expert);
+  };
+  const RequestAssign = async () => {
+    const reqAss = await axios.get(
+      `http://localhost:3000/api/preassignment/6597d50d37c4ebe46bf05633`
+    );
+    const data = reqAss?.data?.data.filter((item) => item.status == "pending");
+    SetRequestAssign(data);
+  };
+  useEffect(() => {
+    RequestAssign();
+  }, []);
   const getAssignment = async (id) => {
     const getData = await axios.get(
-      `http://34.93.135.33:8080/api/assignment/all/25`
+      `http://localhost:3000/api/assignment/all/6597d50d37c4ebe46bf05633`
     );
     const assigned = getData?.data?.data.filter(
       (item) => item.ass_status == "assigned" || item.ass_status == "pending"
     );
-    const pending = getData?.data?.data.filter(
-      (item) => item.ass_status == "pending"
-    );
+    // const pending = getData?.data?.data.filter(
+    //   (item) => item.ass_status == "pending"
+    // );
     const excuted = getData?.data?.data.filter(
       (item) => item.ass_status == "executed"
     );
@@ -45,20 +59,28 @@ const ExcusionCampaign = () => {
       (item) => item.ass_status == "rejected"
     );
     setAssignmentData(assigned);
-    setPendingData(pending);
+    // setPendingData(pending);
     setExecutedData(excuted);
     setVerifiedData(verified);
     setRejectedData(rejected);
   };
   useEffect(() => {
     // getAssignment();
-    getExpertee()
-  }, [decodedToken]);
+    getExpertee();
+  }, []);
   const handleAccordionButtonClick = (index) => {
     setActiveAccordionIndex(index);
   };
 
   const tab1 = (
+    <RequestAssignPage
+      data={requestAssign}
+      RequestAssign={RequestAssign}
+
+    />
+  );
+
+  const tab2 = (
     <ExePageDetailes
       data={assignmentData}
       // status={"assigned"}
@@ -68,15 +90,15 @@ const ExcusionCampaign = () => {
       getAssignment={getAssignment}
     />
   );
-  const tab2 = (
-    <ExePageDetailes
-      data={pendingData}
-      status={"assigned"}
-      setActiveAccordionIndex={setActiveAccordionIndex}
-      activeAccordion="2"
-      getAssignment={getAssignment}
-    />
-  );
+  // const tab3 = (
+  //   <ExePageDetailes
+  //     data={pendingData}
+  //     status={"assigned"}
+  //     setActiveAccordionIndex={setActiveAccordionIndex}
+  //     activeAccordion="2"
+  //     getAssignment={getAssignment}
+  //   />
+  // );
   const tab3 = (
     <ExePageDetailes
       data={executedData}
@@ -105,8 +127,9 @@ const ExcusionCampaign = () => {
   );
 
   const accordionButtons = [
+    "Requested Assign",
     "Assignment",
-    "Pending Excuation",
+    // "Pending Excuation",
     "Excuted",
     "Verified",
     "Rejected",
@@ -126,6 +149,7 @@ const ExcusionCampaign = () => {
         {activeAccordionIndex === 2 && tab3}
         {activeAccordionIndex === 3 && tab4}
         {activeAccordionIndex === 4 && tab5}
+        {/* {activeAccordionIndex === 5 && tab6} */}
       </FormContainer>
     </div>
   );

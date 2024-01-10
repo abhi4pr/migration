@@ -14,7 +14,7 @@ export default function CheckPageFollowers() {
 
 // Interagation of followerData api ----- ** start ** ------------------
   useEffect(() => {
-    axios.get(`http://34.93.135.33:8080/api/getallprojectx`).then((response) => {
+    axios.get(`https://node-dev-server.onrender.com/api/getallprojectx`).then((response) => {
       const data = response.data;
       console.log(data,"<--------");
       if (gridRows.length > 0) {
@@ -204,7 +204,7 @@ export default function CheckPageFollowers() {
              
     //        };
        
-    //        const response = await axios.post("http://34.93.135.33:8080/api/content",
+    //        const response = await axios.post("https://node-dev-server.onrender.com/api/content",
     //        newRecordData);
     //        const newRecord = response.data;
     
