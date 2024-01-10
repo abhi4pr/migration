@@ -12,7 +12,7 @@ const NewPages = ({ pages }) => {
   const fetchCampaignData = async () => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/exe_campaign`
+        `https://jarvis-work-backend.onrender.com/api/exe_campaign`
       );
       setCamp(response?.data?.data);
     } catch (error) {

@@ -72,7 +72,7 @@ const SimUpdate = () => {
   // All Category , subcategory and vendor api here
   const getAllCategory = () => {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_asset_category")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
       .then((res) => {
         setCategoryData(res.data.data.asset_categories);
       });
@@ -81,7 +81,7 @@ const SimUpdate = () => {
     if (assetsCategory) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_asset_sub_category/${assetsCategory}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_asset_sub_category/${assetsCategory}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -98,20 +98,20 @@ const SimUpdate = () => {
     }
   }, [subCategory, subcategoryData]);
   const getAllVendor = () => {
-    axios.get("https://node-dev-server.onrender.com/api/get_all_vendor").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_vendor").then((res) => {
       setVendorData(res.data);
     });
   };
 
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_asset_modals"
+      "https://jarvis-work-backend.onrender.com/api/get_all_asset_modals"
     );
     setModalData(res.data);
   }
   async function getBrandData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_asset_brands"
+      "https://jarvis-work-backend.onrender.com/api/get_all_asset_brands"
     );
     setBrandData(res.data.data);
   }
@@ -140,7 +140,7 @@ const SimUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_sim/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         //if (fetchedData.length > 0) {
@@ -229,7 +229,7 @@ const SimUpdate = () => {
 
     try {
       const response = await axios.put(
-        "https://node-dev-server.onrender.com/api/update_sim",
+        "https://jarvis-work-backend.onrender.com/api/update_sim",
         formData
       );
       const imageData = new FormData();
@@ -241,7 +241,7 @@ const SimUpdate = () => {
       imageData.append("img3", assetsImg3);
       imageData.append("img4", assetsImg4);
       axios.put(
-        "https://node-dev-server.onrender.com/api/update_assets_images",
+        "https://jarvis-work-backend.onrender.com/api/update_assets_images",
         imageData
       );
 

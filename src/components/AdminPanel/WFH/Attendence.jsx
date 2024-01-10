@@ -59,7 +59,7 @@ const Attendence = () => {
 
   function gettingSliderData() {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_month_year_data")
+      .get("https://jarvis-work-backend.onrender.com/api/get_month_year_data")
       .then((res) => {
         setCompletedYearsMonths(res.data.data);
       });
@@ -67,7 +67,7 @@ const Attendence = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/all_departments_of_wfh")
+      .get("https://jarvis-work-backend.onrender.com/api/all_departments_of_wfh")
       .then((res) => {
         if (RoleIDContext == 1 || RoleIDContext == 5) {
           getDepartmentData(res.data.data);
@@ -85,7 +85,7 @@ const Attendence = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
+          "https://jarvis-work-backend.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
@@ -155,7 +155,7 @@ const Attendence = () => {
 
   const handleAttendence = () => {
     axios
-      .post("https://node-dev-server.onrender.com/api/add_attendance", {
+      .post("https://jarvis-work-backend.onrender.com/api/add_attendance", {
         dept: department,
         user_id: userName.user_id,
         noOfabsent: 0,
@@ -174,7 +174,7 @@ const Attendence = () => {
 
   function handleAllDepartmentAttendance() {
     axios
-      .post("https://node-dev-server.onrender.com/api/save_all_depts_attendance", {
+      .post("https://jarvis-work-backend.onrender.com/api/save_all_depts_attendance", {
         month: selectedMonth,
         year: selectedYear,
       })
@@ -204,7 +204,7 @@ const Attendence = () => {
 
   function gettingDepartmentSalaryExists() {
     axios
-      .post("https://node-dev-server.onrender.com/api/get_distinct_depts", {
+      .post("https://jarvis-work-backend.onrender.com/api/get_distinct_depts", {
         month: selectedMonth,
         year: selectedYear,
       })
@@ -218,7 +218,7 @@ const Attendence = () => {
   };
 
   useEffect(() => {
-    axios.get("https://node-dev-server.onrender.com/api/get_all_wfh_users").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -235,7 +235,7 @@ const Attendence = () => {
     };
     axios
       .post(
-        "https://node-dev-server.onrender.com/api/get_salary_by_id_month_year",
+        "https://jarvis-work-backend.onrender.com/api/get_salary_by_id_month_year",
         payload
       )
       .then((res) => {
@@ -260,7 +260,7 @@ const Attendence = () => {
   useEffect(() => {
     if (department) {
       axios
-        .get(`https://node-dev-server.onrender.com/api/get_wfh_user/${department}`)
+        .get(`https://jarvis-work-backend.onrender.com/api/get_wfh_user/${department}`)
         .then((res) => {
           getUsersData(res.data);
         });
@@ -270,7 +270,7 @@ const Attendence = () => {
   const handleCreateSalary = (e) => {
     e.preventDefault();
     axios
-      .put("https://node-dev-server.onrender.com/api/update_attendence_status", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_attendence_status", {
         month: selectedMonth,
         year: Number(selectedYear),
         dept: department,
@@ -285,7 +285,7 @@ const Attendence = () => {
     } else {
       const updatedRow = { ...newRow, isNew: false };
       axios
-        .post("https://node-dev-server.onrender.com/api/add_attendance", {
+        .post("https://jarvis-work-backend.onrender.com/api/add_attendance", {
           dept: updatedRow.dept,
           user_id: updatedRow.user_id,
           noOfabsent: updatedRow.noOfabsent,

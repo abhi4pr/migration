@@ -26,7 +26,7 @@ function ExecutionDetail() {
     axios
       .get(
         `
-        https://node-dev-server.onrender.com/api/get_exe_sum`
+        https://jarvis-work-backend.onrender.com/api/get_exe_sum`
       )
       .then((res) => {
         // console.log(

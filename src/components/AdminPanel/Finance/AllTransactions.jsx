@@ -24,10 +24,10 @@ const AllTransactions = () => {
   const loginUserId = decodedToken.id;
 
   function getData() {
-    axios.post("https://node-dev-server.onrender.com/api/add_php_payment_acc_data_in_node").then((res)=>{
+    axios.post("https://jarvis-work-backend.onrender.com/api/add_php_payment_acc_data_in_node").then((res)=>{
       console.log('data save in local success')
     })
-    axios.get("https://node-dev-server.onrender.com/api/get_all_php_finance_data").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_php_finance_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

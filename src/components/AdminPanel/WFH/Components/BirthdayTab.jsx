@@ -6,7 +6,7 @@ const BirthdayTab = ({ birthdays }) => {
       {birthdays?.map((item) => (
         <li key={item.user_id}>
           <img
-            src={`https://node-dev-server.onrender.com//api/${item.image}`}
+            src={`https://jarvis-work-backend.onrender.com//api/${item.image}`}
             alt="user Image"
           />
           {item.user_name}

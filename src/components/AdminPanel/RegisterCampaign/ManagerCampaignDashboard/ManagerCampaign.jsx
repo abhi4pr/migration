@@ -11,7 +11,7 @@ const ManagerCampaign = () => {
     const Assigndata = async () => {
       try {
         const response = await axios.get(
-          `https://node-dev-server.onrender.com/api/register_campaign`
+          `https://jarvis-work-backend.onrender.com/api/register_campaign`
         );
         console.log(response?.data?.data,"new camp data");
         setNewPages(response?.data?.data)

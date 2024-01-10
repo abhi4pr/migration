@@ -59,7 +59,7 @@ export default function Rejected({ ReloadMain }) {
   const handleReassing = () => {
     console.log(reAssignModalData.register_campaign_id);
     axios
-      .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
+      .put("https://jarvis-work-backend.onrender.com/api/contentSectionReg", {
         content_section_id: reAssignModalData.content_section_id,
         stage: 1,
         status: "1",
@@ -259,7 +259,7 @@ export default function Rejected({ ReloadMain }) {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/contentSectionReg")
+      .get("https://jarvis-work-backend.onrender.com/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(
@@ -270,7 +270,7 @@ export default function Rejected({ ReloadMain }) {
       });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_brands")
+      .get("https://jarvis-work-backend.onrender.com/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
         // setTable1Data2(true);
@@ -279,17 +279,17 @@ export default function Rejected({ ReloadMain }) {
         console.log(err);
       });
 
-    axios.get("https://node-dev-server.onrender.com/api/content").then((response) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_commitments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
 
         setCommits(data);
       });
-    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((response) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((response) => {
       const data = response.data.data.filter((e) => e.dept_id == 13);
       console.log(data);
       setAssignToList(data);
@@ -298,7 +298,7 @@ export default function Rejected({ ReloadMain }) {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/contentSectionReg")
+      .get("https://jarvis-work-backend.onrender.com/api/contentSectionReg")
       .then((response) => {
         // console.log(response.data.data);
         const data = response.data.data.filter(

@@ -12,7 +12,7 @@ const WFHDOverview = () => {
 
   const getData = async () => {
     const response = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_wfh_users"
+      "https://jarvis-work-backend.onrender.com/api/get_all_wfh_users"
     );
     if (RoleIDContext == 1 || RoleIDContext == 5) {
       setAllWFHDData(response.data.data);

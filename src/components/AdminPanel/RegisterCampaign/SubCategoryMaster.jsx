@@ -70,7 +70,7 @@ export default function SubCategoryMaster() {
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("https://node-dev-server.onrender.com/api/projectxSubCategory", postData)
+      .post("https://jarvis-work-backend.onrender.com/api/projectxSubCategory", postData)
       .then((response) => {
         postData.sub_category_name = "";
         console.log("Data saved:", response.data);
@@ -88,7 +88,7 @@ export default function SubCategoryMaster() {
   // get api ------
   const getData = () => {
     axios
-      .get("https://node-dev-server.onrender.com/api/projectxSubCategory")
+      .get("https://jarvis-work-backend.onrender.com/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data);
         const sortedData = res.data.data.sort(
@@ -98,7 +98,7 @@ export default function SubCategoryMaster() {
       });
   };
   useEffect(() => {
-    axios.get("https://node-dev-server.onrender.com/api/projectxCategory").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/projectxCategory").then((res) => {
       console.log(res.data.data);
       setCategory(res.data.data);
     });
@@ -108,7 +108,7 @@ export default function SubCategoryMaster() {
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`https://node-dev-server.onrender.com/api/projectxSubCategory`, {
+      .put(`https://jarvis-work-backend.onrender.com/api/projectxSubCategory`, {
         sub_category_id: editData.sub_category_id,
         sub_category_name: editData.sub_category_name,
         category_id: editData.category_id,
@@ -145,7 +145,7 @@ export default function SubCategoryMaster() {
     if (itemToDeleteId) {
       axios
         .delete(
-          `https://node-dev-server.onrender.com/api/projectxSubCategory/${itemToDeleteId}`
+          `https://jarvis-work-backend.onrender.com/api/projectxSubCategory/${itemToDeleteId}`
         )
         .then(() => {
           getData();

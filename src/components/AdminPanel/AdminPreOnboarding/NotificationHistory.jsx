@@ -19,7 +19,7 @@ const NotificationHistory = () => {
 
   async function getData() {
     await axios
-      .get("https://node-dev-server.onrender.com/api/get_all_notifications")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_notifications")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

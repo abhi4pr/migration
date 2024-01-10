@@ -8,7 +8,7 @@ const TransferReq = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("https://node-dev-server.onrender.com/api/get_all_transreq").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_transreq").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

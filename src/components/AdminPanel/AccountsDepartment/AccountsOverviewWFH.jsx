@@ -33,7 +33,7 @@ const AccountsOverviewWFH = () => {
 
   const getData = async () => {
     try {
-      axios.get(`https://node-dev-server.onrender.com/api/get_finances`).then((res) => {
+      axios.get(`https://jarvis-work-backend.onrender.com/api/get_finances`).then((res) => {
         const response = res.data;
         setData(response);
         setFilterData(
@@ -80,7 +80,7 @@ const AccountsOverviewWFH = () => {
     formData.append("attendence_id", rowData.attendence_id);
 
     axios
-      .put(`https://node-dev-server.onrender.com/api/edit_finance`, formData, {
+      .put(`https://jarvis-work-backend.onrender.com/api/edit_finance`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

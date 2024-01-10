@@ -22,7 +22,7 @@ const BrandOverviewOld = () => {
   const [countData, setCountData] = useState([]);
 
   function getData() {
-    axios.get("https://node-dev-server.onrender.com/api/logodata").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/logodata").then((res) => {
       setCountData(res.data);
       const responseData = res.data;
       const uniqueBrandName = new Set();
@@ -38,11 +38,11 @@ const BrandOverviewOld = () => {
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/alllogocat")
+      .get("https://jarvis-work-backend.onrender.com/api/alllogocat")
       .then((res) => setCategoryData(res.data));
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_users")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
       .then((res) => setEmployeeData(res.data.data));
   }
 

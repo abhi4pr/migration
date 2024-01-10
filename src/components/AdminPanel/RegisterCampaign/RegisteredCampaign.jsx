@@ -64,7 +64,7 @@ export default function RegisteredCampaign() {
 
   const handleDeleteRowConfirm = () => {
     axios
-      .delete(`https://node-dev-server.onrender.com/api/register_campaign/${deleteRowId}`)
+      .delete(`https://jarvis-work-backend.onrender.com/api/register_campaign/${deleteRowId}`)
       .then((res) => {
         console.log(res);
         setReload(!reload);
@@ -217,14 +217,14 @@ export default function RegisteredCampaign() {
 
         try {
           const response = await axios
-            .post("https://node-dev-server.onrender.com/api/contentSectionReg", formData, {
+            .post("https://jarvis-work-backend.onrender.com/api/contentSectionReg", formData, {
               headers: {
                 "Content-Type": "multipart/form-data", // Important for file uploads
               },
             })
             .then((response) => {
               axios
-                .put("https://node-dev-server.onrender.com/api/register_campaign", {
+                .put("https://jarvis-work-backend.onrender.com/api/register_campaign", {
                   register_campaign_id: campaignId,
                   status: 1,
                 })
@@ -292,7 +292,7 @@ export default function RegisteredCampaign() {
   };
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/register_campaign")
+      .get("https://jarvis-work-backend.onrender.com/api/register_campaign")
       .then((response) => {
         // console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -318,7 +318,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_brands")
+      .get("https://jarvis-work-backend.onrender.com/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -328,19 +328,19 @@ export default function RegisteredCampaign() {
         console.log(err);
       });
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_commitments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<--------");
 
         setCommits(data);
       });
-    axios.get("https://node-dev-server.onrender.com/api/content").then((response) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/exe_campaign")
+      .get("https://jarvis-work-backend.onrender.com/api/exe_campaign")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<----data");
@@ -352,7 +352,7 @@ export default function RegisteredCampaign() {
   }, []);
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/register_campaign")
+      .get("https://jarvis-work-backend.onrender.com/api/register_campaign")
       .then((response) => {
         console.log(response.data.data, "response");
         SetLoadTable1(true);
@@ -378,7 +378,7 @@ export default function RegisteredCampaign() {
       });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_brands")
+      .get("https://jarvis-work-backend.onrender.com/api/get_brands")
       .then((response) => {
         console.log(response.data.data, "response");
         setBrandName(response.data.data);
@@ -964,7 +964,7 @@ const PlanCreationComponent = ({ row, handlePlan, handleShowPlan }) => {
     const fetchData = async () => {
       try {
         const newData = await axios.get(
-          `https://node-dev-server.onrender.com/api/campaignplan/${row._id}`
+          `https://jarvis-work-backend.onrender.com/api/campaignplan/${row._id}`
         );
         setPlanData(newData);
       } catch (error) {
@@ -998,7 +998,7 @@ const PhaseCreationComponent = ({ row, handlePhase }) => {
     const fetchData = async () => {
       try {
         const newData = await axios.get(
-          `https://node-dev-server.onrender.com/api/campaignplan/${rowId}`
+          `https://jarvis-work-backend.onrender.com/api/campaignplan/${rowId}`
         );
         setPlanData(newData);
       } catch (error) {

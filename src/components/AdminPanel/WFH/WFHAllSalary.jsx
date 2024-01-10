@@ -17,14 +17,14 @@ const WFHAllSalary = () => {
 
   const getData = async () => {
     const response = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_attendance_data"
+      "https://jarvis-work-backend.onrender.com/api/get_all_attendance_data"
     );
     setAllSalaryData(response.data.data);
     setMasterDataList(response.data.data);
     setSavedData(response.data.data);
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
       .then((res) => {
         setDepartmentList(res.data);
       });

@@ -37,10 +37,10 @@ const SaleBookingClose = () => {
   };
 
   function getData() {
-    axios.post("https://node-dev-server.onrender.com/api/add_php_sale_booking_tds_data_in_node").then((res)=>{
+    axios.post("https://jarvis-work-backend.onrender.com/api/add_php_sale_booking_tds_data_in_node").then((res)=>{
       console.log('data save in local success')
     })
-    axios.get("https://node-dev-server.onrender.com/api/get_all_php_sale_booking_tds_data").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_php_sale_booking_tds_data").then((res) => {
       const allData = res.data.data;
       const filteredData = allData.filter((item) => item.show_fstatus == 'Open');
       setData(allData);

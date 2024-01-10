@@ -19,7 +19,7 @@ function RoleMastUpdate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`https://node-dev-server.onrender.com/api/update_role`, {
+    axios.put(`https://jarvis-work-backend.onrender.com/api/update_role`, {
       role_id: id,
       role_name: role_name,
       remark: remark,

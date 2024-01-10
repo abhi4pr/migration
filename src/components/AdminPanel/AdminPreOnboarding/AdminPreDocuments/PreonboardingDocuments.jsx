@@ -45,7 +45,7 @@ const PreonboardingDocuments = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://node-dev-server.onrender.com/api/add_doc", {
+      .post("https://jarvis-work-backend.onrender.com/api/add_doc", {
         doc_type: documentType,
         priority: priority,
         period: Number(period),

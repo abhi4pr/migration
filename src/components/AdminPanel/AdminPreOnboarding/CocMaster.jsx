@@ -26,7 +26,7 @@ const CocMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.post("https://node-dev-server.onrender.com/api/add_coc",{
+      await axios.post("https://jarvis-work-backend.onrender.com/api/add_coc",{
         display_sequence: displaySeq,
         heading: heading,
         heading_desc: headingDesc,

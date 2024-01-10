@@ -28,7 +28,7 @@ const ReplacementList = ({ replacementData, hardRender }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const getReplacementDetail = async (id) => {
     const x = await axios.get(
-      `https://node-dev-server.onrender.com/api/replacement/${id}`
+      `https://jarvis-work-backend.onrender.com/api/replacement/${id}`
     );
     setReplacementDetails(x.data.data);
   };
@@ -43,7 +43,7 @@ const ReplacementList = ({ replacementData, hardRender }) => {
     };
   
     const result = await axios.post(
-      "https://node-dev-server.onrender.com/api/replacement/status",
+      "https://jarvis-work-backend.onrender.com/api/replacement/status",
       data
     );
     if (result.status == 200) {

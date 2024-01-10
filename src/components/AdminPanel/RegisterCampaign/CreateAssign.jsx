@@ -107,7 +107,7 @@ const CreateAssign = () => {
   const ExpertiseDa = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/expertise"
+        "https://jarvis-work-backend.onrender.com/api/expertise"
       );
       const res = response.data.data;
       setExpertiseData(res);
@@ -119,7 +119,7 @@ const CreateAssign = () => {
   //submiting the assignment
   const handleSubmitAssign = async () => {
     try {
-      const createAssignment = await axios.post(`https://node-dev-server.onrender.com/api/assignment/bulk`, { pages: payload });
+      const createAssignment = await axios.post(`https://jarvis-work-backend.onrender.com/api/assignment/bulk`, { pages: payload });
       alert("assignment created successfully")
       // navigate("/admin/excusionCampaign");
     } catch (error) {

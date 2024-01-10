@@ -30,7 +30,7 @@ const DataCategory = () => {
   const handleSubCategroy = async (row) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_data_sub_category_from_categoryid/${row}`
+        `https://jarvis-work-backend.onrender.com/api/get_data_sub_category_from_categoryid/${row}`
       );
       console.log(response, "responsne ere");
       setSubcategroycount(response.data.data.sub_categories);
@@ -45,7 +45,7 @@ const DataCategory = () => {
     try {
       
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_data_sub_category",
+          "https://jarvis-work-backend.onrender.com/api/add_data_sub_category",
           {
             data_sub_cat_name: subCatName,  
             cat_id: categoryNameSub,
@@ -126,7 +126,7 @@ const DataCategory = () => {
         alert("Category already Exists");
       } else {
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_data_category",
+          "https://jarvis-work-backend.onrender.com/api/add_data_category",
           {
             category_name: categoryName,
           }
@@ -141,7 +141,7 @@ const DataCategory = () => {
   };
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_data_categorys"
+      "https://jarvis-work-backend.onrender.com/api/get_all_data_categorys"
     );
     setModalData(res.data.simcWithSubCategoryCount);
     setModalFilter(res.data.simcWithSubCategoryCount);
@@ -157,7 +157,7 @@ const DataCategory = () => {
   };
   const handleModalUpdate = () => {
     axios
-      .put("https://node-dev-server.onrender.com/api/update_data_category", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_data_category", {
         _id: modalId,
         category_name: categoryNameUpdate,
       })

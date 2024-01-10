@@ -52,7 +52,7 @@ const DataBrandMaster = () => {
 
   useEffect(() => {
     axios
-    .get("https://node-dev-server.onrender.com/api/get_all_users")
+    .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
     .then((res) => {
       const allUsers = res.data.data;
         const filteredUsers = allUsers.filter(user => user.dept_id == 49);
@@ -60,17 +60,17 @@ const DataBrandMaster = () => {
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_data_platforms")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_platforms")
       .then((res) => {
         setPlateformData(res.data);
       });
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_data_content_types")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_content_types")
       .then((res) => {
         setContentTypeData(res.data);
       });
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_data_brands")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_brands")
       .then((res) => {
         setDataBrandData(res.data);
       });
@@ -79,7 +79,7 @@ const DataBrandMaster = () => {
   useEffect(()=>{
     if(category){
       axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_data_from_sub_category/${category}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_data_from_sub_category/${category}`)
       .then((res) => {
         setDataSubCategoryData(res.data);
       });
@@ -88,7 +88,7 @@ const DataBrandMaster = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_data_categorys")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_categorys")
       .then((res) => setCategoryData(res.data.simcWithSubCategoryCount));
 
     const today = new Date();
@@ -140,7 +140,7 @@ const DataBrandMaster = () => {
         formData.append("created_by", userID);
         formData.append("designed_by", designedBy);
 
-        await axios.post("https://node-dev-server.onrender.com/api/add_data", formData, {
+        await axios.post("https://jarvis-work-backend.onrender.com/api/add_data", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

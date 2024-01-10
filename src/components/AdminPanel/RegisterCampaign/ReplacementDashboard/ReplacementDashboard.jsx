@@ -21,10 +21,10 @@ const ReplacementDashboard = () => {
   const getReplacementData = async () => {
     try {
 
-      const replace = await axios.get('https://node-dev-server.onrender.com/api/replacement/plan')
+      const replace = await axios.get('https://jarvis-work-backend.onrender.com/api/replacement/plan')
       setReplacementData(replace?.data?.data)
 
-      const getCampaigns = await axios.get('https://node-dev-server.onrender.com/api/exe_campaign')
+      const getCampaigns = await axios.get('https://jarvis-work-backend.onrender.com/api/exe_campaign')
       setAllCampaigns(getCampaigns?.data?.data)
 
     } catch (error) {
@@ -47,7 +47,7 @@ const ReplacementDashboard = () => {
 
   // const ExpertiesData = async () => {
   //   const Experties = await axios.get(
-  //     "https://node-dev-server.onrender.com/api/expertise"
+  //     "https://jarvis-work-backend.onrender.com/api/expertise"
   //   );
 
   //   // setReplacementData(Experties?.data?.data);

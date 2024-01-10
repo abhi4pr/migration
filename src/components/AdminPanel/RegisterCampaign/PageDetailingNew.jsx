@@ -131,7 +131,7 @@ const PageDetailingNew = ({ pageName, data,setPhaseDataError,phaseInfo }) => {
                 setFilteredPages(pageData.data.body)
             } else if (pageName == 'phaseCreation') {
                 const pageD = await axios.get(
-                    `https://node-dev-server.onrender.com/api/campaignplan/${data.campaignId}`
+                    `https://jarvis-work-backend.onrender.com/api/campaignplan/${data.campaignId}`
                 )
                 const x = pageD.data.data.filter((page) => {
                     return page.replacement_status == "inactive" || page.replacement_status == "replacement"

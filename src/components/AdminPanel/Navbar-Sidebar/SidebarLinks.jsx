@@ -17,7 +17,7 @@ const SidebarLinks = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);

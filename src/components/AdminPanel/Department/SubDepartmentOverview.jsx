@@ -26,7 +26,7 @@ export default function SubDepartmentOverview() {
 
   function getData() {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_sub_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_sub_departments")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -34,7 +34,7 @@ export default function SubDepartmentOverview() {
   }
   function getSubDepartmentData(dept_id) {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_subdept_from_dept"/${dept_id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_subdept_from_dept"/${dept_id}`)
       .then((res) => {
         setSubDeparmentData(res.data);
       });
@@ -42,7 +42,7 @@ export default function SubDepartmentOverview() {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

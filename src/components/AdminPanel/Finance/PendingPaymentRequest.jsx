@@ -66,7 +66,7 @@ export default function PendingPaymentRequest() {
 
   const handleDiscardClick = (row) => {
     axios
-      .delete(`https://node-dev-server.onrender.com/api/delete_demo/${row._id}`)
+      .delete(`https://jarvis-work-backend.onrender.com/api/delete_demo/${row._id}`)
       .then(() => {
         callApi();
       });

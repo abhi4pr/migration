@@ -43,7 +43,7 @@ const FamilyFields = () => {
     async function fetchFamilyData() {
       try {
         const response = await axios.get(
-          `https://node-dev-server.onrender.com/api/get_single_family/1`
+          `https://jarvis-work-backend.onrender.com/api/get_single_family/1`
         );
         setFieldDetails(response.data.data);
       } catch (error) {

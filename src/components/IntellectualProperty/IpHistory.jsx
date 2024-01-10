@@ -16,7 +16,7 @@ const IpHistory = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get(`https://node-dev-server.onrender.com/api/dataofiphistory/${id}`).then((res) => {
+    axios.get(`https://jarvis-work-backend.onrender.com/api/dataofiphistory/${id}`).then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

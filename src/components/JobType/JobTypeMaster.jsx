@@ -77,7 +77,7 @@ const JobTypeMaster = () => {
         alert("Brand already Exists");
       } else {
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_job_type",
+          "https://jarvis-work-backend.onrender.com/api/add_job_type",
           {
             job_type: jobTypeName,
             job_type_description: description,
@@ -94,7 +94,7 @@ const JobTypeMaster = () => {
 
   async function getJobTypeData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_job_types"
+      "https://jarvis-work-backend.onrender.com/api/get_all_job_types"
     );
     setJobTypeData(res.data.data);
     setJobTypeFilter(res.data.data);
@@ -112,7 +112,7 @@ const JobTypeMaster = () => {
 
   const handleJobTypeUpdate = () => {
     axios
-      .put("https://node-dev-server.onrender.com/api/update_job_type", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_job_type", {
         _id: jobTypeID,
         job_type: jobTypeNameUpdate,
         job_type_description: jobTypeDescriptionUpdate,

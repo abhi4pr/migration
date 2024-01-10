@@ -21,7 +21,7 @@ const DashboardWFHCardDetails = () => {
   const [search, setSearch] = useState("");
   const getData = () => {
     axios
-      .post("https://node-dev-server.onrender.com/api/dept_id_with_wfh", {
+      .post("https://jarvis-work-backend.onrender.com/api/dept_id_with_wfh", {
         dept_id: id,
       })
       .then((res) => {

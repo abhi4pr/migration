@@ -57,7 +57,7 @@ export default function ContentType() {
   }
 
   const fff = () => {
-    axios.get("https://node-dev-server.onrender.com/api/content").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/content").then((res) => {
       const newData = res.data.data;
       console.log(newData);
       setRows(newData);
@@ -87,7 +87,7 @@ export default function ContentType() {
 
   const handleDeleteClick = (id) => {
     axios
-      .delete(`https://node-dev-server.onrender.com/api/content/${id}`)
+      .delete(`https://jarvis-work-backend.onrender.com/api/content/${id}`)
       .then(() => {
         console.log(id, "Deleted successfully");
         fff();
@@ -110,7 +110,7 @@ export default function ContentType() {
     if (addrows) {
       setAddRows(false);
       try {
-        axios.post("https://node-dev-server.onrender.com/api/content", {
+        axios.post("https://jarvis-work-backend.onrender.com/api/content", {
           // content_type_id:updatedRow.content_type_id,
           content_type: updatedRow.content_type,
           content_value: updatedRow.content_value,
@@ -124,7 +124,7 @@ export default function ContentType() {
     } else {
       try {
         axios
-          .put("https://node-dev-server.onrender.com/api/content", {
+          .put("https://jarvis-work-backend.onrender.com/api/content", {
             content_type_id: updatedRow.content_type_id,
             content_type: updatedRow.content_type,
             content_value: updatedRow.content_value,

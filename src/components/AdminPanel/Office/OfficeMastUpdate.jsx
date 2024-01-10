@@ -21,7 +21,7 @@ function OfficeMastUpdate() {
     formData.append("remarks", remark);
     formData.append("created_by", createdby);
 
-    await axios.put(`https://node-dev-server.onrender.com/api/update_room`, formData, {
+    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_room`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

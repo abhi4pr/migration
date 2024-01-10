@@ -22,7 +22,7 @@ const CocOverview = () => {
 
   async function getData() {
     await axios
-      .get("https://node-dev-server.onrender.com/api/get_all_cocs")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_cocs")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

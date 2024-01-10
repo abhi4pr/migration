@@ -53,7 +53,7 @@ const ReplacePagesModal = ({ open, handleClose, selection, planData, stage }) =>
       vendor_id: page.vendor_id
     }));
     const result = await axios.post(
-      "https://node-dev-server.onrender.com/api/replacement/plan", {
+      "https://jarvis-work-backend.onrender.com/api/replacement/plan", {
       campaignName: selection?.campaignName,
       campaignId: selection?.campaignId,
       replacement_request_by: "12345",

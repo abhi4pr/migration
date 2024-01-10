@@ -51,7 +51,7 @@ const SalaryDashboard = () => {
 
   useEffect(() => {
     axios
-      .post("https://node-dev-server.onrender.com/api/get_salary_count_by_dept_year", {
+      .post("https://jarvis-work-backend.onrender.com/api/get_salary_count_by_dept_year", {
         dept: id,
       })
       .then((res) => {
@@ -60,7 +60,7 @@ const SalaryDashboard = () => {
   }, [id]);
 
   useEffect(() => {
-    axios.get("https://node-dev-server.onrender.com/api/get_all_wfh_users").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -71,14 +71,14 @@ const SalaryDashboard = () => {
   }, [department]);
 
   useEffect(() => {
-    axios.get(" https://node-dev-server.onrender.com/api/get_total_salary").then((res) => {
+    axios.get(" https://jarvis-work-backend.onrender.com/api/get_total_salary").then((res) => {
       setTotalCountOfSalary(res.data.data);
     });
   }, []);
 
   const getAttendanceData = () => {
     axios
-      .post("https://node-dev-server.onrender.com/api/get_salary_by_filter", {
+      .post("https://jarvis-work-backend.onrender.com/api/get_salary_by_filter", {
         dept: id,
       })
       .then((res) => {

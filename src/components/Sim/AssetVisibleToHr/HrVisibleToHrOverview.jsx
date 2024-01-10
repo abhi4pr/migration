@@ -125,7 +125,7 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
   const handleVendorDetails = async (id) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_single_vendor/${id}`
+        `https://jarvis-work-backend.onrender.com/api/get_single_vendor/${id}`
       );
       setVendorData([response.data.data]);
       console.log([response.data.data], "data jere");

@@ -14,7 +14,7 @@ const PreOnboardingOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_users"
+        "https://jarvis-work-backend.onrender.com/api/get_all_users"
       );
       const data = response.data.data;
       const onboarddata = data.filter((d) => d.onboard_status === 2);
@@ -36,7 +36,7 @@ const PreOnboardingOverview = () => {
     formData.append("user_id", row);
     formData.append("onboard_status", 1);
     axios
-      .put("https://node-dev-server.onrender.com/api/update_user", formData, {
+      .put("https://jarvis-work-backend.onrender.com/api/update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

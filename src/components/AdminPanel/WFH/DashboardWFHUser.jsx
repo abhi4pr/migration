@@ -20,7 +20,7 @@ const DashboardWFHUser = () => {
   const getDepartment = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/all_departments_of_wfh"
+        "https://jarvis-work-backend.onrender.com/api/all_departments_of_wfh"
       );
 
       setDepartmentData(response.data.data);
@@ -32,7 +32,7 @@ const DashboardWFHUser = () => {
   const getTotalSalary = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_total_salary"
+        "https://jarvis-work-backend.onrender.com/api/get_total_salary"
       );
       setTotalSalary(response.data.data[0].totalsalary);
     } catch (error) {
@@ -43,7 +43,7 @@ const DashboardWFHUser = () => {
   const preOnboardCount = async () => {
     try {
       const res = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_wfh_users"
+        "https://jarvis-work-backend.onrender.com/api/get_all_wfh_users"
       );
       const data = res.data.data;
       const onboarddata = data.filter((d) => d.onboard_status === 2).length;
@@ -58,10 +58,10 @@ const DashboardWFHUser = () => {
   const getAnniversaryBirthdays = async () => {
     try {
       const responseDOB = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_users_with_dob"
+        "https://jarvis-work-backend.onrender.com/api/get_all_users_with_dob"
       );
       const responseDOJ = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_users_with_doj"
+        "https://jarvis-work-backend.onrender.com/api/get_all_users_with_doj"
       );
       setBirthdays(responseDOB.data.users);
       setWorkAnniversary(responseDOJ.data.users);
@@ -73,7 +73,7 @@ const DashboardWFHUser = () => {
   const getThisMonthJoinees = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_last_month_users"
+        "https://jarvis-work-backend.onrender.com/api/get_last_month_users"
       );
       setThisMonthJoinee(response.data);
     } catch (error) {
@@ -84,7 +84,7 @@ const DashboardWFHUser = () => {
   const IncompleteUserProfiles = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_percentage"
+        "https://jarvis-work-backend.onrender.com/api/get_all_percentage"
       );
       setIncompleteUserProfileData(response.data.incompleteUsersDetails);
     } catch (error) {

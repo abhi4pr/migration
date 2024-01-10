@@ -40,7 +40,7 @@ export default function ExecutionDashboard() {
     formData.append("loggedin_user_id", 36);
 setLoading(true)
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_purchase_data")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_purchase_data")
       .then((res) => {
         setAlldata(res.data.result);
         let tempdata = res.data.result.filter((ele) => {
@@ -61,7 +61,7 @@ setLoading(true)
     if (userID && contextData == false) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           if (res.data[33].view_value == 1) {
@@ -87,7 +87,7 @@ setLoading(true)
 
   const handleUpdateRowClick = (row) => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_exe_ip_count_history/${row.p_id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_exe_ip_count_history/${row.p_id}`)
       .then((res) => {
         let data = res.data.data.filter((e) => {
           return e.isDeleted !== true;

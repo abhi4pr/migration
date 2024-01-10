@@ -23,7 +23,7 @@ const AssetSubCategoryMaster = () => {
   // const [categoryName, setCategoryName] = useState([]);
   // useEffect(() => {
   //   axios
-  //     .get("https://node-dev-server.onrender.com/api/get_all_asset_category")
+  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
   //     .then((res) => {
   //       setCategoryName(res.data);
   //     })
@@ -36,7 +36,7 @@ const AssetSubCategoryMaster = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://node-dev-server.onrender.com/api/add_asset_sub_category",
+        "https://jarvis-work-backend.onrender.com/api/add_asset_sub_category",
         {
           sub_category_name: subCategoryName,
           category_id: selectedCat,

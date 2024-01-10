@@ -21,13 +21,13 @@ export default function SubDepartmentUpdate() {
 
   function getData() {
     // axios
-    //   .get("https://node-dev-server.onrender.com/api/get_all_departments")
+    //   .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
     //   .then((res) => {
     //     setDepartmentData(res.data);
     //   });
 
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_subdept_from_id/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_subdept_from_id/${id}`)
       .then((res) => {
         console.log(res.data.dept_id, "yha deta hai");
         setDeptId(res.data.dept_id);
@@ -42,7 +42,7 @@ export default function SubDepartmentUpdate() {
   async function handleSubmit(e) {
     e.preventDefault();
     // sub_dept_name, dept_id, remark, last_updated_by {target by id}
-    await axios.put(`https://node-dev-server.onrender.com/api/update_sub_department`, {
+    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_sub_department`, {
       id: Number(id),
       sub_dept_name: subDepartmentName,
       dept_id: Number(deptId),

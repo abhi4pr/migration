@@ -24,7 +24,7 @@ const ContentUploader = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/alldataofIptype")
+      .get("https://jarvis-work-backend.onrender.com/api/alldataofIptype")
       .then((res) => setIpTypeData(res.data))
   }, []);
   
@@ -39,7 +39,7 @@ const ContentUploader = () => {
     formData.append("content", content);
     formData.append("user_id", userID);
 
-    await axios.post("https://node-dev-server.onrender.com/api/content_upload", formData, {
+    await axios.post("https://jarvis-work-backend.onrender.com/api/content_upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }

@@ -136,7 +136,7 @@ const SalaryWFH = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://node-dev-server.onrender.com/api/get_all_wfh_users"
+          "https://jarvis-work-backend.onrender.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         setAllWFHUsers(data.length);
@@ -161,7 +161,7 @@ const SalaryWFH = () => {
 
   function gettingSliderData() {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_month_year_data")
+      .get("https://jarvis-work-backend.onrender.com/api/get_month_year_data")
       .then((res) => {
         setCompletedYearsMonths(res.data.data);
       });
@@ -169,7 +169,7 @@ const SalaryWFH = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/all_departments_of_wfh")
+      .get("https://jarvis-work-backend.onrender.com/api/all_departments_of_wfh")
       .then((res) => {
         if (RoleIDContext === 1 || RoleIDContext === 5) {
           getDepartmentData(res.data.data);
@@ -185,12 +185,12 @@ const SalaryWFH = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`https://node-dev-server.onrender.com/api/get_all_users`).then((res) => {
+    axios.get(`https://jarvis-work-backend.onrender.com/api/get_all_users`).then((res) => {
       getUsersData(res.data.data);
     });
     if (department) {
       axios
-        .get(`https://node-dev-server.onrender.com/api/get_user_by_deptid/${department}`)
+        .get(`https://jarvis-work-backend.onrender.com/api/get_user_by_deptid/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
@@ -301,7 +301,7 @@ const SalaryWFH = () => {
   const handleMonthYearData = async () => {
     try {
       const response = await axios.post(
-        "https://node-dev-server.onrender.com/api/get_salary_by_month_year",
+        "https://jarvis-work-backend.onrender.com/api/get_salary_by_month_year",
         {
           month: month,
           year: Number(year),
@@ -317,7 +317,7 @@ const SalaryWFH = () => {
   //Create all Department Salary
   function handleAllDepartmentSalary() {
     axios
-      .post("https://node-dev-server.onrender.com/api/save_all_depts_attendance", {
+      .post("https://jarvis-work-backend.onrender.com/api/save_all_depts_attendance", {
         month: month,
         year: year,
       })
@@ -338,7 +338,7 @@ const SalaryWFH = () => {
     };
     axios
       .post(
-        "https://node-dev-server.onrender.com/api/get_salary_by_id_month_year",
+        "https://jarvis-work-backend.onrender.com/api/get_salary_by_id_month_year",
         payload
       )
       .then((res) => {
@@ -357,7 +357,7 @@ const SalaryWFH = () => {
     formData.append("invoice_template_no", selectedTemplate);
 
     axios
-      .put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
+      .put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -380,11 +380,11 @@ const SalaryWFH = () => {
 
     if (department || month || year !== "") {
       axios
-        .get("https://node-dev-server.onrender.com/api/get_total_salary")
+        .get("https://jarvis-work-backend.onrender.com/api/get_total_salary")
         .then((res) => setCard2Data(res.data.data[0]));
 
       axios
-        .post("https://node-dev-server.onrender.com/api/left_employees", {
+        .post("https://jarvis-work-backend.onrender.com/api/left_employees", {
           dept_id: department,
           month: month,
           year: year,
@@ -393,7 +393,7 @@ const SalaryWFH = () => {
     }
 
     axios
-      .post("https://node-dev-server.onrender.com/api/new_joiners", {
+      .post("https://jarvis-work-backend.onrender.com/api/new_joiners", {
         dept_id: department,
         month: month,
         year: year,
@@ -401,7 +401,7 @@ const SalaryWFH = () => {
       .then((res) => setNewJoineeCount(res.data));
 
     axios
-      .post("https://node-dev-server.onrender.com/api/check_salary_status", {
+      .post("https://jarvis-work-backend.onrender.com/api/check_salary_status", {
         month: month,
         year: year,
         dept: department,
@@ -413,7 +413,7 @@ const SalaryWFH = () => {
 
   function gettingDepartmentSalaryExists() {
     axios
-      .post("https://node-dev-server.onrender.com/api/get_distinct_depts", {
+      .post("https://jarvis-work-backend.onrender.com/api/get_distinct_depts", {
         month: month,
         year: year,
       })
@@ -423,7 +423,7 @@ const SalaryWFH = () => {
   const handleAttendance = async () => {
     try {
       const addAttendanceResponse = await axios.post(
-        "https://node-dev-server.onrender.com/api/add_attendance",
+        "https://jarvis-work-backend.onrender.com/api/add_attendance",
         {
           dept: department,
           user_id: userName.user_id,
@@ -433,7 +433,7 @@ const SalaryWFH = () => {
         }
       );
       const updateAttendanceStatusResponse = await axios.put(
-        "https://node-dev-server.onrender.com/api/update_attendence_status",
+        "https://jarvis-work-backend.onrender.com/api/update_attendence_status",
         {
           month: month,
           year: Number(year),
@@ -559,12 +559,12 @@ const SalaryWFH = () => {
   //Send to finance
   function handleSendToFinance(e, row) {
     e.preventDefault();
-    axios.post(`https://node-dev-server.onrender.com/api/add_finance`, {
+    axios.post(`https://jarvis-work-backend.onrender.com/api/add_finance`, {
       attendence_id: row.attendence_id,
     });
 
     axios
-      .put(`https://node-dev-server.onrender.com/api/update_salary`, {
+      .put(`https://jarvis-work-backend.onrender.com/api/update_salary`, {
         attendence_id: row.attendence_id,
         sendToFinance: 1,
       })
@@ -681,13 +681,13 @@ const SalaryWFH = () => {
     setUserName(username);
     setUserContact(user_contact_no);
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_reasons")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
 
   const today = new Date().toISOString().split("T")[0];
   function handleSeparationDataPost() {
-    axios.post("https://node-dev-server.onrender.com/api/add_separation", {
+    axios.post("https://jarvis-work-backend.onrender.com/api/add_separation", {
       user_id: separationUserID,
       status: separationStatus,
       created_by: userID,

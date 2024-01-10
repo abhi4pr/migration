@@ -286,35 +286,35 @@ const UserMaster = () => {
     if (department) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_subdept_from_dept/${department}`
+          `https://jarvis-work-backend.onrender.com/api/get_subdept_from_dept/${department}`
         )
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
 
   useEffect(() => {
-    axios.get("https://node-dev-server.onrender.com/api/get_all_roles").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("https://node-dev-server.onrender.com/api/not_alloc_sitting").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/not_alloc_sitting").then((res) => {
       getRefrenceData(res.data.data);
     });
 
-    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
       const userSitting = res.data.data.map((user) => user.sitting_id);
       setAllUsersSittings(userSitting);
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_designations")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -480,7 +480,7 @@ const UserMaster = () => {
           alert("this login ID already exists");
         } else {
           axios
-            .post("https://node-dev-server.onrender.com/api/add_user", formData, {
+            .post("https://jarvis-work-backend.onrender.com/api/add_user", formData, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
@@ -502,7 +502,7 @@ const UserMaster = () => {
           if (familyDetails[0].Name !== "") {
             for (const elements of familyDetails) {
               const response = axios.post(
-                "https://node-dev-server.onrender.com/api/add_family",
+                "https://jarvis-work-backend.onrender.com/api/add_family",
                 {
                   name: elements.Name,
                   DOB: elements.DOB,
@@ -518,7 +518,7 @@ const UserMaster = () => {
           if (educationDetails[0].title !== "") {
             for (const elements of educationDetails) {
               const response = axios.post(
-                "https://node-dev-server.onrender.com/api/add_education",
+                "https://jarvis-work-backend.onrender.com/api/add_education",
                 {
                   title: elements.title,
                   institute_name: elements.universityInstitute,
@@ -533,7 +533,7 @@ const UserMaster = () => {
           }
           if (reportL1 !== "") {
             axios
-              .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
+              .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
                 email: email,
                 subject: "User Registration",
                 text: "A new user has been registered.",
@@ -566,7 +566,7 @@ const UserMaster = () => {
             // formData.append("remark", "remark");
 
             axios.post(
-              "https://node-dev-server.onrender.com/api/add_user_other_field",
+              "https://jarvis-work-backend.onrender.com/api/add_user_other_field",
               { field_name: elements.name, field_value: elements.file },
               {
                 headers: {
@@ -577,7 +577,7 @@ const UserMaster = () => {
           }
 
           axios
-            .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
+            .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
               email: email,
               subject: "User Registration",
               text: "A new user has been registered.",

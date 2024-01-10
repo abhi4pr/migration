@@ -22,14 +22,14 @@ const AssetSubCategoryUpdate = () => {
   // const [categories, setCategories] = useState([]);
   // useEffect(() => {
   //   axios
-  //     .get("https://node-dev-server.onrender.com/api/get_all_asset_category")
+  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
   //     .then((res) => setCategories(res.data))
   //     .catch((error) => console.error("Error fetching categories:", error));
   // }, []);
 
   const getData = () => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_asset_cat/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_asset_cat/${id}`)
       .then((res) => {
         const response = res.data.data;
         console.log(response[0], "lalit is here");
@@ -52,7 +52,7 @@ const AssetSubCategoryUpdate = () => {
       const loginUserId = decodedToken ? decodedToken.id : null;
 
       const response = await axios.put(
-        "https://node-dev-server.onrender.com/api/update_asset_sub_category",
+        "https://jarvis-work-backend.onrender.com/api/update_asset_sub_category",
         {
           category_id: selectedCat,
           sub_category_id: id,

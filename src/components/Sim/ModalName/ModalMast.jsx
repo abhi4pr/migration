@@ -27,7 +27,7 @@ const ModalMast = () => {
   // const [brandData, setBrandData] = useState([]);
   // async function getBrandData() {
   //   const res = await axios.get(
-  //     "https://node-dev-server.onrender.com/api/get_all_asset_brands"
+  //     "https://jarvis-work-backend.onrender.com/api/get_all_asset_brands"
   //   );
   //   setBrandData(res.data.data);
   // }
@@ -40,7 +40,7 @@ const ModalMast = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_total_asset_in_category/${row}`
+        `https://jarvis-work-backend.onrender.com/api/get_total_asset_in_category/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -55,7 +55,7 @@ const ModalMast = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_total_asset_in_category_allocated/${row}`
+        `https://jarvis-work-backend.onrender.com/api/get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -139,7 +139,7 @@ const ModalMast = () => {
         alert("Brand already Exists");
       } else {
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_asset_modal",
+          "https://jarvis-work-backend.onrender.com/api/add_asset_modal",
           {
             asset_modal_name: modalName,
             asset_brand_id: brandName,
@@ -155,7 +155,7 @@ const ModalMast = () => {
   };
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_asset_modals"
+      "https://jarvis-work-backend.onrender.com/api/get_all_asset_modals"
     );
     setModalData(res.data);
     setModalFilter(res.data);
@@ -174,7 +174,7 @@ const ModalMast = () => {
   const handleModalUpdate = () => {
     console.log(modalId, "id");
     axios
-      .put("https://node-dev-server.onrender.com/api/update_asset_modal", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_asset_modal", {
         asset_modal_id: modalId,
         asset_brand_id: brandNameUpdate,
         asset_modal_name: modalNameUpdate,

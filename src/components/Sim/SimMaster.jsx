@@ -79,7 +79,7 @@ const SimMaster = () => {
   // const [categoryData, setCategoryData] = useState([]);
   // const getAllCategory = () => {
   //   axios
-  //     .get("https://node-dev-server.onrender.com/api/get_all_asset_category")
+  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
   //     .then((res) => {
   //       setCategoryData(res.data);
   //     });
@@ -88,7 +88,7 @@ const SimMaster = () => {
   // const [brandData, setBrandData] = useState([]);
   // async function getBrandData() {
   //   const res = await axios.get(
-  //     "https://node-dev-server.onrender.com/api/get_all_asset_brands"
+  //     "https://jarvis-work-backend.onrender.com/api/get_all_asset_brands"
   //   );
   //   setBrandData(res.data.data);
   // }
@@ -97,7 +97,7 @@ const SimMaster = () => {
     if (assetsCategory.category_id) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_asset_sub_category/${assetsCategory.category_id}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_asset_sub_category/${assetsCategory.category_id}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -114,13 +114,13 @@ const SimMaster = () => {
   }, [subCategory.sub_category_id, subcategoryData]);
 
   const getAllVendor = () => {
-    axios.get("https://node-dev-server.onrender.com/api/get_all_vendor").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_vendor").then((res) => {
       setVendorData(res.data);
     });
   };
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_asset_modals"
+      "https://jarvis-work-backend.onrender.com/api/get_all_asset_modals"
     );
     setModalData(res.data);
   }
@@ -190,7 +190,7 @@ const SimMaster = () => {
 
       //There is asssets post data api
       const response = await axios.post(
-        "https://node-dev-server.onrender.com/api/add_sim",
+        "https://jarvis-work-backend.onrender.com/api/add_sim",
         formData
       );
 
@@ -205,7 +205,7 @@ const SimMaster = () => {
       imageData.append("img3", assetsImg3);
       imageData.append("img4", assetsImg4);
       await axios.post(
-        "https://node-dev-server.onrender.com/api/add_assets_images",
+        "https://jarvis-work-backend.onrender.com/api/add_assets_images",
         imageData
       );
 

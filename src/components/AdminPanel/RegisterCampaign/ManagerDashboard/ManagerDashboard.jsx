@@ -21,7 +21,7 @@ const ManagerDashboard = () => {
   const Assigndata = async () => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/assignment/campaign/${Cid}`
+        `https://jarvis-work-backend.onrender.com/api/assignment/campaign/${Cid}`
       );
 
       const assigned = response.data?.data?.filter(

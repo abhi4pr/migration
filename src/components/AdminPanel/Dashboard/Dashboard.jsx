@@ -42,7 +42,7 @@ function Dashboard() {
     if (userId && contextData.length === 0) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userId}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userId}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -50,7 +50,7 @@ function Dashboard() {
     }
     if (userId) {
       axios
-        .get(`https://node-dev-server.onrender.com/api/get_single_user/${userId}`)
+        .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${userId}`)
         .then((res) => {
           setLoginUserData(res.data);
         });
@@ -59,21 +59,21 @@ function Dashboard() {
 
   useEffect(() => {
     setRenderCount(renderCount + 1);
-    axios.get("https://node-dev-server.onrender.com/api/get_all_sims").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_sims").then((res) => {
       getAllSimData(res.data.data);
     });
-    axios.get("https://node-dev-server.onrender.com/api/get_logo_data").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_logo_data").then((res) => {
       getLogoBrandData(res.data);
     });
-    axios.get("https://node-dev-server.onrender.com/api/get_all_datas").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_datas").then((res) => {
       setAllData(res.data);
     });
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_instapages")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_instapages")
       .then((res) => {
         getIntellectualProperty(res.data);
       });
-    axios.get("https://node-dev-server.onrender.com/api/get_finances").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_finances").then((res) => {
       const response = res?.data;
       setAccountsPendingPaymentsCount(
         response?.filter((item) => item?.status_ == 0)

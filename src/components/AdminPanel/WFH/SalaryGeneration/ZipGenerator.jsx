@@ -19,7 +19,7 @@ export const generatePDF = async (rowData) => {
     return null;
   }
 
-  const signatureImageUrl = `https://node-dev-server.onrender.com/uploads/${rowData?.digital_signature_image}`;
+  const signatureImageUrl = `https://jarvis-work-backend.onrender.com/uploads/${rowData?.digital_signature_image}`;
 
   const dataWithImage = {
     ...rowData,

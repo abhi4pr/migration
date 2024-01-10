@@ -15,13 +15,13 @@ const BillingUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_billingheader/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_billingheader/${id}`)
       .then((res) => {
         const fetchData = res.data;
 
@@ -33,7 +33,7 @@ const BillingUpdate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put("https://node-dev-server.onrender.com/api/update_billingheader", {
+    await axios.put("https://jarvis-work-backend.onrender.com/api/update_billingheader", {
       billingheader_id: id,
       billing_header_name: bilingName,
       dept_id: department,

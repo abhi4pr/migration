@@ -30,7 +30,7 @@ const ExpertiesOverview = () => {
 
   const ExpertiesData = async () => {
     const Experties = await axios.get(
-      "https://node-dev-server.onrender.com/api/expertise"
+      "https://jarvis-work-backend.onrender.com/api/expertise"
     );
     const setexdata = Experties.data.data;
     setGetExpertiesData(setexdata);
@@ -74,7 +74,7 @@ const ExpertiesOverview = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`https://node-dev-server.onrender.com/api/expertise/${userId}`)
+            .delete(`https://jarvis-work-backend.onrender.com/api/expertise/${userId}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(

@@ -267,7 +267,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_subdept_from_dept/${department}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_subdept_from_dept/${department}`)
       .then((res) => setSubDepartmentData(res.data));
   }, [department]);
 
@@ -281,7 +281,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_roles")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_roles")
       .then((res) => {
         getRoleData(res.data.data);
       })
@@ -290,25 +290,25 @@ const UserUpdate = () => {
       });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("https://node-dev-server.onrender.com/api/not_alloc_sitting").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/not_alloc_sitting").then((res) => {
       setRefrenceData(res.data.data);
     });
 
-    axios.get("https://node-dev-server.onrender.com/api/get_all_sittings").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
 
-    axios.get("https://node-dev-server.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_designations")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
@@ -317,10 +317,10 @@ const UserUpdate = () => {
   useEffect(() => {
     async function getDetails() {
       const familyDataResponse = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_single_family/${id}`
+        `https://jarvis-work-backend.onrender.com/api/get_single_family/${id}`
       );
       const educationDataResponse = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_single_education/${id}`
+        `https://jarvis-work-backend.onrender.com/api/get_single_education/${id}`
       );
       setFamilyDetails(familyDataResponse.data.data);
       setEducationDetails(educationDataResponse.data.data);
@@ -330,7 +330,7 @@ const UserUpdate = () => {
 
   function getOtherDocument() {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_user_other_fields/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -338,7 +338,7 @@ const UserUpdate = () => {
 
   async function getDocuments() {
     const response = await axios.post(
-      "https://node-dev-server.onrender.com/api/get_user_doc",
+      "https://jarvis-work-backend.onrender.com/api/get_user_doc",
       {
         user_id: id,
       }
@@ -352,7 +352,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_user/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -676,7 +676,7 @@ const UserUpdate = () => {
     const formDataa = new FormData();
     if (isValidcontact == true && validEmail == true) {
       console.log("came to if");
-      await axios.put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
+      await axios.put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -684,7 +684,7 @@ const UserUpdate = () => {
 
       if (reportL1 !== "") {
         axios
-          .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
+          .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
             email: email,
             subject: "User Registration",
             text: "A new user has been registered.",
@@ -724,7 +724,7 @@ const UserUpdate = () => {
         }
         try {
           const response = await axios.put(
-            "https://node-dev-server.onrender.com/api/update_family",
+            "https://jarvis-work-backend.onrender.com/api/update_family",
             payload
           );
         } catch (error) {
@@ -749,7 +749,7 @@ const UserUpdate = () => {
         }
         try {
           const response = await axios.put(
-            "https://node-dev-server.onrender.com/api/update_education",
+            "https://jarvis-work-backend.onrender.com/api/update_education",
             payload
           );
           console.log(response.data);
@@ -783,7 +783,7 @@ const UserUpdate = () => {
                 : document.status
             );
             const response = await axios.put(
-              "https://node-dev-server.onrender.com/api/update_user_doc",
+              "https://jarvis-work-backend.onrender.com/api/update_user_doc",
               formData,
               {
                 headers: {
@@ -824,7 +824,7 @@ const UserUpdate = () => {
         formDataa.append("lastupdated_by", loginUserId);
         formDataa.append("field_value", element.field_value);
         axios.put(
-          `https://node-dev-server.onrender.com/api/updateuserotherfielddata/${id}`,
+          `https://jarvis-work-backend.onrender.com/api/updateuserotherfielddata/${id}`,
           // {
           //   id:element.id,
           //   field_name: element.field_name,
@@ -847,7 +847,7 @@ const UserUpdate = () => {
       // console.log(uid, "yha uid hai put ke bad");
       // console.log(panUpload, "pan hai yha");
       // axios
-      //   .post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
+      //   .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
       //     email: email,
       //     subject: "User Registration",
       //     text: "A new user has been registered.",
@@ -1022,7 +1022,7 @@ const UserUpdate = () => {
     if (itemToRemove && itemToRemove.family_id) {
       try {
         await axios.delete(
-          `https://node-dev-server.onrender.com/api/delete_family/${itemToRemove.family_id}`
+          `https://jarvis-work-backend.onrender.com/api/delete_family/${itemToRemove.family_id}`
         );
         toastAlert("Details Deleted");
       } catch (error) {
@@ -1059,7 +1059,7 @@ const UserUpdate = () => {
     if (itemToRemove && itemToRemove.education_id) {
       try {
         await axios.delete(
-          `https://node-dev-server.onrender.com/api/delete_education/${itemToRemove.education_id}`
+          `https://jarvis-work-backend.onrender.com/api/delete_education/${itemToRemove.education_id}`
         );
         console.log(
           "Deleted Education detail from server:",

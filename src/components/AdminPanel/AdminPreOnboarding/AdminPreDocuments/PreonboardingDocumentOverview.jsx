@@ -62,7 +62,7 @@ const PreonboardingDocumentOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_docs"
+        "https://jarvis-work-backend.onrender.com/api/get_all_docs"
       );
       const data = response.data.data;
       setData(data);

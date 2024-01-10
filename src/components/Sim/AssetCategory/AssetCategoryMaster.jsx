@@ -28,7 +28,7 @@ const AssetCategoryMaster = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://node-dev-server.onrender.com/api/add_asset_category",
+        "https://jarvis-work-backend.onrender.com/api/add_asset_category",
         {
           category_name: categoryName,
           description: description,

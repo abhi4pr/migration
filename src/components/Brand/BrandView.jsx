@@ -27,7 +27,7 @@ const BrandView = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`https://node-dev-server.onrender.com/api/get_single_logo_data/${id}`).then((res) => {
+    axios.get(`https://jarvis-work-backend.onrender.com/api/get_single_logo_data/${id}`).then((res) => {
       const fetchedData = res.data;
       const { 
         brand_name,
@@ -45,7 +45,7 @@ const BrandView = () => {
 
   useEffect(() => {
     if(brand){
-      axios.get(`https://node-dev-server.onrender.com/api/get_logo_data_for_brand/${brand}`).then((res) => {
+      axios.get(`https://jarvis-work-backend.onrender.com/api/get_logo_data_for_brand/${brand}`).then((res) => {
         setLogos(res.data);
       });
     }

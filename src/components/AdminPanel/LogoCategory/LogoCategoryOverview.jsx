@@ -13,7 +13,7 @@ const LogoCategoryOverview = () => {
   // const [contextData, setDatas] = useState([]);
 
   async function getData() {
-    await axios.get("https://node-dev-server.onrender.com/api/get_all_logo_categories").then((res) => {
+    await axios.get("https://jarvis-work-backend.onrender.com/api/get_all_logo_categories").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

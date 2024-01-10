@@ -22,7 +22,7 @@ function ObjectUpdate() {
   const userId = decodedToken.id;
   useEffect(() => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/objdata/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/objdata/${id}`)
       .then((res) => {
         const data = res.data.data;
         setObjData(data);
@@ -32,12 +32,12 @@ function ObjectUpdate() {
       })
       .catch((error) => console.error(error));
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_departments")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
       .then((res) => setDeptData(res.data));
   }, [id]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`https://node-dev-server.onrender.com/api/obj_update`, {
+    axios.put(`https://jarvis-work-backend.onrender.com/api/obj_update`, {
       obj_id: id,
       soft_name: softwareName,
       obj_name: objectName,

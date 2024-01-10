@@ -71,7 +71,7 @@ const AssetVisibleToHr = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/show_asset_hr_data"
+        "https://jarvis-work-backend.onrender.com/api/show_asset_hr_data"
       );
       setFilterData(response.data.data);
       setData(response.data.data);

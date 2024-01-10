@@ -19,7 +19,7 @@ const RoleOverView = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get( `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`).then((res) => {
+      axios.get( `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`).then((res) => {
         setDatas(res.data);
       });
     }
@@ -27,7 +27,7 @@ const RoleOverView = () => {
 
   async function getData() {
     try {
-      const response = await axios.get("https://node-dev-server.onrender.com/api/get_all_roles");
+      const response = await axios.get("https://jarvis-work-backend.onrender.com/api/get_all_roles");
       setData(response.data.data);
       setFilterData(response.data.data);
       console.log(response.data.data);

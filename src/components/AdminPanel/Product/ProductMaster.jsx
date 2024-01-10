@@ -39,7 +39,7 @@ const ProductMaster = () => {
     formData.append("Opening_stock_date", openingStockDate);
     formData.append("Remarks", remark);
 
-    await axios.post("https://node-dev-server.onrender.com/api/add_product", formData, {
+    await axios.post("https://jarvis-work-backend.onrender.com/api/add_product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -53,7 +53,7 @@ const ProductMaster = () => {
       };
 
       try {
-        await axios.post(`https://node-dev-server.onrender.com/api/add_proppost`, payload, {
+        await axios.post(`https://jarvis-work-backend.onrender.com/api/add_proppost`, payload, {
           headers: {
             "Content-Type": "application/json",
           },

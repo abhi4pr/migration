@@ -27,7 +27,7 @@ const IncompleteProfileUsers = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -38,7 +38,7 @@ const IncompleteProfileUsers = () => {
   async function getData() {
     try {
       const res = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_percentage"
+        "https://jarvis-work-backend.onrender.com/api/get_all_percentage"
       );
 
       const data = res.data.incompleteUsersDetails;
@@ -72,7 +72,7 @@ const IncompleteProfileUsers = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`https://node-dev-server.onrender.com/api/delete_user/${userId}`)
+            .delete(`https://jarvis-work-backend.onrender.com/api/delete_user/${userId}`)
             .then(() => {
               swalWithBootstrapButtons.fire(
                 "Deleted!",

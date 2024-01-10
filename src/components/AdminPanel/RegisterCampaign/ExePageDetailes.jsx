@@ -54,12 +54,12 @@ const ExePageDetailes = ({
 
   const handleUpdate = async (params) => {
     const response = await axios.get(
-      `https://node-dev-server.onrender.com/api/campaignphase/singlephase/${params.row.phase_id}`
+      `https://jarvis-work-backend.onrender.com/api/campaignphase/singlephase/${params.row.phase_id}`
     );
     setSinglePhase(response?.data?.data?.commitment);
 
     const assCommit = await axios.get(
-      `https://node-dev-server.onrender.com/api/assignment/commit/single/${params.row.ass_id}`
+      `https://jarvis-work-backend.onrender.com/api/assignment/commit/single/${params.row.ass_id}`
     );
     setAssignmentCommits(assCommit.data.data);
     setCommitPayload(assCommit.data.data);
@@ -85,7 +85,7 @@ const ExePageDetailes = ({
   const handleExecute = async (params) => {
     console.log(params);
     const response = await axios.post(
-      "https://node-dev-server.onrender.com/api/assignment/status",
+      "https://jarvis-work-backend.onrender.com/api/assignment/status",
       {
         ass_id: params.row.ass_id,
         campaignId: params.row.campaignId,
@@ -101,7 +101,7 @@ const ExePageDetailes = ({
       (commit) => commit.comm_id == params.comm_id
     );
     const response = await axios.put(
-      `https://node-dev-server.onrender.com/api/assignment/commit/single/${params.comm_id}`,
+      `https://jarvis-work-backend.onrender.com/api/assignment/commit/single/${params.comm_id}`,
       payload
     );
     alert("updated successfully");
@@ -110,7 +110,7 @@ const ExePageDetailes = ({
 
   const handleAssignedSubmit = async () => {
     const response = await axios.post(
-      "https://node-dev-server.onrender.com/api/assignment/commit",
+      "https://jarvis-work-backend.onrender.com/api/assignment/commit",
       assignedData
     );
     alert("submitted successfully");

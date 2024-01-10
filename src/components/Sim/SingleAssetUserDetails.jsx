@@ -9,7 +9,7 @@ const SingleAssetUserDetails = () => {
   const [data, setData] = useState([]);
   const getData = () => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_sim/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         setData(fetchedData);

@@ -25,7 +25,7 @@ const DeleteButton = ({ endpoint, id, getData }) => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`https://node-dev-server.onrender.com/api/${endpoint}/${id}`)
+            .delete(`https://jarvis-work-backend.onrender.com/api/${endpoint}/${id}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(

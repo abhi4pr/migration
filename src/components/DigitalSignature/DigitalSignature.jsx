@@ -38,7 +38,7 @@ const DigitalSignature = ({
         }
 
         axios
-          .put(`https://node-dev-server.onrender.com/api/update_user`, formData, {
+          .put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

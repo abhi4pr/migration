@@ -33,7 +33,7 @@ const AssetCategoryOverview = () => {
   const handleSubCategroy = async (row) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_count_sub_category/${row}`
+        `https://jarvis-work-backend.onrender.com/api/get_count_sub_category/${row}`
       );
       setSubcategroycount(response.data.data.sub_categories);
       setHandleOpenSubCat(true);
@@ -44,7 +44,7 @@ const AssetCategoryOverview = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_total_asset_in_category/${row}`
+        `https://jarvis-work-backend.onrender.com/api/get_total_asset_in_category/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -59,7 +59,7 @@ const AssetCategoryOverview = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/get_total_asset_in_category_allocated/${row}`
+        `https://jarvis-work-backend.onrender.com/api/get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -75,7 +75,7 @@ const AssetCategoryOverview = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://node-dev-server.onrender.com/api/add_asset_sub_category",
+        "https://jarvis-work-backend.onrender.com/api/add_asset_sub_category",
         {
           sub_category_name: subCategoryName,
           category_id: catId,
@@ -100,7 +100,7 @@ const AssetCategoryOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_asset_category"
+        "https://jarvis-work-backend.onrender.com/api/get_all_asset_category"
       );
 
       setFilterData(response.data.data.asset_categories);

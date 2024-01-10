@@ -36,7 +36,7 @@ const OnboardExtendDateOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -47,7 +47,7 @@ const OnboardExtendDateOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://node-dev-server.onrender.com/api/get_all_users"
+        "https://jarvis-work-backend.onrender.com/api/get_all_users"
       );
       const data = response.data.data.filter(
         (item) => item.joining_date_extend_status == "Requested"
@@ -77,13 +77,13 @@ const OnboardExtendDateOverview = () => {
       formData.append("joining_date_reject_reason", rejectReason);
     }
     axios
-      .put("https://node-dev-server.onrender.com/api/update_user", formData, {
+      .put("https://jarvis-work-backend.onrender.com/api/update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then(() => {
-        axios.post("https://node-dev-server.onrender.com/api/add_send_user_mail", {
+        axios.post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
           email: "lalit@creativefuel.io",
           subject: "Extend Date Status",
           text: status,
@@ -152,7 +152,7 @@ const OnboardExtendDateOverview = () => {
       name: "Proof Doc",
       selector: (row) => (
         <a
-          href={`https://node-dev-server.onrender.com/uploads/${row.joining_extend_document}`}
+          href={`https://jarvis-work-backend.onrender.com/uploads/${row.joining_extend_document}`}
         >
           <CloudDownloadIcon />
         </a>

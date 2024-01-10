@@ -78,7 +78,7 @@ const PhaseCreation = () => {
   //fetching data for the single plan
   const getPageData = async () => {
     const pageD = await axios.get(
-      `https://node-dev-server.onrender.com/api/campaignplan/${id}`
+      `https://jarvis-work-backend.onrender.com/api/campaignplan/${id}`
     );
 
     const x = pageD.data.data.filter((page) => {
@@ -98,7 +98,7 @@ const PhaseCreation = () => {
 
   const getPhaseData = async () => {
     const data = await axios.get(
-      `https://node-dev-server.onrender.com/api/campaignphase/${id}`
+      `https://jarvis-work-backend.onrender.com/api/campaignphase/${id}`
     );
     setAllPhaseData(data?.data?.result);
   };

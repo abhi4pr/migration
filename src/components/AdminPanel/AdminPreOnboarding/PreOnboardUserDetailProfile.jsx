@@ -15,7 +15,7 @@ const PreOnboardUserDetailsProfile = () => {
 
   function userOtherDocuments() {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_user_other_fields/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -27,7 +27,7 @@ const PreOnboardUserDetailsProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_user/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         setUser(fetchedData);

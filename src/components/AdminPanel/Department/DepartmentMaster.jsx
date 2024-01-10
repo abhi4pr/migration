@@ -24,7 +24,7 @@ const DepartmentMaster = () => {
     e.preventDefault();
     setError("");
     await axios
-      .post("https://node-dev-server.onrender.com/api/add_department", {
+      .post("https://jarvis-work-backend.onrender.com/api/add_department", {
         dept_name: departmentName,
         short_name: shortName,
         remark: remark,

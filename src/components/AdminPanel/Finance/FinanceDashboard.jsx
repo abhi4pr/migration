@@ -21,7 +21,7 @@ const FinanceDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.post("https://node-dev-server.onrender.com/api/",{
+      await axios.post("https://jarvis-work-backend.onrender.com/api/",{
         display_sequence: displaySeq,
       });
 

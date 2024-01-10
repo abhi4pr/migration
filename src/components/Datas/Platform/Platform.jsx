@@ -71,7 +71,7 @@ const Platform = () => {
         alert("Platform already Exists");
       } else {
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_data_platform",
+          "https://jarvis-work-backend.onrender.com/api/add_data_platform",
           {
             platform_name: platformName,
             remark: "",
@@ -87,7 +87,7 @@ const Platform = () => {
   };
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_data_platforms"
+      "https://jarvis-work-backend.onrender.com/api/get_all_data_platforms"
     );
     setModalData(res.data);
     setModalFilter(res.data);
@@ -103,7 +103,7 @@ const Platform = () => {
   };
   const handleModalUpdate = () => {
     axios
-      .put("https://node-dev-server.onrender.com/api/update_data_platform", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_data_platform", {
         _id: modalId,
         platform_name: platformNameUpdate,
       })

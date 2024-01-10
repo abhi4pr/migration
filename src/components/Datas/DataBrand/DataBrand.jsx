@@ -69,7 +69,7 @@ const DataBrand = () => {
         alert("Brand already Exists");
       } else {
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_data_brand",
+          "https://jarvis-work-backend.onrender.com/api/add_data_brand",
           {
             brand_name: dataBrandName,
           }
@@ -84,7 +84,7 @@ const DataBrand = () => {
   };
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_data_brands"
+      "https://jarvis-work-backend.onrender.com/api/get_all_data_brands"
     );
     setModalData(res.data);
     setModalFilter(res.data);
@@ -100,7 +100,7 @@ const DataBrand = () => {
   };
   const handleModalUpdate = () => {
     axios
-      .put("https://node-dev-server.onrender.com/api/update_data_brand", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_data_brand", {
         _id: modalId,
         brand_name: dataBrandNameUpdate,
       })

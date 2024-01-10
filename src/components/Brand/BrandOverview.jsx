@@ -21,7 +21,7 @@ const BrandOverview = () => {
   const [employeeData, setEmployeeData] = useState([]);
 
   async function getData() {
-    await axios.get("https://node-dev-server.onrender.com/api/get_logo_data").then((res) => {
+    await axios.get("https://jarvis-work-backend.onrender.com/api/get_logo_data").then((res) => {
       setCountData(res.data);
       const responseData = res.data;
       const uniqueBrandName = new Set();
@@ -37,11 +37,11 @@ const BrandOverview = () => {
     });
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_logo_categories")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_logo_categories")
       .then((res) => setCategoryData(res.data));
 
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_users")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
       .then((res) => setEmployeeData(res.data.data));
   }
 
@@ -71,7 +71,7 @@ const BrandOverview = () => {
 
   const deleteBrand = async (brand_name) => {
     await axios
-      .delete(`https://node-dev-server.onrender.com/api/delete_logo_based_brand/${brand_name}`)
+      .delete(`https://jarvis-work-backend.onrender.com/api/delete_logo_based_brand/${brand_name}`)
       .then((res) => {
         getData();
       })

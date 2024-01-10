@@ -55,7 +55,7 @@ const DocumentTab = ({
                 : document.status
             );
             const response = await axios.put(
-              "https://node-dev-server.onrender.com/api/update_user_doc",
+              "https://jarvis-work-backend.onrender.com/api/update_user_doc",
               formData,
               {
                 headers: {

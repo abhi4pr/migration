@@ -290,7 +290,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "https://node-dev-server.onrender.com/api/campaignplan",
+          "https://jarvis-work-backend.onrender.com/api/campaignplan",
           newdata
         );
         toastAlert("Plan Created SuccessFully");
@@ -324,7 +324,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "https://node-dev-server.onrender.com/api/campaignphase",
+          "https://jarvis-work-backend.onrender.com/api/campaignphase",
           newdata
         );
         toastAlert("Phase Created SuccessFully");

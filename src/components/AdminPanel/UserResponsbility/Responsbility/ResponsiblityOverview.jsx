@@ -28,7 +28,7 @@ const ResponsiblityOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -38,7 +38,7 @@ const ResponsiblityOverview = () => {
 
   function getData() {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_responsibilitys")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_responsibilitys")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -61,7 +61,7 @@ const ResponsiblityOverview = () => {
   useEffect(() => {
     getData();
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_jobresponsibilitys")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_jobresponsibilitys")
       .then((res) => {
         setAllResponsibility(res.data.data);
       });

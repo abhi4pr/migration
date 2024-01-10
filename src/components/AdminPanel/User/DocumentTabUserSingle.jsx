@@ -13,7 +13,7 @@ const DocumentTabUserSingle = (id) => {
   const getDocuments = async () => {
     try {
       const response = await axios.post(
-        "https://node-dev-server.onrender.com/api/get_user_doc",
+        "https://jarvis-work-backend.onrender.com/api/get_user_doc",
         {
           user_id: id.id,
         }
@@ -42,7 +42,7 @@ const DocumentTabUserSingle = (id) => {
 
       console.log(payload);
       const response = await axios.put(
-        "https://node-dev-server.onrender.com/api/update_user_doc",
+        "https://jarvis-work-backend.onrender.com/api/update_user_doc",
         payload
       );
       toastAlert("Approved");

@@ -53,7 +53,7 @@ export default function ExecutionAccepted() {
       if (userID && contextData == false) {
         axios
           .get(
-            `https://node-dev-server.onrender.com/api/get_single_user_auth_detail/${userID}`
+            `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {
@@ -70,7 +70,7 @@ export default function ExecutionAccepted() {
       // formData.append("pendingorcomplete", "pending");
       console.log(formData);
       const response = axios
-        .get("https://node-dev-server.onrender.com/api/get_exe_sum")
+        .get("https://jarvis-work-backend.onrender.com/api/get_exe_sum")
         .then((res) => {
           setData(res.data.filter((ele) => ele.execution_status == "2"));
           // console.log()
@@ -80,7 +80,7 @@ export default function ExecutionAccepted() {
       console.error("Error fetching data:", error);
       // setLoading(false);
     }
-    axios.post("https://node-dev-server.onrender.com/api/exe_sum_post", {
+    axios.post("https://jarvis-work-backend.onrender.com/api/exe_sum_post", {
       loggedin_user_id: 52,
     });
   };

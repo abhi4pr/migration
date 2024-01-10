@@ -24,7 +24,7 @@ const ExcusionCampaign = () => {
 
   const getExpertee = async () => {
     const expert = await axios.get(
-      `https://node-dev-server.onrender.com/api/expertise/user/${decodedToken.id}`
+      `https://jarvis-work-backend.onrender.com/api/expertise/user/${decodedToken.id}`
     );
     getAssignment(expert.data.data.exp_id);
     console.log(expert);

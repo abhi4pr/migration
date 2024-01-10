@@ -23,7 +23,7 @@ const PlatformUpdate = () => {
     setError("");
 
     axios
-      .put(`https://node-dev-server.onrender.com/api/platformupdate/`, {
+      .put(`https://jarvis-work-backend.onrender.com/api/platformupdate/`, {
         id: Number(id),
         name: platformName,
         remark: remark,
@@ -43,7 +43,7 @@ const PlatformUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`https://node-dev-server.onrender.com/api/dataofplatform/${id}`).then((res) => {
+    axios.get(`https://jarvis-work-backend.onrender.com/api/dataofplatform/${id}`).then((res) => {
       const fetchedData = res.data[0];
       const {
         name,

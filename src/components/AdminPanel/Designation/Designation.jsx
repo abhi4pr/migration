@@ -18,7 +18,7 @@ const Designation = () => {
 
   // useEffect(() => {
   //   axios
-  //     .get("https://node-dev-server.onrender.com/api/get_all_departments")
+  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
   //     .then((res) => {
   //       getDepartmentData(res.data).catch((error) => console.log(error));
   //     });
@@ -27,7 +27,7 @@ const Designation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://node-dev-server.onrender.com/api/add_designation", {
+      await axios.post("https://jarvis-work-backend.onrender.com/api/add_designation", {
         desi_name: designationName,
         dept_id: departmentName,
         remark: remark,

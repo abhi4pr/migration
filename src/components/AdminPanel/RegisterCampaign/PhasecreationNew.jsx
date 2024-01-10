@@ -53,7 +53,7 @@ const PhasecreationNew = () => {
 
   const getPhaseData = async () => {
     const data = await axios.get(
-      `https://node-dev-server.onrender.com/api/campaignphase/${id}`
+      `https://jarvis-work-backend.onrender.com/api/campaignphase/${id}`
     );
     setAllPhaseData(data?.data?.result);
   };

@@ -21,7 +21,7 @@ const UserNav = () => {
   const [loginUserData, setLoginUserData] = useState([]);
   useEffect(() => {
     axios
-      .post("https://node-dev-server.onrender.com/api/login_user_data", {
+      .post("https://jarvis-work-backend.onrender.com/api/login_user_data", {
         user_id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));

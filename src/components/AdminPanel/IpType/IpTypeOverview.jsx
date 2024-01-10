@@ -12,7 +12,7 @@ const AccessTypeOverview = () => {
   const [filterData, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("https://node-dev-server.onrender.com/api/alldataofIptype").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/alldataofIptype").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

@@ -20,7 +20,7 @@ const ViewEditDigiSignature = () => {
 
   const gettingData = async () => {
     const response = await axios.get(
-      `https://node-dev-server.onrender.com/api/get_single_user/${loginUserId}`
+      `https://jarvis-work-backend.onrender.com/api/get_single_user/${loginUserId}`
     );
     const DSImage = await response?.data?.digital_signature_image_url;
     setDigitalSignatureImage(DSImage);

@@ -13,7 +13,7 @@ const UserWiseDashboard = () => {
 
   function getData() {
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_user_by_deptid/${id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_user_by_deptid/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

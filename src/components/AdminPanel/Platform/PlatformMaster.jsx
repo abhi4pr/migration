@@ -21,7 +21,7 @@ const PlatformMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://node-dev-server.onrender.com/api/platform", {
+      .post("https://jarvis-work-backend.onrender.com/api/platform", {
         name: platformName,
         remark: remark,
         created_by: userID

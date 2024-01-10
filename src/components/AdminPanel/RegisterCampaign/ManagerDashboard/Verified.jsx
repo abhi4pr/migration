@@ -14,8 +14,8 @@ const Verified = ({ verified }) => {
     const _id = params.row.ass_id;
     try {
       const response = await axios.get(
-        `https://node-dev-server.onrender.com/api/assignment/commit/single/${_id}`
-        // `https://node-dev-server.onrender.com/api/assignment/commit/single/2`
+        `https://jarvis-work-backend.onrender.com/api/assignment/commit/single/${_id}`
+        // `https://jarvis-work-backend.onrender.com/api/assignment/commit/single/2`
       );
       setPendingCommit(response.data.data);
       setOpen2(true);

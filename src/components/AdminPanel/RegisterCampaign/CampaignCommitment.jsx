@@ -73,7 +73,7 @@ export default function CampaignCommitment() {
       return;
     }
     axios
-      .post("https://node-dev-server.onrender.com/api/exe_campaign", postData)
+      .post("https://jarvis-work-backend.onrender.com/api/exe_campaign", postData)
       .then((response) => {
         setIsModalOpen(false);
         getData();
@@ -87,7 +87,7 @@ export default function CampaignCommitment() {
 
   // get api ========>
   const getData = () => {
-    axios.get("https://node-dev-server.onrender.com/api/exe_campaign").then((res) => {
+    axios.get("https://jarvis-work-backend.onrender.com/api/exe_campaign").then((res) => {
       console.log(res.data.data, "yyyyyyyyyyyyyy");
       const data = res.data.data;
       const uniqueCmtNames = new Set();
@@ -117,7 +117,7 @@ export default function CampaignCommitment() {
   // put api =============>
   const handlePutData = () => {
     axios
-      .put(`https://node-dev-server.onrender.com/api/exe_campaign`, {
+      .put(`https://jarvis-work-backend.onrender.com/api/exe_campaign`, {
         exeCmpId: editData.exeCmpId,
         exeCmpName: editData.exeCmpName,
         exeHashTag: editData.exeHashTag,
@@ -147,7 +147,7 @@ export default function CampaignCommitment() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`https://node-dev-server.onrender.com/api/exe_campaign/${itemToDeleteId}`)
+        .delete(`https://jarvis-work-backend.onrender.com/api/exe_campaign/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");

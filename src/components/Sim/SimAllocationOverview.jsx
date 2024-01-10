@@ -23,7 +23,7 @@ const SimAllocationOverview = () => {
 
   function getData() {
     axios
-      .get("https://node-dev-server.onrender.com/api/alldataofsimallocment")
+      .get("https://jarvis-work-backend.onrender.com/api/alldataofsimallocment")
       .then((res) => {
         const filteredData = res.data.data.filter(
           (check) => check.submitted_at == null || check.status == "Allocated"
@@ -46,7 +46,7 @@ const SimAllocationOverview = () => {
   const getSimData = (row) => {
     // console.log(row , "row yha hai")
     axios
-      .get(`https://node-dev-server.onrender.com/api/get_single_sim/${row.sim_id}`)
+      .get(`https://jarvis-work-backend.onrender.com/api/get_single_sim/${row.sim_id}`)
       .then((res) => {
         const particularSimData = res.data;
         setSimInfo(particularSimData);
@@ -54,7 +54,7 @@ const SimAllocationOverview = () => {
 
     axios
       .get(
-        `https://node-dev-server.onrender.com/api/get_allocation_by_alloid/${row.allo_id}`
+        `https://jarvis-work-backend.onrender.com/api/get_allocation_by_alloid/${row.allo_id}`
       )
       .then((res) => {
         const fetchedData = res.data.data;
@@ -74,7 +74,7 @@ const SimAllocationOverview = () => {
     const currentReason = reason[row.sim_id];
     const currSubDate = subDate[row.sim_id];
     if (currSubDate && currentReason) {
-      axios.put("https://node-dev-server.onrender.com/api/update_allocationsim", {
+      axios.put("https://jarvis-work-backend.onrender.com/api/update_allocationsim", {
         sim_id: row.sim_id,
         allo_id: simData.allo_id,
         user_id: simData.user_id,
@@ -87,7 +87,7 @@ const SimAllocationOverview = () => {
       });
 
       axios
-        .put("https://node-dev-server.onrender.com/api/update_sim", {
+        .put("https://jarvis-work-backend.onrender.com/api/update_sim", {
           id: row.sim_id,
           mobilenumber: row.mobileNo,
           sim_no: row.simNo,

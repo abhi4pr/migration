@@ -24,7 +24,7 @@ export default function FinanceWFHDashboard() {
 
   const getData = async () => {
     try {
-      axios.get(`https://node-dev-server.onrender.com/api/get_finances`).then((res) => {
+      axios.get(`https://jarvis-work-backend.onrender.com/api/get_finances`).then((res) => {
         const response = res.data;
         setData(response);
         setFilterData(response);

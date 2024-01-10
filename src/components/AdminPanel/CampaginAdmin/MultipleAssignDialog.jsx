@@ -35,7 +35,7 @@ export default function MultipleAssignDialog({
   const handleAssignMultiple = () => {
     for (let i in showMultipleAssignModalData) {
       axios
-        .put("https://node-dev-server.onrender.com/api/contentSectionReg", {
+        .put("https://jarvis-work-backend.onrender.com/api/contentSectionReg", {
           content_section_id: showMultipleAssignModalData[i].content_section_id,
           assign_to: setAssignTo.current,
           creator_dt: selectedDate,

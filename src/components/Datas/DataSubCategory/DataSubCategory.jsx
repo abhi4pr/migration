@@ -26,7 +26,7 @@ const DataSubCategory = () => {
 
   useEffect(() => {
     axios
-      .get("https://node-dev-server.onrender.com/api/get_all_data_categorys")
+      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_categorys")
       .then((res) => {
         setCategoryData(res.data.simcWithSubCategoryCount);
       });
@@ -91,7 +91,7 @@ const DataSubCategory = () => {
         );
       } else {
         const response = await axios.post(
-          "https://node-dev-server.onrender.com/api/add_data_sub_category",
+          "https://jarvis-work-backend.onrender.com/api/add_data_sub_category",
           {
             data_sub_cat_name: subCatName,  
             cat_id: categoryName,
@@ -109,7 +109,7 @@ const DataSubCategory = () => {
 
   async function getModalData() {
     const res = await axios.get(
-      "https://node-dev-server.onrender.com/api/get_all_data_Sub_categories"
+      "https://jarvis-work-backend.onrender.com/api/get_all_data_Sub_categories"
     );
     setModalData(res.data);
     setModalFilter(res.data);
@@ -126,7 +126,7 @@ const DataSubCategory = () => {
   };
   const handleModalUpdate = () => {
     axios
-      .put("https://node-dev-server.onrender.com/api/update_data_sub_category", {
+      .put("https://jarvis-work-backend.onrender.com/api/update_data_sub_category", {
         _id: modalId,
         cat_id: categoryNameUpdate,
         data_sub_cat_name: subCatNameUpdate,

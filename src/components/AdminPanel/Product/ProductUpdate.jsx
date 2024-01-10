@@ -49,7 +49,7 @@ const ProductUpdate = () => {
 
     // formData.append("Opening_stock_date", openingStockDate);
 
-    axios.put("https://node-dev-server.onrender.com/api/update_productupdate", formData, {
+    axios.put("https://jarvis-work-backend.onrender.com/api/update_productupdate", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -64,7 +64,7 @@ const ProductUpdate = () => {
       };
 
       try {
-        axios.post(`https://node-dev-server.onrender.com/api/add_proppost`, payload, {
+        axios.post(`https://jarvis-work-backend.onrender.com/api/add_proppost`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -91,10 +91,10 @@ const ProductUpdate = () => {
 
   const removeProp = async (propid) => {
     var data = await axios
-      .delete(`https://node-dev-server.onrender.com/api/delete_propdelete/${propid}`, null)
+      .delete(`https://jarvis-work-backend.onrender.com/api/delete_propdelete/${propid}`, null)
       .then((crash) => {
         axios
-          .get(`https://node-dev-server.onrender.com/api/get_single_productdata/${id}`)
+          .get(`https://jarvis-work-backend.onrender.com/api/get_single_productdata/${id}`)
           .then((res) => {
             setInputFields(res.data.Product_Prop);
           });
@@ -132,7 +132,7 @@ const ProductUpdate = () => {
   useEffect(() => {
     if (localStorage.getItem("product_id")) {
       axios
-        .get(`https://node-dev-server.onrender.com/api/get_single_productdata/${id}`)
+        .get(`https://jarvis-work-backend.onrender.com/api/get_single_productdata/${id}`)
         .then((res) => {
           setInputFields(res.data.Product_Prop);
         });

@@ -23,7 +23,7 @@ const AccessTypeUpdate = () => {
     setError("");
 
     axios
-      .put(`https://node-dev-server.onrender.com/api/Iptypeupdate/`, {
+      .put(`https://jarvis-work-backend.onrender.com/api/Iptypeupdate/`, {
         id: Number(id),
         name: accessTypeName,
         remark: remark,
@@ -43,7 +43,7 @@ const AccessTypeUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`https://node-dev-server.onrender.com/api/Iptypedata/${id}`).then((res) => {
+    axios.get(`https://jarvis-work-backend.onrender.com/api/Iptypedata/${id}`).then((res) => {
       const fetchedData = res.data;
       const {
         name,

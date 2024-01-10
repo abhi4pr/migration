@@ -28,14 +28,14 @@ const ReplacementRecord = ({ open, data, handleClose }) => {
 
   const getRecord = async () => {
     const record = await axios.get(
-      `https://node-dev-server.onrender.com/api/replacement/${data.replacement_id._id}`
+      `https://jarvis-work-backend.onrender.com/api/replacement/${data.replacement_id._id}`
     );
     console.log(record.data.data, "<---------------------------------");
     setReplacementData(record?.data?.data);
   };
   const getPageData = async () => {
     const oldPageData = await axios.get(
-      `https://node-dev-server.onrender.com/api/replacement/${data.replacement_id._id}`
+      `https://jarvis-work-backend.onrender.com/api/replacement/${data.replacement_id._id}`
     );
     seteNewPageData(oldPageData?.data?.data?.newPages);
     setOldData(oldPageData?.data?.data);
