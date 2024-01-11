@@ -29,9 +29,12 @@ const ExcusionCampaign = () => {
     getAssignment(expert.data.data.exp_id);
     console.log(expert);
   };
+  useEffect(()=>{
+    getExpertee()
+  },[activeAccordionIndex])
   const RequestAssign = async () => {
     const reqAss = await axios.get(
-      `http://localhost:3000/api/preassignment/6597d50d37c4ebe46bf05633`
+      `https://jarvis-work-backend.onrender.com/api/preassignment/${decodedToken.id}`
     );
     const data = reqAss?.data?.data.filter((item) => item.status == "pending");
     SetRequestAssign(data);
@@ -41,7 +44,7 @@ const ExcusionCampaign = () => {
   }, []);
   const getAssignment = async (id) => {
     const getData = await axios.get(
-      `http://localhost:3000/api/assignment/all/6597d50d37c4ebe46bf05633`
+      `https://jarvis-work-backend.onrender.com/api/assignment/all/${decodedToken.id}`
     );
     const assigned = getData?.data?.data.filter(
       (item) => item.ass_status == "assigned" || item.ass_status == "pending"
