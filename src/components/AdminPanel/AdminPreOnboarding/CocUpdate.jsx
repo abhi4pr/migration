@@ -137,6 +137,7 @@ const CocUpdate = () => {
 
         <FieldContainer
           Tag="textarea"
+          required={false}
           label="description"
           fieldGrid={4}
           value={description}
