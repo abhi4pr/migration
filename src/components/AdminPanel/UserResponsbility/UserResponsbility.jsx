@@ -29,7 +29,7 @@ const UserResponsbility = () => {
   const loginUser = decodedToken.id;
 
   function getUserCompleteData() {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       const data = res.data.data;
       getUserData(data);
       setUserContact(
@@ -54,7 +54,7 @@ const UserResponsbility = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_responsibilitys")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_responsibilitys")
       .then((res) => {
         setResponsibilityData(res.data);
       });
@@ -64,7 +64,7 @@ const UserResponsbility = () => {
     e.preventDefault();
     setError("");
     for (const element of todos) {
-      await axios.post("https://jarvis-work-backend.onrender.com/api/add_job_responsibility", {
+      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_job_responsibility", {
         user_id: userName,
         job_responsi: element.responsibility,
         description: element.description,

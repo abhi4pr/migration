@@ -278,7 +278,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/campaignplan",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan",
           newdata
         );
         // console.log(result);
@@ -314,7 +314,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/campaignphase",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignphase",
           newdata
         );
         // console.log(result);

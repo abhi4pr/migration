@@ -19,7 +19,7 @@ export const generatePDF = async (rowData) => {
   }
 
   console.log(rowData?.digital_signature_image, "image herere");
-  const signatureImageUrl = `https://jarvis-work-backend.onrender.com/uploads/${rowData?.digital_signature_image}`;
+  const signatureImageUrl = `https://api-dot-react-migration-project.el.r.appspot.com/uploads/${rowData?.digital_signature_image}`;
 
   const dataWithImage = {
     ...rowData,

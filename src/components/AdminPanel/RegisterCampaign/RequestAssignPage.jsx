@@ -22,7 +22,7 @@ const RequestAssignPage = ({ data ,RequestAssign}) => {
   }));
 
   const handleAccept= async (row)=> {
-    const x=await axios.post(`https://jarvis-work-backend.onrender.com/api/preassignment/phase/update`, {
+    const x=await axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment/phase/update`, {
       pre_ass_id: row.pre_ass_id,
       status: "accepted",
       phase_id: row.phase_id,
@@ -31,7 +31,7 @@ const RequestAssignPage = ({ data ,RequestAssign}) => {
     RequestAssign()
   }
 const handleReject= async (row)=> {
-    const x=await axios.post(`https://jarvis-work-backend.onrender.com/api/preassignment/phase/update`, {
+    const x=await axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment/phase/update`, {
       pre_ass_id: row.pre_ass_id,
       status: "rejected",
       phase_id: row.phase_id,

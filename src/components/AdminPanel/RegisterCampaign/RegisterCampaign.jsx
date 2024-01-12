@@ -88,7 +88,7 @@ export default function RegisterCampaign() {
     form.append("stage", 0);
     console.log(form, "<--------------------this is form");
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/register_campaign", form)
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/register_campaign", form)
       .then(() => {
         // Reset form fields on successful submission
         setBrandName([]);
@@ -165,7 +165,7 @@ export default function RegisterCampaign() {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_brands")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_brands")
       .then((response) => {
         const data = response.data.data;
         setShowBrandName(data);
@@ -175,7 +175,7 @@ export default function RegisterCampaign() {
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_commitments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_commitments")
       .then((response) => {
         setCampignList(response.data.data);
       })
@@ -184,7 +184,7 @@ export default function RegisterCampaign() {
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/exe_campaign")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<----data");

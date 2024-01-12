@@ -138,7 +138,7 @@ function ExecutionOwn() {
     if (userID && contextData == false) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           if (res.data[33].view_value == 1) {
@@ -439,7 +439,7 @@ const handleEndDateChange = (newValue) => {
 
    
         axios
-          .post(`https://jarvis-work-backend.onrender.com/api/add_exe_pid_history`, formData, {
+          .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/add_exe_pid_history`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

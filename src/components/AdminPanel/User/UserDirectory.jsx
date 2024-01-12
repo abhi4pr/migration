@@ -20,19 +20,19 @@ const UserOverview = () => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`https://jarvis-work-backend.onrender.com/api/userauth/${userID}`).then((res) => {
+      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/userauth/${userID}`).then((res) => {
         setData(res.data);
       });
     }
   }, [userID]);
 
   function getData() {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       setDatas(res.data.data);
       setBackupData(res.data.data);
     });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_departments").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments").then((res) => {
       setDepartmentData(res.data)
     });
   }

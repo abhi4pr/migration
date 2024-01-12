@@ -24,7 +24,7 @@ export default function StatsAllPagesDetail() {
   const [loading, setLoading] = useState(false);
   const apiCall = () => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_distinct_count_history")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_distinct_count_history")
       .then((res) => {
         console.log(res.data);
         setAllPagesDetail(res.data.data);
@@ -37,7 +37,7 @@ export default function StatsAllPagesDetail() {
 setLoading(true);
     axios
       .get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_purchase_data",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_purchase_data",
       ).then((res) => {
         setLoading(false);
         setPhpData(res.data.result);
@@ -48,7 +48,7 @@ setLoading(true);
        
       });
     apiCall();
-      axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+      axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       setAllUsers(res.data.data);
     });
   }, []);

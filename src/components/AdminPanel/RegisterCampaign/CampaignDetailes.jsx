@@ -20,7 +20,7 @@ const CampaignDetailes = ({
   const getData = async () => {
     try {
       const res = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/register_campaign/${cid}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/register_campaign/${cid}`
       );
       setCampaignData(res.data.data);
     } catch (error) {
@@ -31,7 +31,7 @@ const CampaignDetailes = ({
   // console.log(cid, "mycid");
   // console.log(commitData)
   const getBrandInfo = async () => {
-    const brand = await axios.get(`https://jarvis-work-backend.onrender.com/api/get_brands`);
+    const brand = await axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_brands`);
     const myBrand = brand.data.data.find(
       (brand) => brand.brand_id == campaignData.brand_id
     );
@@ -43,7 +43,7 @@ const CampaignDetailes = ({
   // },[getCampaign])
 
   const getCampaignName = async () => {
-    const camp = await axios.get(`https://jarvis-work-backend.onrender.com/api/exe_campaign`);
+    const camp = await axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign`);
     const mycamp = camp.data.data.find(
       (camp) => camp.exeCmpId == campaignData.exeCmpId
     );
@@ -56,7 +56,7 @@ const CampaignDetailes = ({
 
   const getCommitments = async () => {
     const comm = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_commitments"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_commitments"
     );
     const myComm = comm.data.data.filter((comm) =>
       commInfo.includes(comm.cmtId)

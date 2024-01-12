@@ -18,7 +18,7 @@ const ResponsibilityUpdate = () => {
   const userId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/get_single_responsibility/${id}`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_responsibility/${id}`).then((res) => {
       const fetchedData = res.data;
       setResponsibility(fetchedData.respo_name);
       setDescription(fetchedData.description);
@@ -28,7 +28,7 @@ const ResponsibilityUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://jarvis-work-backend.onrender.com/api/edit_responsibility/${id}`, {
+      await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_responsibility/${id}`, {
         respo_name: responsibility,
         description: description,
         Last_updated_by: userId,

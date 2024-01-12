@@ -20,7 +20,7 @@ export default function ForgetPassword() {
       return;
     } else {
       axios
-        .post("https://jarvis-work-backend.onrender.com/api/forgot_pass", {
+        .post("https://api-dot-react-migration-project.el.r.appspot.com/api/forgot_pass", {
           user_email_id: email,
         })
         .then((res) => {

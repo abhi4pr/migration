@@ -21,7 +21,7 @@ const OfficeMast = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_rooms").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms").then((res) => {
       setOfficeData(res.data.data);
     });
   }, []);
@@ -40,7 +40,7 @@ const OfficeMast = () => {
       if (isLoginIdExists) {
         alert("this Room No already exists");
       } else {
-        await axios.post("https://jarvis-work-backend.onrender.com/api/add_room", formData, {
+        await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_room", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

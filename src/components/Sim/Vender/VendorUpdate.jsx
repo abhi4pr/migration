@@ -38,7 +38,7 @@ const VendorUpdate = () => {
   // const [categoryData, setCategoryData] = useState([]);
   // const getCategoryData = () => {
   //   axios
-  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
+  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
   //     .then((res) => {
   //       console.log(res.data, "category");
   //       setCategoryData(res.data);
@@ -50,7 +50,7 @@ const VendorUpdate = () => {
 
   const getData = () => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_vendor/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_vendor/${id}`)
       .then((res) => {
         const response = res.data.data;
 
@@ -89,7 +89,7 @@ const VendorUpdate = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "https://jarvis-work-backend.onrender.com/api/update_vendor",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/update_vendor",
         {
           vendor_id: id,
           vendor_name: vendorName,

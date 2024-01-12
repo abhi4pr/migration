@@ -18,7 +18,7 @@ const PlanOverview = () => {
   console.log(selectData);
   const getSelectPage = async () => {
     const newPlan = await axios.get(
-      `https://jarvis-work-backend.onrender.com/api/campaignplan/${id}`
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan/${id}`
     );
 
     const x=newPlan.data.data.filter(page=>{

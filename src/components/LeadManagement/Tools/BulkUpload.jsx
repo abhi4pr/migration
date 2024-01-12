@@ -95,7 +95,7 @@ export default function BulkUpload({ setUpload }) {
     const uniqueData = [];
     for (let i = 0; i < bulklead.length; i++) {
       try {
-        axios.post("https://jarvis-work-backend.onrender.com/api/leadmastpost", {
+        axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/leadmastpost", {
           lead_name: bulklead[i].lead_name,
           mobile_no: bulklead[i].mobile_no,
           alternate_mobile_no: bulklead[i].alternate_mobile_no,

@@ -20,7 +20,7 @@ const OfficeMastOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -30,7 +30,7 @@ const OfficeMastOverview = () => {
 
   async function getData() {
     try {
-      const res = await axios.get("https://jarvis-work-backend.onrender.com/api/get_all_rooms");
+      const res = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms");
       
       setData(res.data.data);
       setFilterData(res.data.data);

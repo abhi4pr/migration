@@ -73,7 +73,7 @@ export default function CampaignCommitment() {
       return;
     }
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/exe_campaign", postData)
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign", postData)
       .then((response) => {
         setIsModalOpen(false);
         getData();
@@ -87,7 +87,7 @@ export default function CampaignCommitment() {
 
   // get api ========>
   const getData = () => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/exe_campaign").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign").then((res) => {
       console.log(res.data.data, "yyyyyyyyyyyyyy");
       const data = res.data.data;
       const uniqueCmtNames = new Set();
@@ -117,7 +117,7 @@ export default function CampaignCommitment() {
   // put api =============>
   const handlePutData = () => {
     axios
-      .put(`https://jarvis-work-backend.onrender.com/api/exe_campaign`, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign`, {
         exeCmpId: editData.exeCmpId,
         exeCmpName: editData.exeCmpName,
         exeHashTag: editData.exeHashTag,
@@ -147,7 +147,7 @@ export default function CampaignCommitment() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`https://jarvis-work-backend.onrender.com/api/exe_campaign/${itemToDeleteId}`)
+        .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");

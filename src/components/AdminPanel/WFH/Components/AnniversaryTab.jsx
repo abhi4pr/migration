@@ -6,7 +6,7 @@ const AnniversaryTab = ({ workAnniversary }) => {
       {workAnniversary?.map((item) => (
         <li key={item.user_id}>
           <img
-            src={`https://jarvis-work-backend.onrender.com//api/${item.image}`}
+            src={`https://api-dot-react-migration-project.el.r.appspot.com//api/${item.image}`}
             alt="user Image"
           />
           {item.user_name}

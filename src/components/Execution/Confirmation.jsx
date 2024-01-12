@@ -58,7 +58,7 @@ const Confirmation = ({
         execution_status: 2,
       };
       axios
-        .put(`https://jarvis-work-backend.onrender.com/api/edit_exe_sum`, payload)
+        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);
@@ -110,7 +110,7 @@ const Confirmation = ({
         end_date: new Date(),
       };
       axios
-        .put(`https://jarvis-work-backend.onrender.com/api/edit_exe_sum`, payload)
+        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);
@@ -170,7 +170,7 @@ const Confirmation = ({
         execution_time: hoursDifference.toFixed(2),
       };
       axios
-        .put(`https://jarvis-work-backend.onrender.com/api/edit_exe_sum`, payload)
+        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_exe_sum`, payload)
         .then((res) => {
           console.log(res);
           setReload((preVal) => !preVal);

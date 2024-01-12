@@ -112,7 +112,7 @@ function EditLead() {
       setAddRows(false);
       // console.log("post api hitted");
       try {
-        axios.post("https://jarvis-work-backend.onrender.com/api/leadmastpost", {
+        axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/leadmastpost", {
           lead_name: updatedRow.lead_name,
           mobile_no: updatedRow.mobile_no,
           alternate_mobile_no: updatedRow.alternate_mobile_no,
@@ -132,7 +132,7 @@ function EditLead() {
       return updatedRow;
     }
     try {
-      axios.put("https://jarvis-work-backend.onrender.com/api/leadmastupdate", {
+      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/leadmastupdate", {
         id: updatedRow.leadmast_id,
         lead_name: updatedRow.lead_name,
         mobile_no: updatedRow.mobile_no,

@@ -9,7 +9,7 @@ const AlertOrderSuccessful = () => {
   async function getData() {
     try {
       const res = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_orderreqdata"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata"
       );
       setData(res.data.data);
       console.log(res.data.data);

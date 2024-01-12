@@ -40,7 +40,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
   async function getData() {
     try {
       await axios
-        .get("https://jarvis-work-backend.onrender.com/api/get_LastOrderId")
+        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_LastOrderId")
         .then((res) => {
           setOrderID(res.data.Order_req_id);
         });
@@ -76,7 +76,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_delivery_boy")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_boy")
       .then((res) => setReqDelApiData(res.data.results));
   }, []);
   const handlePlaceOrder = async () => {
@@ -91,7 +91,7 @@ const UserSidebar = ({ cartItems, updatedCart, selectedSitting }) => {
       const finalsitting_id =
         selectedSitting == "" ? Number(SittingId) : Number(selectedSitting);
       await axios
-        .post("https://jarvis-work-backend.onrender.com/api/add_orderreq", {
+        .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_orderreq", {
           product_id: element.product_id,
           order_quantity: count[element.product_id],
           special_request: specialRequest,

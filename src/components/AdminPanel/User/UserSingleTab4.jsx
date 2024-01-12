@@ -64,7 +64,7 @@ const UserSingleTab4 = ({ user, id, getData }) => {
 
     axios({
       method: "put",
-      url: "https://jarvis-work-backend.onrender.com/api/update_user",
+      url: "https://api-dot-react-migration-project.el.r.appspot.com/api/update_user",
       data: formData,
     }).then(() => {
       if (emptyState) emptyState("");
@@ -79,7 +79,7 @@ const UserSingleTab4 = ({ user, id, getData }) => {
       .then(() => {
         e.preventDefault();
         axios
-          .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+          .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
             email: fetchedData[0].user_email_id,
             subject: "User Onboard",
             text: "Your Some Document is not clear Plzz Upload Again",

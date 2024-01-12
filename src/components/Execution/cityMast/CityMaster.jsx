@@ -38,7 +38,7 @@ export default function CityMaster() {
   };
   const handleSaveEditCityName = () => {
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/update_city", {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_city", {
         _id: rowData._id,
         city_name: editCityName,
       })
@@ -67,7 +67,7 @@ export default function CityMaster() {
   };
 
   const callApi = () => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_cities").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cities").then((res) => {
       console.log(res);
       setCity(res.data.data);
       setRow(res.data.data);
@@ -112,7 +112,7 @@ export default function CityMaster() {
 
   // const handleSaveEditCityName = () => {
   //   axios
-  //     .put("https://jarvis-work-backend.onrender.com/api/update_city", {
+  //     .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_city", {
   //       _id: rowData._id,
   //       city_name: editCityName,
   //     })
@@ -140,7 +140,7 @@ export default function CityMaster() {
 
   const handleClickAddCity = () => {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_city", { city_name: addCity })
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_city", { city_name: addCity })
       .then((res) => {
         if (res.status === 200) {
           toastAlert(`${addCity} added successfully`);

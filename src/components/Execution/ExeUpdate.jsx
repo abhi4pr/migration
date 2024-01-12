@@ -183,7 +183,7 @@ export default function ExeUPdate() {
     formData.append("story_view_date", storyViewDate );
 
     axios
-      .put(`https://jarvis-work-backend.onrender.com/api/edit_exe_ip_count_history`, formData, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_exe_ip_count_history`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -197,7 +197,7 @@ export default function ExeUPdate() {
   const apiCall = () => {
     axios
       .get(
-        `https://jarvis-work-backend.onrender.com/api/get_exe_ip_count_history/${location.state}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_ip_count_history/${location.state}`
       )
       .then((res) => {
         let data = res.data.data.filter((e) => {
@@ -280,7 +280,7 @@ export default function ExeUPdate() {
 
   useEffect(() => {
     setCountryList(Country.getAllCountries());
-    axios.get('https://jarvis-work-backend.onrender.com/api/get_all_cities').then((res) => {
+    axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cities').then((res) => {
       console.log(res.data.data);
       setCityList(res.data.data.map((city) => city.city_name));
   });

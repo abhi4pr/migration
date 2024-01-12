@@ -11,7 +11,7 @@ const AllOrder = () => {
 
   function getData() {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_orderreqdata")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

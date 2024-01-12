@@ -25,7 +25,7 @@ const AssetVisibleToTagedPerosn = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/show_asset_user_data/${userID}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/show_asset_user_data/${userID}`
       );
       setFilterData(response.data.data);
       setData(response.data.data);

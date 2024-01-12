@@ -24,7 +24,7 @@ const DepartmentUpdate = () => {
     setError("");
 
     await axios
-      .put(`https://jarvis-work-backend.onrender.com/api/update_department`, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_department`, {
         dept_id: id,
         dept_name: departmentName,
         short_name: shortName,

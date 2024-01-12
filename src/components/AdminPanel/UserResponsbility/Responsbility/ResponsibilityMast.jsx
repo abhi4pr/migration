@@ -19,7 +19,7 @@ const ResponsibilityMast = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://jarvis-work-backend.onrender.com/api/add_responsibility", {
+      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_responsibility", {
         respo_name: responsibility,
         description: description,
         created_by: userId,

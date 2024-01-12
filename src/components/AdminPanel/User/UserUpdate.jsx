@@ -203,6 +203,7 @@ const UserUpdate = () => {
 
   const [documentData, setDocumentData] = useState([]);
   const [loading,setLoading]=useState(false)
+  const [jobTypeData, setJobTypeData] = useState([]);
 
   const [cast, setCast] = useState("");
   const { toastAlert, toastError } = useGlobalContext();
@@ -215,7 +216,7 @@ const UserUpdate = () => {
     "Post Graduation",
     "Other",
   ];
-  const jobTypeData = ["WFO", "WFH"];
+  // const jobTypeData = ["WFO", "WFH"];
   const genderData = ["Male", "Female", "Other"];
   const bloodGroupData = [
     "A+ (A Positive)",
@@ -268,7 +269,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_subdept_from_dept/${department}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_subdept_from_dept/${department}`)
       .then((res) => setSubDepartmentData(res.data));
   }, [department]);
 
@@ -282,46 +283,49 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_roles")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_roles")
       .then((res) => {
         getRoleData(res.data.data);
       })
       .catch((error) => {
-        // console.log(error);
+        console.log(error);
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/not_alloc_sitting").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/not_alloc_sitting").then((res) => {
       setRefrenceData(res.data.data);
     });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_sittings").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
     });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
+      axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_job_types').then((res)=>{
+        setJobTypeData(res.data.data)
+      })
   }, []);
 
   useEffect(() => {
     async function getDetails() {
       const familyDataResponse = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_family/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_family/${id}`
       );
       const educationDataResponse = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_education/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_education/${id}`
       );
       setFamilyDetails(familyDataResponse.data.data);
       setEducationDetails(educationDataResponse.data.data);
@@ -331,7 +335,7 @@ const UserUpdate = () => {
 
   function getOtherDocument() {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_user_other_fields/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -339,7 +343,7 @@ const UserUpdate = () => {
 
   async function getDocuments() {
     const response = await axios.post(
-      "https://jarvis-work-backend.onrender.com/api/get_user_doc",
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_doc",
       {
         user_id: id,
       }
@@ -353,7 +357,7 @@ const UserUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -530,7 +534,7 @@ const UserUpdate = () => {
       return toastError("Password is Required");
     } else if (!speakingLanguage || speakingLanguage == "") {
       return toastError("Speaking Language is Required");
-    }else if (!gender || gender == "") {
+    } else if (!gender || gender == "") {
       return toastError("Gender is Required");
     } else if (!nationality || nationality == "") {
       return toastError("Nationality is Required");
@@ -554,8 +558,8 @@ const UserUpdate = () => {
       return toastError("City is Required");
     } else if (!state || state == "") {
       return toastError("State/UT is Required");
-    } else if (!pincode || pincode == "") {
-      return toastError("Pincode is Required");
+    } else if (!pincode || pincode == "" || pincode.length !== 6) {
+      return toastError("Pincode should be 6 number long");
     } else if (!joiningDate || joiningDate == "") {
       return toastError("Joining Date is Required");
     } else if (!userStatus || userStatus == "") {
@@ -567,7 +571,6 @@ const UserUpdate = () => {
     } else if (!username || username == "") {
       return toastError("User Name Error is required");
     }
-
 
     if (jobType == "WFO" && sitting == "") {
       return toastError("Sitting Error is required");
@@ -582,7 +585,7 @@ const UserUpdate = () => {
     formData.append("user_email_id", email);
     formData.append("user_login_id", loginId);
     formData.append("user_login_password", password);
-    formData.append("user_contact_no", contact?contact:"");
+    formData.append("user_contact_no", contact ? contact : "");
     formData.append("sitting_id", jobType === "WFH" ? 0 : sitting);
     formData.append("room_id", roomId.room_id ? roomId.room_id : roomId);
     // console.log("room id he yha", roomId);
@@ -636,7 +639,10 @@ const UserUpdate = () => {
     formData.append("emergency_contact1", emergencyContact);
     formData.append("emergency_contact_person_name1", emergencyContactName);
     formData.append("emergency_contact_relation1", emergencyContactRelation);
-    formData.append("emergency_contact2", emergencyContact2?emergencyContact2:"");
+    formData.append(
+      "emergency_contact2",
+      emergencyContact2 ? emergencyContact2 : ""
+    );
     formData.append("emergency_contact_person_name2", emergencyContactName2);
     formData.append("emergency_contact_relation2", emergencyContactRelation2);
 
@@ -647,25 +653,27 @@ const UserUpdate = () => {
     console.log("other doc");
     const formDataa = new FormData();
     if (personalEmail && personalContact) {
-      setLoading(true)
+      setLoading(true);
 
       console.log("came to if");
-      await axios.put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }).then((res)=>{
-        setLoading(false)
-        console.log(res.data);
-
-      }).catch(function(err){
-        setLoading(false)
-        console.log(err);
-      });
+      await axios
+        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+          console.log(res.data);
+        })
+        .catch(function (err) {
+          setLoading(false);
+          console.log(err);
+        });
 
       if (reportL1 !== "") {
         axios
-          .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+          .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
             email: email,
             subject: "User Registration",
             text: "A new user has been registered.",
@@ -705,7 +713,7 @@ const UserUpdate = () => {
         }
         try {
           const response = await axios.put(
-            "https://jarvis-work-backend.onrender.com/api/update_family",
+            "https://api-dot-react-migration-project.el.r.appspot.com/api/update_family",
             payload
           );
         } catch (error) {
@@ -730,7 +738,7 @@ const UserUpdate = () => {
         }
         try {
           const response = await axios.put(
-            "https://jarvis-work-backend.onrender.com/api/update_education",
+            "https://api-dot-react-migration-project.el.r.appspot.com/api/update_education",
             payload
           );
           console.log(response.data);
@@ -764,7 +772,7 @@ const UserUpdate = () => {
                 : document.status
             );
             const response = await axios.put(
-              "https://jarvis-work-backend.onrender.com/api/update_user_doc",
+              "https://api-dot-react-migration-project.el.r.appspot.com/api/update_user_doc",
               formData,
               {
                 headers: {
@@ -805,7 +813,7 @@ const UserUpdate = () => {
         formDataa.append("lastupdated_by", loginUserId);
         formDataa.append("field_value", element.field_value);
         axios.put(
-          `https://jarvis-work-backend.onrender.com/api/updateuserotherfielddata/${id}`,
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/updateuserotherfielddata/${id}`,
           // {
           //   id:element.id,
           //   field_name: element.field_name,
@@ -828,7 +836,7 @@ const UserUpdate = () => {
       // console.log(uid, "yha uid hai put ke bad");
       // console.log(panUpload, "pan hai yha");
       // axios
-      //   .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+      //   .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
       //     email: email,
       //     subject: "User Registration",
       //     text: "A new user has been registered.",
@@ -1003,7 +1011,7 @@ const UserUpdate = () => {
     if (itemToRemove && itemToRemove.family_id) {
       try {
         await axios.delete(
-          `https://jarvis-work-backend.onrender.com/api/delete_family/${itemToRemove.family_id}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_family/${itemToRemove.family_id}`
         );
         toastAlert("Details Deleted");
       } catch (error) {
@@ -1040,7 +1048,7 @@ const UserUpdate = () => {
     if (itemToRemove && itemToRemove.education_id) {
       try {
         await axios.delete(
-          `https://jarvis-work-backend.onrender.com/api/delete_education/${itemToRemove.education_id}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_education/${itemToRemove.education_id}`
         );
         console.log(
           "Deleted Education detail from server:",
@@ -1082,8 +1090,8 @@ const UserUpdate = () => {
         <Select
           className=""
           options={jobTypeData.map((option) => ({
-            value: `${option}`,
-            label: `${option}`,
+            value: `${option.job_type}`,
+            label: `${option.job_type}`,
           }))}
           value={{
             value: jobType,
@@ -1119,9 +1127,7 @@ const UserUpdate = () => {
       </div>
 
       <div className="form-group col-3">
-        <label className="form-label">
-          Cast 
-        </label>
+        <label className="form-label">Cast</label>
         <Select
           className=""
           options={castOption.map((option) => ({
@@ -1162,7 +1168,9 @@ const UserUpdate = () => {
         />
       </div>
       <div className="form-group col-3">
-        <label className="form-label">Sub Department <sup style={{ color: "red" }}>*</sup></label>
+        <label className="form-label">
+          Sub Department <sup style={{ color: "red" }}>*</sup>
+        </label>
         <Select
           className=""
           options={subDepartmentData.map((option) => ({
@@ -1312,7 +1320,7 @@ const UserUpdate = () => {
       )}
 
       <ContactNumberReact
-      astric={true}
+        astric={true}
         label="Alternate Contact"
         parentComponentContact={alternateContact}
         setParentComponentContact={setAlternateContact}
@@ -1363,7 +1371,9 @@ const UserUpdate = () => {
 
       <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
         <div className="form-group">
-          <label>Login ID <sup style={{ color: "red" }}>*</sup></label>
+          <label>
+            Login ID <sup style={{ color: "red" }}>*</sup>
+          </label>
           <div className="input-group">
             <input
               className="form-control"
@@ -1384,7 +1394,9 @@ const UserUpdate = () => {
       </div>
       <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
         <div className="form-group">
-          <label>Generate Password <sup style={{ color: "red" }}>*</sup></label>
+          <label>
+            Generate Password <sup style={{ color: "red" }}>*</sup>
+          </label>
           <div className="input-group">
             <input
               type="text"
@@ -1457,7 +1469,6 @@ const UserUpdate = () => {
         />
       </div>
 
-     
       {jobType === "WFH" && (
         <>
           <FieldContainer
@@ -1732,7 +1743,9 @@ const UserUpdate = () => {
   const personalFields = (
     <>
       <div className="form-group col-3">
-        <label className="form-label">Spoken Languages <sup style={{ color: "red" }}>*</sup></label>
+        <label className="form-label">
+          Spoken Languages <sup style={{ color: "red" }}>*</sup>
+        </label>
         <Select
           isMulti
           name="langauages"
@@ -1806,7 +1819,9 @@ const UserUpdate = () => {
         onChange={(e) => setHobbies(e.target.value)}
       />
       <div className="form-group col-6">
-        <label className="form-label">Blood Group <sup style={{ color: "red" }}>*</sup></label>
+        <label className="form-label">
+          Blood Group <sup style={{ color: "red" }}>*</sup>
+        </label>
         <Select
           className=""
           options={bloodGroupData.map((option) => ({

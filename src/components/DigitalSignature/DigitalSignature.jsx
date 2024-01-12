@@ -38,7 +38,7 @@ const DigitalSignature = ({
         }
 
         axios
-          .put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
+          .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

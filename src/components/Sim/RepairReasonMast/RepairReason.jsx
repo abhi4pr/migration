@@ -30,7 +30,7 @@ const RepairReason = () => {
   // const [brandData, setBrandData] = useState([]);
   // async function getBrandData() {
   //   const res = await axios.get(
-  //     "https://jarvis-work-backend.onrender.com/api/get_all_asset_brands"
+  //     "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_brands"
   //   );
   //   setBrandData(res.data.data);
   // }
@@ -42,7 +42,7 @@ const RepairReason = () => {
   const handleTotalRequest = async (row) => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_all_repair_request_by_asset_reasonId/${row}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_repair_request_by_asset_reasonId/${row}`
       );
       setTotalRepariData(response.data.data);
       console.log(response.data.data, "new data");
@@ -59,7 +59,7 @@ const RepairReason = () => {
     if (categoryName) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_asset_sub_category/${categoryName}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_asset_sub_category/${categoryName}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -137,7 +137,7 @@ const RepairReason = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://jarvis-work-backend.onrender.com/api/add_asset_reason",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_asset_reason",
         {
           reason: reason,
           category_id: categoryName,
@@ -155,7 +155,7 @@ const RepairReason = () => {
   };
   async function getRepairReason() {
     const res = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_assetResons"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_assetResons"
     );
     setModalData(res?.data.data);
     setModalFilter(res?.data.data);
@@ -178,7 +178,7 @@ const RepairReason = () => {
   const handleModalUpdate = () => {
     console.log(repairId, "id");
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/update_asset_reason", {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_asset_reason", {
         asset_reason_id: repairId,
         category_id: categoryNameUpdate,
         sub_category_id: subCategoryNameUpdate,

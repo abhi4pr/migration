@@ -35,7 +35,7 @@ const BrandMaster = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_logo_categories")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_logo_categories")
       .then((res) => setCategoryData(res.data));
 
     const today = new Date();
@@ -67,7 +67,7 @@ const BrandMaster = () => {
         formData.append("logo_cat", selectedCategories[i]);
 
         await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/add_logo_brand",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/add_logo_brand",
           formData,
           {
             headers: {

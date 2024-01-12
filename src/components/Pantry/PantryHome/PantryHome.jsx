@@ -16,7 +16,7 @@ const PantryHome = () => {
   // const userId = decodedToken.id;
   // useEffect(() => {
   //   if (userId && contextData.length === 0) {
-  //     axios.get(`https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userId}`).then((res) => {
+  //     axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userId}`).then((res) => {
   //       setDatas(res.data);
   //     });
   //   }
@@ -41,7 +41,7 @@ const PantryHome = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_orderreqdata")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata")
       .then((res) => {
         setAllOrderData(res.data.data);
       });
@@ -58,7 +58,7 @@ const PantryHome = () => {
 
   const allOrderCount = allOrderData?.length;
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_transreq").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_transreq").then((res) => {
       setTransferReq(res.data.data);
     });
   }, []);

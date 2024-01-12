@@ -31,7 +31,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((data) => {
         setDepartmentName(data.data);
       });
@@ -39,7 +39,7 @@ const PendingOrder = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_delivery_boy`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_boy`)
       .then((res) => setAllDeliveryBoy(res.data.results));
   }, []);
 
@@ -50,7 +50,7 @@ const PendingOrder = () => {
       return;
     } else {
       axios
-        .put("https://jarvis-work-backend.onrender.com/api/update_orderrequest", {
+        .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_orderrequest", {
           product_id: row.product_id,
           order_req_id: row.Order_req_id,
           order_quantity: row.Order_quantity,
@@ -79,7 +79,7 @@ const PendingOrder = () => {
 
   function handleGetOrderData() {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_orderreqdata")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata")
       .then((res) => {
         const data = res.data.data
           .filter((res) => res.Status === "pending")
@@ -111,7 +111,7 @@ const PendingOrder = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/get_delivery_user`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_user`).then((res) => {
       setDeliveryBoyData(res.data);
     });
   }, []);
@@ -120,7 +120,7 @@ const PendingOrder = () => {
     // console.log("selectedRow", selectedRow);
     if (remarks.length > 2) {
       axios
-        .put("https://jarvis-work-backend.onrender.com/api/update_orderrequest", {
+        .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_orderrequest", {
           product_id: selectedRow.product_id,
           order_req_id: selectedRow.Order_req_id,
           order_quantity: selectedRow.Order_quantity,
@@ -150,7 +150,7 @@ const PendingOrder = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_transreq", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_transreq", {
         from_id: orderRequestTransfer[1],
         to_id: transferTo,
         reason: reason,

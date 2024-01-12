@@ -37,7 +37,7 @@ const VenderMaster = () => {
   // const [categoryData, setCategoryData] = useState([]);
   // const getCategoryData = () => {
   //   axios
-  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
+  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
   //     .then((res) => {
   //       setCategoryData(res.data);
   //     });
@@ -50,7 +50,7 @@ const VenderMaster = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://jarvis-work-backend.onrender.com/api/add_vendor",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_vendor",
         {
           vendor_name: vendorName,
           vendor_type: type,

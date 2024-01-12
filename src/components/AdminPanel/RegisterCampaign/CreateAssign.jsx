@@ -58,13 +58,13 @@ const CreateAssign = () => {
 
       //1.check if preAssignment Exist for particular phase
       const isPreAss = await axios.post(
-        `https://jarvis-work-backend.onrender.com/api/preassignment/phase`, {
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment/phase`, {
         phase_id: id
       }
       );
 
       if (isPreAss?.data?.data?.length > 0) {
-        const assignment = await axios.get(`https://jarvis-work-backend.onrender.com/api/assignment/phase/${id}`)
+        const assignment = await axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/phase/${id}`)
         const filter = assignment?.data?.data.filter((page) => {
           return page.replacement_status === 'pending' || page.replacement_status === "replacement" || page.replacement_status === "inactive";
         })
@@ -77,7 +77,7 @@ const CreateAssign = () => {
         const loadingTimeout = setTimeout(() => setIsLoading(false), 3000);
 
         const createPreAssignment = await axios.post(
-          `https://jarvis-work-backend.onrender.com/api/preassignment`, {
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment`, {
           phase_id: id,
           ass_by: "123"
         }
@@ -111,7 +111,7 @@ const CreateAssign = () => {
   const ExpertiseDa = async () => {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/expertise"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/expertise"
       );
       const res = response.data.data;
       setExpertiseData(res);
@@ -123,7 +123,7 @@ const CreateAssign = () => {
   //submiting the assignment
   const handleSubmitAssign = async () => {
     try {
-      const createAssignment = await axios.post(`https://jarvis-work-backend.onrender.com/api/assignment/bulk`, { pages: payload });
+      const createAssignment = await axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/bulk`, { pages: payload });
       alert("assignment created successfully")
       // navigate("/admin/excusionCampaign");
     } catch (error) {

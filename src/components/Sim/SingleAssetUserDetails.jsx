@@ -9,7 +9,7 @@ const SingleAssetUserDetails = () => {
   const [data, setData] = useState([]);
   const getData = () => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_sim/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         setData(fetchedData);

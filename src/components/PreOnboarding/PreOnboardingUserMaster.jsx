@@ -326,7 +326,7 @@ const PreOnboardingUserMaster = () => {
   const fetchCOCData = async () => {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_cocs"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cocs"
       );
       const data = response.data;
       setCocData(data.data);
@@ -338,7 +338,7 @@ const PreOnboardingUserMaster = () => {
   useEffect(() => {
     async function getGuardian() {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_guardian/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_guardian/${id}`
       );
       setGuardianDetails(response.data.data);
     }
@@ -368,7 +368,7 @@ const PreOnboardingUserMaster = () => {
               {item.sub_heading_sequence} {item.sub_heading}
             </h5>
             <p>
-              {item.sub_heading_sequence} {item.sub_heading_desc}
+              {item.sub_heading_desc}
             </p>
           </div>
         ))}
@@ -417,7 +417,7 @@ const PreOnboardingUserMaster = () => {
 
   const getDocuments = async () => {
     const response = await axios.post(
-      "https://jarvis-work-backend.onrender.com/api/get_user_doc",
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_doc",
       {
         user_id: id,
       }
@@ -466,7 +466,7 @@ const PreOnboardingUserMaster = () => {
 
   const gettingData = () => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
 
@@ -686,7 +686,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("document_percentage_mandatory", showMandotaryPer);
     formData.append("document_percentage_non_mandatory", showNonMandotaryPer);
     await axios
-      .put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -719,7 +719,7 @@ const PreOnboardingUserMaster = () => {
 
       try {
         const response = await axios.put(
-          "https://jarvis-work-backend.onrender.com/api/update_guardian",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/update_guardian",
           payload
         );
       } catch (error) {
@@ -744,7 +744,7 @@ const PreOnboardingUserMaster = () => {
       }
       try {
         const response = await axios.put(
-          "https://jarvis-work-backend.onrender.com/api/update_family",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/update_family",
           payload
         );
       } catch (error) {
@@ -770,7 +770,7 @@ const PreOnboardingUserMaster = () => {
       }
       try {
         const response = await axios.put(
-          "https://jarvis-work-backend.onrender.com/api/update_education",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/update_education",
           payload
         );
         console.log(response.data);
@@ -781,7 +781,7 @@ const PreOnboardingUserMaster = () => {
 
     // After update send mail
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
         email: "lalit@creativefuel.io",
         subject: "User Pre Onboarding",
         text: "Pre Onboarding Data Update Successfully",
@@ -806,10 +806,10 @@ const PreOnboardingUserMaster = () => {
   useEffect(() => {
     async function getDetails() {
       const familyDataResponse = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_family/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_family/${id}`
       );
       const educationDataResponse = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_education/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_education/${id}`
       );
       setFamilyDetails(familyDataResponse.data.data);
       setEducationDetails(educationDataResponse.data.data);
@@ -840,7 +840,7 @@ const PreOnboardingUserMaster = () => {
     if (itemToRemove && itemToRemove.guardian_id) {
       try {
         await axios.delete(
-          `https://jarvis-work-backend.onrender.com/api/delete_guardian/${itemToRemove.guardian_id}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_guardian/${itemToRemove.guardian_id}`
         );
       } catch (error) {
         console.error("Error Deleting Guardian", error);
@@ -874,7 +874,7 @@ const PreOnboardingUserMaster = () => {
     if (itemToRemove && itemToRemove.family_id) {
       try {
         await axios.delete(
-          `https://jarvis-work-backend.onrender.com/api/delete_family/${itemToRemove.family_id}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_family/${itemToRemove.family_id}`
         );
         toastAlert("Details Deleted");
       } catch (error) {
@@ -911,7 +911,7 @@ const PreOnboardingUserMaster = () => {
     if (itemToRemove && itemToRemove.education_id) {
       try {
         await axios.delete(
-          `https://jarvis-work-backend.onrender.com/api/delete_education/${itemToRemove.education_id}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_education/${itemToRemove.education_id}`
         );
         console.log(
           "Deleted Education detail from server:",
@@ -950,7 +950,7 @@ const PreOnboardingUserMaster = () => {
   const handleLogOut = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://jarvis-work-backend.onrender.com/api/log_out", {
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/log_out", {
       user_id: id,
     });
 
@@ -1068,7 +1068,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("nick_name", nickName);
     formData.append("profileflag", 1);
 
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -1082,7 +1082,7 @@ const PreOnboardingUserMaster = () => {
     formData.append("user_id", id);
     formData.append("coc_flag", true);
 
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -1092,7 +1092,7 @@ const PreOnboardingUserMaster = () => {
   };
 
   const handleGetOnboard = async () => {
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_user`, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, {
       user_id: id,
       showOnboardingModal: false,
     });

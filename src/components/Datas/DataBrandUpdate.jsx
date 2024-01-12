@@ -52,7 +52,7 @@ const DataBrandUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_data/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         const { data_name, upload_logo, remark, cat_name } = fetchedData;
@@ -65,28 +65,28 @@ const DataBrandUpdate = () => {
       });
     
       axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_categorys")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_categorys")
       .then((res) => {
         setCategoryData(res.data.simcWithSubCategoryCount);
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_platforms")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_platforms")
       .then((res) => {
         setPlateformData(res.data);
       });
     // axios
-    //   .get("https://jarvis-work-backend.onrender.com/api/get_all_data_Sub_categories")
+    //   .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_Sub_categories")
     //   .then((res) => {
     //     setDataSubCategoryData(res.data);
     //   });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_content_types")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_content_types")
       .then((res) => {
         setContentTypeData(res.data);
       });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_brands")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_brands")
       .then((res) => {
         setDataBrandData(res.data);
       });
@@ -99,7 +99,7 @@ const DataBrandUpdate = () => {
   useEffect(()=>{
     if(category){
       axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_data_from_sub_category/${category}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data_from_sub_category/${category}`)
       .then((res) => {
         setDataSubCategoryData(res.data);
       });
@@ -118,7 +118,7 @@ const DataBrandUpdate = () => {
   const getCombinedData = async () => {
     if (brand) {
       axios
-        .get(`https://jarvis-work-backend.onrender.com/api/get_data_based_data_name/${brand}`)
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name/${brand}`)
         .then((res) => {
           setLogos(res.data);
 
@@ -141,7 +141,7 @@ const DataBrandUpdate = () => {
       setError("You can't delete default data type, try to delete data instead");
     } else {
       var data = await axios.delete(
-        `https://jarvis-work-backend.onrender.com/api/delete_data/${_id}`,
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_data/${_id}`,
         null
       );
       if (data) {
@@ -153,7 +153,7 @@ const DataBrandUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/edit_data_new`, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_data_new`, {
       _id: id,
       data_name: brandName,
       remark: remark,
@@ -177,7 +177,7 @@ const DataBrandUpdate = () => {
         formData.append("created_by", loginUserId);
 
         await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/add_data",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/add_data",
           formData,
           {
             headers: {

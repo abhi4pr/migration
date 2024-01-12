@@ -18,7 +18,7 @@ const Hobbies = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_hobby/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_hobby/${id}`
       );
       const hobbyName = response.data.data.hobby_name;
       setHobby(hobbyName);
@@ -32,14 +32,14 @@ const Hobbies = () => {
     try {
       if (id == 0) {
         const response = await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/add_hobby",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/add_hobby",
           {
             hobby_name: hobby,
           }
         );
       } else {
         const response = await axios.put(
-          `https://jarvis-work-backend.onrender.com/api/update_hobby`,
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/update_hobby`,
           {
             hobby_id: id,
             hobby_name: hobby,

@@ -32,7 +32,7 @@ const AnnouncementPost = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/annomastpost", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/annomastpost", {
         dept_id: department,
         desi_id: designation,
         onboard_status: announcementFor,
@@ -58,13 +58,13 @@ const AnnouncementPost = () => {
   };
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });

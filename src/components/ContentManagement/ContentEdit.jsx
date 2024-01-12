@@ -25,7 +25,7 @@ const ContentEdit = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/content_upload/${id}`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/content_upload/${id}`).then((res) => {
       const fetchedData = res.data[0];
       setPageName(fetchedData.pageName);
       setContentName(fetchedData.contentName);
@@ -37,7 +37,7 @@ const ContentEdit = () => {
     });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/alldataofIptype")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/alldataofIptype")
       .then((res) => setIpTypeData(res.data))
   }, []);
   
@@ -54,7 +54,7 @@ const ContentEdit = () => {
     // formData.append("reason", reason);
     // formData.append("status", status)
 
-    await axios.put("https://jarvis-work-backend.onrender.com/api/content_upload", formData, {
+    await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/content_upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }

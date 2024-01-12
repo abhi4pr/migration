@@ -14,7 +14,7 @@ const ContentOverview = () => {
   const [filterdata, setFilterData] = useState([]);
 
   async function getData() {
-    await axios.get("https://jarvis-work-backend.onrender.com/api/content_upload").then((res) => {
+    await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/content_upload").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

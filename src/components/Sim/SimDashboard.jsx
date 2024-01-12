@@ -36,7 +36,7 @@ const SimDashboard = () => {
   // const [categoryData, setCategoryData] = useState([]);
   // const getCategoryData = () => {
   //   axios
-  //     .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
+  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
   //     .then((res) => {
   //       setCategoryData(res.data);
   //     });
@@ -49,7 +49,7 @@ const SimDashboard = () => {
     if (category) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_asset_sub_category/${category}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_asset_sub_category/${category}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -65,7 +65,7 @@ const SimDashboard = () => {
   }, [category]);
 
   function getData() {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_sims").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sims").then((res) => {
       setSimData(res.data.data);
 
       const availableObjects = res.data.data.filter(
@@ -79,7 +79,7 @@ const SimDashboard = () => {
       setAllocatedCount(allocatedObjects);
     });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_asset_department_count")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_asset_department_count")
       .then((res) => {
         setDepartmentData(res.data.data);
 
@@ -97,7 +97,7 @@ const SimDashboard = () => {
   const handleRowClick = (row) => {
     setSelectedRow(row);
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_asset_users_of_dept/${row}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_asset_users_of_dept/${row}`)
       .then((res) => {
         setSelectedUserData(res.data.data);
       });

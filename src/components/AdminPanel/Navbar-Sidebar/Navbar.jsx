@@ -24,7 +24,7 @@ const Navbar = () => {
 
   useEffect(() => {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/login_user_data", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/login_user_data", {
         user_id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));
@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const fetchData = async () => {
     await axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_unreden_notifications")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_unreden_notifications")
       .then((res) => {
         setNotificationData(res.data.data);
         setCount(res.data.data.length);
@@ -50,7 +50,7 @@ const Navbar = () => {
 
   const NotificationsOff = async (_id) => {
     // e.preventDefault();
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_notification/`, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_notification/`, {
       _id: _id,
       readen: true,
     });

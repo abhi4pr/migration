@@ -25,7 +25,7 @@ const InvoiceCreated = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://jarvis-work-backend.onrender.com/api/", {
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/", {
       display_sequence: displaySeq,
     });
 
@@ -34,10 +34,10 @@ const InvoiceCreated = () => {
   };
 
   function getData() {
-    axios.post("https://jarvis-work-backend.onrender.com/api/add_php_pending_invoice_data_in_node").then((res)=>{
+    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_php_pending_invoice_data_in_node").then((res)=>{
       console.log('data save in local success')
     })
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_php_pending_invoice_data").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_php_pending_invoice_data").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

@@ -23,7 +23,7 @@ const DeliveryData = () => {
 
   function getData() {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_orderreqdata")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata")
       .then((res) => {
         if (res.data.data?.length !== orderLength) {
           orderLength = res.data.data.length;
@@ -36,7 +36,7 @@ const DeliveryData = () => {
       });
 
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_orderreqs", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_orderreqs", {
         // Sitting_id: sittingID,
         Request_delivered_by: loginUserId,
         room_id: roomId,
@@ -62,7 +62,7 @@ const DeliveryData = () => {
     getData();
     axios
 
-      .get(`https://jarvis-work-backend.onrender.com/api/get_delivery_user`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_user`)
       .then((res) => {
         setDeliveryBoyData(res.data);
         // console.log(res.data);
@@ -79,7 +79,7 @@ const DeliveryData = () => {
   ) => {
     // console.log(productId, OrderReqId, userid, orderquantity, productmessage);
     axios
-      .put(`https://jarvis-work-backend.onrender.com/api/update_orderrequest`, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_orderrequest`, {
         product_id: productId,
         order_req_id: OrderReqId,
         order_quantity: orderquantity,
@@ -100,7 +100,7 @@ const DeliveryData = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_transreq", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_transreq", {
         from_id: roleId,
         to_id: transferTo,
         reason: reason,

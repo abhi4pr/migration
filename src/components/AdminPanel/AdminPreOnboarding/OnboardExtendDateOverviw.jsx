@@ -18,7 +18,7 @@ const OnboardExtendDateOverview = () => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`https://jarvis-work-backend.onrender.com/api/userauth/${userID}`).then((res) => {
+      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/userauth/${userID}`).then((res) => {
         setDatas(res.data);
       });
     }
@@ -26,7 +26,7 @@ const OnboardExtendDateOverview = () => {
 
   async function getData() {
     try {
-      const response = await axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users");
+      const response = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users");
       const data = response.data.data.filter(
         (item) => item.joining_date_extend_status == "Requested"
       );
@@ -48,7 +48,7 @@ const OnboardExtendDateOverview = () => {
     formData.append("id", user_id);
     formData.append("joining_date_extend_status", status);
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/userupdate", formData, {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/userupdate", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

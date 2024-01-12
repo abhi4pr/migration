@@ -57,7 +57,7 @@ const UserView = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         setFetchedAlreadyData(res.data);
@@ -153,7 +153,7 @@ const UserView = () => {
     formData.append("onboard_status", fetchedAlreadyData.onboard_status);
 
     try {
-      await axios.put("https://jarvis-work-backend.onrender.com/api/update_usernew", fromData, {
+      await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_usernew", fromData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -12,7 +12,7 @@ const PlatformOverview = () => {
   const [filterData, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("https://jarvis-work-backend.onrender.com/api/alldataofplatform").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/alldataofplatform").then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });

@@ -11,7 +11,7 @@ const ManagerCampaign = () => {
     const Assigndata = async () => {
       try {
         const response = await axios.get(
-          `https://jarvis-work-backend.onrender.com/api/register_campaign`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/register_campaign`
         );
         console.log(response?.data?.data,"new camp data");
         setNewPages(response?.data?.data)

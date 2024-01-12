@@ -28,7 +28,7 @@ export default function ExeHistory() {
 
   const apiCall = () => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_exe_ip_count_history/${id.id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_ip_count_history/${id.id}`)
       .then((res) => {
         const data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
@@ -39,7 +39,7 @@ export default function ExeHistory() {
 
   useEffect(() => {
     apiCall();
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       setAllUsers(res.data.data);
     });
   }, []);

@@ -20,7 +20,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_orderreqshistory/${userId}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_orderreqshistory/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data);
         setFilterData(res.data);
@@ -37,7 +37,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_delivery_boy")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_boy")
       .then((res) => setReqDelApiData(res.data.results));
   }, []);
 
@@ -63,7 +63,7 @@ const OrderHistory = () => {
       }
       var productProp1 = propNames.toString();
     }
-    await axios.post("https://jarvis-work-backend.onrender.com/api/add_orderreq", {
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_orderreq", {
       product_id: row.product_id,
       order_quantity: row.Order_quantity,
       // special_request: specialRequest,
@@ -84,7 +84,7 @@ const OrderHistory = () => {
     setSelectedRow(row);
     axios
       .get(
-        `https://jarvis-work-backend.onrender.com/api/get_single_productdata/${row.product_id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_productdata/${row.product_id}`
       )
       .then((res) => {
         // console.log("new console", res.data);

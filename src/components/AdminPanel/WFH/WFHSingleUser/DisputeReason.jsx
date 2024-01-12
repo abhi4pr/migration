@@ -15,7 +15,7 @@ const DisputeReason = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
   const handleSubmitDispute = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("https://jarvis-work-backend.onrender.com/api/update_attendance", {
+      await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_attendance", {
         attendence_id: attendence_id,
         attendence_status_flow: "Disputed",
         disputed_reason: disputeReason,

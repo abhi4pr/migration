@@ -76,7 +76,7 @@ export default function Pending() {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/contentSectionReg")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/contentSectionReg")
       .then((response) => {
         // const data = response.data.data.filter(
         //   (e) => e.status == "1" && e.stage == "1"
@@ -105,7 +105,7 @@ export default function Pending() {
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_brands")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_brands")
       .then((response) => {
         setBrandName(response.data.data);
       })
@@ -113,17 +113,17 @@ export default function Pending() {
         console.log(err);
       });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/content").then((response) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/content").then((response) => {
       setContentTypeList(response.data.data);
     });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_commitments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_commitments")
       .then((response) => {
         const data = response.data.data;
 
         setCommits(data);
       });
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((response) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((response) => {
       const data = response.data.data.filter((e) => e.dept_id == 13);
       setAssignToList(data);
     });
@@ -131,7 +131,7 @@ export default function Pending() {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/contentSectionReg")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/contentSectionReg")
       .then((response) => {
         setShowBundelData(false);
         // const data = response.data.data.filter(

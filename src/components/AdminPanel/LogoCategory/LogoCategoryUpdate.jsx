@@ -22,7 +22,7 @@ const LogoCategoryUpdate = () => {
   useEffect(() => {
     if (id) {
       console.log(id);
-      axios.get(`https://jarvis-work-backend.onrender.com/api/get_single_category/${id}`).then((res)=>{
+      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_category/${id}`).then((res)=>{
         const fetchedData = res.data;
         setCategoryName(fetchedData.cat_name)
         setRemark(fetchedData.remark)
@@ -33,7 +33,7 @@ const LogoCategoryUpdate = () => {
     e.preventDefault();
     setError("");
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/update_logo_category", {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_logo_category", {
         id: id,
         cat_name: categoryName,
         remark: remark,

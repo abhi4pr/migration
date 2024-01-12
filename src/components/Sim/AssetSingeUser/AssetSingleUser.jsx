@@ -33,7 +33,7 @@ const AssetSingleUser = () => {
   const getData = async () => {
     try {
       const res = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_allocated_asset_data_for_user_id/${userID}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_allocated_asset_data_for_user_id/${userID}`
       );
       setData(res.data.data);
       setFilterData(res.data.data);
@@ -44,7 +44,7 @@ const AssetSingleUser = () => {
   };
   async function getRepairReason() {
     const res = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_assetResons"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_assetResons"
     );
     console.log(res.data.data, "reason");
     setReasonData(res?.data.data);
@@ -124,7 +124,7 @@ const AssetSingleUser = () => {
       formData.append("problem_detailing", problemDetailing);
 
       const response = await axios.post(
-        "https://jarvis-work-backend.onrender.com/api/add_repair_request",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_repair_request",
         formData
       );
       setAssetName("");

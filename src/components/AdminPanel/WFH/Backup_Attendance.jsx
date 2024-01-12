@@ -55,7 +55,7 @@ const Backup_Attendence = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/allwfhusers").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/allwfhusers").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -66,7 +66,7 @@ const Backup_Attendence = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
@@ -80,7 +80,7 @@ const Backup_Attendence = () => {
       year: selectedYear,
     };
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/salaryfromattendence", payload)
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/salaryfromattendence", payload)
       .then((res) => {
         console.log(res.data, "res");
         setAttendenceData(res.data.data);
@@ -102,7 +102,7 @@ const Backup_Attendence = () => {
     if (department) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/getuserdeptwisewfhdata/${department}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/getuserdeptwisewfhdata/${department}`
         )
         .then((res) => {
           getUsersData(res.data);
@@ -113,7 +113,7 @@ const Backup_Attendence = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/attendencemastpost", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/attendencemastpost", {
         dept: department,
         user_id: userName,
         noOfabsent: Number(noOfAbsent),

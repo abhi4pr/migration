@@ -76,12 +76,12 @@ const BalancePaymentList = () => {
 
   function getData() {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_php_payment_bal_data_in_node")
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_php_payment_bal_data_in_node")
       .then((res) => {
         console.log("data save in local success");
       });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_php_payment_bal_data")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_php_payment_bal_data")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

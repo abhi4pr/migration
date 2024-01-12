@@ -22,7 +22,7 @@ const SittingMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_sitting", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_sitting", {
         sitting_ref_no: sittingRefrenceNum,
         room_id: Number(roomId),
         sitting_area: sittingArea,
@@ -44,7 +44,7 @@ const SittingMaster = () => {
   };
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_rooms")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms")
       .then((res) => {
         getRoomData(res.data.data);
       })

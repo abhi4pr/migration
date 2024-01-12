@@ -32,7 +32,7 @@ const DataBrandOverview = () => {
 
   async function getData() {
     await axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_datas")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_datas")
       .then((res) => {
         setCountData(res.data);
         const responseData = res.data;
@@ -53,23 +53,23 @@ const DataBrandOverview = () => {
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_categorys")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_categorys")
       .then((res) => setCategoryData(res.data.simcWithSubCategoryCount));
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_brands")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_brands")
       .then((res) => setBrandData(res.data));
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
       .then((res) => setEmployeeData(res.data.data));
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_platforms")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_platforms")
       .then((res) => setPlatformData(res.data));
     axios
 
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_data_content_types")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_content_types")
       .then((res) => setContentData(res.data));
   }
 
@@ -103,7 +103,7 @@ const DataBrandOverview = () => {
   const deleteBrand = async (brand_name) => {
     await axios
       .delete(
-        `https://jarvis-work-backend.onrender.com/api/delete_data_based_data/${brand_name}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_data_based_data/${brand_name}`
       )
       .then((res) => {
         getData();

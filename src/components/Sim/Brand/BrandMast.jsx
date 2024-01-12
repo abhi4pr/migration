@@ -26,7 +26,7 @@ const BrandMast = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_total_asset_in_category/${row}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_total_asset_in_category/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -41,7 +41,7 @@ const BrandMast = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_total_asset_in_category_allocated/${row}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response.data.data);
       seAssetModel(true);
@@ -130,7 +130,7 @@ const BrandMast = () => {
         alert("Brand already Exists");
       } else {
         const response = await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/add_asset_brand",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/add_asset_brand",
           {
             asset_brand_name: brandName,
           }
@@ -144,7 +144,7 @@ const BrandMast = () => {
   };
   async function getBrandData() {
     const res = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_asset_brands"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_brands"
     );
     setBrandData(res.data.data);
     setBrnadFilter(res.data.data);
@@ -160,7 +160,7 @@ const BrandMast = () => {
   };
   const handleBrandUpdate = () => {
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/update_asset_brand", {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_asset_brand", {
         asset_brand_id: brandId,
         asset_brand_name: brandNameUpdate,
       })

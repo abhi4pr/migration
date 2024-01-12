@@ -29,7 +29,7 @@ const DataBrandView = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_data/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         const { data_name, upload_logo, remark, cat_name } = fetchedData;
@@ -44,7 +44,7 @@ const DataBrandView = () => {
   useEffect(() => {
     if (brand) {
       axios
-        .get(`https://jarvis-work-backend.onrender.com/api/get_data_based_data_name/${brand}`)
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name/${brand}`)
         .then((res) => {
           setLogos(res.data);
         });

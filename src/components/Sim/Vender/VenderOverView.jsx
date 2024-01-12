@@ -28,7 +28,7 @@ const VenderOverView = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_vendor"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_vendor"
       );
       setFilterData(response.data);
       setData(response.data);

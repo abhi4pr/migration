@@ -39,7 +39,7 @@ export default function ExecutionDone() {
       if (userID && contextData == false) {
         axios
           .get(
-            `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+            `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {
@@ -52,7 +52,7 @@ export default function ExecutionDone() {
       formData.append("loggedin_user_id", 36);
       console.log(formData);
       const response = axios
-        .get("https://jarvis-work-backend.onrender.com/api/get_exe_sum", {
+        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_sum", {
           loggedin_user_id: 52,
         })
         .then((res) => {

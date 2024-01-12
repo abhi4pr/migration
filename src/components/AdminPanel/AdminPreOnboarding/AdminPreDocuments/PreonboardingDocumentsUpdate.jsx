@@ -36,7 +36,7 @@ const PreonboardingDocumentsUpdate = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/get_doc/${id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_doc/${id}`
       );
       const data = response.data.data;
       setDocumentType(data.doc_type);
@@ -52,7 +52,7 @@ const PreonboardingDocumentsUpdate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/update_doc", {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_doc", {
         _id: id,
         doc_type: documentType,
         priority: priority,

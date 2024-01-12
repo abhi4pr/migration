@@ -34,7 +34,7 @@ export default function PerformanceGraphDialog({
 
   const callApi = () => {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/page_health_dashboard", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/page_health_dashboard", {
         p_id: rowData?.p_id,
         interval: intervalFlag?.value,
       })

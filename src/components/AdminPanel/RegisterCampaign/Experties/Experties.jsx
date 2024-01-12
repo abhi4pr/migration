@@ -34,7 +34,7 @@ const Experties = () => {
   //   console.log(expertiesusername.user_id, "res");
   //   const getExperties = () => {
   //     axios
-  //       .get("https://jarvis-work-backend.onrender.com/api/expertise")
+  //       .get("https://api-dot-react-migration-project.el.r.appspot.com/api/expertise")
   //       .then((res) => {
   //         console.log(res.data.data.user_id, "expert");
   //         const matchdata = res.data.data.map(
@@ -62,10 +62,10 @@ const Experties = () => {
 
   const getAllUsers = async () => {
     const alluser = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_users"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
     );
     setGetUserData(alluser.data.data);
-    // const expert = await axios.get("https://jarvis-work-backend.onrender.com/api/expertise");
+    // const expert = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/expertise");
     // console.log(expert.data.data);
     // const difference = alluser?.data?.data?.filter(
     //   (obj1) =>
@@ -74,7 +74,7 @@ const Experties = () => {
     // console.log(difference, "diffrence here");
   };
   // const getExpertData = () => {
-  //   const expertdata = axios.get("https://jarvis-work-backend.onrender.com/api/expertise");
+  //   const expertdata = axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/expertise");
   //   const expert = expertdata.data.data;
   //   setExpertData(expert);
   //   console.log(expert, "all expet data");
@@ -123,7 +123,7 @@ const Experties = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://jarvis-work-backend.onrender.com/api/expertise",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/expertise",
         {
           exp_name: expertiesusername.label,
           user_id: expertiesusername.user_id,

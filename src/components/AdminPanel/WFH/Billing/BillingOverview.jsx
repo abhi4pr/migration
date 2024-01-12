@@ -22,7 +22,7 @@ const BillingOverview = () => {
 
   const getData = () => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_billingheaders")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_billingheaders")
       .then((res) => {
         setBillData(res.data.result);
         setFilterData(res.data.result);
@@ -33,7 +33,7 @@ const BillingOverview = () => {
     if (userID && contextData?.length === 0) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);

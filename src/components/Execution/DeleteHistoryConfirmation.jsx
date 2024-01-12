@@ -30,7 +30,7 @@ export default function DeleteHistoryConfirmation(props) {
   const handleDeleteConfirmation = () => {
     axios
       .delete(
-        `https://jarvis-work-backend.onrender.com/api/delete_exe_ip_count_history/${rowData._id}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_exe_ip_count_history/${rowData._id}`
       )
       .then((res) => {
         if (res.data.isDeleted) {

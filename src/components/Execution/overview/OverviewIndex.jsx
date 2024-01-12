@@ -34,7 +34,7 @@ const OverviewIndex = () => {
       const responseArray = [];
 
       axios
-        .get("https://jarvis-work-backend.onrender.com/api/get_exe_sum", {
+        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_sum", {
           loggedin_user_id: 52,
         })
         .then((response) => {
@@ -71,7 +71,7 @@ const OverviewIndex = () => {
       // }
 
       axios
-        .get("https://jarvis-work-backend.onrender.com/api/execution_graph")
+        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/execution_graph")
         .then((res) => {
           console.log(res.data, "this is response");
           setCounts(res.data);

@@ -9,11 +9,11 @@ const UserDashboard = () => {
   const [departmentData, setDepartmentData] = useState([]);
 
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       setUserData(res.data.data);
     });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

@@ -13,7 +13,7 @@ const HobbiesOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_hobbies"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_hobbies"
       );
       const data = response.data.data;
       setHobbiesData(data);

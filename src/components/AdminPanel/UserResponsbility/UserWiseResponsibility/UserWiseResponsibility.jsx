@@ -31,7 +31,7 @@ const UserWiseResponsibility = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -42,7 +42,7 @@ const UserWiseResponsibility = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_users"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
       );
       const data = response.data.data;
 
@@ -54,7 +54,7 @@ const UserWiseResponsibility = () => {
 
   const handleTransfer = (userId) => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_kra/${userId}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_kra/${userId}`)
       .then((res) => {
         setTransferResponsibilityData(res.data);
       });
@@ -79,7 +79,7 @@ const UserWiseResponsibility = () => {
   }
 
   function getDatas() {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/userbyjobres/${id}`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/userbyjobres/${id}`).then((res) => {
       setData(res.data);
       setFilterData(res.data);
     });
@@ -88,7 +88,7 @@ const UserWiseResponsibility = () => {
     getData();
     getDatas();
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_jobresponsibilitys")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_jobresponsibilitys")
       .then((res) => {
         setAllResponsibility(res.data.data);
       });
@@ -112,7 +112,7 @@ const UserWiseResponsibility = () => {
         Job_res_id: element.Job_res_id,
       };
       axios
-        .post("https://jarvis-work-backend.onrender.com/api/kratranspost", requestData)
+        .post("https://api-dot-react-migration-project.el.r.appspot.com/api/kratranspost", requestData)
         .then((res) => {
           setRemark("");
           setTransferTo("");
@@ -122,7 +122,7 @@ const UserWiseResponsibility = () => {
           console.log(MailUser, "mail user hai");
 
           axios
-            .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+            .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
               email: MailUser.user_email_id,
               subject: "User Registration",
               text: "You Have Assign New KRA",

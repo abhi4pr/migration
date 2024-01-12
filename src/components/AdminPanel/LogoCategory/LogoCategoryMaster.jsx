@@ -22,7 +22,7 @@ const LogoCategoryMaster = () => {
     e.preventDefault();
     setError("");
     await axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_logo_category", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_logo_category", {
         cat_name: categoryName,
         remark: remark,
         created_by: loginUserID,

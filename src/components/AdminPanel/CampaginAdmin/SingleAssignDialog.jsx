@@ -42,7 +42,7 @@ export default function SingleAssignDialog(props) {
 
   const handleAssign = () => {
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/contentSectionReg", {
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/contentSectionReg", {
         content_section_id: modalNotEditable.content_section_id,
         assign_to: setAssignTo.current,
         creator_dt: selectedDate,

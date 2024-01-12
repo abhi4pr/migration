@@ -29,23 +29,23 @@ const AppProvider = ({ children }) => {
 
   const getAllCategoryContextFunction = () => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_asset_category")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
       .then((res) => {
         setCategoryData(res.data.data.asset_categories);
       });
   };
   async function getBrandData() {
     const res = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_asset_brands"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_brands"
     );
     setBrandDataContext(res.data.data);
   }
   async function getAssetData() {
-    const res = await axios.get("https://jarvis-work-backend.onrender.com/api/get_all_sims");
+    const res = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sims");
     setAssetDataContext(res.data.data);
   }
   async function getUserAPIData() {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       setUsersContextData(res.data.data);
     });
   }

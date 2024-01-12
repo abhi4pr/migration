@@ -92,21 +92,21 @@ const AdminPreOnboarding = () => {
   });
 
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_roles").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
     });
   }, []);
@@ -173,7 +173,7 @@ const AdminPreOnboarding = () => {
         if (isLoginIdExists) {
           alert("this login ID already exists");
         } else {
-          await axios.post("https://jarvis-work-backend.onrender.com/api/add_user", formData, {
+          await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_user", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -185,7 +185,7 @@ const AdminPreOnboarding = () => {
             [username, loginId, password, "http://jarvis.work/"]
           );
           axios
-            .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+            .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
               email: personalEmail,
               subject: "User Registration",
               text: "A new user has been onboard.",

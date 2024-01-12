@@ -16,7 +16,7 @@ const KRA = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`https://jarvis-work-backend.onrender.com/api/get_user_job_responsibility`, {
+      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_job_responsibility`, {
         user_id: Number(id),
       })
       .then((res) => {

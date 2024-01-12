@@ -43,7 +43,7 @@ const IpUpdate = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/dataofipregis/${id}`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataofipregis/${id}`).then((res) => {
       const fetchedData = res.data[0];
       setIpType(fetchedData.ip_type);
       setPlatform(fetchedData.platform);
@@ -70,21 +70,21 @@ const IpUpdate = () => {
     });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
       .then((res) => setUserData(res.data.data));
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_platforms")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_platforms")
       .then((res) => setPlatFormData(res.data));
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_iptypes")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_iptypes")
       .then((res) => setIpTypeData(res.data));
   }, []);
 
   const handleSelectChange = (e) => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user/${e.target.value}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${e.target.value}`)
       .then((res) => {
         setl1(res.data.Report_L1);
         setl2(res.data.Report_L2);
@@ -109,7 +109,7 @@ const IpUpdate = () => {
       .padStart(3, "0")}`;
 
     e.preventDefault();
-    axios.put("https://jarvis-work-backend.onrender.com/api/ipregiupdate", {
+    axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/ipregiupdate", {
       id: Number(id),
       ip_type: Number(ipType),
       platform: Number(platform),

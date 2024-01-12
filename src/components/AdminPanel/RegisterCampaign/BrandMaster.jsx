@@ -130,7 +130,7 @@ export default function BrandMaster() {
     setError("");
 
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_brand", postData)
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_brand", postData)
       .then((response) => {
         console.log(response.data, "Data saved:");
         setIsModalOpen(false);
@@ -153,7 +153,7 @@ export default function BrandMaster() {
 
   // get api ------
   const getData = () => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_brands").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_brands").then((res) => {
       const newData = res.data.data;
       const sortedData = newData.sort((a, b) => b.brand_id - a.brand_id);
 
@@ -162,7 +162,7 @@ export default function BrandMaster() {
   };
 
   const categoryData = () => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/projectxCategory").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory").then((res) => {
       console.log(res.data.data, "-------> cat data");
       setCategoryOptions(res.data.data);
     });
@@ -170,7 +170,7 @@ export default function BrandMaster() {
   const subCategoryData = () => {
     console.log("calling the subcategory data");
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/projectxSubCategory")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -198,7 +198,7 @@ export default function BrandMaster() {
   const subCategoryDataOnEdit = () => {
     console.log("calling the subcategory data on Edit");
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/projectxSubCategory")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -217,7 +217,7 @@ export default function BrandMaster() {
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`https://jarvis-work-backend.onrender.com/api/edit_brand`, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_brand`, {
         brand_id: editData.brand_id,
         brand_name: editData.brand_name,
         category_id: editData.category_id,
@@ -240,7 +240,7 @@ export default function BrandMaster() {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/projectxSubCategory")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data.data, "-------> subcat data");
         const filteredData = res.data.data.filter((item) => {
@@ -280,7 +280,7 @@ export default function BrandMaster() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`https://jarvis-work-backend.onrender.com/api/delete_brand/${itemToDeleteId}`)
+        .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/delete_brand/${itemToDeleteId}`)
         .then(() => {
           getData();
           console.log("Data deleted successfully");

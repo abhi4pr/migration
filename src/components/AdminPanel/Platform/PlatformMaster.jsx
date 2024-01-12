@@ -21,7 +21,7 @@ const PlatformMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/platform", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/platform", {
         name: platformName,
         remark: remark,
         created_by: userID

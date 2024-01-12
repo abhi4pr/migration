@@ -29,10 +29,10 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   const [oldUserProduct, setOldUserProduct] = useState([]);
 
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_products").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_products").then((res) => {
       setProducts(res.data);
     });
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_rooms").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms").then((res) => {
       setOffice(res.data.data);
     });
   }, []);
@@ -40,7 +40,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   // Single User Product Data
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_orderreqshistory/${userId}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_orderreqshistory/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data);
       });
@@ -80,19 +80,19 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
 
   useEffect(() => {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/get_user_pre_sitting", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_pre_sitting", {
         user_id: userId,
       })
       .then((res) => setSittingHistory(res.data));
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_sittings")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sittings")
       .then((res) => setSittingData(res.data.data));
   }, []);
   // new sitting api ---------------------------------------------
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_sitting/${sittingId}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_sitting/${sittingId}`)
       .then((res) => {
         setSittingAreaData(res.data);
       });
@@ -101,7 +101,7 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   useEffect(() => {
     if (selectedSitting) {
       axios
-        .get(`https://jarvis-work-backend.onrender.com/api/get_single_sitting/${sittingId}`)
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_sitting/${sittingId}`)
         .then((res) => {
           // handleSitting(res.data.sitting_area);
           //  104 sitting problem ke liye comment kiya

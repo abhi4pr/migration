@@ -19,7 +19,7 @@ const Reason = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await axios.post("https://jarvis-work-backend.onrender.com/api/add_reason", {
+      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_reason", {
         created_by: loginUserID,
         reason: reason,
         remark: remark,
@@ -36,7 +36,7 @@ const Reason = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_reasons"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_reasons"
       );
       setData(response.data);
     } catch (error) {

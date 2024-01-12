@@ -42,7 +42,7 @@ export default function AddPage({ setXlxsData }) {
   useEffect(() => {
     // console.log( "gridRows");
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/getallprojectx")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/getallprojectx")
       .then((response) => {
         const data = response.data;
         // console.log(data,"<--------");

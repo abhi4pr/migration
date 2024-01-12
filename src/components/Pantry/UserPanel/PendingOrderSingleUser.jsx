@@ -19,7 +19,7 @@ const PendingOrderSingleUser = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_pendingorders/${userId}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_pendingorders/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data.data);
         setFilterData(res.data.data);

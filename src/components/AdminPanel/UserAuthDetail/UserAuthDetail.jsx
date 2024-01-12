@@ -21,7 +21,7 @@ const UserAuthDetail = () => {
   }, []);
   function getData() {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -105,7 +105,7 @@ const UserAuthDetail = () => {
   ];
   function postData() {
     for (const element of filterData) {
-      axios.put("https://jarvis-work-backend.onrender.com/api/update_user_auth", {
+      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_user_auth", {
         auth_id: element.auth_id,
         Juser_id: Number(id),
         obj_id: element.obj_id,

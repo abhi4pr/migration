@@ -51,7 +51,7 @@ const PhasecreationNew = () => {
 
   const getPhaseData = async () => {
     const data = await axios.get(
-      `https://jarvis-work-backend.onrender.com/api/campaignphase/${id}`
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/campaignphase/${id}`
     );
     setAllPhaseData(data?.data?.result);
   };

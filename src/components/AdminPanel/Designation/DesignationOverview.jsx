@@ -30,14 +30,14 @@ const DesignationOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setContextData(res.data);
         });
     }
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       setAllUserDesignation(res.data.data);
     });
   }, [userID]);
@@ -45,7 +45,7 @@ const DesignationOverview = () => {
   // Fetch all designations data
   async function getData() {
     await axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

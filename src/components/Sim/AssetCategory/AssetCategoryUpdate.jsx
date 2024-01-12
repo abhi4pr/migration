@@ -32,7 +32,7 @@ const AssetCategoryUpdate = () => {
 
   const getData = () => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_asset_category/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_asset_category/${id}`)
       .then((res) => {
         const response = res.data.data;
         setCategoryName(response.category_name);
@@ -48,7 +48,7 @@ const AssetCategoryUpdate = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "https://jarvis-work-backend.onrender.com/api/update_asset_category",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/update_asset_category",
         {
           category_id: id,
           category_name: categoryName,

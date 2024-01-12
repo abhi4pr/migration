@@ -19,14 +19,14 @@ const ObjectMaster = () => {
   const userId = decodedToken.id;
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => setDeptData(res.data));
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_obj", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_obj", {
         obj_name: objectName,
         soft_name: softwareName,
         dept_id: selectedDepartment,

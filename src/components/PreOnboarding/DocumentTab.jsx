@@ -55,7 +55,7 @@ const DocumentTab = ({
                 : document.status
             );
             const response = await axios.put(
-              "https://jarvis-work-backend.onrender.com/api/update_user_doc",
+              "https://api-dot-react-migration-project.el.r.appspot.com/api/update_user_doc",
               formData,
               {
                 headers: {

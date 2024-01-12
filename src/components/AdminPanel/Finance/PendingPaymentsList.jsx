@@ -24,7 +24,7 @@ const PendingPaymentsList = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://jarvis-work-backend.onrender.com/api/", {
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/", {
       display_sequence: displaySeq,
     });
 
@@ -33,7 +33,7 @@ const PendingPaymentsList = () => {
   };
 
   function getData() {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_sims").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sims").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

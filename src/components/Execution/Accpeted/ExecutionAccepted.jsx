@@ -54,7 +54,7 @@ export default function ExecutionAccepted() {
       if (userID && contextData == false) {
         axios
           .get(
-            `https://jarvis-work-backend.onrender.com/api/get_single_user_auth_detail/${userID}`
+            `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {

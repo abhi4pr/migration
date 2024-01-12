@@ -147,7 +147,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
                 setFilteredPages(pageData.data.body);
             } else if (pageName == "phaseCreation") {
                 const pageD = await axios.get(
-                    `https://jarvis-work-backend.onrender.com/api/campaignplan/${data.campaignId}`
+                    `https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan/${data.campaignId}`
                 );
                 const x = pageD.data.data
                     .filter((page) => {
@@ -613,7 +613,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
             try {
                 setIsLoadingPlan(true)
                 const result = await axios.post(
-                    "https://jarvis-work-backend.onrender.com/api/campaignplan",
+                    "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan",
                     newdata
                 );
                 // console.log(result);
@@ -655,7 +655,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
             try {
                 setIsLoadingPhase(true)
                 const result = await axios.post(
-                    "https://jarvis-work-backend.onrender.com/api/campaignphase",
+                    "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignphase",
                     newdata
                 );
                 // console.log(result);

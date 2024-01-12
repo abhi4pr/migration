@@ -14,7 +14,7 @@ const SalarySummary = () => {
   const handleUserModal = async (row) => {
     try {
       const response = await axios.post(
-        `https://jarvis-work-backend.onrender.com/api/get_users_count_by_dept`,
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_users_count_by_dept`,
         {
           dept_id: row.dept_id,
           month: row.month,
@@ -34,7 +34,7 @@ const SalarySummary = () => {
 
   const getData = async () => {
     const response = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_salary_calculation_data"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_salary_calculation_data"
     );
     setAllSalaryData(response.data.data);
     setSavedData(response.data.data);

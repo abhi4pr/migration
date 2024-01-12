@@ -21,7 +21,7 @@ const DesiDeptAuth = () => {
   }, []);
   function getData() {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_desi_dept_auth/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_desi_dept_auth/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -105,7 +105,7 @@ const DesiDeptAuth = () => {
   ];
   function postData() {
     for (const element of filterData) {
-      axios.put("https://jarvis-work-backend.onrender.com/api/update_dept_desi_auth", {
+      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_dept_desi_auth", {
         dept_desi_auth_id: element.dept_desi_auth_id,
         dept_id: element.dept_id,
         desi_id: element.desi_id,

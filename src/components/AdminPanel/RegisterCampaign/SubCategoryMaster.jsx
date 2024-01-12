@@ -70,7 +70,7 @@ export default function SubCategoryMaster() {
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/projectxSubCategory", postData)
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory", postData)
       .then((response) => {
         postData.sub_category_name = "";
         console.log("Data saved:", response.data);
@@ -88,7 +88,7 @@ export default function SubCategoryMaster() {
   // get api ------
   const getData = () => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/projectxSubCategory")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory")
       .then((res) => {
         console.log(res.data);
         const sortedData = res.data.data.sort(
@@ -98,7 +98,7 @@ export default function SubCategoryMaster() {
       });
   };
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/projectxCategory").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory").then((res) => {
       console.log(res.data.data);
       setCategory(res.data.data);
     });
@@ -108,7 +108,7 @@ export default function SubCategoryMaster() {
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`https://jarvis-work-backend.onrender.com/api/projectxSubCategory`, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory`, {
         sub_category_id: editData.sub_category_id,
         sub_category_name: editData.sub_category_name,
         category_id: editData.category_id,
@@ -145,7 +145,7 @@ export default function SubCategoryMaster() {
     if (itemToDeleteId) {
       axios
         .delete(
-          `https://jarvis-work-backend.onrender.com/api/projectxSubCategory/${itemToDeleteId}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory/${itemToDeleteId}`
         )
         .then(() => {
           getData();

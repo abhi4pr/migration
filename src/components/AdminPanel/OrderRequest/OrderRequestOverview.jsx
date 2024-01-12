@@ -13,7 +13,7 @@
 //   const [filterdata, setFilterData] = useState([]);
 
 //   function getData() {
-//     axios.get("https://jarvis-work-backend.onrender.com/api/allorderrequest").then((res) => {
+//     axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/allorderrequest").then((res) => {
 //       setData(res.data);
 //       setFilterData(res.data);
 //       console.log(res.data);
@@ -50,7 +50,7 @@
 //             "success"
 //           );
 //           axios
-//             .delete(`https://jarvis-work-backend.onrender.com/api/userdelete/${user_id}`)
+//             .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/userdelete/${user_id}`)
 //             .then(() => {
 //               getData();
 //             });

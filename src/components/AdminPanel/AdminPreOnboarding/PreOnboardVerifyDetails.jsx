@@ -13,7 +13,7 @@ const PreOnboardVerifyDetails = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://jarvis-work-backend.onrender.com/api/get_all_users"
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
       );
       const data = response.data.data;
 

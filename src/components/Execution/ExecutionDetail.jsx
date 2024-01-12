@@ -26,7 +26,7 @@ function ExecutionDetail() {
     axios
       .get(
         `
-        https://jarvis-work-backend.onrender.com/api/get_exe_sum`
+        https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_sum`
       )
       .then((res) => {
         // console.log(

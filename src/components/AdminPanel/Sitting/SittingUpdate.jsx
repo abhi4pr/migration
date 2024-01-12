@@ -26,7 +26,7 @@ const SittingUpdate = () => {
     setError("");
 
     axios
-      .put(`https://jarvis-work-backend.onrender.com/api/update_sitting`, {
+      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_sitting`, {
         sitting_id: id,
         sitting_ref_no: sittingRefrenceNum,
         sitting_area: sittingArea,
@@ -51,7 +51,7 @@ const SittingUpdate = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_rooms")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms")
       .then((res) => {
         setRoomData(res.data.data);
       })

@@ -17,16 +17,16 @@ const InvoicePdfGenerator = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
 
     e.preventDefault();
 
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_attendance`, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_attendance`, {
       attendence_id: data.attendence_id,
       attendence_status_flow: "Pending for invoice verification",
     });
 
-    await axios.post(`https://jarvis-work-backend.onrender.com/api/add_finance`, {
+    await axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/add_finance`, {
       attendence_id: data?.attendence_id,
     });
 
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_salary`, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_salary`, {
       attendence_id: data?.attendence_id,
       sendToFinance: 1,
     });

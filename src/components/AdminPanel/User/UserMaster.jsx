@@ -223,8 +223,9 @@ const UserMaster = () => {
     status: false,
     bankDetails: false,
   });
+  const [jobTypeData, setJobTypeData] = useState([])
 
-  const [loader, setLoader] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const higestQualificationData = [
     "10th",
@@ -234,7 +235,7 @@ const UserMaster = () => {
     "Post Graduation",
     "Other",
   ];
-  const jobTypeData = ["WFO", "WFH"];
+  // const jobTypeData = ["WFO", "WFH"];
   const tdsApplicableData = ["Yes", "No"];
   const statusData = ["Active", "Exit", "On Leave", "Resign"];
   const genderData = ["Male", "Female", "Other"];
@@ -288,38 +289,42 @@ const UserMaster = () => {
     if (department) {
       axios
         .get(
-          `https://jarvis-work-backend.onrender.com/api/get_subdept_from_dept/${department}`
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_subdept_from_dept/${department}`
         )
         .then((res) => setSubDepartmentData(res.data));
     }
   }, [department]);
 
   useEffect(() => {
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_roles").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_roles").then((res) => {
       getRoleData(res.data.data);
     });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/not_alloc_sitting").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/not_alloc_sitting").then((res) => {
       getRefrenceData(res.data.data);
     });
 
-    axios.get("https://jarvis-work-backend.onrender.com/api/get_all_users").then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
       getUsersData(res.data.data);
       const userSitting = res.data.data.map((user) => user.sitting_id);
       setAllUsersSittings(userSitting);
     });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_designations")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });
+
+    axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_job_types').then(res=>{
+      setJobTypeData(res.data.data)
+    })
   }, []);
 
   const handleSubmit = async (e) => {
@@ -386,8 +391,8 @@ const UserMaster = () => {
       return toastError("City is Required");
     } else if (!state || state == "") {
       return toastError("State/UT is Required");
-    } else if (!pincode || pincode == "") {
-      return toastError("Pincode is Required");
+    } else if (!pincode || pincode == "" || pincode.length !== 6) {
+      return toastError("Pincode should be 6 number long");
     } else if (!joiningDate || joiningDate == "") {
       return toastError("Joining Date is Required");
     } else if (!status || status == "") {
@@ -500,9 +505,9 @@ const UserMaster = () => {
         } else if (userNameExists) {
           alert("User Name Already Exists");
         } else {
-          setLoader(true);
+          setLoading(true);
           axios
-            .post("https://jarvis-work-backend.onrender.com/api/add_user", formData, {
+            .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_user", formData, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
@@ -511,22 +516,22 @@ const UserMaster = () => {
               if (res.status == 200) {
                 setIsFormSubmitted(true);
                 toastAlert("User Registerd");
-                setLoader(false);
+                setLoading(false);
               } else {
                 toastError("Sorry User is Not Created, Please try again later");
-                setLoader(false);
+                setLoading(false);
               }
             })
             .catch((err) => {
               // toastError("Sorry User is Not Created, Please try again later");
               toastError(err.message);
-              setLoader(false);
+              setLoading(false);
             });
 
           if (familyDetails[0].Name !== "") {
             for (const elements of familyDetails) {
               const response = axios.post(
-                "https://jarvis-work-backend.onrender.com/api/add_family",
+                "https://api-dot-react-migration-project.el.r.appspot.com/api/add_family",
                 {
                   name: elements.Name,
                   DOB: elements.DOB,
@@ -542,7 +547,7 @@ const UserMaster = () => {
           if (educationDetails[0].title !== "") {
             for (const elements of educationDetails) {
               const response = axios.post(
-                "https://jarvis-work-backend.onrender.com/api/add_education",
+                "https://api-dot-react-migration-project.el.r.appspot.com/api/add_education",
                 {
                   title: elements.title,
                   institute_name: elements.universityInstitute,
@@ -557,7 +562,7 @@ const UserMaster = () => {
           }
           if (reportL1 !== "") {
             axios
-              .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+              .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
                 email: email,
                 subject: "User Registration",
                 text: "A new user has been registered.",
@@ -590,7 +595,7 @@ const UserMaster = () => {
             // formData.append("remark", "remark");
 
             axios.post(
-              "https://jarvis-work-backend.onrender.com/api/add_user_other_field",
+              "https://api-dot-react-migration-project.el.r.appspot.com/api/add_user_other_field",
               { field_name: elements.name, field_value: elements.file },
               {
                 headers: {
@@ -601,7 +606,7 @@ const UserMaster = () => {
           }
 
           axios
-            .post("https://jarvis-work-backend.onrender.com/api/add_send_user_mail", {
+            .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
               email: email,
               subject: "User Registration",
               text: "A new user has been registered.",
@@ -973,8 +978,6 @@ const UserMaster = () => {
             }
           }}
           onBlur={() => {
-            console.log("onBlur called");
-            console.log(username);
             if (username === "") {
               setMandatoryFieldsEmpty((prevState) => ({
                 ...prevState,
@@ -1002,8 +1005,8 @@ const UserMaster = () => {
         <Select
           className=""
           options={jobTypeData.map((option) => ({
-            value: `${option}`,
-            label: `${option}`,
+            value: `${option.job_type}`,
+            label: `${option.job_type}`,
           }))}
           value={{
             value: jobType,
@@ -1102,7 +1105,7 @@ const UserMaster = () => {
               subDepartmentData === null ||
               subDepartmentData.length === 0
             ) {
-              console.log("onBlur called inside if");
+
               // setMandatoryFieldsEmpty({...mandatoryFieldsEmpty,subDepartment:true});
               return setMandatoryFieldsEmpty((prevState) => ({
                 ...prevState,
@@ -1710,8 +1713,6 @@ const UserMaster = () => {
               const selectedOption = refrenceData.find(
                 (option) => option.sitting_id === Number(selectedSittingId)
               );
-              // console.log(selectedSittingId, "selectedSittingId")
-              // console.log(selectedOption.room_id, "selectedOption")
               setRoomId(selectedOption);
             }}
             required={true}
@@ -2627,45 +2628,6 @@ const UserMaster = () => {
 
   return (
     <>
-      {loader ? (
-        <div className="loader">
-          <div>
-            <ul>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 90 120">
-                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
-                </svg>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 90 120">
-                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
-                </svg>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 90 120">
-                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
-                </svg>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 90 120">
-                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
-                </svg>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 90 120">
-                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
-                </svg>
-              </li>
-              <li>
-                <svg fill="currentColor" viewBox="0 0 90 120">
-                  <path d="M90,0 L90,120 L11,120 C4.92486775,120 0,115.075132 0,109 L0,11 C0,4.92486775 4.92486775,0 11,0 L90,0 Z M71.5,81 L18.5,81 C17.1192881,81 16,82.1192881 16,83.5 C16,84.8254834 17.0315359,85.9100387 18.3356243,85.9946823 L18.5,86 L71.5,86 C72.8807119,86 74,84.8807119 74,83.5 C74,82.1745166 72.9684641,81.0899613 71.6643757,81.0053177 L71.5,81 Z M71.5,57 L18.5,57 C17.1192881,57 16,58.1192881 16,59.5 C16,60.8254834 17.0315359,61.9100387 18.3356243,61.9946823 L18.5,62 L71.5,62 C72.8807119,62 74,60.8807119 74,59.5 C74,58.1192881 72.8807119,57 71.5,57 Z M71.5,33 L18.5,33 C17.1192881,33 16,34.1192881 16,35.5 C16,36.8254834 17.0315359,37.9100387 18.3356243,37.9946823 L18.5,38 L71.5,38 C72.8807119,38 74,36.8807119 74,35.5 C74,34.1192881 72.8807119,33 71.5,33 Z"></path>
-                </svg>
-              </li>
-            </ul>
-          </div>
-          <span>Loading</span>
-        </div>
-      ) : 
       <FormContainer
         mainTitle="User"
         title="User Registration"
@@ -2673,6 +2635,7 @@ const UserMaster = () => {
         accordionButtons={accordionButtons}
         activeAccordionIndex={activeAccordionIndex}
         onAccordionButtonClick={handleAccordionButtonClick}
+        loading={loading}
       >
         {activeAccordionIndex === 0 && genralFields}
         {activeAccordionIndex === 1 && personalFields}
@@ -2681,7 +2644,6 @@ const UserMaster = () => {
         {activeAccordionIndex === 4 && familyFields}
         {activeAccordionIndex === 5 && educationFields}
       </FormContainer>
-      }
     </>
   );
 };

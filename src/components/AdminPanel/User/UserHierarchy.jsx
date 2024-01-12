@@ -10,7 +10,7 @@ const UserHierarchy = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
       .then((res) => {
         setData(res.data.data);
         setAllUserData(res.data.data);
@@ -22,7 +22,7 @@ const UserHierarchy = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_departments")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
@@ -33,7 +33,7 @@ const UserHierarchy = () => {
       setData(allUserData);
     } else {
       axios
-        .post("https://jarvis-work-backend.onrender.com/api/l1l2l3usersbydept", {
+        .post("https://api-dot-react-migration-project.el.r.appspot.com/api/l1l2l3usersbydept", {
           dept_id: selectedDepartment,
         })
         .then((res) => {

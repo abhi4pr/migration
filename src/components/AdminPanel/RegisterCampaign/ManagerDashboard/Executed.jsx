@@ -12,8 +12,8 @@ const Executed = ({ executed,forceRender }) => {
     const _id = params.row.ass_id;
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/assignment/commit/single/${_id}`
-        // `https://jarvis-work-backend.onrender.com/api/assignment/commit/single/2`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/commit/single/${_id}`
+        // `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/commit/single/2`
       );
       setExecutedCommit(response.data.data);
       setOpen2(true);
@@ -111,7 +111,7 @@ const Executed = ({ executed,forceRender }) => {
   const handleVerified = async () => {
     // console.log(executed[0]?.ass_id, executed[0]?.campaignId);
     const response = await axios.post(
-      `https://jarvis-work-backend.onrender.com/api/assignment/status`,
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/status`,
       {
         ass_id: executed[0]?.ass_id,
         campaignId: executed[0]?.campaignId,
@@ -124,7 +124,7 @@ const Executed = ({ executed,forceRender }) => {
   };
   const handleReject = async () => {
     const response = await axios.post(
-      `https://jarvis-work-backend.onrender.com/api/assignment/status`,
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/status`,
       {
         ass_id: executed[0]?.ass_id,
         campaignId: executed[0]?.campaignId,

@@ -56,7 +56,7 @@ const RepairRequest = () => {
   const [reasonData, setReasonData] = useState([]);
   async function getRepairReason() {
     const res = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_assetResons"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_assetResons"
     );
     console.log(res.data.data, "reason");
     setReasonData(res?.data.data);
@@ -164,7 +164,7 @@ const RepairRequest = () => {
       formData.append("problem_detailing", problemDetailing);
 
       const response = await axios.post(
-        "https://jarvis-work-backend.onrender.com/api/add_repair_request",
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_repair_request",
         formData
       );
       setAssetName("");
@@ -184,7 +184,7 @@ const RepairRequest = () => {
   };
   async function getRepairRequest() {
     const res = await axios.get(
-      "https://jarvis-work-backend.onrender.com/api/get_all_repair_request"
+      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_repair_request"
     );
     setModalData(res?.data.data);
     setrepairRequestFilter(res?.data.data);
@@ -236,7 +236,7 @@ const RepairRequest = () => {
     formData.append("img4", assetsImg4Update);
     formData.append("problem_detailing", problemDetailingUpdate);
     axios
-      .put("https://jarvis-work-backend.onrender.com/api/update_repair_request", formData)
+      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_repair_request", formData)
       .then((res) => {
         getRepairRequest();
         toastAlert("Update Success");

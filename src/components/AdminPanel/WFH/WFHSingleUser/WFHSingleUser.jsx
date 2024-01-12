@@ -86,7 +86,7 @@ const WFHSingleUser = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "https://jarvis-work-backend.onrender.com/api/get_all_wfh_users"
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_wfh_users"
         );
         const data = res.data.data;
         const filteredUser = data.filter((d) => d.dept_id === department);
@@ -105,19 +105,19 @@ const WFHSingleUser = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/all_departments_of_wfh")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/all_departments_of_wfh")
       .then((res) => {
         getDepartmentData(res.data.data);
       });
   }, []);
 
   useEffect(() => {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/get_all_users`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users`).then((res) => {
       getUsersData(res.data.data);
     });
     if (department) {
       axios
-        .get(`https://jarvis-work-backend.onrender.com/api/get_user_by_deptid/${department}`)
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_by_deptid/${department}`)
         .then((res) => {
           setDepartmentWise(res.data);
         });
@@ -126,7 +126,7 @@ const WFHSingleUser = () => {
 
   const handleSubmit = () => {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/get_attendance_by_userid", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/get_attendance_by_userid", {
         user_id: userID,
       })
       .then((res) => {
@@ -146,7 +146,7 @@ const WFHSingleUser = () => {
     formData.append("user_id", data.user_id);
     formData.append("invoice_template_no", selectedTemplate);
 
-    axios.put(`https://jarvis-work-backend.onrender.com/api/update_user`, formData, {
+    axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -171,7 +171,7 @@ const WFHSingleUser = () => {
 
   // const handleAttendence = () => {
   //   axios
-  //     .post("https://jarvis-work-backend.onrender.com/api/add_attendance", {
+  //     .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_attendance", {
   //       dept: department,
   //       user_id: userName.user_id,
   //       noOfabsent: 0,
@@ -306,12 +306,12 @@ const WFHSingleUser = () => {
   //Send to finance
   // function handleSendToFinance(e, row) {
   //   e.preventDefault();
-  //   axios.post(`https://jarvis-work-backend.onrender.com/api/add_finance`, {
+  //   axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/add_finance`, {
   //     attendence_id: row.attendence_id,
   //   });
 
   //   axios
-  //     .put(`https://jarvis-work-backend.onrender.com/api/update_salary`, {
+  //     .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_salary`, {
   //       attendence_id: row.attendence_id,
   //       sendToFinance: 1,
   //     })
@@ -833,7 +833,7 @@ const WFHSingleUser = () => {
                 ScreenShot :
                 {rowDataModal?.screenshot ? (
                   <img
-                    src={`https://jarvis-work-backend.onrender.com/api/uploads/${rowDataModal?.screenshot}`}
+                    src={`https://api-dot-react-migration-project.el.r.appspot.com/api/uploads/${rowDataModal?.screenshot}`}
                   />
                 ) : (
                   "Null"

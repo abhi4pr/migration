@@ -91,7 +91,7 @@ const IpGraph = () => {
     setActiveButton("Year");
     const currentYear = new Date().getFullYear()?.toString();
     axios
-      .post(`https://jarvis-work-backend.onrender.com/api/dataforgraph`, {
+      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataforgraph`, {
         dateFormat: currentYear, // 2023
         ip_id: id,
       })
@@ -163,7 +163,7 @@ const IpGraph = () => {
     const currentYearMonth = `${year}-${month}`;
 
     axios
-      .post(`https://jarvis-work-backend.onrender.com/api/dataforgraph`, {
+      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataforgraph`, {
         dateFormat: currentYearMonth, // 2023-08
         ip_id: id,
       })
@@ -181,7 +181,7 @@ const IpGraph = () => {
     const year = currentDate.getFullYear();
 
     axios
-      .post(`https://jarvis-work-backend.onrender.com/api/dataforgraph`, {
+      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataforgraph`, {
         start_date: `${year}-${firstMonth}-${"01"}`,
         end_date: `${year}-${secondMonth}-${"30"}`,
         ip_id: id,
@@ -200,7 +200,7 @@ const IpGraph = () => {
 
   const saveStats = async (e) => {
     e.preventDefault();
-    axios.post(`https://jarvis-work-backend.onrender.com/api/ip_stats_post`, {
+    axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/ip_stats_post`, {
       ip_id: id,
       story_view: storyView,
       month_reach: monthReach,
@@ -222,7 +222,7 @@ const IpGraph = () => {
 
   const saveIpPageResponsiblity = async (e) => {
     e.preventDefault();
-    axios.put(`https://jarvis-work-backend.onrender.com/api/ipregiupdatenew`, {
+    axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/ipregiupdatenew`, {
       id: id,
       user_id: ipAllocateUser,
       user_response: ipAllocatePage?.map((option) => option.value).join(),
@@ -232,7 +232,7 @@ const IpGraph = () => {
 
   useEffect(() => {
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_users")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
       .then((res) => setUserData(res.data.data));
   }, []);
 
@@ -247,7 +247,7 @@ const IpGraph = () => {
       year: currentYear,
     };
 
-    axios.post("https://jarvis-work-backend.onrender.com/api/show_stats", payload).then((res) => {
+    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/show_stats", payload).then((res) => {
       setStatsData(res.data.data);
 
       $("#donutChart").remove();
@@ -276,7 +276,7 @@ const IpGraph = () => {
       year: statsYear,
     };
 
-    axios.post("https://jarvis-work-backend.onrender.com/api/show_stats", payload).then((res) => {
+    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/show_stats", payload).then((res) => {
       setStatsData(res.data.data);
 
       $("#donutChart").remove();

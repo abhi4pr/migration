@@ -25,7 +25,7 @@ const CocUpdate = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`https://jarvis-work-backend.onrender.com/api/get_single_coc/${id}`).then((res) => {
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_coc/${id}`).then((res) => {
       const fetchedData = res.data.data;
       setDisplaySeq(fetchedData.display_sequence);
       setHeading(fetchedData.heading);
@@ -41,7 +41,7 @@ const CocUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.put(`https://jarvis-work-backend.onrender.com/api/update_coc/`,{
+      await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_coc/`,{
         _id: id,
         display_sequence: displaySeq,
         heading: heading,

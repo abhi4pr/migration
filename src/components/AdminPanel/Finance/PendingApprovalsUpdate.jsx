@@ -46,12 +46,12 @@ const PendingApprovalUpdate = () => {
 
   function getData() {
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/add_php_finance_data_in_node")
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_php_finance_data_in_node")
       .then((res) => {
         console.log("data save in local success");
       });
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_php_finance_data_pending")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_php_finance_data_pending")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

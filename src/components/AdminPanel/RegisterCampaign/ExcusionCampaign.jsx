@@ -24,7 +24,7 @@ const ExcusionCampaign = () => {
 
   const getExpertee = async () => {
     const expert = await axios.get(
-      `https://jarvis-work-backend.onrender.com/api/expertise/user/${decodedToken.id}`
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/expertise/user/${decodedToken.id}`
     );
     getAssignment(expert.data.data.exp_id);
     console.log(expert);
@@ -34,7 +34,7 @@ const ExcusionCampaign = () => {
   },[activeAccordionIndex])
   const RequestAssign = async () => {
     const reqAss = await axios.get(
-      `https://jarvis-work-backend.onrender.com/api/preassignment/${decodedToken.id}`
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment/${decodedToken.id}`
     );
     const data = reqAss?.data?.data.filter((item) => item.status == "pending");
     SetRequestAssign(data);
@@ -44,7 +44,7 @@ const ExcusionCampaign = () => {
   }, []);
   const getAssignment = async (id) => {
     const getData = await axios.get(
-      `https://jarvis-work-backend.onrender.com/api/assignment/all/${decodedToken.id}`
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/all/${decodedToken.id}`
     );
     const assigned = getData?.data?.data.filter(
       (item) => item.ass_status == "assigned" || item.ass_status == "pending"

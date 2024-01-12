@@ -22,7 +22,7 @@ export default function SubDepartmentMaster() {
 
   // const [departmentdata, getDepartmentData] = useState([]);
   // useEffect(() => {
-  //   axios.get("https://jarvis-work-backend.onrender.com/api/get_all_departments").then((res) => {
+  //   axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments").then((res) => {
   //     getDepartmentData(res.data).catch((error) => console.log(error));
   //   });
   // }, []);
@@ -30,7 +30,7 @@ export default function SubDepartmentMaster() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://jarvis-work-backend.onrender.com/api/add_sub_department", {
+      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_sub_department", {
         sub_dept_name: subDepartmentName,
         dept_id: departmentName,
         remark: remark,

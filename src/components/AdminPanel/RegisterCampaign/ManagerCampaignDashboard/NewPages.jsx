@@ -12,7 +12,7 @@ const NewPages = ({ pages }) => {
   const fetchCampaignData = async () => {
     try {
       const response = await axios.get(
-        `https://jarvis-work-backend.onrender.com/api/exe_campaign`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign`
       );
       setCamp(response?.data?.data);
     } catch (error) {

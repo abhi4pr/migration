@@ -26,7 +26,7 @@ const CocMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
                 
-      await axios.post("https://jarvis-work-backend.onrender.com/api/add_coc",{
+      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_coc",{
         display_sequence: displaySeq,
         heading: heading,
         heading_desc: headingDesc,
@@ -123,7 +123,7 @@ const CocMaster = () => {
         <FieldContainer
           Tag="textarea"
           label="description"
-          required={true}
+          required={false}
           fieldGrid={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}

@@ -40,7 +40,7 @@ const BrandUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://jarvis-work-backend.onrender.com/api/get_single_logo_data/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_logo_data/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         const { brand_name, upload_logo, remarks, cat_name } = fetchedData;
@@ -52,7 +52,7 @@ const BrandUpdate = () => {
       });
 
     axios
-      .get("https://jarvis-work-backend.onrender.com/api/get_all_logo_categories")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_logo_categories")
       .then((res) => setCategoryData(res.data));
 
     const today = new Date();
@@ -72,7 +72,7 @@ const BrandUpdate = () => {
   const getCombinedData = async () => {
     if (brand) {
       axios
-        .get(`https://jarvis-work-backend.onrender.com/api/get_logo_data_for_brand/${brand}`)
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_logo_data_for_brand/${brand}`)
         .then((res) => {
           setLogos(res.data);
         });
@@ -88,7 +88,7 @@ const BrandUpdate = () => {
       setError("You can't delete default image, try to delete brand instead");
     } else {
       var data = await axios.delete(
-        `https://jarvis-work-backend.onrender.com/api/delete_logo/${logo_id}`,
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_logo/${logo_id}`,
         null
       );
       if (data) {
@@ -100,7 +100,7 @@ const BrandUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.put(`https://jarvis-work-backend.onrender.com/api/update_logo_brand_new`, {
+    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_logo_brand_new`, {
       id: id,
       brand_name: brand,
       remarks: remark,
@@ -122,7 +122,7 @@ const BrandUpdate = () => {
         formData.append("logo_cat", selectedCategories[i]);
 
         await axios.post(
-          "https://jarvis-work-backend.onrender.com/api/add_logo_brand",
+          "https://api-dot-react-migration-project.el.r.appspot.com/api/add_logo_brand",
           formData,
           {
             headers: {

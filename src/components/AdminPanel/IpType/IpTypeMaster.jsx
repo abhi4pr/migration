@@ -21,7 +21,7 @@ const AccessTypeMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://jarvis-work-backend.onrender.com/api/Iptype", {
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/Iptype", {
         name: accessTypeName,
         remark: remark,
         created_by: userID

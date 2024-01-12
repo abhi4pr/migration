@@ -27,7 +27,7 @@ export default function DeleteCity({openDeleteCityName,handleCloseDeleteCityName
     const handleDeleteCityName = (rowData) => {
     
         axios
-            .delete(`https://jarvis-work-backend.onrender.com/api/delete_city/${rowData._id}`)
+            .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/delete_city/${rowData._id}`)
             .then((res) => {
                 console.log(res);
                 if (res.data.success) {
