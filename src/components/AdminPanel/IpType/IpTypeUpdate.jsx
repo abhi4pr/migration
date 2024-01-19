@@ -27,7 +27,7 @@ const AccessTypeUpdate = () => {
         id: Number(id),
         name: accessTypeName,
         remark: remark,
-        last_updated_by: userID
+        last_updated_by: userID,
       })
       .then(() => {
         setAccessTypeName("");
@@ -45,10 +45,7 @@ const AccessTypeUpdate = () => {
   useEffect(() => {
     axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/Iptypedata/${id}`).then((res) => {
       const fetchedData = res.data;
-      const {
-        name,
-        remark
-      } = fetchedData;
+      const { name, remark } = fetchedData;
       setAccessTypeName(name);
       setRemark(remark);
       // setSimData(fetchedData);

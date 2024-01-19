@@ -27,7 +27,7 @@ const PlatformUpdate = () => {
         id: Number(id),
         name: platformName,
         remark: remark,
-        last_updated_by: userID
+        last_updated_by: userID,
       })
       .then(() => {
         setPlatformName("");
@@ -43,16 +43,15 @@ const PlatformUpdate = () => {
   };
 
   useEffect(() => {
-    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataofplatform/${id}`).then((res) => {
-      const fetchedData = res.data[0];
-      const {
-        name,
-        remark
-      } = fetchedData;
-      setPlatformName(name);
-      setRemark(remark);
-      setSimData(fetchedData);
-    });
+    axios
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataofplatform/${id}`)
+      .then((res) => {
+        const fetchedData = res.data[0];
+        const { name, remark } = fetchedData;
+        setPlatformName(name);
+        setRemark(remark);
+        setSimData(fetchedData);
+      });
   }, [id]);
 
   if (isFormSubmitted) {

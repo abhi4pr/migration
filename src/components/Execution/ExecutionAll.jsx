@@ -2663,13 +2663,14 @@ function ExecutionAll() {
     navigate(`/admin/exe-history/${row.p_id}`, { state: row.p_id });
   };
 
-  const handleUpdateRowClick = (row) => {
-    axios
+  const handleUpdateRowClick = async (row) => {
+    await axios
       .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_ip_count_history/${row.p_id}`)
       .then((res) => {
         let data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
         });
+        console.log(row.p_id, data, "data");
         data = data[data.length - 1];
         navigate(`/admin/exe-update/${data._id}`, { state: row.p_id });
       });

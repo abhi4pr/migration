@@ -21,13 +21,12 @@ const LogoCategoryMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    await axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_logo_category", {
-        cat_name: categoryName,
-        remark: remark,
-        created_by: loginUserID,
-      })
-      
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_logo_category", {
+      cat_name: categoryName,
+      remark: remark,
+      created_by: loginUserID,
+    });
+
     setCategoryName("");
     setRemark("");
 

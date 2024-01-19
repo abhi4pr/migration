@@ -8,6 +8,7 @@ import { useAPIGlobalContext } from "../../AdminPanel/APIContext/APIContext";
 import { Autocomplete, TextField } from "@mui/material";
 import Select from "react-select";
 import axios from "axios";
+import AssetSingleuserOverview from "./AssetSingleuserOverview";
 
 const AssetSingleUser = () => {
   const { usersDataContext, getAssetDataContext, toastAlert } =
@@ -28,7 +29,27 @@ const AssetSingleUser = () => {
   const [assetsImg4, setAssetsImg4] = useState(null);
   const [problemDetailing, setProblemDetailing] = useState("");
   const [tagUser, setTagUser] = useState([]);
+  const [newAssetRequestData, setNewAssetRequestData] = useState([]);
   const PriorityData = ["Low", "Medium", "High", "Urgent"];
+
+  // New tab
+  const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
+  const handleAccordionButtonClick = (index) => {
+    setActiveAccordionIndex(index);
+  };
+  const accordionButtons = ["Assigned assets", "Asset requests"];
+
+  const newRequestAPIRender = () => {
+    return getNewAssetRequest() || getData();
+  };
+
+  const tab1 = <AssetSingleuserOverview filterData={filterData} tab="tab" />;
+  const tab2 = (
+    <AssetSingleuserOverview
+      newAssetRequestData={newAssetRequestData}
+      newRequestAPIRender={newRequestAPIRender}
+    />
+  );
 
   const getData = async () => {
     try {
@@ -46,48 +67,22 @@ const AssetSingleUser = () => {
     const res = await axios.get(
       "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_assetResons"
     );
-    console.log(res.data.data, "reason");
     setReasonData(res?.data.data);
+  }
+  async function getNewAssetRequest() {
+    const res = await axios.get(
+      `https://api-dot-react-migration-project.el.r.appspot.com/api/get_allocated_asset_data_for_user_id/${userID}`
+    );
+    console.log(res.data.data, "reason hai");
+    setNewAssetRequestData(res?.data.data);
   }
 
   useEffect(() => {
     getRepairReason();
     getData();
+    getNewAssetRequest();
   }, []);
 
-  const columns = [
-    {
-      name: "S.No",
-      cell: (row, index) => <div>{index + 1}</div>,
-      width: "9%",
-      sortable: true,
-    },
-    {
-      name: "Asset Name",
-      selector: (row) => row.assetsName,
-      sortable: true,
-    },
-    {
-      name: "Assigned Date",
-      selector: (row) => row.submitted_at,
-      sortable: true,
-    },
-
-    {
-      name: "RepairReason",
-      cell: (row) => (
-        <button
-          onClick={() => handleRow(row)}
-          className="btn btn-warning"
-          data-toggle="modal"
-          data-target="#exampleModal"
-          size="small"
-        >
-          Repair
-        </button>
-      ),
-    },
-  ];
   useEffect(() => {
     const result = data.filter((d) => {
       return d.assetsName?.toLowerCase().match(search.toLocaleLowerCase());
@@ -103,6 +98,7 @@ const AssetSingleUser = () => {
     console.log(row.assetsName, "row is here");
     setAssetName(row?.sim_id);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -148,7 +144,24 @@ const AssetSingleUser = () => {
   }, []);
   return (
     <>
-      <FormContainer
+      <div className="action_heading">
+        <div className="action_title">
+          <FormContainer
+            submitButton={false}
+            mainTitle="Asset"
+            title=""
+            accordionButtons={accordionButtons}
+            activeAccordionIndex={activeAccordionIndex}
+            onAccordionButtonClick={handleAccordionButtonClick}
+          >
+            {activeAccordionIndex === 0 && tab1}
+            {activeAccordionIndex === 1 && tab2}
+          </FormContainer>
+        </div>
+      </div>
+
+      {/* old  */}
+      {/* <FormContainer
         mainTitle="Asset"
         link="/"
         submitButton={false}
@@ -176,7 +189,9 @@ const AssetSingleUser = () => {
             }
           />
         </div>
-      </div>
+      </div> */}
+
+      {/* Repair Requset Modal  */}
       <div
         className="modal fade"
         id="exampleModal"

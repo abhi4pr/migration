@@ -21,7 +21,7 @@ const DataBrandView = () => {
   const [images, setImages] = useState([]);
   const [details, setDetails] = useState([]);
   const [category, setCategory] = useState("");
-
+  
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
   const loginUserId = decodedToken.id;
@@ -29,10 +29,12 @@ const DataBrandView = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data/${id}`)
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name/${id}`)
       .then((res) => {
-        const fetchedData = res.data;
+        const fetchedData = res.data[0];
         const { data_name, upload_logo, remark, cat_name } = fetchedData;
+        // console.log(fetchedData);
+        console.log(data_name);
         setBrand(data_name);
         setLogo(upload_logo);
         setRemark(remark);
@@ -44,11 +46,13 @@ const DataBrandView = () => {
   useEffect(() => {
     if (brand) {
       axios
-        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name/${brand}`)
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name_new/${brand}`)
         .then((res) => {
+          console.log(res.data);
           setLogos(res.data);
         });
     }
+    console.log(brand);
   }, [brand]);
 
   const handleSubmit = async (e) => {
@@ -71,7 +75,7 @@ const DataBrandView = () => {
               allowFullScreen
             ></iframe>
           </>
-        )
+        );
       case "xls":
       case "xlsx":
         return <img src={sheets} alt="Excel" style={{ width: "32%" }} />;
@@ -103,14 +107,14 @@ const DataBrandView = () => {
               />
 
               <div className="row">
-                {logos.map((detail) => (
+                {logos.map((detail, index) => (
                   <div
+                    key={index}
                     className="col-md-3 card"
                     style={{ margin: "0 0 10px 0" }}
                   >
-
                     <div>
-                      {getFileIcon(detail.data_type,detail.data_image)}
+                      {getFileIcon(detail.data_type, detail.data_image)}
                     </div>
                     <div className="card-body"></div>
                     <ul className="list-group list-group-flush">
@@ -145,9 +149,10 @@ const DataBrandView = () => {
                     <div className="card-body">
                       <button type="button" className="btn btn-success">
                         <a
-                          href={detail.data_image}
+                          href={detail.data_image_download}
                           target="_blank"
                           rel="noopener noreferrer"
+                          download={detail.data_image_download}
                         >
                           {" "}
                           Download{" "}

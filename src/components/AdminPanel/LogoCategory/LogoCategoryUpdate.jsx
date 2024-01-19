@@ -22,11 +22,13 @@ const LogoCategoryUpdate = () => {
   useEffect(() => {
     if (id) {
       console.log(id);
-      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_category/${id}`).then((res)=>{
-        const fetchedData = res.data;
-        setCategoryName(fetchedData.cat_name)
-        setRemark(fetchedData.remark)
-      });
+      axios
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_category/${id}`)
+        .then((res) => {
+          const fetchedData = res.data;
+          setCategoryName(fetchedData.cat_name);
+          setRemark(fetchedData.remark);
+        });
     }
   }, []);
   const handleSubmit = (e) => {

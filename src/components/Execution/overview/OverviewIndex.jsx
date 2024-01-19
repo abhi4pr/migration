@@ -70,19 +70,17 @@ const OverviewIndex = () => {
       //   }
       // }
 
-      axios
-        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/execution_graph")
-        .then((res) => {
-          console.log(res.data, "this is response");
-          setCounts(res.data);
-          console.log(
-            res.data.filter(
-              (count) =>
-                count.interval_type === "Weekly" && count.execution_status === 1
-            )[0].count,
-            "filter data"
-          );
-        });
+      axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/execution_graph").then((res) => {
+        console.log(res.data, "this is response");
+        setCounts(res.data);
+        console.log(
+          res.data.filter(
+            (count) =>
+              count.interval_type === "Weekly" && count.execution_status === 1
+          )[0].count,
+          "filter data"
+        );
+      });
 
       setCounts(responseArray);
     };

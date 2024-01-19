@@ -24,7 +24,7 @@ const PlatformMaster = () => {
       .post("https://api-dot-react-migration-project.el.r.appspot.com/api/platform", {
         name: platformName,
         remark: remark,
-        created_by: userID
+        created_by: userID,
       })
       .then(() => {
         setPlatformName("");

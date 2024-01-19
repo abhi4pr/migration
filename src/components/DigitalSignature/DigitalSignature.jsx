@@ -55,18 +55,23 @@ const DigitalSignature = ({
 
   return (
     <>
-      <div style={{ border: "2px solid black", width: 500, height: 200 }}>
+      <h1>Digital Signature</h1>
+      <div
+        style={{ border: "2px solid black", height: "200px", width: "500px" }}
+      >
         <SignatureCanvas
           ref={(data) => setSignature(data)}
           canvasProps={{ width: 500, height: 200, className: "sigCanvas" }}
         />
       </div>
-      <button className="btn btn-outline-danger" onClick={handleClear}>
-        Clear
-      </button>
-      <button className="btn btn-primary" onClick={handleGenerate}>
-        Save
-      </button>
+      <div className="mt-3">
+        <button className="btn btn-outline-danger mr-3" onClick={handleClear}>
+          Clear
+        </button>
+        <button className="btn btn-primary" onClick={handleGenerate}>
+          Save
+        </button>
+      </div>
       <br />
     </>
   );

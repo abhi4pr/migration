@@ -11,11 +11,19 @@ import pdf from "./pdf-file.png";
 import sheets from "./sheets.png";
 import video from "./montage.png";
 import Select from "react-select";
+import { de } from "date-fns/locale";
 
 const DataBrandUpdate = () => {
-  const { toastAlert } = useGlobalContext();
+  const [openReviewDisalog, setOpenReviewDisalog] = useState({
+    open: false,
+    image: "",
+    detail: {},
+  });
+  const [fileDetails, setFileDetails] = useState([]);
+  const { toastAlert, toastError } = useGlobalContext();
   const [brand, setBrand] = useState("");
-  const[brandName, setBrandName] = useState("")
+  const [permanentBrand, setPermanentBrand] = useState("");
+  const [brandName, setBrandName] = useState("");
   const [logo, setLogo] = useState([]);
   const [logos, setLogos] = useState([]);
   const [image, setImage] = useState("");
@@ -34,9 +42,13 @@ const DataBrandUpdate = () => {
   const [contentTypeData, setContentTypeData] = useState([]);
   const [dataBrand, setDataBrand] = useState("");
   const [dataBrandData, setDataBrandData] = useState([]);
+  // const [dataSubCategory, setDataSubCategory] = useState([]);
   const [dataSubCategory, setDataSubCategory] = useState("");
   const [dataSubCategoryData, setDataSubCategoryData] = useState([]);
   const [error, setError] = useState("");
+  const [dataId, setDataId] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [allData, setAllData] = useState([]);
 
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -50,21 +62,43 @@ const DataBrandUpdate = () => {
     return `${day}/${month}/${year}`;
   };
 
+  const callAbvApi = async () => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_datas").then((res) => {
+      setAllData(res.data);
+      res.data
+        .filter((detail) => {
+          return detail.data_id == logos[0]?.data_id;
+        })
+        .map((detail, index) => {
+          setFileDetails(detail);
+          console.log(detail);
+          return detail;
+        });
+    });
+  };
+
+  useEffect(() => {
+    callAbvApi();
+  }, [logos]);
+
   useEffect(() => {
     axios
       .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data/${id}`)
       .then((res) => {
         const fetchedData = res.data;
-        const { data_name, upload_logo, remark, cat_name } = fetchedData;
+        const { data_name, data_id, upload_logo, remark, cat_name } =
+          fetchedData;
         setBrand(data_name);
+        setPermanentBrand(data_name);
+        setDataId(data_id);
         setBrandName(data_name);
         // setLogo(upload_logo);
         // setRemark(remark);
         // setCategory(cat_name);
         // setBrandData(fetchedData);
       });
-    
-      axios
+
+    axios
       .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_categorys")
       .then((res) => {
         setCategoryData(res.data.simcWithSubCategoryCount);
@@ -96,15 +130,17 @@ const DataBrandUpdate = () => {
     setCurrentDate(formattedDate);
   }, [id]);
 
-  useEffect(()=>{
-    if(category){
+  useEffect(() => {
+    if (category) {
       axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data_from_sub_category/${category}`)
-      .then((res) => {
-        setDataSubCategoryData(res.data);
-      });
+        .get(
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_data_from_sub_category/${category}`
+        )
+        .then((res) => {
+          setDataSubCategoryData(res.data);
+        });
     }
-  },[category])
+  }, [category]);
 
   const handleCategoryChange = (event, index) => {
     const { value } = event.target;
@@ -116,17 +152,39 @@ const DataBrandUpdate = () => {
   };
 
   const getCombinedData = async () => {
-    if (brand) {
-      axios
-        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name/${brand}`)
-        .then((res) => {
-          setLogos(res.data);
+    if (dataId) {
+      // axios
+      //   .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name/${dataId}`)
+      //   .then((res) => {
+      //     setLogos(prev=>res.data);
 
-          setCategory(res.data[0]?.cat_id)
-          setDataSubCategory(res.data[0]?.sub_cat_id)
-          setPlateform(res.data[0]?.platform_id)
-          setContentType(res.data[0]?.content_type_id)
-          setDataBrand(res.data[0]?.brand_id)
+      //     setLogo(res.data)
+      //     // console.log(res.data[0]?.sub_cat_id[0].split(","),"subcat")
+      //     setCategory(res.data[0]?.cat_id);
+      //     // setDataSubCategory(res.data[0]?.sub_cat_id[0].split(","))
+      //     setDataSubCategory(res.data[0]?.sub_cat_id);
+
+      //     setPlateform(res.data[0]?.platform_id);
+      //     setContentType(res.data[0]?.content_type_id);
+      //     setDataBrand(res.data[0]?.brand_id);
+      //     setRemark(res.data[0]?.remark);
+      //   });
+      axios
+        .get(
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_data_based_data_name_new/${brandName}`
+        )
+        .then((res) => {
+          setLogos((prev) => res.data);
+
+          setLogo(res.data);
+          // console.log(res.data[0]?.sub_cat_id[0].split(","),"subcat")
+          setCategory(res.data[0]?.cat_id);
+          // setDataSubCategory(res.data[0]?.sub_cat_id[0].split(","))
+          setDataSubCategory(res.data[0]?.sub_cat_id);
+
+          setPlateform(res.data[0]?.platform_id);
+          setContentType(res.data[0]?.content_type_id);
+          setDataBrand(res.data[0]?.brand_id);
           setRemark(res.data[0]?.remark);
         });
     }
@@ -136,9 +194,18 @@ const DataBrandUpdate = () => {
     getCombinedData();
   }, [brand]);
 
-  const removeImage = async (_id) => {
+  const removeImage = async (_id,data_id) => {
+    console.log(id,"id",data_id,"data_id")
+    if(id==data_id){
+      toastError(
+        "You can't delete default data type, try to delete data instead"
+      );
+      return;
+    }
     if (_id == id) {
-      setError("You can't delete default data type, try to delete data instead");
+      setError(
+        "You can't delete default data type, try to delete data instead"
+      );
     } else {
       var data = await axios.delete(
         `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_data/${_id}`,
@@ -150,44 +217,160 @@ const DataBrandUpdate = () => {
     }
   };
 
+  const removeAddedImage = async (index) => {
+    const newDetails = [...details];
+    newDetails.splice(index, 1);
+    setDetails(newDetails);
+
+  }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log(dataSubCategory, "subcat");
+  //   // return;
+
+  //   await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_data`, {
+  //     data_id: +id,
+  //     data_name: brandName,
+  //     brand_id: dataBrand,
+  //     platform_id: platform,
+  //     content_type_id: contentType,
+  //     cat_id: category,
+  //     sub_cat_id: dataSubCategory,
+  //     remark: remark,
+  //     updated_by: loginUserId,
+  //     updated_at: new Date(),
+  //     size_in_mb: size,
+
+  //   });
+
+  //   try {
+  //     for (let i = 0; i < details.length; i++) {
+  //       const formData = new FormData();
+  //       formData.append("data_name", brandName);
+  //       formData.append("cat_id", category);
+  //       formData.append("sub_cat_id", dataSubCategory);
+  //       formData.append("platform_id", platform);
+  //       formData.append("brand_id", dataBrand);
+  //       formData.append("content_type_id", contentType);
+  //       formData.append("data_upload", details[i].file);
+  //       formData.append("data_type", details[i].fileType);
+  //       formData.append("size_in_mb", details[i].sizeInMB);
+  //       formData.append("remark", remark);
+  //       formData.append("created_by", loginUserId);
+
+  //       await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_data", formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       });
+  //     }
+  //     setIsFormSubmitted(true);
+  //     toastAlert("Data details updated");
+  //     setBrand("");
+  //     setLogo("");
+  //     setImage("");
+  //     setSize("");
+  //     setRemark("");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_data_new`, {
-      _id: id,
-      data_name: brandName,
-      remark: remark,
-      updated_by: loginUserId,
-      updated_at: new Date()
-    });
+    console.log(images[0]);
+    // return;
+    if (category == "") {
+      toastError("Category is required");
+    } else if (dataSubCategory == "") {
+      toastError("Sub category is required");
+    } else if (platform == "") {
+      toastError("Platform is required");
+    } else if (contentType == "") {
+      toastError("Content type is required");
+    } else if (dataBrand == "") {
+      toastError("Brand is required");
+    }
 
     try {
-      for (let i = 0; i < details.length; i++) {
-        const formData = new FormData();
-        formData.append("data_name", brandName);
-        formData.append("cat_id", category);
-        formData.append("sub_cat_id", dataSubCategory);
-        formData.append("platform_id", platform);
-        formData.append("brand_id", dataBrand);
-        formData.append("content_type_id", contentType);
-        formData.append("data_upload", details[i].file);
-        formData.append("data_type", details[i].fileType);
-        formData.append("size_in_mb", details[i].sizeInMB);
-        formData.append("remark", remark);
-        formData.append("created_by", loginUserId);
-
-        await axios.post(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/add_data",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+      if (
+        category &&
+        platform &&
+        contentType &&
+        dataBrand &&
+        brand &&
+        dataSubCategory
+      ) {
+        setIsLoading(true);
       }
+      console.log(details.length, "befoer img");
+      if (details.length == 0) {
+        // const formData = new FormData();
+        // formData.append("data_id", id);
+        // formData.append("data_name", brandName);
+        // formData.append("cat_id", category);
+        // formData.append("sub_cat_id", dataSubCategory);
+        // formData.append("platform_id", platform);
+        // formData.append("brand_id", dataBrand);
+        // formData.append("content_type_id", contentType);
+
+        // formData.append("remark", remark);
+
+        await axios
+          .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_data", {
+            data_id: id,
+            data_name: brandName,
+            remark: remark,
+            cat_id: category,
+            sub_cat_id: dataSubCategory,
+            platform_id: platform,
+            brand_id: dataBrand,
+            content_type_id: contentType,
+          })
+          .then((res) => {})
+          .catch((err) => {
+            console.log(err, "err");
+          });
+      } else {
+        for (let i = 0; i < details.length; i++) {
+          console.log("come in loop");
+          const formData = new FormData();
+          formData.append("data_id", id);
+          formData.append("data_name", brandName);
+          formData.append("remark", remark);
+          formData.append("data_type", details[i].fileType);
+          formData.append("size_in_mb", details[i].sizeInMB);
+          formData.append("cat_id", category);
+          formData.append("sub_cat_id", dataSubCategory);
+          formData.append("platform_id", platform);
+          formData.append("brand_id", dataBrand);
+          formData.append("content_type_id", contentType);
+          formData.append("data_upload", images[i]);
+
+          // formData.append("sub_cat_id", dataSubCategory.map(e=>e));
+          // formData.append("size", details[i].size);
+          // formData.append("created_by", userID);
+          // formData.append("designed_by", designedBy);
+          console.log(formData, "formdata");
+          await axios
+            .post(
+              "https://api-dot-react-migration-project.el.r.appspot.com/api/add_data",
+              formData ,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
+            .then((res) => {})
+            .catch((err) => {
+              console.log(err, "err");
+            });
+        }
+      }
+
       setIsFormSubmitted(true);
-      toastAlert("Data details updated");
+      toastAlert("Data uploaded");
       setBrand("");
       setLogo("");
       setImage("");
@@ -195,10 +378,13 @@ const DataBrandUpdate = () => {
       setRemark("");
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false); // Set loading state to false after API call completes
     }
   };
 
   const handleFileChange = (event) => {
+    // setFileDetails((prev) => [...prev, event.target.files]);
     const files = Array.from(event.target.files);
     setImages(files);
 
@@ -269,7 +455,11 @@ const DataBrandUpdate = () => {
         <UserNav />
         <div className="section section_padding sec_bg h100vh">
           <div className="container">
-            <FormContainer mainTitle="Data" title="Data" handleSubmit={handleSubmit}>
+            <FormContainer
+              mainTitle="Data"
+              title="Data"
+              handleSubmit={handleSubmit}
+            >
               <FieldContainer
                 label="Name *"
                 type="text"
@@ -313,6 +503,23 @@ const DataBrandUpdate = () => {
                 <label className="form-label">
                   Sub Category Name <sup style={{ color: "red" }}>*</sup>
                 </label>
+                {/* <Select
+    options={dataSubCategoryData.map((opt) => ({
+      value: opt._id,
+      label: opt.data_sub_cat_name,
+    }))}
+    value={dataSubCategory?.map(subCatId => 
+      dataSubCategoryData.find(opt => opt._id == subCatId)
+    ).filter(Boolean).map(opt => ({
+      value: opt._id,
+      label: opt.data_sub_cat_name
+    }))}
+    onChange={(selectedOptions) => {
+      setDataSubCategory(selectedOptions.map(opt => opt.value));
+    }}
+    isMulti
+    required
+  /> */}
                 <Select
                   options={dataSubCategoryData.map((opt) => ({
                     value: opt._id,
@@ -331,6 +538,7 @@ const DataBrandUpdate = () => {
                   required
                 />
               </div>
+
               <div className="form-group col-3">
                 <label className="form-label">
                   Platform Name <sup style={{ color: "red" }}>*</sup>
@@ -396,77 +604,158 @@ const DataBrandUpdate = () => {
               </div>
 
               <div className="summary_cards brand_img_list">
-                {logos && logos.map((detail) => (
-                  <div className="summary_card brand_img_item">
-                    <div className="summary_cardrow brand_img_row">
-                      <div className="col summary_box brand_img_box">
-                        <img
-                          className="brandimg_icon"
-                          src={detail.data_image}
-                        />
-                      </div>
-                      <div className="col summary_box brand_img_box">
-                        <h4>
-                          <span>Extension:</span>
-                          {detail.data_type}
-                        </h4>
-                      </div>
-                      {/* <div className="col summary_box brand_img_box">
+                {logos.length > 0 &&
+                  logos?.map((detail, index) => (
+                    <div key={index} className="summary_card brand_img_item">
+                      <div className="summary_cardrow brand_img_row">
+                        <div className="col summary_box brand_img_box">
+                          <img
+                            className="brandimg_icon"
+                            src={detail.data_image}
+                          />
+                          {/* {detail.data_type === "jpg" ||
+                          detail.data_type === "jpeg" ||
+                          detail.data_type === "png" ||
+                          detail.data_type === "gif" ? (
+                            images[index] && (
+                              <img
+                                onClick={() =>
+                                  setOpenReviewDisalog({
+                                    open: true,
+                                    image: URL.createObjectURL(images[index]),
+                                    detail: detail,
+                                  })
+                                }
+                                className="brandimg_icon"
+                                src={URL.createObjectURL(images[index])}
+                                alt={`Image ${index + 1}`}
+                              />
+                              
+                            )
+                          ) : (
+                            <div
+                            
+                              className="file_icon"
+                              onClick={() =>
+                                setOpenReviewDisalog({
+                                  open: true,
+                                  image: URL.createObjectURL(images[index]),
+                                  detail: detail,
+                                })
+                              }
+                            >
+                              {renderFileIcon(detail.fileType)}
+                            </div>
+                          )} */}
+                        </div>
+                        <div className="col summary_box brand_img_box">
+                          <h4>
+                            <span>Extension: manoj</span>
+                            {detail.data_type}
+                          </h4>
+                        </div>
+                        {/* <div className="col summary_box brand_img_box">
                         <h4>
                           <span>Resolution:</span>
                           {detail.size}
                         </h4>
                       </div> */}
+                        <div className="col summary_box brand_img_box">
+                          <h4>
+                            <span>Size:</span>
+                            {detail.size_in_mb}
+                            {"MB"}
+                          </h4>
+                        </div>
+                        {/* <div className="col summary_box brand_img_box">
+                          <h4>
+                            <span>Data Category:</span>
+                            {detail.category_name}
+                          </h4>
+                        </div> */}
+                        <div className="col summary_box brand_img_box">
+                          <h4>
+                            <span>Date:</span>
+                            {detail.created_at.split("T")[0]}
+                          </h4>
+                        </div>
+                        <div className="col brand_img_box ml-auto mr-0 summary_box brand_img_delete">
+                          <p>
+                            {" "}
+                            <MdCancel
+                              onClick={() => removeImage(detail._id,detail.data_id)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                {/* {allData.length >0 && allData.filter((detail) => (
+                  detail.data_id==logos[0].data_id)).map((detail, index) => (
+                  <div key={index} className="summary_card brand_img_item">
+                    <div className="summary_cardrow brand_img_row">
+                      <div className="col summary_box brand_img_box col140">
+                        {detail.fileType === "jpg" ||
+                        detail.fileType === "jpeg" ||
+                        detail.fileType === "png" ||
+                        detail.fileType === "gif" ? (
+                          <img
+                            className="brandimg_icon"
+                            src={URL.createObjectURL(images[index])}
+                            alt={`Image ${index + 1}`}
+                          />
+                        ) : (
+                          <div className="file_icon">
+                            {renderFileIcon(detail.fileType)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col summary_box brand_img_box">
+                        <h4>
+                          <span>Extension:</span>
+                          {detail.image_type}
+                        </h4>
+                      </div>
+                      
                       <div className="col summary_box brand_img_box">
                         <h4>
                           <span>Size:</span>
-                          {detail.size_in_mb}
+                          {detail.sizeInMB}
                           {"MB"}
                         </h4>
                       </div>
                       <div className="col summary_box brand_img_box">
                         <h4>
-                          <span>Data Category:</span>
-                          {detail.category_name}
-                        </h4>
-                      </div>
-                      <div className="col summary_box brand_img_box">
-                        <h4>
                           <span>Date:</span>
-                          {detail.created_at.split("T")[0]}
+                          {currentDate}
                         </h4>
                       </div>
-                      <div className="col brand_img_box ml-auto mr-0 summary_box brand_img_delete">
-                        <p>
-                          {" "}
-                          <MdCancel
-                            onClick={() => removeImage(detail._id)}
-                            style={{ cursor: "pointer" }}
-                          />
-                        </p>
-                      </div>
+                      
                     </div>
                   </div>
-                ))}
+
+                ))} */}
+
                 {details.map((detail, index) => (
-                  <div className="summary_card brand_img_item">
+                  <div key={index} className="summary_card brand_img_item">
                     <div className="summary_cardrow brand_img_row">
-                    <div className="col summary_box brand_img_box col140">
-                  {detail.fileType === "jpg" ||
-                  detail.fileType === "jpeg" ||
-                  detail.fileType === "png" ||
-                  detail.fileType === "gif" ? (
-                    <img
-                      className="brandimg_icon"
-                      src={URL.createObjectURL(images[index])}
-                      alt={`Image ${index + 1}`}
-                    />
-                  ) : (
-                    <div className="file_icon">
-                      {renderFileIcon(detail.fileType)}
-                    </div>
-                  )}
-                </div>
+                      <div className="col summary_box brand_img_box col140">
+                        {detail.fileType === "jpg" ||
+                        detail.fileType === "jpeg" ||
+                        detail.fileType === "png" ||
+                        detail.fileType === "gif" ? (
+                          <img
+                            className="brandimg_icon"
+                            src={images[index]?URL.createObjectURL(images[index]):""}
+                            alt={`Image ${index + 1}`}
+                          />
+                        ) : (
+                          <div className="file_icon">
+                            {renderFileIcon(detail.fileType)}
+                          </div>
+                        )}
+                      </div>
                       <div className="col summary_box brand_img_box">
                         <h4>
                           <span>Extension:</span>
@@ -508,6 +797,16 @@ const DataBrandUpdate = () => {
                           ))}
                         </FieldContainer>
                       </div> */}
+                                              <div className="col brand_img_box ml-auto mr-0 summary_box brand_img_delete">
+
+                       <p>
+                            {" "}
+                            <MdCancel
+                              onClick={() => removeAddedImage(index)}
+                              style={{ cursor: "pointer" }}
+                            />
+                          </p>
+                          </div>
                     </div>
                   </div>
                 ))}

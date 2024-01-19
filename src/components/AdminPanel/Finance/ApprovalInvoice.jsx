@@ -7,7 +7,6 @@ import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 
 const ApprovalInvoice = () => {
-  
   const { toastAlert } = useGlobalContext();
   const [displaySeq, setDisplaySeq] = useState("");
   const [heading, setHeading] = useState("");
@@ -20,22 +19,20 @@ const ApprovalInvoice = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-                
-      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/",{
-        display_sequence: displaySeq,
-      });
 
-      toastAlert("Coc created");
-      setIsFormSubmitted(true);
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/", {
+      display_sequence: displaySeq,
+    });
+
+    toastAlert("Coc created");
+    setIsFormSubmitted(true);
   };
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/finance" />;
   }
 
-  const handleDateChange = (e) => {
-    
-  };
+  const handleDateChange = (e) => {};
 
   return (
     <>

@@ -45,12 +45,9 @@ const DeliveryData = () => {
         if (res.data && res.data.length > 0) {
           setDeliveryData(res.data);
         } else {
-
         }
       })
-      .catch((error) => {
-
-      });
+      .catch((error) => {});
   }
 
   useEffect(() => {
@@ -60,13 +57,10 @@ const DeliveryData = () => {
 
   useEffect(() => {
     getData();
-    axios
-
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_user`)
-      .then((res) => {
-        setDeliveryBoyData(res.data);
-        // console.log(res.data);
-      });
+    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_user`).then((res) => {
+      setDeliveryBoyData(res.data);
+      // console.log(res.data);
+    });
   }, []);
 
   const handleOrderCompleted = (

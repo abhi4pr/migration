@@ -243,10 +243,11 @@ const Attendence = () => {
         setFilterData(res.data.data);
       })
       .catch(() => {
+        setFilterData([]);
         department &&
           selectedMonth &&
           selectedYear &&
-          toastAlert("Failed to submit data");
+          toastError("Not Data Exist");
       });
   };
 
@@ -315,7 +316,7 @@ const Attendence = () => {
     {
       field: "user_name",
       headerName: "Employee Name",
-      width: 150,
+      width: 200,
       type: "text",
     },
     {
@@ -548,7 +549,7 @@ const Attendence = () => {
           {filterData.length > 0 && (
             <DataGrid
               rows={filterData}
-              getRowId={(row) => row.attendence_id}
+              getRowId={(row) => row._id}
               columns={columns}
               slots={{
                 toolbar: GridToolbar,

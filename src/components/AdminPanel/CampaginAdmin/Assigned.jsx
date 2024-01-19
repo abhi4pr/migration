@@ -242,11 +242,13 @@ export default function Assigned() {
 
         setCommits(data);
       });
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      console.log(data);
-      setAssignToList(data);
-    });
+    axios
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        console.log(data);
+        setAssignToList(data);
+      });
   }, []);
 
   return (

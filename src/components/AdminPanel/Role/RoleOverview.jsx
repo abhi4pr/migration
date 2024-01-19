@@ -19,15 +19,21 @@ const RoleOverView = () => {
   const userID = decodedToken.id;
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get( `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+        )
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
   }, [userID]);
 
   async function getData() {
     try {
-      const response = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_roles");
+      const response = await axios.get(
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_roles"
+      );
       setData(response.data.data);
       setFilterData(response.data.data);
       console.log(response.data.data);
@@ -35,7 +41,6 @@ const RoleOverView = () => {
       console.error("An error occurred:", error);
     }
   }
-  
 
   const columns = [
     {
@@ -90,7 +95,7 @@ const RoleOverView = () => {
                 </button>
               </Link>
             )}
-          {contextData &&
+          {/* {contextData &&
             contextData[4] &&
             contextData[4].delete_flag_value === 1 && (
               <DeleteButton
@@ -98,7 +103,7 @@ const RoleOverView = () => {
                 id={row.role_id}
                 getData={getData}
               />
-            )}
+            )} */}
         </>
       ),
     },

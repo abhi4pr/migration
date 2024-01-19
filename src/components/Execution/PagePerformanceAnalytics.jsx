@@ -46,7 +46,7 @@ export default function PagePerformanceAnalytics() {
 
   const callApi = () => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/page_health_dashboard", {
+      .post("http://34.93.135.33:8080/api/page_health_dashboard", {
         intervalFlag: intervalFlag.value,
       })
       .then((res) => {
@@ -640,7 +640,7 @@ export default function PagePerformanceAnalytics() {
     const startDay = startDateObject.getDate().toString().padStart(2, "0");
     const startFormattedDate = `${startYear}-${startMonth}-${startDay}`;
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/page_health_dashboard", {
+      .post("http://34.93.135.33:8080/api/page_health_dashboard", {
         startDate: startFormattedDate,
         endDate: endFormattedDate,
       })

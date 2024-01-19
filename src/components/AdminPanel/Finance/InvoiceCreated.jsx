@@ -34,13 +34,19 @@ const InvoiceCreated = () => {
   };
 
   function getData() {
-    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_php_pending_invoice_data_in_node").then((res)=>{
-      console.log('data save in local success')
-    })
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_php_pending_invoice_data").then((res) => {
-      setData(res.data.data);
-      setFilterData(res.data.data);
-    });
+    axios
+      .post(
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_php_pending_invoice_data_in_node"
+      )
+      .then((res) => {
+        console.log("data save in local success");
+      });
+    axios
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_php_pending_invoice_data")
+      .then((res) => {
+        setData(res.data.data);
+        setFilterData(res.data.data);
+      });
   }
 
   useEffect(() => {

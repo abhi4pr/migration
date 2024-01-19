@@ -4,8 +4,9 @@ import { Navigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import TextEditor from "../../ReusableComponents/TextEditor";
 
 const EditEmailTemp = () => {
   const { id } = useParams();
@@ -21,39 +22,41 @@ const EditEmailTemp = () => {
   const loginUserId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_email_content/${id}`).then((res) => {
-      const fetchedData = res.data.data;
-      setEmailFor(fetchedData.email_for);
-      setEmailForId(fetchedData.email_for_id);
-      setEmailContent(fetchedData.email_content);
-      setEmailSub(fetchedData.email_sub);
-      setRemarks(fetchedData.remarks);
-    });
-  }, []);  
+    axios
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_email_content/${id}`)
+      .then((res) => {
+        const fetchedData = res.data.data;
+        setEmailFor(fetchedData.email_for);
+        setEmailForId(fetchedData.email_for_id);
+        setEmailContent(fetchedData.email_content);
+        setEmailSub(fetchedData.email_sub);
+        setRemarks(fetchedData.remarks);
+      });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-                
-      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/update_email_content",{
-        _id: id,
-        email_for: emailFor,
-        email_for_id: emailForId,
-        email_content: emailContent,
-        email_sub: emailSub,
-        remarks: remarks,
-        updated_by: loginUserId
-      });
 
-      toastAlert("Email templated updated");
-      setIsFormSubmitted(true);
+    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/update_email_content", {
+      _id: id,
+      email_for: emailFor,
+      email_for_id: emailForId,
+      email_content: emailContent,
+      email_sub: emailSub,
+      remarks: remarks,
+      updated_by: loginUserId,
+    });
+
+    toastAlert("Email templated updated");
+    setIsFormSubmitted(true);
   };
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/email-template-overview" />;
   }
 
-    return (
-      <>
+  return (
+    <>
       <FormContainer
         mainTitle="Email Template"
         title="Edit Template"
@@ -66,7 +69,6 @@ const EditEmailTemp = () => {
           value={emailFor}
           onChange={(e) => setEmailFor(e.target.value)}
         />
-
         <FieldContainer
           label="Email Template Id"
           type="number"
@@ -75,47 +77,63 @@ const EditEmailTemp = () => {
           required={true}
           onChange={(e) => setEmailForId(e.target.value)}
         />
-
         <FieldContainer
           label="Remarks"
           fieldGrid={6}
           value={remarks}
           required={false}
-          onChange={(e)=> setRemarks(e.target.value)}
+          onChange={(e) => setRemarks(e.target.value)}
         />
-
         <FieldContainer
           label="Email Subject"
           fieldGrid={6}
           required={true}
           value={emailSub}
-          onChange={(e)=> setEmailSub(e.target.value)}
-        /> 
-
-        <ReactQuill 
-          theme="snow" 
-          value={emailContent} 
-          onChange={setEmailContent} 
+          onChange={(e) => setEmailSub(e.target.value)}
+        />
+        {/* <ReactQuill
+          theme="snow"
+          value={emailContent}
+          onChange={setEmailContent}
           modules={{
             toolbar: [
-              [{ 'header': [1, 2, false] }],
-              ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-              [{'color': []}, {'background': []}], 
-              [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-              ['link', 'image'],
-              ['clean']
+              [{ header: [1, 2, false] }],
+              ["bold", "italic", "underline", "strike", "blockquote"],
+              [{ color: [] }, { background: [] }],
+              [
+                { list: "ordered" },
+                { list: "bullet" },
+                { indent: "-1" },
+                { indent: "+1" },
+              ],
+              ["link", "image"],
+              ["clean"],
             ],
           }}
           formats={[
-            'header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent',
-            'link', 'image', 'color', 'background' 
+            "header",
+            "font",
+            "size",
+            "bold",
+            "italic",
+            "underline",
+            "strike",
+            "blockquote",
+            "list",
+            "bullet",
+            "indent",
+            "link",
+            "image",
+            "color",
+            "background",
           ]}
-          style={{marginBottom:"5%"}}
-        />
+          style={{ marginBottom: "5%" }}
+        /> */}
 
+        <TextEditor value={emailContent} onChange={setEmailContent} />
       </FormContainer>
-      </>  
-    );
+    </>
+  );
 };
 
 export default EditEmailTemp;

@@ -123,10 +123,12 @@ export default function Pending() {
 
         setCommits(data);
       });
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((response) => {
-      const data = response.data.data.filter((e) => e.dept_id == 13);
-      setAssignToList(data);
-    });
+    axios
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
+      .then((response) => {
+        const data = response.data.data.filter((e) => e.dept_id == 13);
+        setAssignToList(data);
+      });
   }, []);
 
   useEffect(() => {

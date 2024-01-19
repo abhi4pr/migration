@@ -122,11 +122,11 @@ export default function ExeUPdate() {
   const [ageImgSrc, setAgeImgSrc] = useState(null);
   const [reachImgSrc, setReachImgSrc] = useState(null);
   const [reachImg, setReachImg] = useState(null);
-  const [storyViewDate, setStoryViewDate] = useState('');
+  const [storyViewDate, setStoryViewDate] = useState("");
 
   const navigate = useNavigate();
   const saveStats = async (e) => {
-    console.log(storyViewDate)
+    console.log(storyViewDate);
     e.preventDefault();
 
     const formData = new FormData();
@@ -180,14 +180,18 @@ export default function ExeUPdate() {
     formData.append("percentage_country5_name", country5Percentage);
     formData.append("country_image_upload", countryImg);
     formData.append("user_id", userID);
-    formData.append("story_view_date", storyViewDate );
+    formData.append("story_view_date", storyViewDate);
 
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_exe_ip_count_history`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .put(
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/edit_exe_ip_count_history`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then(() => {
         navigate("/admin/exeexecution/all");
         toastAlert("Form Submitted success");
@@ -225,7 +229,11 @@ export default function ExeUPdate() {
         setEndDate(data.end_date);
         setEndDate(dayjs(new Date(data.end_date?.split("T")[0])));
         setStartDate(dayjs(new Date(data.start_date?.split("T")[0])));
-        setStoryViewDate(data.story_view_date!=null?dayjs(new Date(data.story_view_date?.split("T")[0])):"");
+        setStoryViewDate(
+          data.story_view_date != null
+            ? dayjs(new Date(data.story_view_date?.split("T")[0]))
+            : ""
+        );
         setEngagement(data.engagement);
         // setEngagementImg(data.engagement_upload_image_url);
         setEngagementImgSrc(data.engagement_upload_image_url);
@@ -280,10 +288,10 @@ export default function ExeUPdate() {
 
   useEffect(() => {
     setCountryList(Country.getAllCountries());
-    axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cities').then((res) => {
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cities").then((res) => {
       console.log(res.data.data);
       setCityList(res.data.data.map((city) => city.city_name));
-  });
+    });
     // setCityList([
     //   ...new Set(City.getCitiesOfCountry("IN").map((city) => city.name)),
     // ]);
@@ -466,9 +474,9 @@ export default function ExeUPdate() {
             />
           )}
         </div>
-        <h4  className="h3 text-center">Followers Bifurcation</h4>
-        <div className="row ">
-          <div className="card">
+        <h4 className="h3 text-center">Followers Bifurcation</h4>
+        <div className="row">
+          <div className="card col-md-12 col-lg-3">
             <div className="card-body">
               <div className="col-md-3 col-lg-12  my-2">
                 <TextField
@@ -712,17 +720,17 @@ export default function ExeUPdate() {
                   />
                 </Button>
                 <div className="my-2 d-block ">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    className="my-1"
-                    label="Story View Date"
-                    format="DD/MM/YY"
-                    value={storyViewDate}
-                    onChange={(newValue) => {
-                      handleStoryViewDateChange(newValue);
-                    }}
-                  />
-                </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      className="my-1"
+                      label="Story View Date"
+                      format="DD/MM/YY"
+                      value={storyViewDate}
+                      onChange={(newValue) => {
+                        handleStoryViewDateChange(newValue);
+                      }}
+                    />
+                  </LocalizationProvider>
                 </div>
                 <div>
                   {storyViewImgSrc && (
@@ -777,7 +785,7 @@ export default function ExeUPdate() {
             </div>
           </div>
 
-          <div className="card">
+          <div className="card col-md-12 col-lg-3">
             <div className="card-body">
               <label className="mt-3 h6">City</label>
               <Autocomplete
@@ -976,7 +984,7 @@ export default function ExeUPdate() {
             </div>
           </div>
 
-          <div className="card">
+          <div className="card col-md-12 col-lg-3">
             <div className="card-body">
               <label className="mt-3 h6">Country</label>
               <div>
@@ -1026,7 +1034,7 @@ export default function ExeUPdate() {
                   )}
                 />
                 <TextField
-                  style={{ width: "10%" }}
+                  // style={{ width: "10%" }}
                   className="mb-2"
                   value={country2Percentage}
                   onChange={(e) => {
@@ -1058,7 +1066,7 @@ export default function ExeUPdate() {
                   )}
                 />
                 <TextField
-                  style={{ width: "10%" }}
+                  // style={{ width: "10%" }}
                   className="mb-2"
                   type="number"
                   value={country3Percentage}
@@ -1185,7 +1193,7 @@ export default function ExeUPdate() {
             </div>
           </div>
 
-          <div>
+          <div className="col-md-12 col-lg-3">
             <div className="card">
               <div className="card-body">
                 <label className="h6 d-block">Age Group</label>

@@ -18,21 +18,26 @@ const ResponsibilityUpdate = () => {
   const userId = decodedToken.id;
 
   useEffect(() => {
-    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_responsibility/${id}`).then((res) => {
-      const fetchedData = res.data;
-      setResponsibility(fetchedData.respo_name);
-      setDescription(fetchedData.description);
-    });
+    axios
+      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_responsibility/${id}`)
+      .then((res) => {
+        const fetchedData = res.data;
+        setResponsibility(fetchedData.respo_name);
+        setDescription(fetchedData.description);
+      });
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_responsibility/${id}`, {
-        respo_name: responsibility,
-        description: description,
-        Last_updated_by: userId,
-      });
+      await axios.put(
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/edit_responsibility/${id}`,
+        {
+          respo_name: responsibility,
+          description: description,
+          Last_updated_by: userId,
+        }
+      );
       toastAlert("Form submitted");
       setIsFormSubmitted(true);
     } catch (error) {
@@ -40,7 +45,6 @@ const ResponsibilityUpdate = () => {
       toastAlert("Form submission failed");
     }
   };
-  
 
   if (isFormSubmitted) {
     return <Navigate to="/admin/responsibility-overview" />;

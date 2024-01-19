@@ -53,11 +53,15 @@ const ProductMaster = () => {
       };
 
       try {
-        await axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/add_proppost`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        await axios.post(
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/add_proppost`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         console.log("Request successfully sent for", inputField);
       } catch (error) {

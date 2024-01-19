@@ -40,7 +40,9 @@ const UserProducts = ({ handleCartAddition, cartItems, handleSitting }) => {
   // Single User Product Data
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_orderreqshistory/${userId}`)
+      .get(
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_orderreqshistory/${userId}`
+      )
       .then((res) => {
         setOldUserProduct(res.data);
       });

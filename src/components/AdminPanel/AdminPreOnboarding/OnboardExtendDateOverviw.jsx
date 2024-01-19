@@ -18,15 +18,19 @@ const OnboardExtendDateOverview = () => {
 
   useEffect(() => {
     if (userID && contextData.length === 0) {
-      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/userauth/${userID}`).then((res) => {
-        setDatas(res.data);
-      });
+      axios
+        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/userauth/${userID}`)
+        .then((res) => {
+          setDatas(res.data);
+        });
     }
   }, []);
 
   async function getData() {
     try {
-      const response = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users");
+      const response = await axios.get(
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
+      );
       const data = response.data.data.filter(
         (item) => item.joining_date_extend_status == "Requested"
       );
@@ -113,7 +117,6 @@ const OnboardExtendDateOverview = () => {
       name: "Action",
       cell: (row) => (
         <>
-          
           <button
             title="Approve"
             className="btn btn-outline-primary btn-md user-button"
@@ -123,7 +126,7 @@ const OnboardExtendDateOverview = () => {
           >
             Approve
           </button>
-          
+
           <button
             title="Reject"
             className="btn btn-outline-primary btn-md user-button"

@@ -13,10 +13,12 @@ const LogoCategoryOverview = () => {
   // const [contextData, setDatas] = useState([]);
 
   async function getData() {
-    await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_logo_categories").then((res) => {
-      setData(res.data);
-      setFilterData(res.data);
-    });
+    await axios
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_logo_categories")
+      .then((res) => {
+        setData(res.data);
+        setFilterData(res.data);
+      });
   }
   useEffect(() => {
     getData();

@@ -43,7 +43,7 @@ export default function PagePerformanceDashboard() {
 
   const callApi = () => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/page_health_dashboard", {
+      .post("http://34.93.135.33:8080/api/page_health_dashboard", {
         intervalFlag: intervalFlag.value,
       })
       .then((res) => {

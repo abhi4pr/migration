@@ -183,10 +183,13 @@ import AddEmailTemp from "./User/AddEmailTemp";
 import EmailTempOverview from "./User/EmailTempOverview";
 import EditEmailTemp from "./User/EditEmailTemp";
 import ManagerDashboard from "./RegisterCampaign/ManagerDashboard/ManagerDashboard";
+
 import ManagerCampaign from "./RegisterCampaign/ManagerCampaignDashboard/ManagerCampaign";
 import AssetVisibleToTagedPerosn from "../Sim/AssetVisibleToTagedPerson/AssetVisibleToTagedPerosn";
 import AssetSingleUser from "../Sim/AssetSingeUser/AssetSingleUser";
 import AssetVisibleToHr from "../Sim/AssetVisibleToHr/AssetVisibleToHr";
+import AssetManager from "../Sim/AssetManager/AssetManager";
+
 import WFHAllSalary from "./WFH/WFHAllSalary";
 import PendingPaymentRequest from "./Finance/PendingPaymentRequest";
 import PaymentDone from "./Finance/PaymentDone";
@@ -199,6 +202,7 @@ import ViewEditDigiSignature from "./WFH/DigitalSignature/ViewEditDigiSignature"
 import PlancreationNew from "./RegisterCampaign/PlancreationNew";
 import PhasecreationNew from "./RegisterCampaign/PhasecreationNew";
 import DesiDeptAuth from "../AdminPanel/Designation/DesiDeptAuth";
+import PlanDashboard from "./RegisterCampaign/PlanDashboard/PlanDashboard";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -492,6 +496,7 @@ const Admin = () => {
                       path="/asset-visible-to-taged-person"
                       element={<AssetVisibleToTagedPerosn />}
                     />
+                    <Route path="/asset-manager" element={<AssetManager />} />
                     <Route
                       path="/asset-single-user"
                       element={<AssetSingleUser />}
@@ -744,6 +749,11 @@ const Admin = () => {
 
                   {/* Phase Dashboard here  */}
                   <Route path="/phase-dashboard" element={<PhaseDashboard />} />
+                  <Route
+                    path="/plan-dashboard/:id"
+                    element={<PlanDashboard />}
+                  />
+
                   <Route
                     path="/replacement-dashboard"
                     element={<ReplacementDashobard />}

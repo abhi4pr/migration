@@ -21,20 +21,22 @@ const BrandOverview = () => {
   const [employeeData, setEmployeeData] = useState([]);
 
   async function getData() {
-    await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_logo_data").then((res) => {
-      setCountData(res.data);
-      const responseData = res.data;
-      const uniqueBrandName = new Set();
-      const filteredData = responseData.filter((item) => {
-        if (!uniqueBrandName.has(item.brand_name)) {
-          uniqueBrandName.add(item.brand_name);
-          return true;
-        }
-        return false;
+    await axios
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_logo_data")
+      .then((res) => {
+        setCountData(res.data);
+        const responseData = res.data;
+        const uniqueBrandName = new Set();
+        const filteredData = responseData.filter((item) => {
+          if (!uniqueBrandName.has(item.brand_name)) {
+            uniqueBrandName.add(item.brand_name);
+            return true;
+          }
+          return false;
+        });
+        setData(filteredData);
+        setBackupData(filteredData);
       });
-      setData(filteredData);
-      setBackupData(filteredData);
-    });
 
     axios
       .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_logo_categories")
@@ -71,7 +73,9 @@ const BrandOverview = () => {
 
   const deleteBrand = async (brand_name) => {
     await axios
-      .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/delete_logo_based_brand/${brand_name}`)
+      .delete(
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_logo_based_brand/${brand_name}`
+      )
       .then((res) => {
         getData();
       })

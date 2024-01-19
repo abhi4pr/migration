@@ -30,8 +30,10 @@ const OfficeMastOverview = () => {
 
   async function getData() {
     try {
-      const res = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms");
-      
+      const res = await axios.get(
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms"
+      );
+
       setData(res.data.data);
       setFilterData(res.data.data);
     } catch (error) {

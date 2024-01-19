@@ -31,22 +31,22 @@ const AppProvider = ({ children }) => {
     axios
       .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
       .then((res) => {
-        setCategoryData(res.data.data.asset_categories);
+        setCategoryData(res?.data.data.asset_categories);
       });
   };
   async function getBrandData() {
     const res = await axios.get(
       "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_brands"
     );
-    setBrandDataContext(res.data.data);
+    setBrandDataContext(res?.data.data);
   }
   async function getAssetData() {
     const res = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sims");
-    setAssetDataContext(res.data.data);
+    setAssetDataContext(res?.data.data);
   }
   async function getUserAPIData() {
     axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
-      setUsersContextData(res.data.data);
+      setUsersContextData(res?.data.data);
     });
   }
 

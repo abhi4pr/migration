@@ -153,11 +153,15 @@ const UserView = () => {
     formData.append("onboard_status", fetchedAlreadyData.onboard_status);
 
     try {
-      await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_usernew", fromData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axios.put(
+        "https://api-dot-react-migration-project.el.r.appspot.com/api/update_usernew",
+        fromData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
     } catch (error) {
       console.log("Failed on Submit form", error);
     }
