@@ -6,7 +6,7 @@ const AgencyOverview = () => {
 
     const [agencyData,setAgencyData]=useState([])
     const getAgencyInfo=async ()=>{
-        const data=await axios.get('http://192.168.29.114:3000/api/agency')
+        const data=await axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/agency')
         setAgencyData(data.data.result)
     }
 

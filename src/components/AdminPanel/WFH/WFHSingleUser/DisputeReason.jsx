@@ -7,7 +7,7 @@ import DateISOtoNormal from "../../../../utils/DateISOtoNormal";
 const DisputeReason = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
   const { toastAlert } = useGlobalContext();
   const [disputeReason, setDisputeReason] = useState("");
-  const { attendence_id } = data;
+  const { attendence_id, month, year } = data;
 
   const d = new Date();
   const currentDate = DateISOtoNormal(d.toISOString());
@@ -17,6 +17,8 @@ const DisputeReason = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
     try {
       await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_attendance", {
         attendence_id: attendence_id,
+        month: month,
+        year: year,
         attendence_status_flow: "Disputed",
         disputed_reason: disputeReason,
         disputed_date: currentDate,

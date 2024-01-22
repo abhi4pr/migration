@@ -285,15 +285,18 @@ const Attendence = () => {
       return null;
     } else {
       const updatedRow = { ...newRow, isNew: false };
+      // console.log(updatedRow, "update row");
       axios
         .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_attendance", {
+          attendence_id: updatedRow.attendence_id,
           dept: updatedRow.dept,
           user_id: updatedRow.user_id,
+          attendence_id: updatedRow.attendence_id,
           noOfabsent: updatedRow.noOfabsent,
           salary_deduction: Number(updatedRow.salary_deduction),
           month: selectedMonth,
           year: selectedYear,
-          bonus: updatedRow.bonus,
+          bonus: Number(updatedRow.bonus),
           remark: remark,
           created_by: userID,
         })

@@ -338,7 +338,7 @@ const PreOnboardingUserMaster = () => {
 
   const fetchCOCData = async () => {
     try {
-      const response = await axios.get("http://192.168.29.150:3000/api/newcoc");
+      const response = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/newcoc");
       const data = response.data.data[1].coc_content;
       setCocData(data);
     } catch (error) {

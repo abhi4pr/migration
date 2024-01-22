@@ -6,7 +6,7 @@ const GoalOverview = () => {
 
     const [goalData,setGoalData]=useState([])
     const getGoalInfo=async ()=>{
-        const data=await axios.get('http://192.168.29.114:3000/api/goal')
+        const data=await axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/goal')
         setGoalData(data.data.result)
     }
 

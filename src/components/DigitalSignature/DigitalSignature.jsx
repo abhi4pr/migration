@@ -24,7 +24,20 @@ const DigitalSignature = ({
       if (blob) {
         const formData = new FormData();
         formData.append("user_id", userID);
-        formData.append("digital_signature_image", blob);
+
+        // Get current date and time in ISO format
+        const currentDateTime = new Date().toISOString();
+
+        // Create a file name with the current date and time
+        const fileName = `digital_signature_${currentDateTime}.png`;
+
+        // Create a File object from the blob with the new file name
+        const file = new File([blob], fileName, {
+          type: "image/png",
+        });
+
+        formData.append("digital_signature_image", file);
+
         {
           offetLetterAcceptanceDate &&
             formData.append(

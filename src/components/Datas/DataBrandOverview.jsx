@@ -90,7 +90,7 @@ const DataBrandOverview = () => {
 
   async function getData() {
     await axios
-      .get("http://192.168.29.150:3000/api/get_all_datas")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_datas")
       .then((res) => {
         setCountData(res.data);
         const responseData = res.data;
@@ -112,26 +112,26 @@ const DataBrandOverview = () => {
       });
 
     axios
-      .get("http://192.168.29.150:3000/api/get_all_data_categorys")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_categorys")
       .then((res) => setCategoryData(res.data.simcWithSubCategoryCount));
 
     axios
-      .get("http://192.168.29.150:3000/api/get_all_data_brands")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_brands")
       .then((res) => setBrandData(res.data));
 
     axios
-      .get("http://192.168.29.150:3000/api/distinct_created_by")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/distinct_created_by")
       .then((res) => setEmployeeData(res.data.data));
     axios
-      .get("http://192.168.29.150:3000/api/distinct_designed_by")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/distinct_designed_by")
       .then((res) => setDesignedData(res.data.data));
 
     axios
-      .get("http://192.168.29.150:3000/api/get_all_data_platforms")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_platforms")
       .then((res) => setPlatformData(res.data));
     axios
 
-      .get("http://192.168.29.150:3000/api/get_all_data_content_types")
+      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_content_types")
       .then((res) => setContentData(res.data));
   }
 
@@ -181,7 +181,7 @@ const DataBrandOverview = () => {
   const deleteBrand = async (brand_name) => {
     await axios
       .delete(
-        `http://192.168.29.150:3000/api/delete_data_based_data/${brand_name}`
+        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_data_based_data/${brand_name}`
       )
       .then((res) => {
         getData();

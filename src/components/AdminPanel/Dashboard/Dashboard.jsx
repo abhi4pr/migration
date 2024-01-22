@@ -65,8 +65,8 @@ function Dashboard() {
     axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_logo_data").then((res) => {
       getLogoBrandData(res.data);
     });
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_datas").then((res) => {
-      setAllData(res.data);
+    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/total_count_data").then((res) => {
+      setAllData(res.data.distinctDataNamesCount);
     });
     axios
       .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_instapages")
@@ -84,7 +84,7 @@ function Dashboard() {
   const AllSimData = allsimData.length;
   const AllLogoBrandData = logoBrandData.length;
   const AllIntellectualProperty = IntellectualProperty.length;
-  const AllData = allData.length;
+  const AllData = allData;
   return (
     <>
       <div>

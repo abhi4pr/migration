@@ -55,7 +55,7 @@ const CocMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://192.168.29.150:3000/api/newcoc", {
+      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/newcoc", {
         coc_content: cocContent,
         created_by: loginUserId,
       });
