@@ -17,8 +17,11 @@ const InvoicePdfGenerator = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
 
     e.preventDefault();
 
+    console.log("data for attendance ", data);
     await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_attendance`, {
       attendence_id: data.attendence_id,
+      month: data.month,
+      year: data.year,
       attendence_status_flow: "Pending for invoice verification",
     });
 

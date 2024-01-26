@@ -75,13 +75,13 @@ const WFHSingleUser = () => {
     axios
       .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${userID}`)
       .then((res) => {
-        const getDigitalSignImage = res.data.digital_signature_image;
-  
+        const getDigitalSignImage = res.data.digital_signature_image_url;
+
         if (!getDigitalSignImage) {
           setIsModalOpen(true);
         } else {
           const imageUrl = "";
-  
+
           if (getDigitalSignImage.startsWith(imageUrl)) {
             const imageName = getDigitalSignImage.substring(imageUrl.length);
             if (imageName.trim() === "") {

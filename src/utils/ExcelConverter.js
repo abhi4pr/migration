@@ -9,8 +9,10 @@ const exportToCSV = (apiData, fileName) => {
   const totalPages = apiData.length;
 
   // Map your data to the format you want in the Excel
-  const formattedData = apiData.map(data => ({
+  const formattedData = apiData.map((data,index)=> ({
+    sno:index+1,
     PageName: data.page_name,
+    link:data.page_link,
     Category: data.cat_name,
     Follower: data.follower_count,
     Post: data.postPerPage,
@@ -30,6 +32,7 @@ const exportToCSV = (apiData, fileName) => {
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
 
+  
   // Buffer
   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
   const data = new Blob([excelBuffer], {

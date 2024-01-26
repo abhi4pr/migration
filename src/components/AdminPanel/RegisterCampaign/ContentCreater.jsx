@@ -20,24 +20,25 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useGlobalContext } from "../../../Context/Context";
+import { toolbarStyles } from "./CampaignCommitment";
+
 export default function CampaignCommitment() {
+  const { toastAlert, toastError } = useGlobalContext();
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editData, setEditData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
-  // const [errorMessage, setErrorMessage] = useState("");
+  const [reload, setReload] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
     useState(false);
   const [itemToDeleteId, setItemToDeleteId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-
   const [isPutOpen, setIsPutOpen] = useState(false);
   const [postData, setPostData] = useState({
-    // cmtId: "",
     cmtName: "",
-    // cmtValue: "",
   });
 
   function EditToolbar() {
@@ -45,14 +46,13 @@ export default function CampaignCommitment() {
       setIsModalOpen(true);
     };
     return (
-      <GridToolbarContainer>
+      <GridToolbarContainer style={toolbarStyles}>
         <Button
-          color="primary"
+          color="error"
           variant="outlined"
-          startIcon={<AddIcon />}
           onClick={handleClick}
         >
-          Add record
+         create commitment
         </Button>
       </GridToolbarContainer>
     );
@@ -60,10 +60,10 @@ export default function CampaignCommitment() {
   //post data =======>
   const handleChange = (event) => {
     const { name, value } = event.target;
-
-    if (name === "cmtName" && !value) {
+    if (name === "") {
       setErrorMessage("Please enter a valid name");
-      return;
+    } else if (value.trim() === "") {
+      setErrorMessage("Enter Commitment name");
     } else {
       setErrorMessage("");
     }
@@ -76,22 +76,27 @@ export default function CampaignCommitment() {
   const handleSave = (e) => {
     e.preventDefault();
     if (!postData.cmtName) {
-      setErrorMessage("* fields are required.");
+      setErrorMessage("* fields are required");
       return;
     }
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/commitment", postData)
+      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_commitment", postData)
       .then((response) => {
         setIsModalOpen(false);
-        getData();
-        console.log("Data saved:", response.data);
+        setPostData("");
+        setReload(!reload);
+        // console.log("Data saved:", response.data);
+        if (response.data.success === false) {
+          toastError(response.data.message);
+        } else {
+          toastAlert("Update successfully");
+        }
       })
       .catch((error) => {
         console.error("Error saving data:", error);
+        toastError(" Add properly");
       });
     setIsModalOpen(false);
-    getData();
-    // setErrorMessage(" ")
   };
 
   // get api ========>
@@ -112,13 +117,14 @@ export default function CampaignCommitment() {
             return true;
           }
         });
-        setRows(uniqueRows);
+        const sortedData = uniqueRows.sort((a, b) => b.cmtId - a.cmtId);
+        setRows(sortedData);
       });
   };
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [reload]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -130,14 +136,18 @@ export default function CampaignCommitment() {
   const handlePutData = () => {
     if (editData.cmtName !== "") {
       axios
-        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/commitment`, {
+        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_commitment`, {
           cmtId: editData.cmtId,
           cmtName: editData.cmtName,
         })
         .then((res) => {
-          console.log(res.data);
+          if (res.data.success === false) {
+            toastError(res.data.message);
+          } else {
+            toastAlert("Update successfully");
+          }
           setIsPutOpen(true);
-          getData();
+          setReload(!reload);
         })
         .catch((error) => {
           console.error("Error updating data:", error);
@@ -147,10 +157,9 @@ export default function CampaignCommitment() {
         });
       console.log("put data");
     } else {
-      console.log("cmtName is empty");
+      toastError("Commitment name fill");
     }
   };
-
   const handleEditClick = (id, row) => () => {
     setEditData(row);
     console.log(row);
@@ -164,9 +173,11 @@ export default function CampaignCommitment() {
   const handleConfirmDelete = () => {
     if (itemToDeleteId) {
       axios
-        .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/commitment/${itemToDeleteId}`)
+        .delete(
+          `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_commitment/${itemToDeleteId}`
+        )
         .then(() => {
-          getData();
+          setReload(!reload);
           console.log("Data deleted successfully");
         })
         .catch((error) => {
@@ -240,20 +251,12 @@ export default function CampaignCommitment() {
     setFilteredRows(filtered);
   };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
   useEffect(() => {
     filterRows();
   }, [searchInput, rows]);
 
   return (
     <>
-      {/* {errorMessage && (
-  <div style={{ color: "red", marginBottom: "10px" }}>{errorMessage}</div>
-)} */}
-
       <Paper>
         <div className="form-heading">
           <div className="form_heading_title">
@@ -270,18 +273,7 @@ export default function CampaignCommitment() {
         style={{ marginBottom: "10px" }}
       />
 
-      <Box
-        sx={{
-          height: 500,
-          width: "100%",
-          "& .actions": {
-            color: "text.secondary",
-          },
-          "& .textPrimary": {
-            color: "text.primary",
-          },
-        }}
-      >
+      <Box>
         <DataGrid
           rows={filteredRows}
           columns={columns}
@@ -305,12 +297,9 @@ export default function CampaignCommitment() {
         <DialogTitle>Add Record</DialogTitle>
         <DialogContent>
           <Box
-            component="form"
             sx={{
               "& .MuiTextField-root": { m: 1, width: "25ch" },
             }}
-            noValidate
-            autoComplete="off"
           >
             <div>
               <>

@@ -7,19 +7,20 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from 'react-router-dom';
+import { useGlobalContext } from "../../../../Context/Context";
 let options = [];
 let plateformvar = [];
 
 const Experties = () => {
+  const { toastAlert, toastError } = useGlobalContext();
+  const navigate = useNavigate();
   const [allPageData, setAllPageData] = useState([]);
   const [getUserData, setGetUserData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedFollower, setSelectedFollower] = useState([]);
   const [pageHealth, setPageHealth] = useState([]);
   const [platform, setPlatfrom] = useState([]);
-  const [expertdata, setExpertData] = useState([]);
-
   const [expertiesusername, setExpertiesUserName] = useState("");
 
   const Follower_Count = [
@@ -30,28 +31,6 @@ const Experties = () => {
     ">5M ",
   ];
   const page_health = ["Active", "nonActive"];
-
-  //   console.log(expertiesusername.user_id, "res");
-  //   const getExperties = () => {
-  //     axios
-  //       .get("https://api-dot-react-migration-project.el.r.appspot.com/api/expertise")
-  //       .then((res) => {
-  //         console.log(res.data.data.user_id, "expert");
-  //         const matchdata = res.data.data.map(
-  //           item.user_id === expertiesusername.user_id
-  //         );
-  //         console.log(matchdata, "yha match hia");
-  //         if (matchdata) {
-  //           alert("User ID matches!");
-  //         } else {
-  //           console.log("Not match");
-  //         }
-  //         console.log(matchdata, "experties");
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data:", error);
-  //       });
-  //   };
 
   const getPageData = async () => {
     const pageData = await axios.get(
@@ -65,25 +44,12 @@ const Experties = () => {
       "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
     );
     setGetUserData(alluser.data.data);
-    // const expert = await axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/expertise");
-    // console.log(expert.data.data);
-    // const difference = alluser?.data?.data?.filter(
-    //   (obj1) =>
-    //     !expert?.data?.data.some((obj2) => obj2.user_id === obj1.user_id)
-    // );
-    // console.log(difference, "diffrence here");
   };
-  // const getExpertData = () => {
-  //   const expertdata = axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/expertise");
-  //   const expert = expertdata.data.data;
-  //   setExpertData(expert);
-  //   console.log(expert, "all expet data");
-  // };
+
 
   useEffect(() => {
     getPageData();
     getAllUsers();
-    // getExpertData();
   }, []);
 
   const categorySet = () => {
@@ -135,14 +101,20 @@ const Experties = () => {
           },
         }
       );
-    } catch {}
+      toastAlert("Experties Created Successfully")
+      navigate('/admin/experties-overview');
+    } catch (error) {
+      if(error.message){
+        toastError("Fill * Required Data ")
+      }
+    }
   };
 
   return (
     <>
       <div>
         <div className="form_heading_title">
-          <h2 className="form-heading">Experties</h2>
+          <h2 className="form-heading">Expert</h2>
         </div>
       </div>
 
@@ -166,7 +138,7 @@ const Experties = () => {
                 }
               }}
               renderInput={(params) => (
-                <TextField {...params} label="User Name" />
+                <TextField {...params} label="User Name *" />
               )}
             />
           </div>
@@ -176,7 +148,7 @@ const Experties = () => {
               id="combo-box-demo"
               options={options}
               renderInput={(params) => (
-                <TextField {...params} label="Category" />
+                <TextField {...params} label="Category *" />
               )}
               onChange={categoryChangeHandler}
             />
@@ -187,7 +159,7 @@ const Experties = () => {
               id="combo-box-demo"
               options={plateformvar}
               renderInput={(params) => (
-                <TextField {...params} label="Platform" />
+                <TextField {...params} label="Platform *" />
               )}
               onChange={plateformHandler}
             />

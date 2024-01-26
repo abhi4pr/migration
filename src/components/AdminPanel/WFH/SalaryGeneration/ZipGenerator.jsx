@@ -19,7 +19,7 @@ export const generatePDF = async (rowData) => {
     return null;
   }
 
-  const signatureImageUrl = `https://api-dot-react-migration-project.el.r.appspot.com/uploads/${rowData?.digital_signature_image}`;
+  const signatureImageUrl = rowData?.digital_signature_image_url;
 
   const dataWithImage = {
     ...rowData,
