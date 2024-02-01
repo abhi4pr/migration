@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import logo from "../../../assets/img/logo/logo-icon.png";
 import imageTest1 from "../../../assets/img/product/Avtrar1.png";
+import {baseUrl} from '../../../utils/config'
 
 const UserNav = () => {
   const location = window.location.pathname;
@@ -21,7 +22,7 @@ const UserNav = () => {
   const [loginUserData, setLoginUserData] = useState([]);
   useEffect(() => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/login_user_data", {
+      .post(baseUrl+"login_user_data", {
         user_id: loginUserId,
       })
       .then((res) => setLoginUserData(res.data));

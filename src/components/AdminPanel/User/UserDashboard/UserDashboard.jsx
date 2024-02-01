@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdOutlineCategory } from "react-icons/md";
 import { Link } from "react-router-dom";
+import {baseUrl} from '../../../../utils/config'
 
 const UserDashboard = () => {
   console.log("Dashboard Loaded");
@@ -9,11 +10,11 @@ const UserDashboard = () => {
   const [departmentData, setDepartmentData] = useState([]);
 
   useEffect(() => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
+    axios.get(baseUrl+"get_all_users").then((res) => {
       setUserData(res.data.data);
     });
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import {baseUrl} from '../../../utils/config'
 
 const TransferReq = () => {
   const [search, setSearch] = useState("");
@@ -8,7 +9,7 @@ const TransferReq = () => {
   const [filterdata, setFilterData] = useState([]);
 
   function getData() {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_transreq").then((res) => {
+    axios.get(baseUrl+"get_all_transreq").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

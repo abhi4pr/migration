@@ -7,6 +7,7 @@ import Executed from "./Executed";
 import Verified from "./Verified";
 import Rejected from "./Rejected";
 import { useParams } from "react-router-dom";
+import { baseUrl } from "../../../../utils/config";
 
 const ManagerDashboard = () => {
   const param = useParams();
@@ -21,7 +22,7 @@ const ManagerDashboard = () => {
   const Assigndata = async () => {
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/campaign/${Cid}`
+        `${baseUrl}`+`assignment/campaign/${Cid}`
       );
       
     

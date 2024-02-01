@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { useGlobalContext } from "../../../../Context/Context";
 import FieldContainer from "../../FieldContainer";
 import FormContainer from "../../FormContainer";
+import {baseUrl} from '../../../../utils/config'
 
 const BillingMast = () => {
   const { toastAlert } = useGlobalContext();
@@ -20,10 +21,10 @@ const BillingMast = () => {
     async function fetchData() {
       try {
         const assignedDepartmentResponse = await axios.get(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_billingheaders"
+          baseUrl+"get_all_billingheaders"
         );
         const wfhDepartmentsResponse = await axios.get(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/dept_with_wfh"
+          baseUrl+"dept_with_wfh"
         );
 
         const assignedDepartments = assignedDepartmentResponse.data.result;
@@ -68,7 +69,7 @@ const BillingMast = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_billingheader", {
+      .post(baseUrl+"add_billingheader", {
         billing_header_name: bilingName,
         dept_id: department,
       })

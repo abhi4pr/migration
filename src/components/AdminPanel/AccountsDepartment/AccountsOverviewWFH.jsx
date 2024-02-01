@@ -12,6 +12,7 @@ import MyTemplate5 from "../WFH/SalaryGeneration/Template5";
 
 import { generatePDF } from "../WFH/SalaryGeneration/pdfGenerator";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 const AccountsOverviewWFH = () => {
   const { toastAlert } = useGlobalContext();
@@ -33,7 +34,7 @@ const AccountsOverviewWFH = () => {
 
   const getData = async () => {
     try {
-      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_finances`).then((res) => {
+      axios.get(`${baseUrl}`+`get_finances`).then((res) => {
         const response = res.data;
         setData(response);
         setFilterData(
@@ -80,7 +81,7 @@ const AccountsOverviewWFH = () => {
     formData.append("attendence_id", rowData.attendence_id);
 
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_finance`, formData, {
+      .put(`${baseUrl}`+`edit_finance`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

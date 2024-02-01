@@ -3,6 +3,7 @@ import axios from "axios";
 import DataTable from "react-data-table-component";
 import FormContainer from "../../FormContainer";
 import { useParams } from "react-router-dom";
+import {baseUrl} from '../../../../utils/config'
 
 const UserWiseDashboard = () => {
   const [search, setSearch] = useState("");
@@ -13,7 +14,7 @@ const UserWiseDashboard = () => {
 
   function getData() {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_by_deptid/${id}`)
+      .get(`${baseUrl}`+`get_user_by_deptid/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

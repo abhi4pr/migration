@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormContainer from "../../AdminPanel/FormContainer";
 import FieldContainer from "../../AdminPanel/FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
@@ -7,6 +7,7 @@ import axios from "axios";
 import UserNav from "../../Pantry/UserPanel/UserNav";
 import { Navigate, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import { baseUrl } from "../../../utils/config";
 
 const AssetCategoryMaster = () => {
   const { toastAlert } = useGlobalContext();
@@ -23,30 +24,56 @@ const AssetCategoryMaster = () => {
   const [selfAuditUnit, setSelfAuditUnit] = useState("");
   const [hrselfAuditPeriod, setHrSelfAuditPeriod] = useState("");
   const [hrselfAuditUnit, setHrSelfAuditUnit] = useState("");
-  const Unit = ["Month", "Days", "Year"];
+  const Unit = ["Month(s)", "Day(s)", "Year(s)"];
+  const [categoryData, setCategoryData] = useState([]);
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        baseUrl+"get_all_asset_category"
+      );
+
+      setCategoryData(response.data.data?.asset_categories);
+    } catch (error) {
+      toastAlert("Data not submitted", error.message);
+      return null;
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_asset_category",
-        {
-          category_name: categoryName,
-          description: description,
-          selfAuditPeriod: selfAuditPeriod,
-          selfAuditUnit: selfAuditUnit,
-          hrselfAuditPeriod: hrselfAuditPeriod,
-          hrAuditUnit: hrselfAuditUnit,
-          created_by: loginUserId,
-          last_updated_by: loginUserId,
-        }
+      const isCategoryExist = categoryData.some(
+        (d) => d.category_name === categoryName
       );
-      toastAlert("Data posted successfully!");
-      setCategoryName("");
-      setDescription("");
-      if (response.status == 200) {
-        navigate("/asset-category-overview");
+      if (isCategoryExist) {
+        alert("Category already Exists");
+      } else {
+        const response = await axios.post(
+          baseUrl+"add_asset_category",
+          {
+            category_name: categoryName,
+            description: description,
+            selfAuditPeriod: selfAuditPeriod,
+            selfAuditUnit: selfAuditUnit,
+            hrselfAuditPeriod: hrselfAuditPeriod,
+            hrAuditUnit: hrselfAuditUnit,
+            created_by: loginUserId,
+            last_updated_by: loginUserId,
+          }
+        );
+        toastAlert("Data posted successfully!");
+        setCategoryName("");
+        setDescription("");
+        if (response.status == 200) {
+          navigate("/asset-category-overview");
+        }
+        setIsFormSubmitted(true);
       }
-      setIsFormSubmitted(true);
     } catch (error) {
       toastAlert(error.mesaage);
     }

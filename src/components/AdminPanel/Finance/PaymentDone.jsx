@@ -4,6 +4,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { Button } from '@mui/material';
 import axios from 'axios';
 import ImageView from './ImageView';
+import {baseUrl} from '../../../utils/config'
 
 export default function PaymentDone() {
   const [search, setSearch] = useState("");
@@ -17,7 +18,7 @@ export default function PaymentDone() {
 
   // const callApi = () => {
   //   axios
-  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/phpvendorpaymentrequest")
+  //     .get(baseUrl+"phpvendorpaymentrequest")
   //     .then((res) => {
   //       let filterData = res.data.modifiedData.filter((item) => {
   //         if (item.status == 0) {
@@ -33,7 +34,7 @@ export default function PaymentDone() {
 
   const callApi = () => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/phpvendorpaymentrequest")
+      .get(baseUrl+"phpvendorpaymentrequest")
       .then((res) => {
         console.log(res.data.modifiedData,"node js");
         const x = res.data.modifiedData;

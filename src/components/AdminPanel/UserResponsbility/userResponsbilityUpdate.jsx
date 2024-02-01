@@ -5,6 +5,7 @@ import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import Select from "react-select";
+import {baseUrl} from '../../../utils/config'
 
 const UserResponsbilityUpdate = () => {
   const { toastAlert } = useGlobalContext();
@@ -23,13 +24,13 @@ const UserResponsbilityUpdate = () => {
   const [designation, setDesignation] = useState("");
 
   useEffect(() => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
+    axios.get(baseUrl+"get_all_users").then((res) => {
       getUserData(res.data.data);
     });
   }, []);
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_responsibilitys")
+      .get(baseUrl+"get_all_responsibilitys")
       .then((res) => {
         setResponsibilityData(res.data);
       });
@@ -62,7 +63,7 @@ const UserResponsbilityUpdate = () => {
     for (const element of todos) {
       console.log(userName, "userid");
       axios
-        .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_jobresponsibility`, {
+        .put(`${baseUrl}`+`update_jobresponsibility`, {
           Job_res_id: Number(id),
           user_id: Number(userName),
           job_responsi: element.responsbility,

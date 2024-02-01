@@ -17,6 +17,7 @@ import { Paper, Autocomplete } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 let options = [];
 const PageDetaling = ({
@@ -271,7 +272,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan",
+          baseUrl+"campaignplan",
           newdata
         );
         // console.log(result);
@@ -307,7 +308,7 @@ const PageDetaling = ({
       };
       try {
         const result = await axios.post(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignphase",
+          baseUrl+"campaignphase",
           newdata
         );
         // console.log(result);

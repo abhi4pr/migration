@@ -20,7 +20,7 @@ const FinanceDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/", {
+    await axios.post("https://jarvis.work/api/", {
       display_sequence: displaySeq,
     });
 

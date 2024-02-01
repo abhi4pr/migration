@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import {baseUrl} from '../../../utils/config'
 
 const DeclinedOrder = () => {
   const [search, setSearch] = useState("");
@@ -9,7 +10,7 @@ const DeclinedOrder = () => {
 
   function getData() {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata")
+      .get(baseUrl+"get_all_orderreqdata")
       .then((res) => {
         setData(res.data.data.filter((res) => res.Status === "declined"));
         setFilterData(res.data.data.filter((res) => res.Status === "declined"));

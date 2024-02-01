@@ -4,6 +4,7 @@ import Select from "react-select";
 import "./SalaryDashboard.css";
 import * as XLSX from "xlsx";
 import { Navigate, useParams } from "react-router-dom";
+import {baseUrl} from '../../../../utils/config'
 
 const SalaryDashboard = () => {
   const { id } = useParams();
@@ -51,7 +52,7 @@ const SalaryDashboard = () => {
 
   useEffect(() => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/get_salary_count_by_dept_year", {
+      .post(baseUrl+"get_salary_count_by_dept_year", {
         dept: id,
       })
       .then((res) => {
@@ -60,7 +61,7 @@ const SalaryDashboard = () => {
   }, [id]);
 
   useEffect(() => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_wfh_users").then((res) => {
+    axios.get(baseUrl+"get_all_wfh_users").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -71,14 +72,14 @@ const SalaryDashboard = () => {
   }, [department]);
 
   useEffect(() => {
-    axios.get(" https://api-dot-react-migration-project.el.r.appspot.com/api/get_total_salary").then((res) => {
+    axios.get(baseUrl+"get_total_salary").then((res) => {
       setTotalCountOfSalary(res.data.data);
     });
   }, []);
 
   const getAttendanceData = () => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/get_salary_by_filter", {
+      .post(baseUrl+"get_salary_by_filter", {
         dept: id,
       })
       .then((res) => {

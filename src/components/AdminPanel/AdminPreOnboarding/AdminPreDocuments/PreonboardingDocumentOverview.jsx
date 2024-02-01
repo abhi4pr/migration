@@ -5,6 +5,7 @@ import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import DeleteButton from "../../DeleteButton";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../../../../utils/config";
 
 const PreonboardingDocumentOverview = () => {
   const [search, setSearch] = useState("");
@@ -62,7 +63,7 @@ const PreonboardingDocumentOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_docs"
+        baseUrl+"get_all_docs"
       );
       const data = response.data.data;
       setData(data);

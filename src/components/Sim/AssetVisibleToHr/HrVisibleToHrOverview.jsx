@@ -7,6 +7,7 @@ import axios from "axios";
 import FieldContainer from "../../AdminPanel/FieldContainer";
 import { useAPIGlobalContext } from "../../AdminPanel/APIContext/APIContext";
 import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
   const { userID } = useAPIGlobalContext();
@@ -82,7 +83,7 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
 
           axios
             .put(
-              "https://api-dot-react-migration-project.el.r.appspot.com/api/update_repair_request",
+              baseUrl+"update_repair_request",
               formData
             )
             .then((res) => {
@@ -110,9 +111,8 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
     formData.append("recovery_by", userID);
 
     axios
-      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_repair_request", formData)
+      .put(baseUrl+"update_repair_request", formData)
       .then((res) => {
-        // getRepairRequest();
         setRecoveryRemark("");
         setScrapRemark("");
         hardRender();
@@ -138,9 +138,12 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
             <span className="badge badge-success">Resolved</span>
           ) : row.status === "Requested" ? (
             <span className="badge badge-danger">Requested</span>
+          ) : row.status === "ApprovedByManager" ? (
+            <span className="badge badge-warning">Approve By Manager</span>
           ) : null}
         </>
       ),
+      width: "170px",
       sortable: true,
     },
     {
@@ -261,7 +264,8 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
       ),
       width: "150px",
     },
-    hrOverviewData[0]?.status == "Requested" && {
+    (hrOverviewData[0]?.status == "Requested" ||
+      hrOverviewData[0]?.status == "ApprovedByManager") && {
       name: "Actions",
       cell: (row) => (
         <>
@@ -293,7 +297,7 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
             onClick={() => handleStatusUpdate(row, "Resolved")}
             className="btn btn-warning btn-sm ml-2"
           >
-            Resolved
+            Resolve
           </button>
           <button
             type="button"
@@ -394,7 +398,7 @@ const HrVisibleToHrOverview = ({ hrOverviewData, hardRender }) => {
   const handleVendorDetails = async (id) => {
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_vendor/${id}`
+        `${baseUrl}`+`get_single_vendor/${id}`
       );
       setVendorData([response.data.data]);
       console.log([response.data.data], "data jere");

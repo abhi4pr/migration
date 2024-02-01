@@ -20,6 +20,7 @@ import { memo } from "react";
 import BulkUpload from "./Tools/BulkUpload";
 import DwndTemplate from "./Tools/DwndTemplate";
 // import { columns } from "./Tools/EditColoum";
+import {baseUrl} from '../../utils/config'
 
 function EditLead() {
   // console.log("Edit lead reload");
@@ -112,7 +113,7 @@ function EditLead() {
       setAddRows(false);
       // console.log("post api hitted");
       try {
-        axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/leadmastpost", {
+        axios.post(baseUrl+"leadmastpost", {
           lead_name: updatedRow.lead_name,
           mobile_no: updatedRow.mobile_no,
           alternate_mobile_no: updatedRow.alternate_mobile_no,
@@ -132,7 +133,7 @@ function EditLead() {
       return updatedRow;
     }
     try {
-      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/leadmastupdate", {
+      axios.put(baseUrl+"leadmastupdate", {
         id: updatedRow.leadmast_id,
         lead_name: updatedRow.lead_name,
         mobile_no: updatedRow.mobile_no,

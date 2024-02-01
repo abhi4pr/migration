@@ -13,6 +13,7 @@ import { useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import axios from "axios";
+import {baseUrl} from '../../utils/config'
 
 export default function PerformanceGraphDialog({
   setOpenPerformanceGraphDialog,
@@ -34,7 +35,7 @@ export default function PerformanceGraphDialog({
 
   const callApi = () => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/page_health_dashboard", {
+      .post(baseUrl+"page_health_dashboard", {
         p_id: rowData?.p_id,
         interval: intervalFlag?.value,
       })

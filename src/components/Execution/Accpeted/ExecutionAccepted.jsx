@@ -10,6 +10,7 @@ import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import Confirmation from "../Confirmation";
 import ExecutionUpdate from "../ExecutionUpdate";
+import { baseUrl } from "../../../utils/config";
 
 export default function ExecutionAccepted() {
   const storedToken = sessionStorage.getItem("token");
@@ -54,7 +55,7 @@ export default function ExecutionAccepted() {
       if (userID && contextData == false) {
         axios
           .get(
-            `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+            `${baseUrl}`+`get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {

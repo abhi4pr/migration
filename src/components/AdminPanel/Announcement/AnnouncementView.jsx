@@ -1,6 +1,7 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
+import {baseUrl} from '../../../utils/config'
 
 const AnnouncementView = () => {
   const token = sessionStorage.getItem("token");
@@ -13,7 +14,7 @@ const AnnouncementView = () => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/allannouncementdata"
+          baseUrl+"allannouncementdata"
         );
         const allData = await res.data;
         setData(allData);

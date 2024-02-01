@@ -5,6 +5,8 @@ import jwtDecode from "jwt-decode";
 import { useGlobalContext } from "../../../Context/Context";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
+import {baseUrl} from '../../../utils/config'
+
 const AnnouncementPost = () => {
   const { toastAlert } = useGlobalContext;
 
@@ -32,7 +34,7 @@ const AnnouncementPost = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/annomastpost", {
+      .post(baseUrl+"annomastpost", {
         dept_id: department,
         desi_id: designation,
         onboard_status: announcementFor,
@@ -58,13 +60,13 @@ const AnnouncementPost = () => {
   };
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
+      .get(baseUrl+"get_all_designations")
       .then((res) => {
         setDesignationData(res.data.data);
       });

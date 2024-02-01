@@ -32,8 +32,9 @@ import { useGlobalContext } from "../../../Context/Context";
 import Loader from "./Loader/Loader";
 import exportToCSV from "../../../utils/ExcelConverter";
 import generatePDF from "../../../utils/PdfConverter";
-
 import * as XLSX from 'xlsx';
+import {baseUrl} from '../../../utils/config'
+
 let options = [];
 let pageNames = [];
 const Follower_Count = [
@@ -51,6 +52,8 @@ let text;
 let rejectedPages = [];
 
 const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
+  const campValue=data?.campaignName
+  
   const { toastAlert, toastError } = useGlobalContext();
   const navigate = useNavigate();
 
@@ -77,6 +80,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
   const [searchField, setSearchField] = useState(false);
 
   const [excelUpload, setExcelUpload] = useState(false)
+  const [excelData, setExcelData] = useState([]);
 
   useEffect(() => {
     getPageData();
@@ -91,7 +95,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
   useEffect(() => {
     if (!excelUpload) {
 
-      if (selectedRows.length == 0) {
+      if (selectedRows?.length == 0) {
         setPayload([]);
       } else {
         const data = planPages.filter((page) => {
@@ -104,6 +108,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       }
     }
   }, [selectedRows]);
+
 
   useEffect(() => {
     if (excelUpload) {
@@ -125,10 +130,11 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     }
   }, [radioSelected, selectedCategory, selectedFollower]);
 
+
   useEffect(() => {
     pageNames = [];
     for (const page of allPageData) {
-      // console.log(page)
+
       let counter = false;
       payload.some((x) => {
         if (x.p_id == page.p_id) {
@@ -140,6 +146,11 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       }
     }
   }, [unregisteredPages]);
+
+  //this useEffect is to insure that the selectedRows data does not lost during  reRendering
+  useEffect(() => {
+    setSelectedRows(x);
+  }, [filteredPages, searchedPages, unregisteredPages]);
 
   useEffect(() => { }, [externalPPP]);
 
@@ -167,27 +178,29 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
         setFilteredPages(pageData.data.body);
       } else if (pageName == "phaseCreation") {
         const pageD = await axios.get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan/${data.campaignId}`
+          `${baseUrl}`+`campaignplan/${data.campaignId}`
         );
-     
+
         let newPageData = pageD.data.data
           .filter((page) => {
             return (
-              page.replacement_status == "inactive" ||
-              page.replacement_status == "replacement"
+              (page.replacement_status == "inactive" ||
+                page.replacement_status == "replacement") && (page.postRemaining > 0 || page.storyRemaining > 0)
             );
           })
           .map((page) => {
             return { ...page, postPerPage: 0, storyPerPage: 0 };
           });
-          console.log(phaseInfo.assignAll)
-        if(phaseInfo.assignAll){
-          let row=[]
-          newPageData=newPageData.map(page=>{
+
+        console.log(newPageData)
+
+        if (phaseInfo.assignAll) {
+          let row = []
+          newPageData = newPageData.map(page => {
             row.push(page.p_id)
-            return {...page,postPerPage:page.postRemaining,storyPerPage:page.storyRemaining,postRemaining:0,storyRemaining:0}
+            return { ...page, postPerPage: page.postRemaining, storyPerPage: page.storyRemaining, postRemaining: 0, storyRemaining: 0 }
           })
-          x=row
+          x = row
           setSelectedRows(row)
           setPayload(newPageData)
         }
@@ -200,9 +213,13 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
 
   const categorySet = () => {
     allPageData.forEach((data) => {
-      if (!options.includes(data.cat_name)) {
-        options.push(data.cat_name);
+      if (!options.includes(data?.cat_name)) {
+        if(data.cat_name!=null){
+
+          options.push(data.cat_name)
+        }
       }
+
     });
   };
 
@@ -224,6 +241,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
   };
 
   const filterHandler = () => {
+
     const radioData = planPages?.filter((page) => {
       if (radioSelected == "all") {
         return page;
@@ -319,12 +337,12 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       const data = radioData.filter((pages) => {
         return selectedCategory.includes(pages.cat_name);
       });
-      console.log(data);
+
       x = selectedRows;
       setFilteredPages(data);
       // setSelectedFollower(null)
     } else if (selectedCategory?.length == 0 && !selectedFollower) {
-      console.log(radioData);
+
       x = selectedRows;
       setFilteredPages(radioData);
     } else if (selectedCategory?.length == 0 && selectedFollower) {
@@ -356,17 +374,19 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
 
     // setFilteredPages(data)
   };
+
+
   const handleSearchChange = (e) => {
     if (!e.target.value.length == 0) {
       setSearchField(true);
       clearTimeout(timer);
       timer = setTimeout(() => {
-        const searched = filteredPages.filter((page) => {
+        const searched = filteredPages?.filter((page) => {
           return (
             page.page_name
               .toLowerCase()
               .includes(e.target.value.toLowerCase()) ||
-            page.cat_name.toLowerCase().includes(e.target.value.toLowerCase())
+            page.cat_name?.toLowerCase().includes(e.target.value?.toLowerCase())
           );
         });
 
@@ -380,10 +400,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     }
   };
 
-  //this useEffect is to insure that the selectedRows data does not lost during  reRendering
-  useEffect(() => {
-    setSelectedRows(x);
-  }, [filteredPages, searchedPages, unregisteredPages]);
+
 
   //copy paste logic starts here
 
@@ -392,6 +409,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
   };
 
   const handleCloseCP = () => {
+    // setExcelUpload(true)
     setIsModalOpenCP(false);
   };
 
@@ -399,6 +417,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     text = e.target.value;
   };
   const handleModalPageCP = () => {
+    // setExcelUpload(true)
     const pageInfo = text.split(/\s+/);
     // let rejectedPages=[]
     const newRows = [];
@@ -416,7 +435,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
         let pid = allPageData.length + Math.floor(Math.random() * 1000) + 1;
         rejectedPages = [...rejectedPages, { page_name: text, p_id: pid }];
       }
-      console.log(newRows);
+
       x = [...selectedRows, ...newRows];
       setSelectedRows([...selectedRows, ...newRows]);
     }
@@ -424,6 +443,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     setRadioSelected("all");
     setIsModalOpenCP(false);
   };
+
 
   const blue = {
     100: "#DAECFF",
@@ -484,19 +504,31 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     const toDelete = rejectedPages.filter(
       (page) => page.p_id != params.row.p_id
     );
+
     rejectedPages = toDelete;
     x = selectedRows;
-    setRadioSelected("selected");
+
+
     setUnregisteredPages(rejectedPages);
 
     const pageReplacement = allPageData.find((page) => {
       return page.page_name == e.target.innerText;
     });
+    console.log(pageReplacement)
 
+    setPayload([...payload, { ...pageReplacement, postPerPage: 0, storyPerPage: 0 }])
+    if (excelUpload) {
+
+      setPlanPages([...planPages, { ...pageReplacement, postPerPage: 0, storyPerPage: 0 }])
+    }
+    // setFilteredPages([...filteredPages, {...pageReplacement,postPerPage:0,storyPerPage:0} ])
     setSelectedRows([...selectedRows, pageReplacement.p_id]);
+    setRadioSelected("selected");
   };
+
+  console.log(filteredPages)
   //copy paste logic ends here
-  // console.log(rejectedPages)
+
   const handlePost = (e, field) => {
     let updatedValue = e.target.value;
 
@@ -519,7 +551,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     setPlanPages(newFilteredPages);
 
     if (selectedCategory.length == 0 && selectedFollower == null) {
-      console.log("first");
+
 
       if (radioSelected == "unselected") {
       } else if (radioSelected == "selected") {
@@ -531,7 +563,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
         setFilteredPages(ne);
       } else setFilteredPages(newFilteredPages);
     } else {
-      console.log("second");
+
       if (radioSelected == "unselected") {
       } else if (radioSelected == "selected") {
         const ne = filteredPages.filter((page) => {
@@ -628,10 +660,10 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       try {
         setIsLoadingPlan(true);
         const result = await axios.post(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan",
+          baseUrl+"campaignplan",
           newdata
         );
-        // console.log(result);
+
         setIsLoadingPlan(false);
         toastAlert("Plan Created SuccessFully");
         setTimeout(() => {
@@ -667,10 +699,10 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       try {
         setIsLoadingPhase(true);
         const result = await axios.post(
-          "https://api-dot-react-migration-project.el.r.appspot.com/api/campaignphase",
+          baseUrl+"campaignphase",
           newdata
         );
-        // console.log(result);
+
         phaseInfo.setExpanded(false);
         phaseInfo.setShowPageDetails(false);
         phaseInfo.getPhaseData();
@@ -684,6 +716,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       }
     }
   };
+
   const columnForPages = [
     {
       field: "S.NO",
@@ -700,7 +733,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       width: 150,
       editable: true,
       renderCell: (params, index) => {
-        // console.log(params)
+
         return radioSelected == "unregistered" ? (
           <Autocomplete
             id="combo-box-demo"
@@ -804,46 +837,11 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     },
   ];
 
-  console.log(selectedRows)
-  const [excelData, setExcelData] = useState([]);
-  //   const handleFile=(file)=>{
 
-  //     const reader = new FileReader();
-  //     setExcelUpload(true)
-  //     reader.onload = (e) => {
-  //       const data = new Uint8Array(e.target.result);
-  //       const workbook = XLSX.read(data, { type: 'array' });
-  //       const sheetName = workbook.SheetNames[0]; // Assuming the data is in the first sheet
-  //       const sheet = workbook.Sheets[sheetName];
-  //       const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-  //       let forLoad=[]
-  //       let forFilter=[]
-  //       let rows=[]
-  //       const newData=allPageData?.forEach((item)=>{
-  //         let flag
-  //         if(jsonData.some(page=>{
-  //           flag=page
-  //           return page[1]==item.page_name
-  //         })){
-  //             rows.push(item.p_id)
-  //           forLoad.push({...item,postPerPage:flag[5],storyPerPage:flag[6]}) 
-  //           forFilter.push({...item,postPerPage:flag[5],storyPerPage:flag[6]}) 
-  //         }else {
-  //           forFilter.push(item)
-  //         }
-  //       })
-
-  //       setPayload(forLoad);
-  //       x=rows
-  //       setFilteredPages(forFilter)
-  //       setPlanPages(forFilter)
-  //       // setSelectedRows(rows)
-  //   }
-  //   reader.readAsArrayBuffer(file);
-  // }
+  //for uploading the excel
   const handleFile = (file) => {
-
+    setExcelUpload(true)
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -862,24 +860,28 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
       let forLoad = []
       let forFilter = []
       let rows = []
-      const newData = allPageData?.forEach((item) => {
+
+
+      const newData = combinedData?.forEach((item) => {
         let flag
-        if (combinedData.some(page => {
+        if (allPageData.some(page => {
           flag = page
-          return page[1].charAt(0).toLowerCase() + page[1].slice(1) == item.page_name
+          return page.page_name == item[1].charAt(0).toLowerCase() + item[1].slice(1)
         })) {
-          rows.push(item.p_id)
-          forLoad.push({ ...item, postPerPage: flag[4] || 0, storyPerPage: flag[6] ||0 })
-          forFilter.push({ ...item, postPerPage: flag[4] || 0, storyPerPage: flag[6] || 0 })
+          rows.push(flag.p_id)
+          forLoad.push({ ...flag, postPerPage: item[4] || 0, storyPerPage: item[5] || 0 })
+          forFilter.push({ ...flag, postPerPage: item[4] || 0, storyPerPage: item[5] || 0 })
         } else {
-          forFilter.push(item)
+          forFilter.push(flag)
+          let pid = allPageData.length + Math.floor(Math.random() * 1000) + 1;
+          rejectedPages = [...rejectedPages, { page_name: item[1], p_id: pid }];
         }
       })
 
       setPayload(forLoad);
       x = rows
-      setFilteredPages(forFilter)
-      setPlanPages(forFilter)
+      setFilteredPages(forLoad)
+      setPlanPages(forLoad)
     };
 
     reader.readAsArrayBuffer(file);
@@ -894,21 +896,23 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
     });
     return combinedData;
   };
-  console.log(payload)
+
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    console.log(file)
+
     if (file) {
       handleFile(file);
     }
   };
-  console.log(excelData)
+
   if (isLoadingPhase) {
     return <Loader message="Phase creation in progress..." />;
   }
   if (isLoadingPlan) {
     return <Loader message="Plan creation in progress..." />;
   }
+
+  console.log(options)
 
   return (
     <>
@@ -952,7 +956,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
         <Autocomplete
           multiple
           id="combo-box-demo"
-          options={options}
+          options={options?options:[]}
           sx={{ width: 200 }}
           renderInput={(params) => <TextField {...params} label="Category" />}
           onChange={categoryChangeHandler}
@@ -986,8 +990,10 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
             Copy / paste
           </Button>
 
-
-          <input type="file" id="fileInput" onChange={handleFileInputChange} />
+          <Button variant="contained" sx={{ width:'5rem' }}>
+          <label for="fileInput" class="btn" style={{color:'white'}}>upload excel</label>
+            <input type="file" id="fileInput" style={{visibility:"hidden"}} onChange={handleFileInputChange} />
+          </Button>
 
         </Box>
       </Paper>
@@ -1063,7 +1069,7 @@ const PageDetailingNew = ({ pageName, data, setPhaseDataError, phaseInfo }) => {
             </Button>{" "}
           </div>
         </Box>
-        <SummrayDetailes payload={payload} />
+        <SummrayDetailes payload={payload} campName={campValue}/>
       </Paper>
       {
         //copy paste modal contents

@@ -4,8 +4,8 @@ import { Navigate } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import jwtDecode from "jwt-decode";
-
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 const DepartmentMaster = () => {
   const { toastAlert } = useGlobalContext();
@@ -24,7 +24,7 @@ const DepartmentMaster = () => {
     e.preventDefault();
     setError("");
     await axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_department", {
+      .post(baseUrl+"add_department", {
         dept_name: departmentName,
         short_name: shortName,
         remark: remark,

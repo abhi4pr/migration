@@ -5,6 +5,7 @@ import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 const RoleMaster = () => {
   const { toastAlert } = useGlobalContext();
@@ -20,7 +21,7 @@ const RoleMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_role", {
+      await axios.post(baseUrl+"add_role", {
         created_by: loginUserId,
         role_name: roleName,
         remark: remark,

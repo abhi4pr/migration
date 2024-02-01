@@ -12,6 +12,7 @@ import { GridToolbar } from "@mui/x-data-grid";
 import ExecutionUpdate from "./ExecutionUpdate";
 import PaymentDetailDailog from "./PaymentDetailDailog";
 import PointOfSaleTwoToneIcon from "@mui/icons-material/PointOfSaleTwoTone";
+import { baseUrl } from "../../utils/config";
 
 function ExecutionPending() {
   const [snackbar, setSnackbar] = useState(null);
@@ -69,7 +70,7 @@ function ExecutionPending() {
       if (userID && contextData == false) {
         axios
           .get(
-            `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+            `${baseUrl}`+`get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {
@@ -79,7 +80,7 @@ function ExecutionPending() {
           });
       }
       const response = axios
-        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_sum")
+        .get(baseUrl+"get_exe_sum")
         .then((res) => {
           setData(
             res.data.filter(
@@ -90,7 +91,7 @@ function ExecutionPending() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/exe_sum_post", {
+    axios.post(baseUrl+"exe_sum_post", {
       loggedin_user_id: 52,
     });
   };

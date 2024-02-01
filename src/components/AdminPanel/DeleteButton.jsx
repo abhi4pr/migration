@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
+import { baseUrl } from "../../utils/config";
 
 const DeleteButton = ({ endpoint, id, getData }) => {
   const handleDelete = () => {
@@ -25,7 +26,7 @@ const DeleteButton = ({ endpoint, id, getData }) => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/${endpoint}/${id}`)
+            .delete(`${baseUrl}`+`${endpoint}/${id}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(

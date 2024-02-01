@@ -15,9 +15,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../../Context/Context";
-
-
-
+import {baseUrl} from '../../../../utils/config'
 
 let fieldInRows = [];
 const OverView = ({ name, data, hardReload }) => {
@@ -33,8 +31,8 @@ const OverView = ({ name, data, hardReload }) => {
   const updateHandler = (params) => {
     setCurrentRow(params.row);
     setIsPutOpen(true);
-  };
-
+    // window.location.reload(); // Full page reload
+}
   const deleteHandler = (params) => {
     setDeleteParams(params);
     setIsDeleteDialogOpen(true);
@@ -46,22 +44,22 @@ const OverView = ({ name, data, hardReload }) => {
     try {
       if (name == "Agency") {
         await axios.delete(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/agency/${deleteParams.row._id}`
+          `${baseUrl}`+`agency/${deleteParams.row._id}`
         );
       }
       if (name == "Goal") {
         await axios.delete(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/goal/${deleteParams.row._id}`
+          `${baseUrl}`+`goal/${deleteParams.row._id}`
         );
       }
       if (name == "Industry") {
         await axios.delete(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/industry/${deleteParams.row._id}`
+          `${baseUrl}`+`industry/${deleteParams.row._id}`
         );
       }
       if (name == "Service") {
         await axios.delete(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/services/${deleteParams.row._id}`
+          `${baseUrl}`+`services/${deleteParams.row._id}`
         );
       }
 
@@ -71,6 +69,7 @@ const OverView = ({ name, data, hardReload }) => {
     } catch (error) {}
   };
   const floodColumn = () => {
+    fieldInRows=[]
     const x = data[0];
     let val = [];
     for (const key in x) {
@@ -138,31 +137,32 @@ const OverView = ({ name, data, hardReload }) => {
     try {
       if (name == "Agency") {
         const data = await axios.put(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/agency/${currentRow._id}`,
+          `${baseUrl}`+`agency/${currentRow._id}`,
           updatePayload
         );
       }
       if (name == "Goal") {
         const data = await axios.put(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/goal/${currentRow._id}`,
+          `${baseUrl}`+`goal/${currentRow._id}`,
           updatePayload
         );
       }
       if (name == "Industry") {
         const data = await axios.put(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/industry/${currentRow._id}`,
+          `${baseUrl}`+`industry/${currentRow._id}`,
           updatePayload
         );
       }
       if (name == "Service") {
         const data = await axios.put(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/services/${currentRow._id}`,
+          `${baseUrl}`+`services/${currentRow._id}`,
           updatePayload
         );
       }
+      fieldInRows = []
       setUpdatePayload({});
       setIsPutOpen(false);
-      hardReload();
+      // hardReload();
       toastAlert("Update Successfully");
 
     } catch (error) {}
@@ -219,8 +219,8 @@ const OverView = ({ name, data, hardReload }) => {
         <DialogActions>
           <Button
             onClick={() => {
-              setIsPutOpen(false);
               setUpdatePayload({});
+              setIsPutOpen(false);
             }}
             color="error"
             variant="outlined"

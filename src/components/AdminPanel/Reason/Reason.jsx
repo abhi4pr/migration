@@ -6,6 +6,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 const Reason = () => {
   const token = sessionStorage.getItem("token");
@@ -19,7 +20,7 @@ const Reason = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_reason", {
+      await axios.post(baseUrl+"add_reason", {
         created_by: loginUserID,
         reason: reason,
         remark: remark,
@@ -36,7 +37,7 @@ const Reason = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_reasons"
+        baseUrl+"get_all_reasons"
       );
       setData(response.data);
     } catch (error) {

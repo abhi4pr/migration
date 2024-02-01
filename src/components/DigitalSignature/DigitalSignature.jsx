@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
+import {baseUrl} from '../../utils/config'
 
 const DigitalSignature = ({
   userID,
@@ -51,9 +52,8 @@ const DigitalSignature = ({
         }
 
         try {
-          // Perform the PUT API call and await its completion
           await axios.put(
-            `https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`,
+            `${baseUrl}`+`update_user`,
             formData,
             {
               headers: {
@@ -62,18 +62,16 @@ const DigitalSignature = ({
             }
           );
 
-          // Once the PUT API call is successful, continue with other actions
           closeModal();
           toastAlert("Submitted");
           signature.clear();
 
-          // Delay the execution of gettingData by 3 seconds
+          //3 sec delay because API takes time to save image in GCP bucket || so we wait for 3 sec to call get api
           setTimeout(async () => {
             await gettingData();
-          }, 3000); // 3000 milliseconds = 3 seconds
+          }, 3000);
         } catch (error) {
           console.error("Error in PUT API", error);
-          // Handle the error appropriately, if needed
         }
       }
     }, "image/png");

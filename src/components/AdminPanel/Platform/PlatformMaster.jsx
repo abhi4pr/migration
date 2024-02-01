@@ -5,6 +5,7 @@ import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import jwtDecode from "jwt-decode";
+import {baseUrl} from '../../../utils/config'
 
 const PlatformMaster = () => {
   const { toastAlert } = useGlobalContext();
@@ -21,7 +22,7 @@ const PlatformMaster = () => {
     e.preventDefault();
     setError("");
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/platform", {
+      .post(baseUrl+"platform", {
         name: platformName,
         remark: remark,
         created_by: userID,

@@ -7,6 +7,7 @@ import DeleteButton from "../DeleteButton";
 import FormContainer from "../FormContainer";
 import jwtDecode from "jwt-decode";
 import Modal from "react-modal";
+import { baseUrl } from "../../../utils/config";
 
 const DepartmentOverview = () => {
   const [search, setSearch] = useState("");
@@ -28,20 +29,20 @@ const DepartmentOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
         });
     }
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
+    axios.get(baseUrl+"get_all_users").then((res) => {
       setAllUserDepartment(res.data.data);
     });
   }, [userID]);
 
   function getData() {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

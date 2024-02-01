@@ -9,6 +9,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import Select from "react-select";
 import axios from "axios";
 import AssetSingleuserOverview from "./AssetSingleuserOverview";
+import { baseUrl } from "../../../utils/config";
 
 const AssetSingleUser = () => {
   const { usersDataContext, getAssetDataContext, toastAlert } =
@@ -32,6 +33,10 @@ const AssetSingleUser = () => {
   const [newAssetRequestData, setNewAssetRequestData] = useState([]);
   const PriorityData = ["Low", "Medium", "High", "Urgent"];
 
+  const hardRender = () => {
+    getNewAssetRequest();
+  };
+
   // New tab
   const [activeAccordionIndex, setActiveAccordionIndex] = useState(0);
   const handleAccordionButtonClick = (index) => {
@@ -48,13 +53,14 @@ const AssetSingleUser = () => {
     <AssetSingleuserOverview
       newAssetRequestData={newAssetRequestData}
       newRequestAPIRender={newRequestAPIRender}
+      hardRender={hardRender}
     />
   );
 
   const getData = async () => {
     try {
       const res = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_allocated_asset_data_for_user_id/${userID}`
+        `${baseUrl}`+`get_allocated_asset_data_for_user_id/${userID}`
       );
       setData(res.data.data);
       setFilterData(res.data.data);
@@ -64,16 +70,18 @@ const AssetSingleUser = () => {
   };
   async function getRepairReason() {
     const res = await axios.get(
-      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_assetResons"
+      baseUrl+"get_all_assetResons"
     );
     setReasonData(res?.data.data);
   }
+
   async function getNewAssetRequest() {
     const res = await axios.get(
-      `https://api-dot-react-migration-project.el.r.appspot.com/api/assetrequest/${userID}`
+      `${baseUrl}`+`assetrequest/${userID}`
     );
-    console.log(res.data, "reason hai");
-    setNewAssetRequestData(res?.data);
+    setNewAssetRequestData(
+      res?.data.filter((d) => d.asset_request_status !== "Approved")
+    );
   }
 
   useEffect(() => {
@@ -118,9 +126,10 @@ const AssetSingleUser = () => {
       formData.append("problem_detailing", problemDetailing);
 
       const response = await axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_repair_request",
+        baseUrl+"add_repair_request",
         formData
       );
+
       toastAlert("Success");
       setAssetName("");
       setRepairDate("");

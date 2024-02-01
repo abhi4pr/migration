@@ -216,6 +216,8 @@ import TaskStatusDeptWiseUpdate from "../TaskManagement/Pages/TaskStatusDeptWise
 import DisputeOverview from "./WFH/Dispute/DisputeOverview";
 import FinanceDashboard from "./Finance/Dashboard/FinanceDashboard";
 import SalesExecutiveIncentiveRequestReleaseList from "./Finance/SalesExecutiveIncentiveRequestReleaseList";
+import AssetDashboard from "../Sim/AssetDashboard";
+import { baseUrl } from "../../utils/config";
 
 const Admin = () => {
   const [contextData, setData] = useState([]);
@@ -227,7 +229,7 @@ const Admin = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -388,6 +390,7 @@ const Admin = () => {
                     path="/dispute-overview"
                     element={<DisputeOverview />}
                   />
+
                   {/* <Route
                     path="/wfh-user-dashboard"
                     element={<DashboardWFHUser />}
@@ -491,6 +494,11 @@ const Admin = () => {
                     contextData[5] &&
                     contextData[5].view_value === 1 && ( */}
                   <>
+                    <Route
+                      path="/asset-dashboard"
+                      element={<AssetDashboard />}
+                    />
+
                     <Route path="/self-audit" element={<SelfAudit />} />
 
                     {/* Asset Section  */}
@@ -667,7 +675,10 @@ const Admin = () => {
                     path="/finance-dashboard"
                     element={<FinanceDashboard />}
                   />
-                  <Route path="/Incentive-Request-Released-List/:incentive_request_id" element={<SalesExecutiveIncentiveRequestReleaseList />} />
+                  <Route
+                    path="/Incentive-Request-Released-List/:incentive_request_id"
+                    element={<SalesExecutiveIncentiveRequestReleaseList />}
+                  />
                   <Route
                     path="/finance-pruchasemanagement-alltransaction"
                     element={<PurchaseManagementAllTransaction />}

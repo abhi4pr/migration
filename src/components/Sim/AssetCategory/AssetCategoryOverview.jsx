@@ -9,6 +9,8 @@ import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import DeleteButton from "../../AdminPanel/DeleteButton";
 import Modal from "react-modal";
+import Select from "react-select";
+import { baseUrl } from "../../../utils/config";
 
 const AssetCategoryOverview = () => {
   const { toastAlert } = useGlobalContext();
@@ -16,6 +18,9 @@ const AssetCategoryOverview = () => {
   const [filterData, setFilterData] = useState([]);
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+
+  const [inWarranty, setInWarranty] = useState("");
+  const warranty = ["Yes", "No"];
   // const [selectedRow, setSelectedRow] = useState(null);
 
   // Modal State
@@ -30,10 +35,12 @@ const AssetCategoryOverview = () => {
 
   const [handleOpenSubCat, setHandleOpenSubCat] = useState(false);
 
+  const [subCategoryData, setSubCategoryData] = useState([]);
+
   const handleSubCategroy = async (row) => {
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_count_sub_category/${row}`
+        `${baseUrl}`+`get_count_sub_category/${row}`
       );
       setSubcategroycount(response.data.data?.sub_categories);
       setHandleOpenSubCat(true);
@@ -44,7 +51,7 @@ const AssetCategoryOverview = () => {
   const handleTotalasset = async (row) => {
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_total_asset_in_category/${row}`
+        `${baseUrl}`+`get_total_asset_in_category/${row}`
       );
       setTotalAssets(response?.data.data);
       seAssetModel(true);
@@ -59,7 +66,7 @@ const AssetCategoryOverview = () => {
   const handleAllocatedAsset = async (row) => {
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_total_asset_in_category_allocated/${row}`
+        `${baseUrl}`+`get_total_asset_in_category_allocated/${row}`
       );
       setTotalAssets(response?.data.data);
       seAssetModel(true);
@@ -67,24 +74,48 @@ const AssetCategoryOverview = () => {
       console.log("total asset not working", error);
     }
   };
+
+  const getSubCategoryData = async () => {
+    try {
+      const response = await axios.get(
+        baseUrl+"get_all_asset_sub_category"
+      );
+      setSubCategoryData(response.data.data);
+    } catch (error) {
+      toastAlert("Data not submitted", error.message);
+      return null;
+    }
+  };
   useEffect(() => {
     getData();
+    getSubCategoryData();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_asset_sub_category",
-        {
-          sub_category_name: subCategoryName,
-          category_id: catId,
-          // description: description,
-          // created_by: loginUserId,
-        }
+      const isSubCategoryExist = subCategoryData.some(
+        (d) => d.sub_category_name === subCategoryName
       );
-      getData();
-      toastAlert("Data posted successfully!");
+      if (isSubCategoryExist) {
+        alert("Sub Category already Exists");
+      } else {
+        const response = await axios.post(
+          baseUrl+"add_asset_sub_category",
+          {
+            sub_category_name: subCategoryName,
+            category_id: catId,
+            inWarranty: inWarranty,
+            // description: description,
+            // created_by: loginUserId,
+          }
+        );
+        setSubCategoryName("");
+        setInWarranty("");
+        setIsModalOpen(false);
+        toastAlert("Data posted successfully!");
+        getData();
+      }
     } catch (error) {
       toastAlert(error.message);
     }
@@ -100,7 +131,7 @@ const AssetCategoryOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category"
+        baseUrl+"get_all_asset_category"
       );
 
       setFilterData(response.data.data?.asset_categories);
@@ -231,6 +262,12 @@ const AssetCategoryOverview = () => {
                   type="button"
                   className="btn btn-outline-primary btn-sm"
                 >
+                  <Link to="/admin/asset-dashboard">Dashboard</Link>
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-primary btn-sm"
+                >
                   <Link to="/asset/subCategory/overview">Sub Category</Link>
                 </button>
                 <button
@@ -319,6 +356,27 @@ const AssetCategoryOverview = () => {
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
             />
+
+            <div className="form-group col-6">
+              <label className="form-label">
+                In Warranty <sup style={{ color: "red" }}>*</sup>
+              </label>
+              <Select
+                className=""
+                options={warranty.map((option) => ({
+                  value: `${option}`,
+                  label: `${option}`,
+                }))}
+                value={{
+                  value: inWarranty,
+                  label: `${inWarranty}`,
+                }}
+                onChange={(e) => {
+                  setInWarranty(e.value);
+                }}
+                required
+              />
+            </div>
           </FormContainer>
         </div>
         {/* )} */}
@@ -361,12 +419,15 @@ const AssetCategoryOverview = () => {
                 cell: (row, index) => <div>{index + 1}</div>,
                 width: "10%",
               },
-              { name: "Asset Name", selector: "assetsName" },
-              { name: "Category Name", selector: "category_name" },
-              { name: "Subcategory Name", selector: "sub_category_name" },
-              { name: "Status", selector: "status" },
-              { name: "Asset Type", selector: "asset_type" },
-              { name: "Asset ID", selector: "asset_id" },
+              { name: "Asset Name", selector: (row) => row.assetsName },
+              { name: "Category Name", selector: (row) => row.category_name },
+              {
+                name: "Subcategory Name",
+                selector: (row) => row.sub_category_name,
+              },
+              { name: "Status", selector: (row) => row.status },
+              { name: "Asset Type", selector: (row) => row.asset_type },
+              { name: "Asset ID", selector: (row) => row.asset_id },
             ]}
             data={totalAssets}
             highlightOnHover
@@ -425,9 +486,9 @@ const AssetCategoryOverview = () => {
               {
                 name: "Subcategory Name",
                 width: "40%",
-                selector: "sub_category_name",
+                selector: (row) => row.sub_category_name,
               },
-              { name: "Category Name", selector: "category_name" },
+              { name: "Category Name", selector: (row) => row.category_name },
             ]}
             data={subcategoryCount}
             highlightOnHover

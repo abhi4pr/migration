@@ -7,6 +7,7 @@ import FieldContainer from "../FieldContainer";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import TextEditor from "../../ReusableComponents/TextEditor";
+import {baseUrl} from '../../../utils/config'
 
 const EditEmailTemp = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const EditEmailTemp = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_email_content/${id}`)
+      .get(`${baseUrl}`+`get_single_email_content/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         setEmailFor(fetchedData.email_for);
@@ -37,7 +38,7 @@ const EditEmailTemp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/update_email_content", {
+    await axios.post(baseUrl+"update_email_content", {
       _id: id,
       email_for: emailFor,
       email_for_id: emailForId,

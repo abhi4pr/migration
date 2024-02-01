@@ -7,6 +7,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 import Select from "react-select";
+import { baseUrl } from "../../../utils/config";
 
 const AssetCategoryUpdate = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const AssetCategoryUpdate = () => {
   const [hrselfAuditPeriod, setHrSelfAuditPeriod] = useState("");
   const [hrselfAuditUnit, setHrSelfAuditUnit] = useState("");
 
-  const Unit = ["Month", "Days", "Year"];
+  const Unit = ["Month(s)", "Day(s)", "Year(s)"];
 
   useEffect(() => {
     getData();
@@ -32,7 +33,7 @@ const AssetCategoryUpdate = () => {
 
   const getData = () => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_asset_category/${id}`)
+      .get(`${baseUrl}`+`get_single_asset_category/${id}`)
       .then((res) => {
         const response = res.data.data;
         setCategoryName(response.category_name);
@@ -48,14 +49,14 @@ const AssetCategoryUpdate = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/update_asset_category",
+        baseUrl+"update_asset_category",
         {
           category_id: id,
           category_name: categoryName,
           description: description,
           selfAuditPeriod: selfAuditPeriod,
           selfAuditUnit: selfAuditUnit,
-          hrselfAuditPeriod: hrselfAuditPeriod,
+          hrAuditPeriod: hrselfAuditPeriod,
           hrAuditUnit: hrselfAuditUnit,
           last_updated_by: loginUserId,
         }

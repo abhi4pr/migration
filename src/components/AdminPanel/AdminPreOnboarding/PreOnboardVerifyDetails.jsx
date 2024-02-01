@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import FormContainer from "../FormContainer";
+import {baseUrl} from '../../../utils/config'
 
 const PreOnboardVerifyDetails = () => {
   const [search, setSearch] = useState("");
@@ -13,7 +14,7 @@ const PreOnboardVerifyDetails = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
+        baseUrl+"get_all_users"
       );
       const data = response.data.data;
 

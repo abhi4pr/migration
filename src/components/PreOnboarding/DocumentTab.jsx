@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
+import {baseUrl} from '../../utils/config'
 
 const DocumentTab = ({
   documentData,
@@ -55,7 +56,7 @@ const DocumentTab = ({
                 : document.status
             );
             const response = await axios.put(
-              "https://api-dot-react-migration-project.el.r.appspot.com/api/update_user_doc",
+              baseUrl+"update_user_doc",
               formData,
               {
                 headers: {

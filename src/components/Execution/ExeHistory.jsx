@@ -9,6 +9,7 @@ import { set } from "date-fns";
 import DeleteHistoryConfirmation from "./DeleteHistoryConfirmation";
 import InsertPhotoTwoToneIcon from "@mui/icons-material/InsertPhotoTwoTone";
 import OndemandVideoTwoToneIcon from "@mui/icons-material/OndemandVideoTwoTone";
+import { baseUrl } from "../../utils/config";
 
 export default function ExeHistory() {
   const id = useParams();
@@ -28,7 +29,7 @@ export default function ExeHistory() {
 
   const apiCall = () => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_ip_count_history/${id.id}`)
+      .get(`${baseUrl}`+`get_exe_ip_count_history/${id.id}`)
       .then((res) => {
         const data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
@@ -39,7 +40,7 @@ export default function ExeHistory() {
 
   useEffect(() => {
     apiCall();
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
+    axios.get(baseUrl+"get_all_users").then((res) => {
       setAllUsers(res.data.data);
     });
   }, []);

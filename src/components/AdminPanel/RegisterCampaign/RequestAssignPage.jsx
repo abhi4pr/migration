@@ -9,6 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import axios from "axios";
+import {baseUrl} from '../../../utils/config'
 
 const RequestAssignPage = ({ data, RequestAssign }) => {
   console.log(data[0]?.ass_page?.campaignName, "reuset");
@@ -23,7 +24,7 @@ const RequestAssignPage = ({ data, RequestAssign }) => {
 
   const handleAccept = async (row) => {
     const x = await axios.post(
-      `https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment/phase/update`,
+      `${baseUrl}`+`preassignment/phase/update`,
       {
         pre_ass_id: row.pre_ass_id,
         status: "accepted",
@@ -35,7 +36,7 @@ const RequestAssignPage = ({ data, RequestAssign }) => {
   };
   const handleReject = async (row) => {
     const x = await axios.post(
-      `https://api-dot-react-migration-project.el.r.appspot.com/api/preassignment/phase/update`,
+      `${baseUrl}`+`preassignment/phase/update`,
       {
         pre_ass_id: row.pre_ass_id,
         status: "rejected",

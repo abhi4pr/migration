@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import DigitalSignature from "../../../DigitalSignature/DigitalSignature";
 import getDecodedToken from "../../../../utils/DecodedToken";
 import axios from "axios";
+import {baseUrl} from '../../../../utils/config'
 
 const ViewEditDigiSignature = () => {
   const token = getDecodedToken();
@@ -21,7 +22,7 @@ const ViewEditDigiSignature = () => {
   const gettingData = async () => {
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${loginUserId}`
+        `${baseUrl}`+`get_single_user/${loginUserId}`
       );
       const DSImage = await response?.data?.digital_signature_image_url;
       setDigitalSignatureImage(DSImage);
@@ -34,7 +35,6 @@ const ViewEditDigiSignature = () => {
     gettingData();
   }, [loginUserId]);
 
-  console.log("Image here", digitalSignatureImage);
   return (
     <>
       <div>

@@ -5,6 +5,7 @@ import jwtDecode from "jwt-decode";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 const ApprovalInvoice = () => {
   const { toastAlert } = useGlobalContext();
@@ -20,7 +21,7 @@ const ApprovalInvoice = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/", {
+    await axios.post(baseUrl+"", {
       display_sequence: displaySeq,
     });
 

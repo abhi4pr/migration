@@ -21,8 +21,11 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toolbarStyles } from "./CampaignCommitment";
+import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 export default function CategoryMaster() {
+  const { toastAlert, toastError } = useGlobalContext();
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +41,7 @@ export default function CategoryMaster() {
     // brand_id: "",
   });
 
+  
   function EditToolbar() {
     const handleClick = () => {
       setIsModalOpen(true);
@@ -63,14 +67,20 @@ export default function CategoryMaster() {
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory", postData)
+      .post(baseUrl+"projectxCategory", postData)
       .then((response) => {
+        if (response.data.success === false) {
+          toastError(response.data.message);
+        } else {
+          toastAlert("Add successfully");
+        }
         setIsModalOpen(false);
         getData();
         console.log("Data saved:", response.data);
       })
       .catch((error) => {
         console.error("Error saving data:", error);
+        toastError("Add Properly");
       });
     setIsModalOpen(false);
     setPostData("");
@@ -78,7 +88,7 @@ export default function CategoryMaster() {
 
   // get api ========>
   const getData = () => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory").then((res) => {
+    axios.get(baseUrl+"projectxCategory").then((res) => {
       console.log(res.data.data);
       const sortedData = res.data.data.sort(
         (a, b) => b.category_id - a.category_id
@@ -98,7 +108,7 @@ export default function CategoryMaster() {
   // put api =============>
   const handlePutData = () => {
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory`, {
+      .put(`${baseUrl}`+`projectxCategory`, {
         id: editData.category_id,
         category_name: editData.category_name,
         // brand_id: editData.brand_id,
@@ -106,10 +116,17 @@ export default function CategoryMaster() {
       .then((res) => {
         console.log(res.data);
         setIsPutOpen(true);
+        if (res.data.success === false) {
+          toastError(res.data.message);
+        } else {
+          toastAlert("Update successfully");
+        }
       })
+      
       .then(() => {
         setIsPutOpen(false);
         getData();
+        setReload(!reload);
       });
     console.log("put data");
   };
@@ -121,7 +138,7 @@ export default function CategoryMaster() {
 
   // delete ======>
   // const handleDeleteClick = (id) => () => {
-  //   axios.delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory/${id}`).then((res) => {
+  //   axios.delete(`${baseUrl}`+`projectxCategory/${id}`).then((res) => {
   //     getData();
   //     console.log("re data ", res.data);
   //   });
@@ -136,7 +153,7 @@ export default function CategoryMaster() {
     if (itemToDeleteId) {
       axios
         .delete(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory/${itemToDeleteId}`
+          `${baseUrl}`+`projectxCategory/${itemToDeleteId}`
         )
         .then(() => {
           getData();

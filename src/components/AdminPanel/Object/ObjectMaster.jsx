@@ -6,6 +6,8 @@ import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
 import Select from "react-select";
+import {baseUrl} from '../../../utils/config'
+
 const ObjectMaster = () => {
   const { toastAlert } = useGlobalContext();
   const [objectName, setObjectName] = useState("");
@@ -19,14 +21,14 @@ const ObjectMaster = () => {
   const userId = decodedToken.id;
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => setDeptData(res.data));
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_obj", {
+      .post(baseUrl+"add_obj", {
         obj_name: objectName,
         soft_name: softwareName,
         dept_id: selectedDepartment,

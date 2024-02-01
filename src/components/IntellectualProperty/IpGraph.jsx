@@ -9,6 +9,7 @@ import UserNav from "../Pantry/UserPanel/UserNav";
 // import { Chart } from 'chart.js';
 import Chart from "chart.js/auto";
 import Select from "react-select";
+import {baseUrl} from '../../utils/config'
 
 const setFollowersDataY = {
   labels: [
@@ -91,7 +92,7 @@ const IpGraph = () => {
     setActiveButton("Year");
     const currentYear = new Date().getFullYear()?.toString();
     axios
-      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataforgraph`, {
+      .post(`${baseUrl}`+`dataforgraph`, {
         dateFormat: currentYear, // 2023
         ip_id: id,
       })
@@ -163,7 +164,7 @@ const IpGraph = () => {
     const currentYearMonth = `${year}-${month}`;
 
     axios
-      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataforgraph`, {
+      .post(`${baseUrl}`+`dataforgraph`, {
         dateFormat: currentYearMonth, // 2023-08
         ip_id: id,
       })
@@ -181,7 +182,7 @@ const IpGraph = () => {
     const year = currentDate.getFullYear();
 
     axios
-      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataforgraph`, {
+      .post(`${baseUrl}`+`dataforgraph`, {
         start_date: `${year}-${firstMonth}-${"01"}`,
         end_date: `${year}-${secondMonth}-${"30"}`,
         ip_id: id,
@@ -200,7 +201,7 @@ const IpGraph = () => {
 
   const saveStats = async (e) => {
     e.preventDefault();
-    axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/ip_stats_post`, {
+    axios.post(`${baseUrl}`+`ip_stats_post`, {
       ip_id: id,
       story_view: storyView,
       month_reach: monthReach,
@@ -222,7 +223,7 @@ const IpGraph = () => {
 
   const saveIpPageResponsiblity = async (e) => {
     e.preventDefault();
-    axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/ipregiupdatenew`, {
+    axios.put(`${baseUrl}`+`ipregiupdatenew`, {
       id: id,
       user_id: ipAllocateUser,
       user_response: ipAllocatePage?.map((option) => option.value).join(),
@@ -232,7 +233,7 @@ const IpGraph = () => {
 
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
+      .get(baseUrl+"get_all_users")
       .then((res) => setUserData(res.data.data));
   }, []);
 
@@ -248,7 +249,7 @@ const IpGraph = () => {
     };
 
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/show_stats", payload)
+      .post(baseUrl+"show_stats", payload)
       .then((res) => {
         setStatsData(res.data.data);
 
@@ -279,7 +280,7 @@ const IpGraph = () => {
     };
 
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/show_stats", payload)
+      .post(baseUrl+"show_stats", payload)
       .then((res) => {
         setStatsData(res.data.data);
 

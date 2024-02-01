@@ -7,6 +7,7 @@ import jwtDecode from "jwt-decode";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import { Navigate, useParams } from "react-router-dom";
 import { useGlobalContext } from "../../Context/Context";
+import {baseUrl} from '../../utils/config'
 
 const IpHistory = () => {
   // const { data } = useGlobalContext();
@@ -17,7 +18,7 @@ const IpHistory = () => {
 
   function getData() {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/dataofiphistory/${id}`)
+      .get(`${baseUrl}`+`dataofiphistory/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

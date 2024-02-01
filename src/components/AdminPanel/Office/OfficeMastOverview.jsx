@@ -6,6 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import FormContainer from "../FormContainer";
 import DeleteButton from "../DeleteButton";
 import jwtDecode from "jwt-decode";
+import { baseUrl } from "../../../utils/config";
 
 const OfficeMastOverview = () => {
   const [search, setSearch] = useState("");
@@ -20,7 +21,7 @@ const OfficeMastOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -31,7 +32,7 @@ const OfficeMastOverview = () => {
   async function getData() {
     try {
       const res = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_rooms"
+        baseUrl+"get_all_rooms"
       );
 
       setData(res.data.data);

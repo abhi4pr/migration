@@ -1,6 +1,6 @@
 import React from "react";
 import FormContainer from "../AdminPanel/FormContainer";
-import { Button, Paper } from "@mui/material";
+import { Button, Paper, TextField } from "@mui/material";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { GridColumnMenu } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import ContentLoader from "react-content-loader";
+import {baseUrl} from '../../utils/config'
 
 export default function ExecutionDashboard() {
   const [contextData, setContextData] = useState(false);
@@ -35,12 +36,30 @@ export default function ExecutionDashboard() {
   const handleClickOpenExeDialog = () => {
     setOpenExeDialog(true);
   };
+
+  const formatNumberIndian = (num) => {
+    if (!num) return "";
+    var x = num.toString();
+    var afterPoint = '';
+    if(x.indexOf('.') > 0)
+       afterPoint = x.substring(x.indexOf('.'),x.length);
+    x = Math.floor(x);
+    x = x.toString();
+    var lastThree = x.substring(x.length - 3);
+    var otherNumbers = x.substring(0, x.length - 3);
+    if (otherNumbers != '')
+        lastThree = ',' + lastThree;
+    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+    return res;
+  };
+  
+
   const callDataForLoad = () => {
     const formData = new URLSearchParams();
     formData.append("loggedin_user_id", 36);
     setLoading(true);
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_purchase_data")
+      .get(baseUrl+"get_all_purchase_data")
       .then((res) => {
         setAlldata(res.data.result);
         let tempdata = res.data.result.filter((ele) => {
@@ -61,7 +80,7 @@ export default function ExecutionDashboard() {
     if (userID && contextData == false) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           if (res.data[33].view_value == 1) {
@@ -87,7 +106,7 @@ export default function ExecutionDashboard() {
 
   const handleUpdateRowClick = (row) => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_ip_count_history/${row.p_id}`)
+      .get(`${baseUrl}`+`get_exe_ip_count_history/${row.p_id}`)
       .then((res) => {
         let data = res.data.data.filter((e) => {
           return e.isDeleted !== true;
@@ -235,14 +254,16 @@ export default function ExecutionDashboard() {
         },
     pagemode == 1 || pagemode == 4
       ? {
-          field: "follower_count",
-          headerName: "Followers",
-        }
+        field: "follower_count",
+        headerName: "Followers",
+        valueFormatter: (params) => formatNumberIndian(params.value),
+      }
       : pagemode == 2
       ? ({
-          field: "follower_count",
-          headerName: "Followers",
-        },
+        field: "follower_count",
+        headerName: "Followers",
+        valueFormatter: (params) => formatNumberIndian(params.value),
+      },
         {
           field: "page_likes",
           headerName: "Page Likes",
@@ -404,6 +425,17 @@ export default function ExecutionDashboard() {
       </ContentLoader>
     );
   };
+  const [searchInput, setSearchInput] = useState("");
+  const filterRows = () => {
+    const filtered = alldata.filter((row) =>
+      row.page_name.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setTableData(filtered);
+  };
+
+  useEffect(() => {
+    filterRows();
+  }, [searchInput, alldata]);
   return (
     <div>
       <div style={{ width: "100%", margin: "0 0 0 0" }}>
@@ -494,6 +526,16 @@ export default function ExecutionDashboard() {
             </p>
           </Paper>
         </div>
+        <>
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            sx={{ mb: 2, mt: 2 }}
+          />
+        </>
+
         {!loading && (
           <DataGrid
             rows={tableData}

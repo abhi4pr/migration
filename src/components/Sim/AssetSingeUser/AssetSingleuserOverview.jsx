@@ -6,6 +6,7 @@ import axios from "axios";
 import FieldContainer from "../../AdminPanel/FieldContainer";
 import { useAPIGlobalContext } from "../../AdminPanel/APIContext/APIContext";
 import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 const AssetSingleuserOverview = ({
   filterData,
@@ -14,7 +15,7 @@ const AssetSingleuserOverview = ({
   newAssetRequestData,
   newRequestAPIRender,
 }) => {
-  const { usersDataContext, getAssetDataContext, toastAlert } =
+  const { usersDataContext, getAssetDataContext, toastAlert, toastError } =
     useGlobalContext();
   const { userID } = useAPIGlobalContext();
   const [reasonData, setReasonData] = useState([]);
@@ -37,9 +38,12 @@ const AssetSingleuserOverview = ({
   const [assetSubCategroyData, setAssetSubCategoryData] = useState([]);
   const [repairAssetId, setRepairAssetId] = useState("");
 
+  const [newAssetID, setNewAssetID] = useState(0);
+  const [isEditMode, setIsEditMode] = useState(false);
+
   async function getRepairReason() {
     const res = await axios.get(
-      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_assetResons"
+      baseUrl+"get_all_assetResons"
     );
 
     setReasonData(res?.data.data);
@@ -48,7 +52,7 @@ const AssetSingleuserOverview = ({
   const getAssetSubCategory = async () => {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_sub_category"
+        baseUrl+"get_all_asset_sub_category"
       );
 
       setAssetSubCategoryData(response.data.data);
@@ -83,7 +87,7 @@ const AssetSingleuserOverview = ({
       formData.append("problem_detailing", problemDetailing);
 
       const response = await axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_repair_request",
+        baseUrl+"add_repair_request",
         formData
       );
       setAssetName("");
@@ -116,7 +120,7 @@ const AssetSingleuserOverview = ({
       formData.append("asset_return_by", userID);
 
       const response = axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/assetreturn",
+        baseUrl+"assetreturn",
         formData
       );
 
@@ -128,7 +132,19 @@ const AssetSingleuserOverview = ({
   const handleRow = (row) => {
     setAssetName(row.assetsName);
     setRepairAssetId(row.sim_id);
-    console.log(row.assetsName, "name hai");
+  };
+  const handleDeleteNewAsset = (id) => {
+    try {
+      const response = axios.delete(
+        `${baseUrl}`+`assetrequest/${id}`
+      );
+      newRequestAPIRender();
+      hardRender();
+      toastAlert("Delete Success");
+    } catch (error) {
+      toastError("Error");
+      console.log(error);
+    }
   };
 
   const columns = [
@@ -139,17 +155,23 @@ const AssetSingleuserOverview = ({
       sortable: true,
     },
     {
+      name: "Asset ID",
+      selector: (row) => row.sim_id,
+      sortable: true,
+    },
+    {
       name: "Asset Name",
       selector: (row) => row.assetsName,
       sortable: true,
     },
     {
-      name: "Category Name",
+      name: "Asset Category",
       selector: (row) => row.category_name,
       sortable: true,
     },
+
     {
-      name: "Sub-Category Name",
+      name: "Asset SubCategory",
       selector: (row) => row.sub_category_name,
       sortable: true,
     },
@@ -161,16 +183,38 @@ const AssetSingleuserOverview = ({
       cell: (row) => {
         // Get the assigned date from the row
         const assignedDate = new Date(row.submitted_at);
+        const finalDate = assignedDate.getDate();
 
         // Get the current date
         const currentDate = new Date();
+        const finalCurrentDate = currentDate.getDate();
 
         // Calculate the difference in days
-        const timeDifference = currentDate - assignedDate;
+        const timeDifference = finalCurrentDate - finalDate;
         const daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
 
         return <div>{daysDifference} days</div>;
       },
+    },
+    {
+      name: "Repair Status",
+      selector: (row) => (
+        <>
+          {row.asset_repair_request_status === "Accept" ? (
+            <span className="badge badge-success">Accepted</span>
+          ) : row.asset_repair_request_status === "Recovered" ? (
+            <span className="badge badge-warning">Recoverd</span>
+          ) : row.asset_repair_request_status === "Resolved" ? (
+            <span className="badge badge-success">Resolved</span>
+          ) : row.asset_repair_request_status === "Requested" ? (
+            <span className="badge badge-danger">Requested</span>
+          ) : row.asset_repair_request_status === "ApprovedByManager" ? (
+            <span className="badge badge-warning">Approve By Manager</span>
+          ) : null}
+        </>
+      ),
+      width: "170px",
+      sortable: true,
     },
 
     {
@@ -246,14 +290,54 @@ const AssetSingleuserOverview = ({
     },
     {
       name: "Detail",
-      selector: (row) => row.detail,
+      cell: (row) => (
+        <div style={{ maxHeight: "100px", overflowY: "auto" }}>
+          {row.detail}
+        </div>
+      ),
       sortable: true,
+      width: "300px",
     },
 
     {
       name: "Taged Person",
-      selector: (row) => row.multi_tag_name,
+      selector: (row) => row.multi_tag_names,
       sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn btn-secondary "
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fa-solid fa-ellipsis"></i>
+          </button>
+          <div className="dropdown-menu dropdown-menu-right">
+            <button
+              onClick={() => handleUpdateNewAssetRow(row)}
+              class="dropdown-item"
+              type="button"
+              data-toggle="modal"
+              data-target="#sidebar-right"
+              size="small"
+            >
+              Edit
+            </button>
+            <button
+              className="dropdown-item"
+              type="button"
+              onClick={() => handleDeleteNewAsset(row._id)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ),
     },
   ];
 
@@ -265,7 +349,7 @@ const AssetSingleuserOverview = ({
 
   const handleNewAssetSubmit = () => {
     try {
-      axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/assetrequest", {
+      axios.post(baseUrl+"assetrequest", {
         sub_category_id: assetsName,
         detail: problemDetailing,
         priority: priority,
@@ -274,6 +358,34 @@ const AssetSingleuserOverview = ({
       });
 
       toastAlert("Request Success");
+      hardRender();
+      newRequestAPIRender();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdateNewAssetRow = (row) => {
+    console.log(row, "subcategory id");
+    setIsEditMode(true);
+    setNewAssetID(row._id);
+    setAssetName(row.sub_category_id);
+    setProblemDetailing(row.detail);
+    setPriority(row.priority);
+  };
+  const handleNewAssetUpdate = () => {
+    try {
+      axios.put(baseUrl+"assetrequest", {
+        _id: newAssetID,
+        sub_category_id: assetsName,
+        detail: problemDetailing,
+        priority: priority,
+        request_by: userID,
+        multi_tag: tagUser.map((user) => user.value),
+      });
+
+      toastAlert("Request Success");
+      hardRender();
       newRequestAPIRender();
     } catch (error) {
       console.log(error);
@@ -307,9 +419,14 @@ const AssetSingleuserOverview = ({
             data-target="#sidebar-right"
             size="small"
             className="col-2 ml-3 mb-2 btn btn-outline-primary btn-sm"
+            onClick={() => {
+              setIsEditMode(false);
+              // Additional logic if needed
+            }}
           >
             New Asset Request
           </button>
+
           <div className="page_height">
             <div className="card mb-4">
               <div className="data_tbl table-responsive">
@@ -318,7 +435,7 @@ const AssetSingleuserOverview = ({
                   columns={NewAssetcolumns}
                   data={newAssetRequestData}
                   fixedHeader
-                  fixedHeaderScrollHeight="40vh"
+                  fixedHeaderScrollHeight="50vh"
                   exportToCSV
                   highlightOnHover
                   subHeader
@@ -494,7 +611,7 @@ const AssetSingleuserOverview = ({
         </div>
       </div>
 
-      {/* Sidebar Right */}
+      {/* Sidebar Right new asset */}
       <div className="right-modal">
         <div
           className="modal fade right"
@@ -510,7 +627,7 @@ const AssetSingleuserOverview = ({
                     ×
                   </span>
                 </button>
-                <h4 className="modal-title">Request New Asset</h4>
+                <h4 className="modal-title">Asset Request</h4>
               </div>
               <div className="modal-body">
                 <div className="form-group col-12">
@@ -576,14 +693,25 @@ const AssetSingleuserOverview = ({
                   onChange={(e) => setProblemDetailing(e.target.value)}
                   required
                 />
-                <button
-                  type="button"
-                  data-dismiss="modal"
-                  className=" btn btn-primary ml-2"
-                  onClick={handleNewAssetSubmit}
-                >
-                  Submit
-                </button>
+                {isEditMode ? (
+                  <button
+                    type="button"
+                    data-dismiss="modal"
+                    className="btn btn-primary ml-2"
+                    onClick={handleNewAssetUpdate}
+                  >
+                    Update
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    data-dismiss="modal"
+                    className="btn btn-primary ml-2"
+                    onClick={handleNewAssetSubmit}
+                  >
+                    Submit
+                  </button>
+                )}
               </div>
             </div>
           </div>

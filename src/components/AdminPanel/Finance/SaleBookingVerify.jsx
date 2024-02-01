@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../../Context/Context";
 import DataTable from "react-data-table-component";
 import Modal from "react-modal";
 import { set } from "date-fns";
+import {baseUrl} from '../../../utils/config'
 
 const SaleBookingVerify = () => {
   const { toastAlert, toastError } = useGlobalContext();
@@ -63,7 +64,7 @@ const SaleBookingVerify = () => {
   function getData() {
     axios
       .post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_php_sale_booking_tds_verification_data_in_node"
+        baseUrl+"add_php_sale_booking_tds_verification_data_in_node"
       )
       .then(() => {
         console.log("data save in local success");

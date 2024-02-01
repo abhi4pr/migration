@@ -22,8 +22,11 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toolbarStyles } from "./CampaignCommitment";
+import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 export default function SubCategoryMaster() {
+  const { toastAlert, toastError } = useGlobalContext();
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,8 +73,13 @@ export default function SubCategoryMaster() {
   const handleSave = (e) => {
     e.preventDefault();
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory", postData)
+      .post(baseUrl+"projectxSubCategory", postData)
       .then((response) => {
+        if (response.data.success === false) {
+          toastError(response.data.message);
+        } else {
+          toastAlert("Add successfully");
+        }
         postData.sub_category_name = "";
         console.log("Data saved:", response.data);
         setIsModalOpen(false);
@@ -79,6 +87,8 @@ export default function SubCategoryMaster() {
       })
       .catch((error) => {
         console.error("Error saving data:", error);
+        toastError("Add Properly");
+
       });
     setIsModalOpen(false);
   };
@@ -88,7 +98,7 @@ export default function SubCategoryMaster() {
   // get api ------
   const getData = () => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory")
+      .get(baseUrl+"projectxSubCategory")
       .then((res) => {
         console.log(res.data);
         const sortedData = res.data.data.sort(
@@ -98,7 +108,7 @@ export default function SubCategoryMaster() {
       });
   };
   useEffect(() => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/projectxCategory").then((res) => {
+    axios.get(baseUrl+"projectxCategory").then((res) => {
       console.log(res.data.data);
       setCategory(res.data.data);
     });
@@ -108,7 +118,7 @@ export default function SubCategoryMaster() {
   // put api ------
   const handlePutData = () => {
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory`, {
+      .put(`${baseUrl}`+`projectxSubCategory`, {
         sub_category_id: editData.sub_category_id,
         sub_category_name: editData.sub_category_name,
         category_id: editData.category_id,
@@ -116,10 +126,17 @@ export default function SubCategoryMaster() {
       .then((res) => {
         console.log(res.data);
         setIsPutOpen(true);
+        if (res.data.success === false) {
+          toastError(res.data.message);
+        } else {
+          toastAlert("Update successfully");
+        }
       })
+      
       .then(() => {
         setIsPutOpen(false);
         getData();
+        setReload(!reload);
       });
     console.log("put data");
   };
@@ -145,7 +162,7 @@ export default function SubCategoryMaster() {
     if (itemToDeleteId) {
       axios
         .delete(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/projectxSubCategory/${itemToDeleteId}`
+          `${baseUrl}`+`projectxSubCategory/${itemToDeleteId}`
         )
         .then(() => {
           getData();

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import FormContainer from "../FormContainer";
 import { Button } from "@mui/material";
+import {baseUrl} from '../../../utils/config'
 
 const PreOnboardingOverview = () => {
   const [search, setSearch] = useState("");
@@ -14,7 +15,7 @@ const PreOnboardingOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
+        baseUrl+"get_all_users"
       );
       const data = response.data.data;
       const onboarddata = data.filter((d) => d.onboard_status === 2);
@@ -36,7 +37,7 @@ const PreOnboardingOverview = () => {
     formData.append("user_id", row);
     formData.append("onboard_status", 1);
     axios
-      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_user", formData, {
+      .put(baseUrl+"update_user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

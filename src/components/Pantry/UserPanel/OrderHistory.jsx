@@ -4,6 +4,7 @@ import jwtDecode from "jwt-decode";
 import DataTable from "react-data-table-component";
 import UserNav from "./UserNav";
 import { set } from "date-fns";
+import {baseUrl} from '../../../utils/config'
 
 const OrderHistory = () => {
   const [oldUserProduct, setOldUserProduct] = useState([]);
@@ -21,7 +22,7 @@ const OrderHistory = () => {
   useEffect(() => {
     axios
       .get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_orderreqshistory/${userId}`
+        `${baseUrl}`+`get_single_orderreqshistory/${userId}`
       )
       .then((res) => {
         setOldUserProduct(res.data);
@@ -39,7 +40,7 @@ const OrderHistory = () => {
 
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_boy")
+      .get(baseUrl+"get_delivery_boy")
       .then((res) => setReqDelApiData(res.data.results));
   }, []);
 
@@ -65,7 +66,7 @@ const OrderHistory = () => {
       }
       var productProp1 = propNames.toString();
     }
-    await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_orderreq", {
+    await axios.post(baseUrl+"add_orderreq", {
       product_id: row.product_id,
       order_quantity: row.Order_quantity,
       // special_request: specialRequest,
@@ -86,7 +87,7 @@ const OrderHistory = () => {
     setSelectedRow(row);
     axios
       .get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_productdata/${row.product_id}`
+        `${baseUrl}`+`get_single_productdata/${row.product_id}`
       )
       .then((res) => {
         // console.log("new console", res.data);

@@ -4,6 +4,7 @@ import jwtDecode from "jwt-decode";
 import DataTable from "react-data-table-component";
 import UserNav from "./UserNav";
 import CountdownTimer from "../PendingOrder/CountdownTimer";
+import {baseUrl} from '../../../utils/config'
 
 const PendingOrderSingleUser = () => {
   const [oldUserProduct, setOldUserProduct] = useState([]);
@@ -19,7 +20,7 @@ const PendingOrderSingleUser = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_pendingorders/${userId}`)
+      .get(`${baseUrl}`+`get_single_pendingorders/${userId}`)
       .then((res) => {
         setOldUserProduct(res.data.data);
         setFilterData(res.data.data);

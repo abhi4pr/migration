@@ -4,6 +4,8 @@ import DataTable from "react-data-table-component";
 import { Navigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
+
 const DesiDeptAuth = () => {
   const { toastAlert } = useGlobalContext();
   const token = sessionStorage.getItem("token");
@@ -21,7 +23,7 @@ const DesiDeptAuth = () => {
   }, []);
   function getData() {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_desi_dept_auth/${id}`)
+      .get(`${baseUrl}`+`get_single_desi_dept_auth/${id}`)
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);
@@ -105,7 +107,7 @@ const DesiDeptAuth = () => {
   ];
   function postData() {
     for (const element of filterData) {
-      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_dept_desi_auth", {
+      axios.put(baseUrl+"update_dept_desi_auth", {
         dept_desi_auth_id: element.dept_desi_auth_id,
         dept_id: element.dept_id,
         desi_id: element.desi_id,

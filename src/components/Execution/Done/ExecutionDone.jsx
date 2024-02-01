@@ -9,6 +9,7 @@ import ListAltOutlinedIcon from "@mui/icons-material/ListAltOutlined";
 import { Button } from "@mui/material";
 import PaymentDetailDailog from "../PaymentDetailDailog";
 import PointOfSaleTwoToneIcon from "@mui/icons-material/PointOfSaleTwoTone";
+import {baseUrl} from '../../../utils/config'
 
 export default function ExecutionDone() {
   const storedToken = sessionStorage.getItem("token");
@@ -39,7 +40,7 @@ export default function ExecutionDone() {
       if (userID && contextData == false) {
         axios
           .get(
-            `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+            `${baseUrl}`+`get_single_user_auth_detail/${userID}`
           )
           .then((res) => {
             if (res.data[26].view_value == 1) {
@@ -52,7 +53,7 @@ export default function ExecutionDone() {
       formData.append("loggedin_user_id", 36);
       console.log(formData);
       const response = axios
-        .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_exe_sum", {
+        .get(baseUrl+"get_exe_sum", {
           loggedin_user_id: 52,
         })
         .then((res) => {

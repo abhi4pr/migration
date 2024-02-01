@@ -6,6 +6,7 @@ import { useGlobalContext } from "../../../Context/Context";
 import jwtDecode from "jwt-decode";
 import Select from "react-select";
 import DataTable from "react-data-table-component";
+import {baseUrl} from '../../../utils/config'
 
 const Backup_Attendence = () => {
   const { toastAlert } = useGlobalContext();
@@ -55,7 +56,7 @@ const Backup_Attendence = () => {
   const userID = decodedToken.id;
 
   useEffect(() => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/allwfhusers").then((res) => {
+    axios.get(baseUrl+"allwfhusers").then((res) => {
       const data = res.data.data;
       const filteredUser = data.filter(
         (d) => d.dept_id === department && d.user_status
@@ -66,7 +67,7 @@ const Backup_Attendence = () => {
 
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         getDepartmentData(res.data);
       });
@@ -80,7 +81,7 @@ const Backup_Attendence = () => {
       year: selectedYear,
     };
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/salaryfromattendence", payload)
+      .post(baseUrl+"salaryfromattendence", payload)
       .then((res) => {
         console.log(res.data, "res");
         setAttendenceData(res.data.data);
@@ -102,7 +103,7 @@ const Backup_Attendence = () => {
     if (department) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/getuserdeptwisewfhdata/${department}`
+          `${baseUrl}`+`getuserdeptwisewfhdata/${department}`
         )
         .then((res) => {
           getUsersData(res.data);
@@ -113,7 +114,7 @@ const Backup_Attendence = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/attendencemastpost", {
+      .post(baseUrl+"attendencemastpost", {
         dept: department,
         user_id: userName,
         noOfabsent: Number(noOfAbsent),

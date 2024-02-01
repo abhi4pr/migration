@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
+import {baseUrl} from '../../../utils/config'
 
 const AlertOrderSuccessful = () => {
   const [data, setData] = useState([]);
@@ -9,7 +10,7 @@ const AlertOrderSuccessful = () => {
   async function getData() {
     try {
       const res = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata"
+        baseUrl+"get_all_orderreqdata"
       );
       setData(res.data.data);
       console.log(res.data.data);

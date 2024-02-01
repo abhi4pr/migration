@@ -8,6 +8,7 @@ import DeleteButton from "../../AdminPanel/DeleteButton";
 
 import DataTable from "react-data-table-component";
 import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 const CocOverview = () => {
   const { toastAlert } = useGlobalContext();
@@ -21,7 +22,7 @@ const CocOverview = () => {
 
   async function getData() {
     await axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cocs")
+      .get(baseUrl+"get_all_cocs")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

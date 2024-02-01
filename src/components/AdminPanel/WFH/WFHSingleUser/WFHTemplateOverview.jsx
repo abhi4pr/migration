@@ -4,10 +4,11 @@ import jwtDecode from "jwt-decode";
 import axios from "axios";
 import Modal from "react-modal";
 import { useGlobalContext } from "../../../../Context/Context";
+import {baseUrl} from '../../../../utils/config'
 
 const templateImages = useInvoiceTemplateImages();
 
-const WFHTemplateOverview = () => {
+const WFHTemplateOverview = ({ closeTemplateModal }) => {
   const { toastAlert } = useGlobalContext();
   const token = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(token);
@@ -23,12 +24,13 @@ const WFHTemplateOverview = () => {
     formData.append("user_id", loginUserId);
     formData.append("invoice_template_no", selectedTemplate);
     if (selectedTemplate) {
-      await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
+      await axios.put(`${baseUrl}`+`update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       toastAlert("Template selected successfully");
+      if (closeTemplateModal) closeTemplateModal();
     } else {
       alert("No Template Selected");
     }

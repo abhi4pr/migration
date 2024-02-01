@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import DigitalSignature from "../DigitalSignature/DigitalSignature";
 import { TextField } from "@mui/material";
 import { FcDownload } from "react-icons/fc";
+import { baseUrl } from "../../utils/config";
 
 const LetterTab = ({ allUserData, gettingData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +24,7 @@ const LetterTab = ({ allUserData, gettingData }) => {
     formData.append("offer_later_reject_reason", reason);
 
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_user`, formData, {
+      .put(`${baseUrl}`+`update_user`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

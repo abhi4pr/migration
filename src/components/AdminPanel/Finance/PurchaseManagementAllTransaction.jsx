@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import ImageView from "./ImageView";
 import pdf from "./pdf-file.png";
+import {baseUrl} from '../../../utils/config'
 
 export default function PurchaseManagementAllTransaction() {
   const [search, setSearch] = useState("");
@@ -20,7 +21,7 @@ export default function PurchaseManagementAllTransaction() {
 
   const callApi = () => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/phpvendorpaymentrequest")
+      .get(baseUrl+"phpvendorpaymentrequest")
       .then((res) => {
         console.log(res.data.modifiedData.length, "node l js");
         console.log(res.data.modifiedData, "node js");

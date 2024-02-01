@@ -7,6 +7,7 @@ import FieldContainer from "../AdminPanel/FieldContainer";
 import { useGlobalContext } from "../../Context/Context";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import jwtDecode from "jwt-decode";
+import { baseUrl } from "../../utils/config";
 
 const IpCountUpdate = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const IpCountUpdate = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/lastdataofipcount/${id}`)
+      .get(`${baseUrl}`+`lastdataofipcount/${id}`)
       .then((res) => {
         const fetchedData = res.data[0];
         setIPID(fetchedData.ip_regist_id);
@@ -41,13 +42,13 @@ const IpCountUpdate = () => {
     let intervalId;
 
     try {
-      const apiUrl = "https://api-dot-react-migration-project.el.r.appspot.com/api/instagram";
+      const apiUrl = baseUrl+"instagram";
       const response = await axios.post(apiUrl, { IPName: ipName });
       const dataRequestId = response.data.data_request_id;
 
       intervalId = setInterval(async () => {
         try {
-          const secondApiUrl = `https://api-dot-react-migration-project.el.r.appspot.com/api/instagram2/${dataRequestId}`;
+          const secondApiUrl = `${baseUrl}`+`instagram2/${dataRequestId}`;
           const secondApiResponse = await axios.get(secondApiUrl);
           const followers =
             secondApiResponse.data.response_entries[0].followers;
@@ -73,7 +74,7 @@ const IpCountUpdate = () => {
     const dateString = currDate.replace("T", " ").replace("Z", "");
 
     e.preventDefault();
-    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/ipcountpost", {
+    axios.post(baseUrl+"ipcountpost", {
       ip_id: Number(id),
       last_updated_by: userID,
       last_updated_at: dateString,

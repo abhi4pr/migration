@@ -4,6 +4,7 @@ import { Paper, Button, Box, Typography } from "@mui/material";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import axios from "axios";
+import {baseUrl} from '../../../utils/config' 
 
 export default function CheckPageFollowers() {
   const [gridRows, setGridRows] = useState([]);
@@ -13,7 +14,7 @@ export default function CheckPageFollowers() {
   // Interagation of followerData api ----- ** start ** ------------------
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/getallprojectx`)
+      .get(`${baseUrl}`+`getallprojectx`)
       .then((response) => {
         const data = response.data;
         console.log(data, "<--------");
@@ -182,7 +183,7 @@ export default function CheckPageFollowers() {
 
 //        };
 
-//        const response = await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/content",
+//        const response = await axios.post(baseUrl+"content",
 //        newRecordData);
 //        const newRecord = response.data;
 

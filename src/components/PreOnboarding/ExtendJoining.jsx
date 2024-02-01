@@ -3,8 +3,9 @@ import { TextField } from "@mui/material";
 import axios from "axios";
 import { useGlobalContext } from "../../Context/Context";
 import WhatsappAPI from "../WhatsappAPI/WhatsappAPI";
+import {baseUrl} from '../../utils/config'
 
-const url = "https://api-dot-react-migration-project.el.r.appspot.com/api/";
+const url = baseUrl+"";
 
 const ExtendJoining = ({
   gettingData,

@@ -11,6 +11,7 @@ import * as XLSX from "xlsx";
 import Select from "react-select";
 import Modal from "react-modal";
 import { useGlobalContext } from "../../Context/Context";
+import { baseUrl } from "../../utils/config";
 
 const SimOverview = () => {
   const { toastAlert, categoryDataContext } = useGlobalContext();
@@ -53,7 +54,7 @@ const SimOverview = () => {
   ];
 
   function getData() {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sims").then((res) => {
+    axios.get(baseUrl+"get_all_sims").then((res) => {
       const simAllData = res.data.data;
       // if (status != "") {
       //   const AvailableData = simAllData?.filter(
@@ -75,7 +76,7 @@ const SimOverview = () => {
     });
   }
   // function getAllocatedData (){
-  //   axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_allocations").then((res) => {
+  //   axios.get(baseUrl+"get_all_allocations").then((res) => {
   //     console.log(res.data)
   //   });
   // }
@@ -96,7 +97,7 @@ const SimOverview = () => {
   // const [categoryData, setCategoryData] = useState([]);
   // const getCategoryData = () => {
   //   axios
-  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
+  //     .get(baseUrl+"get_all_asset_category")
   //     .then((res) => {
   //       setCategoryData(res.data);
   //     });
@@ -105,7 +106,7 @@ const SimOverview = () => {
     if (category) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_asset_sub_category/${category}`
+          `${baseUrl}`+`get_single_asset_sub_category/${category}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -123,12 +124,12 @@ const SimOverview = () => {
 
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_allocations")
+      .get(baseUrl+"get_all_allocations")
       .then((res) => {
         setSimAllocationData(res.data.data);
       });
 
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
+    axios.get(baseUrl+"get_all_users").then((res) => {
       setUserData(res.data.data);
     });
   }, []);
@@ -146,7 +147,7 @@ const SimOverview = () => {
 
   function handleParticularSimData(simId) {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_sim/${simId}`)
+      .get(`${baseUrl}`+`get_single_sim/${simId}`)
       .then((res) => {
         setModalData(res.data.data);
         // console.log(res.data.data , "there is data")
@@ -175,7 +176,7 @@ const SimOverview = () => {
     if (selectedUserTransfer != "") {
       const currDate = new Date().toISOString();
       const dateString = currDate.replace("T", " ").replace("Z", "");
-      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_allocationsim", {
+      axios.put(baseUrl+"update_allocationsim", {
         sim_id: simAllocationTransferData[0].sim_id,
         allo_id: simAllocationTransferData[0].allo_id,
         user_id: simAllocationTransferData[0].user_id,
@@ -187,7 +188,7 @@ const SimOverview = () => {
         submitted_at: dateString,
       });
 
-      axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_sim_allocation", {
+      axios.post(baseUrl+"add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         sim_id: Number(simAllocationTransferData[0].sim_id),
         // dept_id: Number(modalSelectedUserData[0].dept_id),
@@ -201,7 +202,7 @@ const SimOverview = () => {
 
   const handleSimAllocation = async () => {
     if (selectedUserTransfer !== "") {
-      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_sim_allocation", {
+      await axios.post(baseUrl+"add_sim_allocation", {
         user_id: Number(selectedUserTransfer),
         status: "Allocated",
         sim_id: Number(modalData.sim_id),
@@ -211,7 +212,7 @@ const SimOverview = () => {
       });
 
       await axios
-        .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_sim", {
+        .put(baseUrl+"update_sim", {
           id: modalData.sim_id,
           mobilenumber: modalData.mobileNumber,
           sim_no: modalData.sim_no,
@@ -251,6 +252,7 @@ const SimOverview = () => {
           {row.assetsName}
         </Link>
       ),
+      width: "150px",
       sortable: true,
     },
     {
@@ -266,7 +268,7 @@ const SimOverview = () => {
     },
     {
       name: "Duration",
-      selector: (row) => row.date_difference + "" + "days",
+      selector: (row) => row.date_difference + " " + " Days",
       sortable: true,
     },
     {
@@ -307,11 +309,16 @@ const SimOverview = () => {
       selector: (row) => (
         <>
           <a style={{ cursor: "pointer" }} href={row.invoiceCopy_url} download>
-            <img
+            {/* <img
               style={{ width: "100px" }}
               src={row.invoiceCopy_url}
               alt="invoice copy"
-            />
+            /> */}
+            <i
+              class="fa fa-download"
+              aria-hidden="true"
+              style={{ fontSize: "25px", color: "blue" }}
+            ></i>
           </a>
         </>
       ),
@@ -393,7 +400,7 @@ const SimOverview = () => {
 
   const handleImageClick = (row) => {
     axios
-      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_assets_image`, {
+      .post(`${baseUrl}`+`get_single_assets_image`, {
         sim_id: row,
       })
       .then((res) => {
@@ -422,7 +429,7 @@ const SimOverview = () => {
         <UserNav />
 
         <div className="section section_padding sec_bg h100vh">
-          <div className="container">
+          <div className="container mt-2">
             <div className="action_heading">
               <div className="action_title">
                 <FormContainer
@@ -436,7 +443,7 @@ const SimOverview = () => {
                   type="button"
                   className={"btn btn-outline-primary btn-sm"}
                 >
-                  <Link to="/sim-dashboard">Dashboard</Link>
+                  <Link to="/admin/asset-dashboard">Dashboard</Link>
                 </button>
 
                 {/* There is masters  */}
@@ -940,11 +947,17 @@ const SimOverview = () => {
                     <div className="summary_cardrow flex-column">
                       <div className="summary_box text-center ml-auto mr-auto"></div>
                       <div className="summary_box col">
-                        <img
-                          src={showAssetsImage[0]?.img1_url}
-                          width="80px"
-                          height="80px"
-                        />
+                        <a
+                          style={{ cursor: "pointer" }}
+                          href={showAssetsImage[0]?.img1_url}
+                          download
+                        >
+                          <img
+                            src={showAssetsImage[0]?.img1_url}
+                            width="80px"
+                            height="80px"
+                          />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -957,11 +970,17 @@ const SimOverview = () => {
                     <div className="summary_cardrow flex-column">
                       <div className="summary_box text-center ml-auto mr-auto"></div>
                       <div className="summary_box col">
-                        <img
-                          src={showAssetsImage[0]?.img2_url}
-                          width="80px"
-                          height="80px"
-                        />
+                        <a
+                          style={{ cursor: "pointer" }}
+                          href={showAssetsImage[0]?.img2_url}
+                          download
+                        >
+                          <img
+                            src={showAssetsImage[0]?.img2_url}
+                            width="80px"
+                            height="80px"
+                          />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -974,11 +993,17 @@ const SimOverview = () => {
                     <div className="summary_cardrow flex-column">
                       <div className="summary_box text-center ml-auto mr-auto"></div>
                       <div className="summary_box col">
-                        <img
-                          src={showAssetsImage[0]?.img3_url}
-                          width="80px"
-                          height="80px"
-                        />
+                        <a
+                          style={{ cursor: "pointer" }}
+                          href={showAssetsImage[0]?.img3_url}
+                          download
+                        >
+                          <img
+                            src={showAssetsImage[0]?.img3_url}
+                            width="80px"
+                            height="80px"
+                          />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -991,11 +1016,17 @@ const SimOverview = () => {
                     <div className="summary_cardrow flex-column">
                       <div className="summary_box text-center ml-auto mr-auto"></div>
                       <div className="summary_box col">
-                        <img
-                          src={showAssetsImage[0]?.img4_url}
-                          width="80px"
-                          height="80px"
-                        />
+                        <a
+                          style={{ cursor: "pointer" }}
+                          href={showAssetsImage[0]?.img4_url}
+                          download
+                        >
+                          <img
+                            src={showAssetsImage[0]?.img4_url}
+                            width="80px"
+                            height="80px"
+                          />
+                        </a>
                       </div>
                     </div>
                   </div>

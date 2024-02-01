@@ -13,6 +13,7 @@ import DeleteButton from "../AdminPanel/DeleteButton";
 import jwtDecode from "jwt-decode";
 import Modal from "react-modal";
 import { Autocomplete, Slider, TextField } from "@mui/material";
+import { baseUrl } from "../../utils/config";
 
 const DataBrandOverview = () => {
   const [search, setSearch] = useState("");
@@ -90,7 +91,7 @@ const DataBrandOverview = () => {
 
   async function getData() {
     await axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_datas")
+      .get(baseUrl+"get_all_datas")
       .then((res) => {
         setCountData(res.data);
         const responseData = res.data;
@@ -112,26 +113,26 @@ const DataBrandOverview = () => {
       });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_categorys")
+      .get(baseUrl+"get_all_data_categorys")
       .then((res) => setCategoryData(res.data.simcWithSubCategoryCount));
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_brands")
+      .get(baseUrl+"get_all_data_brands")
       .then((res) => setBrandData(res.data));
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/distinct_created_by")
+      .get(baseUrl+"distinct_created_by")
       .then((res) => setEmployeeData(res.data.data));
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/distinct_designed_by")
+      .get(baseUrl+"distinct_designed_by")
       .then((res) => setDesignedData(res.data.data));
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_platforms")
+      .get(baseUrl+"get_all_data_platforms")
       .then((res) => setPlatformData(res.data));
     axios
 
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_data_content_types")
+      .get(baseUrl+"get_all_data_content_types")
       .then((res) => setContentData(res.data));
   }
 
@@ -181,7 +182,7 @@ const DataBrandOverview = () => {
   const deleteBrand = async (brand_name) => {
     await axios
       .delete(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_data_based_data/${brand_name}`
+        `${baseUrl}`+`delete_data_based_data/${brand_name}`
       )
       .then((res) => {
         getData();

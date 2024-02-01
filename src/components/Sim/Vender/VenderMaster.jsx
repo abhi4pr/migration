@@ -8,6 +8,7 @@ import UserNav from "../../Pantry/UserPanel/UserNav";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { Autocomplete, TextField } from "@mui/material";
+import { baseUrl } from "../../../utils/config";
 
 const VenderMaster = () => {
   const { toastAlert, categoryDataContext } = useGlobalContext();
@@ -25,19 +26,12 @@ const VenderMaster = () => {
   const [secondaryPersonName, setSecondaryPersonName] = useState("");
 
   const [type, setType] = useState("");
-  // const Type = [
-  //   "Current Asset",
-  //   "Fixed Asset",
-  //   "Tangible Asset",
-  //   "Intangible Asset",
-  //   "Operating Asset",
-  //   "Non Operating Asset",
-  // ];
+
   const Type = ["Sales", "Service", "Both"];
   // const [categoryData, setCategoryData] = useState([]);
   // const getCategoryData = () => {
   //   axios
-  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
+  //     .get(baseUrl+"get_all_asset_category")
   //     .then((res) => {
   //       setCategoryData(res.data);
   //     });
@@ -50,7 +44,7 @@ const VenderMaster = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/add_vendor",
+        baseUrl+"add_vendor",
         {
           vendor_name: vendorName,
           vendor_type: type,
@@ -82,6 +76,19 @@ const VenderMaster = () => {
   const categoryChangeHandler = (e, op) => {
     setSelectedCategory(op);
   };
+
+  // Filter the options to exclude the selected categories
+  const filteredCategoryOptions = categoryDataContext
+    .filter(
+      (category) =>
+        !selectedCategory.find(
+          (selected) => selected.value === category.category_id
+        )
+    )
+    .map((category) => ({
+      label: category.category_name,
+      value: category.category_id,
+    }));
   return (
     <>
       <UserNav />
@@ -121,26 +128,36 @@ const VenderMaster = () => {
             <Autocomplete
               multiple
               id="combo-box-demo"
-              options={categoryDataContext.map((d) => ({
-                label: d.category_name,
-                value: d.category_id,
-              }))}
+              options={filteredCategoryOptions}
+              getOptionLabel={(option) => option.label}
               InputLabelProps={{ shrink: true }}
               renderInput={(params) => (
                 <TextField {...params} label="Vendor Category" />
               )}
               onChange={categoryChangeHandler}
+              value={selectedCategory}
             />
           </div>
           <FieldContainer
-            label="Contect"
+            label="Contact"
             value={vendorContact}
-            onChange={(e) => setVendorContact(e.target.value)}
+            type="number"
+            required={true}
+            onChange={(e) => {
+              if (e.target.value.length <= 10) {
+                setVendorContact(e.target.value);
+              }
+            }}
           />
           <FieldContainer
-            label="Secondary Contect"
+            label="Secondary Contact"
+            type="number"
             value={secondaryContact}
-            onChange={(e) => setSecondaryContact(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.length <= 10) {
+                setSecondaryContact(e.target.value);
+              }
+            }}
           />
           <FieldContainer
             label="Secondary Peroson Name"
@@ -149,6 +166,7 @@ const VenderMaster = () => {
           />
           <FieldContainer
             label="Email"
+            required={true}
             value={vendorEmail}
             onChange={(e) => setVendorEmail(e.target.value)}
           />

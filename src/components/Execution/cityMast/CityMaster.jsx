@@ -16,6 +16,7 @@ import { TextField } from "@mui/material";
 import { useGlobalContext } from "../../../Context/Context";
 import DeleteCity from "./DeleteCity";
 import EditCity from "./EditCity";
+import {baseUrl} from '../../../utils/config'
 
 export default function CityMaster() {
   const [city, setCity] = useState([]);
@@ -28,6 +29,7 @@ export default function CityMaster() {
   const [rowData, setRowData] = useState({});
   const [openDeleteCityName, setOpenDeleteCityName] = React.useState(false);
 
+
   const handleClickOpenDeleteCityName = (row) => {
     setOpenDeleteCityName(true);
     setRowData(row);
@@ -37,7 +39,7 @@ export default function CityMaster() {
   };
   const handleSaveEditCityName = () => {
     axios
-      .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_city", {
+      .put(baseUrl+"update_city", {
         _id: rowData._id,
         city_name: editCityName,
       })
@@ -66,7 +68,7 @@ export default function CityMaster() {
   };
 
   const callApi = () => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_cities").then((res) => {
+    axios.get(baseUrl+"get_all_cities").then((res) => {
       console.log(res);
       setCity(res.data.data);
       setRow(res.data.data);
@@ -77,7 +79,28 @@ export default function CityMaster() {
     callApi();
   }, []);
   const cityColumns = [
-    { field: "city_name", headerName: "City Name", width: 300 },
+
+    {
+      field: "S.NO",
+      headerName: "S.NO",
+      width: 90,
+      editable: false,
+      renderCell: (params) => {
+        const rowIndex = row.indexOf(params.row);
+        return <div>{rowIndex + 1}</div>;
+      },
+    },
+    {
+      field: "city_name",
+      headerName: "City Name",
+      width: 180,
+      require: true,
+      renderCell: (params) => {
+        const name = params.value;
+        const capitalized = name.charAt(0).toUpperCase() + name.slice(1);
+        return <div>{capitalized}</div>;
+      },
+    },
     {
       field: "actions",
       headerName: "Actions",
@@ -111,7 +134,7 @@ export default function CityMaster() {
 
   // const handleSaveEditCityName = () => {
   //   axios
-  //     .put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_city", {
+  //     .put(baseUrl+"update_city", {
   //       _id: rowData._id,
   //       city_name: editCityName,
   //     })
@@ -139,7 +162,7 @@ export default function CityMaster() {
 
   const handleClickAddCity = () => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_city", { city_name: addCity })
+      .post(baseUrl+"add_city", { city_name: addCity })
       .then((res) => {
         if (res.status === 200) {
           toastAlert(`${addCity} added successfully`);

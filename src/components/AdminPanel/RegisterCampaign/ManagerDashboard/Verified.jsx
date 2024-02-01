@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ModeCommentTwoToneIcon from "@mui/icons-material/ModeCommentTwoTone";
 import { Box, Modal, Paper, Typography, Button } from "@mui/material";
+import {baseUrl} from '../../../../utils/config'
 
 const Verified = ({ verified }) => {
   const [open2, setOpen2] = useState(false);
@@ -11,8 +12,8 @@ const Verified = ({ verified }) => {
     const _id = params.row.ass_id;
     try {
       const response = await axios.get(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/commit/single/${_id}`
-        // `https://api-dot-react-migration-project.el.r.appspot.com/api/assignment/commit/single/2`
+        `${baseUrl}`+`assignment/commit/single/${_id}`
+        // `${baseUrl}`+`assignment/commit/single/2`
       );
       setPendingCommit(response.data.data);
       setOpen2(true);

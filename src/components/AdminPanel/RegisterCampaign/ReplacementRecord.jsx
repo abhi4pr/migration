@@ -8,6 +8,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import axios from "axios";
+import {baseUrl} from '../../../utils/config'
 
 const style = {
   position: "absolute",
@@ -28,14 +29,14 @@ const ReplacementRecord = ({ open, data, handleClose }) => {
 
   const getRecord = async () => {
     const record = await axios.get(
-      `https://api-dot-react-migration-project.el.r.appspot.com/api/replacement/${data.replacement_id._id}`
+      `${baseUrl}`+`replacement/${data.replacement_id._id}`
     );
     console.log(record.data.data, "<---------------------------------");
     setReplacementData(record?.data?.data);
   };
   const getPageData = async () => {
     const oldPageData = await axios.get(
-      `https://api-dot-react-migration-project.el.r.appspot.com/api/replacement/${data.replacement_id._id}`
+      `${baseUrl}`+`replacement/${data.replacement_id._id}`
     );
     seteNewPageData(oldPageData?.data?.data?.newPages);
     setOldData(oldPageData?.data?.data);

@@ -3,13 +3,14 @@ import FormContainer from "../AdminPanel/FormContainer";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { baseUrl } from "../../utils/config";
 
 const SingleAssetUserDetails = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const getData = () => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_sim/${id}`)
+      .get(`${baseUrl}`+`get_single_sim/${id}`)
       .then((res) => {
         const fetchedData = res.data.data;
         setData(fetchedData);
@@ -34,9 +35,6 @@ const SingleAssetUserDetails = () => {
             submitButton={false}
             mainTitle="Asset"
             title="Assets Details"
-            //   accordionButtons={accordionButtons}
-            //   activeAccordionIndex={activeAccordionIndex}
-            //   onAccordionButtonClick={handleAccordionButtonClick}
           >
             <div className="profileInfo_area">
               <div className="row profileInfo_row pt-0">
@@ -148,6 +146,20 @@ const SingleAssetUserDetails = () => {
                     <div className="profileInfo_box">
                       <h3>Date of Purchase</h3>
                       <h4>{purchase}</h4>
+                    </div>
+                  </div>
+
+                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                    <div className="profileInfo_box">
+                      <h3>Asset Finacial Type</h3>
+                      <h4>{data.asset_financial_type}</h4>
+                    </div>
+                  </div>
+
+                  <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                    <div className="profileInfo_box">
+                      <h3>Status</h3>
+                      <h4>{data.status}</h4>
                     </div>
                   </div>
                 </div>

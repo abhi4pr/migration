@@ -3,6 +3,7 @@ import axios from "axios";
 import "./Delivery.css";
 import "./DeliveryResponsive.css";
 import jwtDecode from "jwt-decode";
+import {baseUrl} from '../../../utils/config'
 
 let orderLength = 0;
 
@@ -23,7 +24,7 @@ const DeliveryData = () => {
 
   function getData() {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_orderreqdata")
+      .get(baseUrl+"get_all_orderreqdata")
       .then((res) => {
         if (res.data.data?.length !== orderLength) {
           orderLength = res.data.data.length;
@@ -36,7 +37,7 @@ const DeliveryData = () => {
       });
 
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_orderreqs", {
+      .post(baseUrl+"add_orderreqs", {
         // Sitting_id: sittingID,
         Request_delivered_by: loginUserId,
         room_id: roomId,
@@ -57,7 +58,7 @@ const DeliveryData = () => {
 
   useEffect(() => {
     getData();
-    axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_delivery_user`).then((res) => {
+    axios.get(`${baseUrl}`+`get_delivery_user`).then((res) => {
       setDeliveryBoyData(res.data);
       // console.log(res.data);
     });
@@ -73,7 +74,7 @@ const DeliveryData = () => {
   ) => {
     // console.log(productId, OrderReqId, userid, orderquantity, productmessage);
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_orderrequest`, {
+      .put(`${baseUrl}`+`update_orderrequest`, {
         product_id: productId,
         order_req_id: OrderReqId,
         order_quantity: orderquantity,
@@ -94,7 +95,7 @@ const DeliveryData = () => {
   const handleTransfer = (e) => {
     e.preventDefault();
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_transreq", {
+      .post(baseUrl+"add_transreq", {
         from_id: roleId,
         to_id: transferTo,
         reason: reason,

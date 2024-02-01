@@ -6,6 +6,7 @@ import DeleteButton from "../DeleteButton";
 import axios from "axios";
 import FormContainer from "../FormContainer";
 import jwtDecode from "jwt-decode";
+import { baseUrl } from "../../../utils/config";
 
 const ObjectOverview = () => {
   const [search, setSearch] = useState("");
@@ -20,7 +21,7 @@ const ObjectOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -29,7 +30,7 @@ const ObjectOverview = () => {
   }, [userID]);
 
   function getData() {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_objs").then((res) => {
+    axios.get(baseUrl+"get_all_objs").then((res) => {
       setData(res.data.data);
       setFilterData(res.data.data);
     });

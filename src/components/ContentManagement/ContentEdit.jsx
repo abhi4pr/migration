@@ -6,6 +6,7 @@ import FormContainer from "../AdminPanel/FormContainer";
 import FieldContainer from "../AdminPanel/FieldContainer";
 import { useGlobalContext } from "../../Context/Context";
 import UserNav from "../Pantry/UserPanel/UserNav";
+import {baseUrl} from '../../utils/config'
 
 const ContentEdit = () => {
   const { toastAlert } = useGlobalContext();
@@ -26,7 +27,7 @@ const ContentEdit = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/content_upload/${id}`)
+      .get(`${baseUrl}`+`content_upload/${id}`)
       .then((res) => {
         const fetchedData = res.data[0];
         setPageName(fetchedData.pageName);
@@ -39,7 +40,7 @@ const ContentEdit = () => {
       });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/alldataofIptype")
+      .get(baseUrl+"alldataofIptype")
       .then((res) => setIpTypeData(res.data));
   }, []);
 
@@ -56,7 +57,7 @@ const ContentEdit = () => {
     // formData.append("reason", reason);
     // formData.append("status", status)
 
-    await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/content_upload", formData, {
+    await axios.put(baseUrl+"content_upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import DeleteButton from "../DeleteButton";
 import FormContainer from "../FormContainer";
 import jwtDecode from "jwt-decode";
+import { baseUrl } from "../../../utils/config";
 
 const AttendanceOverview = () => {
   const [search, setSearch] = useState("");
@@ -19,7 +20,7 @@ const AttendanceOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setDatas(res.data);
@@ -29,7 +30,7 @@ const AttendanceOverview = () => {
 
   function getData() {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/all_attendence_mast_data")
+      .get(baseUrl+"all_attendence_mast_data")
       .then((res) => {
         setData(res.data);
         setFilterData(res.data);

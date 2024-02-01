@@ -8,6 +8,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import ReplacePagesModal from "./ReplacePagesModal";
 import CampaignDetailes from "./CampaignDetailes";
 import PageOverview from "./PageOverview";
+import { baseUrl } from "../../../utils/config";
 
 const PlanOverview = () => {
   const [selectData, setSelectData] = useState([]);
@@ -18,7 +19,7 @@ const PlanOverview = () => {
 
   const getSelectPage = async () => {
     const newPlan = await axios.get(
-      `https://api-dot-react-migration-project.el.r.appspot.com/api/campaignplan/${id}`
+      `${baseUrl}`+`campaignplan/${id}`
     );
     console.log(newPlan, "dfsldfksdl");
     const x = newPlan.data.data.filter((page) => {
@@ -27,8 +28,8 @@ const PlanOverview = () => {
         page.replacement_status == "replacement" ||
         page.replacement_status == "inactive"
       ) {
-        return page;
       }
+      return page;
     });
     setSelectData(x);
   };

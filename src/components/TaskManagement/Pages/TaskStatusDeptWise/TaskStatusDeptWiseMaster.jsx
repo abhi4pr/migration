@@ -6,6 +6,7 @@ import getDecodedToken from "../../../../utils/DecodedToken";
 import { useGlobalContext } from "../../../../Context/Context";
 import { Navigate } from "react-router-dom";
 import Select from "react-select";
+import {baseUrl} from '../../../../utils/config'
 
 const TaskStatusDeptWiseMaster = () => {
   const tokenValue = getDecodedToken();
@@ -21,7 +22,7 @@ const TaskStatusDeptWiseMaster = () => {
 
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
       });
@@ -30,7 +31,7 @@ const TaskStatusDeptWiseMaster = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/deptwisestatus", {
+      await axios.post(baseUrl+"deptwisestatus", {
         dept_id: selectedDepartmentID,
         status: status,
         description: description,

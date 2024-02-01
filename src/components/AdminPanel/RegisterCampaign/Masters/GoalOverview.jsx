@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import OverView from './OverView'
 import axios from 'axios'
+import {baseUrl} from '../../../../utils/config'
 
 const GoalOverview = () => {
 
     const [goalData,setGoalData]=useState([])
     const getGoalInfo=async ()=>{
-        const data=await axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/goal')
+        const data=await axios.get(baseUrl+'goal')
         setGoalData(data.data.result)
     }
 

@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { Typography } from "antd";
 import axios from "axios";
+import {baseUrl} from '../../../utils/config'
 
 export default function AddPage({ setXlxsData }) {
   const [gridRows, setGridRows] = useState([]);
@@ -42,7 +43,7 @@ export default function AddPage({ setXlxsData }) {
   useEffect(() => {
     // console.log( "gridRows");
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/getallprojectx")
+      .get(baseUrl+"getallprojectx")
       .then((response) => {
         const data = response.data;
         // console.log(data,"<--------");

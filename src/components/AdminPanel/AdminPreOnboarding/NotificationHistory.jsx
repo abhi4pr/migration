@@ -5,6 +5,7 @@ import FormContainer from "../FormContainer";
 import DeleteButton from "../../AdminPanel/DeleteButton";
 import DataTable from "react-data-table-component";
 import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 const NotificationHistory = () => {
   const { toastAlert } = useGlobalContext();
@@ -18,7 +19,7 @@ const NotificationHistory = () => {
 
   async function getData() {
     await axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_notifications")
+      .get(baseUrl+"get_all_notifications")
       .then((res) => {
         setData(res.data.data);
         setFilterData(res.data.data);

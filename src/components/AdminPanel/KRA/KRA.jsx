@@ -4,6 +4,7 @@ import axios from "axios";
 import FormContainer from "../FormContainer";
 import jwtDecode from "jwt-decode";
 import { useParams } from "react-router-dom";
+import {baseUrl} from '../../../utils/config'
 
 const KRA = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const KRA = () => {
 
   function responsibilityAPI() {
     axios
-      .post(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_job_responsibility`, {
+      .post(`${baseUrl}`+`get_user_job_responsibility`, {
         user_id: Number(id),
       })
       .then((res) => {

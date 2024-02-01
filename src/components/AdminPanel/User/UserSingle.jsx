@@ -14,6 +14,8 @@ import UserSingleTab2 from "./UserSingleTab2";
 import UserSingleTab4 from "./UserSingleTab4";
 import UserSingleTab3 from "./UserSingleTab3";
 import DocumentTabUserSingle from "./DocumentTabUserSingle";
+import { baseUrl } from "../../../utils/config";
+
 const UserSingle = () => {
   const whatsappApi = WhatsappAPI();
   const [KRIData, setKRIData] = useState([]);
@@ -64,27 +66,27 @@ const UserSingle = () => {
 
   const KRAAPI = (userId) => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_kra/${userId}`)
+      .get(`${baseUrl}`+`get_single_kra/${userId}`)
       .then((res) => {
         setKRIData(res.data);
       });
   };
   function userOtherDocuments() {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_other_fields/${id}`)
+      .get(`${baseUrl}`+`get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
   }
   // const subDep = async (dept_id) => {
   //   await axios
-  //     .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/subdept/${dept_id}`)
+  //     .get(`${baseUrl}`+`subdept/${dept_id}`)
   //     .then((res) => {
   //       setSubDept(res.data);
   //     });
   // };
   useEffect(() => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sittings").then((res) => {
+    axios.get(baseUrl+"get_all_sittings").then((res) => {
       setDefaultSeatData(res.data.data);
     });
     KRAAPI(id);
@@ -96,7 +98,7 @@ const UserSingle = () => {
   let fetchedData;
   const getData = () => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${id}`)
+      .get(`${baseUrl}`+`get_single_user/${id}`)
       .then((res) => {
         fetchedData = res.data;
         const { dept_id } = fetchedData;
@@ -150,7 +152,7 @@ const UserSingle = () => {
 
     axios({
       method: "put",
-      url: "https://api-dot-react-migration-project.el.r.appspot.com/api/update_user",
+      url: baseUrl+"update_user",
       data: formData,
     }).then(() => {
       if (emptyState) emptyState("");
@@ -164,7 +166,7 @@ const UserSingle = () => {
       .then(() => getData())
       .then(() => {
         axios
-          .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
+          .post(baseUrl+"add_send_user_mail", {
             email: fetchedData[0].user_email_id,
             subject: "User Onboard",
             text: "Your Some Document is not clear Plzz Upload Again",

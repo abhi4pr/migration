@@ -9,6 +9,7 @@ import FormContainer from "../AdminPanel/FormContainer";
 import DeleteButton from "../AdminPanel/DeleteButton";
 import UserNav from "../Pantry/UserPanel/UserNav";
 import FieldContainer from "../AdminPanel/FieldContainer";
+import { baseUrl } from "../../utils/config";
 
 const BrandOverview = () => {
   const [search, setSearch] = useState("");
@@ -22,7 +23,7 @@ const BrandOverview = () => {
 
   async function getData() {
     await axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_logo_data")
+      .get(baseUrl+"get_logo_data")
       .then((res) => {
         setCountData(res.data);
         const responseData = res.data;
@@ -39,11 +40,11 @@ const BrandOverview = () => {
       });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_logo_categories")
+      .get(baseUrl+"get_all_logo_categories")
       .then((res) => setCategoryData(res.data));
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users")
+      .get(baseUrl+"get_all_users")
       .then((res) => setEmployeeData(res.data.data));
   }
 
@@ -74,7 +75,7 @@ const BrandOverview = () => {
   const deleteBrand = async (brand_name) => {
     await axios
       .delete(
-        `https://api-dot-react-migration-project.el.r.appspot.com/api/delete_logo_based_brand/${brand_name}`
+        `${baseUrl}`+`delete_logo_based_brand/${brand_name}`
       )
       .then((res) => {
         getData();

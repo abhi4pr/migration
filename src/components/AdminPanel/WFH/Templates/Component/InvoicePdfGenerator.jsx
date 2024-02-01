@@ -3,6 +3,8 @@ import InvoiceTemplate1 from "./InvoiceTemplate1";
 import { generatePDF } from "../Utils/genratePDF";
 import { useGlobalContext } from "../../../../../Context/Context";
 import axios from "axios";
+import {baseUrl} from '../../../../../utils/config'
+
 const templates = {
   1: InvoiceTemplate1,
 };
@@ -18,18 +20,18 @@ const InvoicePdfGenerator = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
     e.preventDefault();
 
     console.log("data for attendance ", data);
-    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_attendance`, {
+    await axios.put(`${baseUrl}`+`update_attendance`, {
       attendence_id: data.attendence_id,
       month: data.month,
       year: data.year,
       attendence_status_flow: "Pending for invoice verification",
     });
 
-    await axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/add_finance`, {
+    await axios.post(`${baseUrl}`+`add_finance`, {
       attendence_id: data?.attendence_id,
     });
 
-    await axios.put(`https://api-dot-react-migration-project.el.r.appspot.com/api/update_salary`, {
+    await axios.put(`${baseUrl}`+`update_salary`, {
       attendence_id: data?.attendence_id,
       sendToFinance: 1,
     });

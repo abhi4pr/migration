@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AddMoreFieldsComponent from "../AddMoreFields/AddMoreFieldsComponent";
 import useAddMoreFields from "../../Hooks/useAddMoreFields";
+import {baseUrl} from '../../utils/config'
 
 const FamilyFields = () => {
   const initialFamilyDetailsGroup = {
@@ -43,7 +44,7 @@ const FamilyFields = () => {
     async function fetchFamilyData() {
       try {
         const response = await axios.get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_family/1`
+          `${baseUrl}`+`get_single_family/1`
         );
         setFieldDetails(response.data.data);
       } catch (error) {

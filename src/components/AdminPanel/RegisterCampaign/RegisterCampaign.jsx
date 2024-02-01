@@ -11,12 +11,13 @@ import { useEffect, useState } from "react";
 import AddPage from "./AddPage";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import axios from "axios";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
 import { useGlobalContext } from "../../../Context/Context";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../../utils/config";
 
 export default function RegisterCampaign() {
 
@@ -39,7 +40,8 @@ export default function RegisterCampaign() {
   const [caption, setCaption] = useState("");
   const [selectedAgency, setSelectedAgency] = useState("");
   const [agencyList, setAgencyList] = useState([]);
-
+  //const [service, setService] = useState([]);
+  const [selectedService, setSelectedService] = useState("");
   const togglePageDetails = () => {
     setShowPageDetails(!showPageDetails);
   };
@@ -100,10 +102,11 @@ export default function RegisterCampaign() {
     form.append("agency", selectedAgency);
     form.append("industry", selectedIndustry);
     form.append("goal", selectedGoal);
+    //form.append("service", selectedService);
 
     console.log(form, "<--------------------this is form");
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/register_campaign", form)
+      .post(baseUrl+"register_campaign", form)
       .then(() => {
         setBrandName([]);
         setSelectedDate(null);
@@ -176,7 +179,7 @@ export default function RegisterCampaign() {
 
   useEffect(() => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_brands")
+      .get(baseUrl+"get_brands")
       .then((response) => {
         const data = response.data.data;
         setShowBrandName(data);
@@ -186,7 +189,7 @@ export default function RegisterCampaign() {
       });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_commitments")
+      .get(baseUrl+"get_all_commitments")
       .then((response) => {
         setCampignList(response.data.data);
       })
@@ -195,7 +198,7 @@ export default function RegisterCampaign() {
       });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign")
+      .get(baseUrl+"exe_campaign")
       .then((response) => {
         const data = response.data.data;
         console.log(data, "<----data");
@@ -205,7 +208,7 @@ export default function RegisterCampaign() {
         console.log(err);
       });
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/agency")
+      .get(baseUrl+"agency")
       .then((response) => {
         const data = response.data.result;
         console.log(data, "<----agency");
@@ -215,7 +218,7 @@ export default function RegisterCampaign() {
         console.log(err);
       });
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/goal")
+      .get(baseUrl+"goal")
       .then((response) => {
         const data = response.data.result;
         console.log(data, "<----goal");
@@ -225,7 +228,7 @@ export default function RegisterCampaign() {
         console.log(err);
       });
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/industry")
+      .get(baseUrl+"industry")
       .then((response) => {
         const data = response.data.result;
         console.log(data, "<----industry");

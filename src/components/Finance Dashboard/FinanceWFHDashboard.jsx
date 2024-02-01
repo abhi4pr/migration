@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import { downloadSelectedInvoices } from "../AdminPanel/WFH/SalaryGeneration/ZipGenerator";
 import { generatePDF } from "../AdminPanel/WFH/SalaryGeneration/pdfGenerator";
 import { useGlobalContext } from "../../Context/Context";
+import {baseUrl} from '../../utils/config'
 
 const accordionButtons = ["Pending Verify", "Verified", "Payment Released"];
 
@@ -30,7 +31,7 @@ export default function FinanceWFHDashboard() {
 
   const getData = async () => {
     try {
-      axios.get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_finances`).then((res) => {
+      axios.get(`${baseUrl}`+`get_finances`).then((res) => {
         const response = res.data;
         setData(response);
         setFilterData(response);
@@ -109,7 +110,7 @@ export default function FinanceWFHDashboard() {
     formData.append("attendence_id", rowData.attendence_id);
 
     axios
-      .put(`https://api-dot-react-migration-project.el.r.appspot.com/api/edit_finance`, formData, {
+      .put(`${baseUrl}`+`edit_finance`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

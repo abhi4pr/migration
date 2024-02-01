@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import FieldContainer from "../FieldContainer";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
 
 const ProductUpdate = () => {
   // const [categoryNames, setCategoryNames] = useState({});
@@ -49,7 +50,7 @@ const ProductUpdate = () => {
 
     // formData.append("Opening_stock_date", openingStockDate);
 
-    axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_productupdate", formData, {
+    axios.put(baseUrl+"update_productupdate", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -64,7 +65,7 @@ const ProductUpdate = () => {
       };
 
       try {
-        axios.post(`https://api-dot-react-migration-project.el.r.appspot.com/api/add_proppost`, payload, {
+        axios.post(`${baseUrl}`+`add_proppost`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -91,10 +92,10 @@ const ProductUpdate = () => {
 
   const removeProp = async (propid) => {
     var data = await axios
-      .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/delete_propdelete/${propid}`, null)
+      .delete(`${baseUrl}`+`delete_propdelete/${propid}`, null)
       .then((crash) => {
         axios
-          .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_productdata/${id}`)
+          .get(`${baseUrl}`+`get_single_productdata/${id}`)
           .then((res) => {
             setInputFields(res.data.Product_Prop);
           });
@@ -132,7 +133,7 @@ const ProductUpdate = () => {
   useEffect(() => {
     if (localStorage.getItem("product_id")) {
       axios
-        .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_productdata/${id}`)
+        .get(`${baseUrl}`+`get_single_productdata/${id}`)
         .then((res) => {
           setInputFields(res.data.Product_Prop);
         });

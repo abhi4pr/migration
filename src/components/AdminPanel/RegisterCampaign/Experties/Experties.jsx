@@ -9,6 +9,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from "../../../../Context/Context";
+import {baseUrl} from '../../../../utils/config'
+
 let options = [];
 let plateformvar = [];
 
@@ -41,7 +43,7 @@ const Experties = () => {
 
   const getAllUsers = async () => {
     const alluser = await axios.get(
-      "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
+      baseUrl+"get_all_users"
     );
     setGetUserData(alluser.data.data);
   };
@@ -55,7 +57,10 @@ const Experties = () => {
   const categorySet = () => {
     allPageData?.forEach((data) => {
       if (!options.includes(data.cat_name)) {
-        options.push(data.cat_name);
+        if(data.cat_name!=null){
+
+          options.push(data.cat_name);
+        }
       }
     });
   };
@@ -89,7 +94,7 @@ const Experties = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/expertise",
+        baseUrl+"expertise",
         {
           exp_name: expertiesusername.label,
           user_id: expertiesusername.user_id,

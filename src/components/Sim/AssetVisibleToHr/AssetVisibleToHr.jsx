@@ -7,6 +7,7 @@ import Modal from "react-modal";
 import NewAssetRequestOverview from "./NewAssetRequestOverview";
 import DateISOtoNormal from "../../../utils/DateISOtoNormal";
 import { useGlobalContext } from "../../../Context/Context";
+import { baseUrl } from "../../../utils/config";
 
 const AssetVisibleToHr = () => {
   const { toastAlert } = useGlobalContext();
@@ -44,7 +45,7 @@ const AssetVisibleToHr = () => {
   );
   const newAssetTab2 = (
     <NewAssetRequestOverview
-      newAssetData={newAsseRequesttData.filter(
+      newAssetData={newAsseRequesttData?.filter(
         (d) =>
           d.asset_request_status == "ApprovedByManager" ||
           d.asset_request_status == "Requested"
@@ -54,7 +55,7 @@ const AssetVisibleToHr = () => {
   );
   const newAssetTab3 = (
     <NewAssetRequestOverview
-      newAssetData={newAsseRequesttData.filter(
+      newAssetData={newAsseRequesttData?.filter(
         (d) => d.asset_request_status == "Approved"
       )}
       handleRelodenewData={handleRelodenewData}
@@ -62,7 +63,7 @@ const AssetVisibleToHr = () => {
   );
   const newAssetTab4 = (
     <NewAssetRequestOverview
-      newAssetData={newAsseRequesttData.filter(
+      newAssetData={newAsseRequesttData?.filter(
         (d) => d.asset_request_status == "Rejected"
       )}
       handleRelodenewData={handleRelodenewData}
@@ -96,36 +97,38 @@ const AssetVisibleToHr = () => {
   );
   const tab2 = (
     <HrVisibleToHrOverview
-      hrOverviewData={data.filter((d) => d.status == "Requested")}
+      hrOverviewData={data?.filter(
+        (d) => d.status == "Requested" || d.status == "ApprovedByManager"
+      )}
       hardRender={hardRender}
     />
   );
   const tab3 = (
     <HrVisibleToHrOverview
-      hrOverviewData={data.filter((d) => d.status == "Accept")}
+      hrOverviewData={data?.filter((d) => d.status == "Accept")}
       hardRender={hardRender}
     />
   );
   const tab4 = (
     <HrVisibleToHrOverview
-      hrOverviewData={data.filter((d) => d.status == "Recovered")}
+      hrOverviewData={data?.filter((d) => d.status == "Recovered")}
       hardRender={hardRender}
     />
   );
   const tab5 = (
     <HrVisibleToHrOverview
-      hrOverviewData={data.filter((d) => d.status == "Resolved")}
+      hrOverviewData={data?.filter((d) => d.status == "Resolved")}
       hardRender={hardRender}
     />
   );
   const getNewAssetData = () => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/assetrequest").then((res) => {
+    axios.get(baseUrl+"assetrequest").then((res) => {
       setNewAsseRequesttData(res.data.data);
     });
   };
 
   const getReturnAssetData = () => {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/assetreturn").then((res) => {
+    axios.get(baseUrl+"assetreturn").then((res) => {
       setReturnAssetData(res.data.singleAssetReturnRequest);
     });
   };
@@ -136,8 +139,8 @@ const AssetVisibleToHr = () => {
   }, []);
 
   useEffect(() => {
-    const result = data.filter((d) => {
-      return d.asset_name.toLowerCase().match(search.toLowerCase());
+    const result = data?.filter((d) => {
+      return d?.asset_name?.toLowerCase()?.match(search?.toLowerCase());
     });
     setFilterData(result);
   }, [search]);
@@ -145,7 +148,7 @@ const AssetVisibleToHr = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/show_asset_hr_data"
+        baseUrl+"show_asset_hr_data"
       );
       setFilterData(response.data.data);
       setData(response.data.data);
@@ -156,7 +159,7 @@ const AssetVisibleToHr = () => {
 
   const handleReturnAsset = (row) => {
     try {
-      axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_sim", {
+      axios.put(baseUrl+"update_sim", {
         id: row.sim_id,
         status: "Available",
       });
@@ -182,19 +185,22 @@ const AssetVisibleToHr = () => {
       selector: (row) => DateISOtoNormal(row.return_asset_data_time),
     },
     {
-      name: "Return Remark",
+      name: "Remark",
       selector: (row) => row.asset_return_remark,
     },
     {
       name: "Action",
       cell: (row) => (
-        <button
-          className="btn btn-outline-warning btn-sm"
-          onClick={() => handleReturnAsset(row)}
-          title="return status approve and this asset status available"
-        >
-          Return Asset Approve
-        </button>
+        <>
+          <button
+            className="btn btn-outline-success  btn-sm"
+            // onClick={() => handleReturnAsset(row)}
+
+            // title="return status approve and this asset status available"
+          >
+            Recover
+          </button>
+        </>
       ),
     },
   ];

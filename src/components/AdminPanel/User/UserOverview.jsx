@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
+import {baseUrl} from '../../../utils/config'
 
 const UserOverview = () => {
   const whatsappApi = WhatsappAPI();
@@ -30,7 +31,7 @@ const UserOverview = () => {
   const [desiOrgData, setDesiOrgData] = useState([]);
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [designationFilter, setDesignationFilter] = useState("");
-  const [jobType, setJobType] = useState("");
+  const [jobType, setJobType] = useState("ALL");
   const [transferResponsibilityData, setTransferResponsibilityData] = useState(
     []
   );
@@ -66,7 +67,7 @@ const UserOverview = () => {
 
   const KRAAPI = (userId) => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_kra/${userId}`)
+      .get(`${baseUrl}`+`get_single_kra/${userId}`)
       .then((res) => {
         setKRIData(res.data);
       });
@@ -82,13 +83,13 @@ const UserOverview = () => {
     setUserName(username);
     setUserContact(user_contact_no);
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_reasons")
+      .get(baseUrl+"get_all_reasons")
       .then((res) => setSeparationReasonGet(res.data));
   }
   const today = new Date().toISOString().split("T")[0];
 
   function handleSeparationDataPost() {
-    axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_separation", {
+    axios.post(baseUrl+"add_separation", {
       user_id: separationUserID,
       status: separationStatus,
       created_by: userID,
@@ -109,7 +110,7 @@ const UserOverview = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
@@ -120,7 +121,7 @@ const UserOverview = () => {
   // Admin Login from User
   const handleLogin = (user_id, user_login_id, user_login_password) => {
     axios
-      .post("https://api-dot-react-migration-project.el.r.appspot.com/api/login_user", {
+      .post(baseUrl+"login_user", {
         user_id: user_id,
         user_login_id: user_login_id,
         user_login_password: user_login_password,
@@ -142,7 +143,7 @@ const UserOverview = () => {
   async function getData() {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users"
+        baseUrl+"get_all_users"
       );
       const data = response.data.data;
       setDatas(data);
@@ -157,7 +158,7 @@ const UserOverview = () => {
 
   const departmentAPI = () => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         setDepartmentData(res.data);
         getData();
@@ -166,7 +167,7 @@ const UserOverview = () => {
 
   const designationAPI = () => {
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_designations")
+      .get(baseUrl+"get_all_designations")
       .then((res) => {
         setDesiOrgData(res.data.data);
       });
@@ -194,7 +195,7 @@ const UserOverview = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`https://api-dot-react-migration-project.el.r.appspot.com/api/delete_user/${userId}`)
+            .delete(`${baseUrl}`+`delete_user/${userId}`)
             .then(() => {
               // Check if no error occurred and then show the success alert
               swalWithBootstrapButtons.fire(
@@ -241,6 +242,7 @@ const UserOverview = () => {
 
   useEffect(() => {
     const result = datas.filter((d) => {
+      console.log("each data", d.user_designation, designationFilter);
       const departmentMatch =
         !departmentFilter || d.dept_id === departmentFilter;
       const designationMatch =
@@ -248,6 +250,7 @@ const UserOverview = () => {
       const jobtypeMatch = jobType === "ALL" || d.job_type === jobType;
       return departmentMatch && designationMatch && jobtypeMatch;
     });
+    console.log("result", result);
     setFilterData(result);
   }, [departmentFilter, designationFilter, jobType]);
 
@@ -255,6 +258,7 @@ const UserOverview = () => {
     { value: "ALL", label: "All" },
     { value: "WFO", label: "WFO" },
     { value: "WFH", label: "WFH" },
+    { value: "WFHD", label: "WFHD" },
   ];
 
   const columns = [
@@ -481,7 +485,7 @@ const UserOverview = () => {
 
   const handleTransfer = (userId) => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_kra/${userId}`)
+      .get(`${baseUrl}`+`get_single_kra/${userId}`)
       .then((res) => {
         setTransferResponsibilityData(res.data);
       });
@@ -518,13 +522,13 @@ const UserOverview = () => {
         Job_res_id: element.Job_res_id,
       };
       axios
-        .post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_kra", requestData)
+        .post(baseUrl+"add_kra", requestData)
         .then(() => {
           setRemark("");
           setTransferTo("");
           toastAlert("KRA Transfer Successfully");
           const MailUser = transferToUser.find((d) => d.user_id == transferTo);
-          axios.post("https://api-dot-react-migration-project.el.r.appspot.com/api/add_send_user_mail", {
+          axios.post(baseUrl+"add_send_user_mail", {
             email: MailUser.user_email_id,
             subject: "User Registration",
             text: "You Have Assign New KRA",

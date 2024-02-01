@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import Select from "react-select";
+import { baseUrl } from "../../utils/config";
 
 const SimDashboard = () => {
   const { categoryDataContext } = useGlobalContext();
@@ -36,7 +37,7 @@ const SimDashboard = () => {
   // const [categoryData, setCategoryData] = useState([]);
   // const getCategoryData = () => {
   //   axios
-  //     .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_asset_category")
+  //     .get(baseUrl+"get_all_asset_category")
   //     .then((res) => {
   //       setCategoryData(res.data);
   //     });
@@ -49,7 +50,7 @@ const SimDashboard = () => {
     if (category) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_asset_sub_category/${category}`
+          `${baseUrl}`+`get_single_asset_sub_category/${category}`
         )
         .then((res) => {
           setSubCategoryData(res.data);
@@ -65,7 +66,7 @@ const SimDashboard = () => {
   }, [category]);
 
   function getData() {
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_sims").then((res) => {
+    axios.get(baseUrl+"get_all_sims").then((res) => {
       setSimData(res.data.data);
 
       const availableObjects = res.data.data.filter(
@@ -79,7 +80,7 @@ const SimDashboard = () => {
       setAllocatedCount(allocatedObjects);
     });
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_asset_department_count")
+      .get(baseUrl+"get_asset_department_count")
       .then((res) => {
         setDepartmentData(res.data.data);
 
@@ -97,7 +98,7 @@ const SimDashboard = () => {
   const handleRowClick = (row) => {
     setSelectedRow(row);
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_asset_users_of_dept/${row}`)
+      .get(`${baseUrl}`+`get_asset_users_of_dept/${row}`)
       .then((res) => {
         setSelectedUserData(res.data.data);
       });
@@ -124,8 +125,8 @@ const SimDashboard = () => {
 
           <div className="row">
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-              <div className="d_infocard card shadow">
-                <Link to="/sim-overview">
+              <Link to="/sim-overview">
+                <div className="d_infocard card shadow">
                   <div className="card-body">
                     <div className="d_infocard_txt">
                       <h2>Total</h2>
@@ -134,38 +135,38 @@ const SimDashboard = () => {
                       <span>{simData.length}</span>
                     </div>
                   </div>
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
 
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
-              <div className="d_infocard card shadow">
-                <div className="card-body">
-                  <div className="d_infocard_txt">
-                    <Link to="/sim-overview">
+              <Link to="/sim-overview">
+                <div className="d_infocard card shadow">
+                  <div className="card-body">
+                    <div className="d_infocard_txt">
                       <h2>Available</h2>
-                    </Link>
-                  </div>
-                  <div className="d_infocard_icon">
-                    <span>{availableObjects.length}</span>
+                    </div>
+                    <div className="d_infocard_icon">
+                      <span>{availableObjects.length}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
 
             <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 d_infocard_col">
               <div className="d_infocard card shadow">
-                <div className="card-body">
-                  <div className="d_infocard_txt">
-                    <Link to="/sim-overview">
+                <Link to="/sim-overview">
+                  <div className="card-body">
+                    <div className="d_infocard_txt">
                       <h2>Allocated</h2>
                       {/* <SimOverview allocated={isAllocation} /> */}
-                    </Link>
+                    </div>
+                    <div className="d_infocard_icon">
+                      <span>{allocatedObjects.length}</span>
+                    </div>
                   </div>
-                  <div className="d_infocard_icon">
-                    <span>{allocatedObjects.length}</span>
-                  </div>
-                </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -337,9 +338,12 @@ const SimDashboard = () => {
                   cell: (row, index) => <div>{index + 1}</div>,
                   width: "10%",
                 },
-                { name: "Name", selector: "user_name" },
-                { name: "Category Name", selector: "category_name" },
-                { name: "SubCategory Name", selector: "sub_category_name" },
+                { name: "Name", selector: (row) => row.user_name },
+                { name: "Category Name", selector: (row) => row.category_name },
+                {
+                  name: "SubCategory Name",
+                  selector: (row) => row.sub_category_name,
+                },
               ]}
               data={selectedUserData.filter((user) =>
                 user.user_name.toLowerCase().includes(modalSearch.toLowerCase())

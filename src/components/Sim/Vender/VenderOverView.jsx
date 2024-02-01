@@ -7,6 +7,7 @@ import { useGlobalContext } from "../../../Context/Context";
 import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import DeleteButton from "../../AdminPanel/DeleteButton";
+import { baseUrl } from "../../../utils/config";
 
 const VenderOverView = () => {
   const { toastAlert } = useGlobalContext();
@@ -28,7 +29,7 @@ const VenderOverView = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_vendor"
+        baseUrl+"get_all_vendor"
       );
       setFilterData(response.data);
       setData(response.data);
@@ -128,6 +129,12 @@ const VenderOverView = () => {
                 />
               </div>
               <div className="action_btns">
+                <button
+                  type="button"
+                  className="btn btn-outline-primary btn-sm"
+                >
+                  <Link to="/admin/asset-dashboard">Dashboard</Link>
+                </button>
                 <button
                   type="button"
                   className="btn btn-outline-primary btn-sm"

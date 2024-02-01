@@ -1,6 +1,7 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import {baseUrl} from '../../../utils/config'
 
 const ApiContextData = createContext();
 const APIContext = ({ children }) => {
@@ -18,20 +19,20 @@ const APIContext = ({ children }) => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setContextData(res.data);
         });
     }
 
-    axios.get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_users").then((res) => {
+    axios.get(baseUrl+"get_all_users").then((res) => {
       setUserContextData(res.data.data);
       setLoading(true);
     });
 
     axios
-      .get("https://api-dot-react-migration-project.el.r.appspot.com/api/get_all_departments")
+      .get(baseUrl+"get_all_departments")
       .then((res) => {
         setDepartmentContext(res.data);
       });

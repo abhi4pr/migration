@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import DeleteButton from "../../../AdminPanel/DeleteButton";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../../../../utils/config";
 
 const TaskStatusDeptWiseOverview = () => {
   const [data, setData] = useState([]);
@@ -12,7 +13,7 @@ const TaskStatusDeptWiseOverview = () => {
   const getData = async () => {
     try {
       const response = await axios.get(
-        "https://api-dot-react-migration-project.el.r.appspot.com/api/deptwisestatus"
+        baseUrl+"deptwisestatus"
       );
       console.log(response.data);
       setData(response.data);

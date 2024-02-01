@@ -3,6 +3,7 @@ import FieldContainer from "../../FieldContainer";
 import axios from "axios";
 import { useGlobalContext } from "../../../../Context/Context";
 import DateISOtoNormal from "../../../../utils/DateISOtoNormal";
+import {baseUrl} from '../../../../utils/config'
 
 const DisputeReason = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
   const { toastAlert } = useGlobalContext();
@@ -15,7 +16,7 @@ const DisputeReason = ({ data, setIsPreviewModalOpen, handleSubmit }) => {
   const handleSubmitDispute = async (e) => {
     e.preventDefault();
     try {
-      await axios.put("https://api-dot-react-migration-project.el.r.appspot.com/api/update_attendance", {
+      await axios.put(baseUrl+"update_attendance", {
         attendence_id: attendence_id,
         month: month,
         year: year,

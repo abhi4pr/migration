@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import FormContainer from "../FormContainer";
 import { FcDownload } from "react-icons/fc";
 import DateFormattingComponent from "../../DateFormator/DateFormared";
+import {baseUrl} from '../../../utils/config'
 
 const PreOnboardUserDetailsProfile = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const PreOnboardUserDetailsProfile = () => {
 
   function userOtherDocuments() {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_user_other_fields/${id}`)
+      .get(`${baseUrl}`+`get_user_other_fields/${id}`)
       .then((res) => {
         setOtherDocuments(res.data.data);
       });
@@ -27,7 +28,7 @@ const PreOnboardUserDetailsProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user/${id}`)
+      .get(`${baseUrl}`+`get_single_user/${id}`)
       .then((res) => {
         const fetchedData = res.data;
         setUser(fetchedData);

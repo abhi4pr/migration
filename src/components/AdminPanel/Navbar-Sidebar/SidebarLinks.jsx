@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
+import {baseUrl} from '../../../utils/config'
 
 const SidebarLinks = () => {
   const [contextData, setData] = useState([]);
   const [allCount, setAllCount] = useState();
   const [ownCount, setOwnCount] = useState();
   const [otherCount, setOtherCount] = useState();
+  const [jobType, setJobtype] = useState("");
 
   const storedToken = sessionStorage.getItem("token");
   const decodedToken = jwtDecode(storedToken);
@@ -18,10 +20,15 @@ const SidebarLinks = () => {
     if (userID && contextData.length === 0) {
       axios
         .get(
-          `https://api-dot-react-migration-project.el.r.appspot.com/api/get_single_user_auth_detail/${userID}`
+          `${baseUrl}`+`get_single_user_auth_detail/${userID}`
         )
         .then((res) => {
           setData(res.data);
+        });
+      axios
+        .get(`https://jarvis.work/api/get_single_user/${userID}`)
+        .then((res) => {
+          setJobtype(res.data.job_type);
         });
     }
   }, [userID]);
@@ -83,6 +90,8 @@ const SidebarLinks = () => {
   const isAssetNotifierVisible = [40].some(
     (index) => contextData[index]?.view_value === 1
   );
+
+  // const isWFHDuser  = [].some(index=>context )
 
   return (
     <>
@@ -199,46 +208,50 @@ const SidebarLinks = () => {
       )}
       {/* USER MANAGEMENT */}
 
-      {/* PAYOUT USER */}
-      <li className="nav-item">
-        <Link
-          className="nav-link collapsed"
-          data-toggle="collapse"
-          data-target="#collapseFourddnm"
-          aria-expanded="true"
-          aria-controls="collapseFourddnm"
-        >
-          <i className="bi bi-person-gear" />
-          <span>My Info</span>
-        </Link>
-        <div
-          id="collapseFourddnm"
-          className="collapse"
-          aria-labelledby="headingTwo"
-          data-parent="#accordionSidebar"
-        >
-          <div className="bg-white collapse-inner">
-            <Link
-              className="collapse-item"
-              to="/admin/view-edit-digital-signature"
-            >
-              Digital Signature
-            </Link>
+      {/*WFHD USER */}
+      {jobType == "WFHD" && (
+        <li className="nav-item">
+          <Link
+            className="nav-link collapsed"
+            data-toggle="collapse"
+            data-target="#collapseFourddnm"
+            aria-expanded="true"
+            aria-controls="collapseFourddnm"
+          >
+            <i className="bi bi-person-gear" />
+            <span>My Info</span>
+          </Link>
 
-            <Link className="collapse-item" to="/admin/wfh-template-overview">
-              Change/View Template
-            </Link>
+          <div
+            id="collapseFourddnm"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white collapse-inner">
+              <Link
+                className="collapse-item"
+                to="/admin/view-edit-digital-signature"
+              >
+                Digital Signature
+              </Link>
 
-            <Link className="collapse-item" to="/admin/wfh-single-user">
-              Payout Summary
-            </Link>
-            <Link className="collapse-item" to="/admin/dispute-overview">
-              Dispute Summary
-            </Link>
+              <Link className="collapse-item" to="/admin/wfh-template-overview">
+                Change/View Template
+              </Link>
+
+              <Link className="collapse-item" to="/admin/wfh-single-user">
+                Payout Summary
+              </Link>
+
+              <Link className="collapse-item" to="/admin/dispute-overview">
+                Dispute Summary
+              </Link>
+            </div>
           </div>
-        </div>
-      </li>
-      {/* PAYOUT USER */}
+        </li>
+      )}
+      {/* WFHD USER */}
 
       {/* PAYOUT HR MANAGER ACCOUNTS */}
       {isWFHDManager && (
@@ -258,7 +271,7 @@ const SidebarLinks = () => {
             className="collapse"
             aria-labelledby="headingTwo"
           >
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link
                 className="nav-link collapsed"
                 data-toggle="collapse"
@@ -292,7 +305,7 @@ const SidebarLinks = () => {
                   </Link>
                 </div>
               </div>
-            </li>
+            </li> */}
 
             {isWFHDHRPayrollManager && (
               <li className="nav-item">
@@ -327,6 +340,12 @@ const SidebarLinks = () => {
 
                     <Link className="collapse-item" to="/admin/attendence-mast">
                       Attendance Summary
+                    </Link>
+                    <Link
+                      className="collapse-item"
+                      to="/admin/dispute-overview"
+                    >
+                      Dispute Summary
                     </Link>
                   </div>
                 </div>
@@ -479,72 +498,9 @@ const SidebarLinks = () => {
             )}
 
             {/* Asset Managerment Routing  */}
-            {isAssetNotifierVisible && (
-              <li className="nav-item">
-                <Link
-                  className="nav-link collapsed"
-                  data-toggle="collapse"
-                  data-target="#assets"
-                  aria-expanded="true"
-                  aria-controls="assets"
-                >
-                  <i className="bi bi-person-gear" />
-                  <span>Assets</span>
-                </Link>
-                <div
-                  id="assets"
-                  className="collapse"
-                  aria-labelledby="headingTwo"
-                  data-parent="#accordionSidebar"
-                >
-                  <div className="bg-white collapse-inner">
-                    <Link
-                      className="collapse-item"
-                      to="/admin/asset-single-user"
-                    >
-                      Asset
-                    </Link>
-                    {/* {contextData &&
-                  contextData[15] &&
-                contextData[15].view_value === 1 && ( */}
-                    {RoleId == 5 && (
-                      <Link className="collapse-item" to="/sim-overview">
-                        Asset Management
-                      </Link>
-                    )}
-                    {/* )} */}
+            {/* {isAssetNotifierVisible && ( */}
 
-                    {/* {contextData &&
-                  contextData[40] &&
-                  contextData[40].view_value === 1 && ( */}
-                    {RoleId == 5 && (
-                      <Link
-                        className="collapse-item"
-                        to="/admin/asset-visible-to-hr"
-                      >
-                        Asset Request HR
-                      </Link>
-                    )}
-                    {/* )} */}
-                    <Link
-                      className="collapse-item"
-                      to="/admin/asset-visible-to-taged-person"
-                    >
-                      Requested Asset
-                    </Link>
-                    {/* {contextData &&
-                  contextData[41] &&
-                  contextData[41].view_value === 1 && ( */}
-                    {RoleId == 2 && (
-                      <Link className="collapse-item" to="/admin/asset-manager">
-                        Asset Request Approvel
-                      </Link>
-                    )}
-                    {/* )} */}
-                  </div>
-                </div>
-              </li>
-            )}
+            {/* )} */}
 
             {isOnboardingVisible && (
               <li className="nav-item">
@@ -1441,7 +1397,6 @@ const SidebarLinks = () => {
                 </div>
               </li>
 
-
               <li className="nav-item">
                 <Link
                   className="nav-link collapsed"
@@ -1461,25 +1416,73 @@ const SidebarLinks = () => {
                   <div className="bg-white collapse-inner">
                     <>
                       <Link
-
-                        className="collapse-item" 
+                        className="collapse-item"
                         to="/admin/accounts-finance-dashboard"
                       >
                         Payout Summary
                       </Link>
-
                     </>
                   </div>
-                  </div>
-                  </li>
-
-
+                </div>
+              </li>
             </div>
           </div>
         </li>
       )}
+
       {/* )} */}
       {/* FINANCE */}
+
+      {/* Asset Management here  */}
+      <li className="nav-item">
+        <Link
+          className="nav-link collapsed"
+          data-toggle="collapse"
+          data-target="#assets"
+          aria-expanded="true"
+          aria-controls="assets"
+        >
+          <i className="bi bi-person-gear" />
+          <span>Assets</span>
+        </Link>
+        <div
+          id="assets"
+          className="collapse"
+          aria-labelledby="headingTwo"
+          data-parent="#accordionSidebar"
+        >
+          <div className="bg-white collapse-inner">
+            <Link className="collapse-item" to="/admin/asset-dashboard">
+              Dashboard
+            </Link>
+            <Link className="collapse-item" to="/admin/asset-single-user">
+              My Asset
+            </Link>
+            {/* {RoleId == 5 && ( */}
+            <Link className="collapse-item" to="/sim-overview">
+              Asset Management
+            </Link>
+            {/* // )} */}
+            {/* {RoleId == 5 && ( */}
+            <Link className="collapse-item" to="/admin/asset-visible-to-hr">
+              Asset's Request
+            </Link>
+            {/* )} */}
+            {/* )} */}
+            <Link
+              className="collapse-item"
+              to="/admin/asset-visible-to-taged-person"
+            >
+              Tagged Asset
+            </Link>
+            {/* {RoleId == 2 && ( */}
+            <Link className="collapse-item" to="/admin/asset-manager">
+              Asset Request Approvel
+            </Link>
+            {/* // )} */}
+          </div>
+        </div>
+      </li>
 
       <li className="nav-item">
         <Link

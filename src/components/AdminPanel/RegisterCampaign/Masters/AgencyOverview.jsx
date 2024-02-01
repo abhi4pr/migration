@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import OverView from './OverView'
 import axios from 'axios'
+import {baseUrl} from '../../../../utils/config'
 
 const AgencyOverview = () => {
 
     const [agencyData,setAgencyData]=useState([])
     const getAgencyInfo=async ()=>{
-        const data=await axios.get('https://api-dot-react-migration-project.el.r.appspot.com/api/agency')
+        const data=await axios.get(baseUrl+'agency')
         setAgencyData(data.data.result)
     }
 

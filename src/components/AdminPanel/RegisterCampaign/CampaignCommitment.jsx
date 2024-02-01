@@ -21,6 +21,8 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useGlobalContext } from "../../../Context/Context";
+import {baseUrl} from '../../../utils/config'
+
 export const toolbarStyles = {
   display: 'flex',
   justifyContent: 'flex-end', 
@@ -44,7 +46,7 @@ export default function CampaignCommitment() {
     // exeHashTag: "",
     exeRemark: "",
   });
-  const url = "https://api-dot-react-migration-project.el.r.appspot.com/api/exe_campaign";
+  const url = baseUrl+"exe_campaign";
 
   function EditToolbar() {
     const handleClick = () => {
