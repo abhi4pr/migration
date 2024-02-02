@@ -27,10 +27,16 @@ const NewAssetRequestOverview = () => {
   ];
   const hardRender = () => {
     getManagerData();
+    getReturnAssetData();
+    getRepairRequestData();
   };
 
   const tab1 = (
-    <ManagerDynamicOverview filterData={repairRequestData} tabOne="tabOne" />
+    <ManagerDynamicOverview
+      filterData={repairRequestData}
+      hardRender={hardRender}
+      tabOne="tabOne"
+    />
   );
   const tab2 = (
     <ManagerDynamicOverview
@@ -40,13 +46,15 @@ const NewAssetRequestOverview = () => {
     />
   );
   const tab3 = (
-    <ManagerDynamicOverview filterData={assetReturnData} tabThree="tabThree" />
+    <ManagerDynamicOverview
+      filterData={assetReturnData}
+      hardRender={hardRender}
+      tabThree="tabThree"
+    />
   );
   const getRepairRequestData = () => {
     axios
-      .get(
-        `http://34.93.221.166:3000/api/show_repair_request_asset_data_to_reportL1/${userID}`
-      )
+      .get(`${baseUrl}show_repair_request_asset_data_to_reportL1/${userID}`)
       .then((res) => {
         setRepairRequestData(res.data.data);
       });
@@ -57,19 +65,19 @@ const NewAssetRequestOverview = () => {
       const response = await axios.get(
         `${baseUrl}` + `show_asset_user_data_report/${userID}`
       );
-      const data = response.data.data;
-      // .filter(
-      //   (d) => d.asset_new_request_status == "Requested"
-      // );
+      const data = response?.data.data;
+
       setManagerData(data);
     } catch (error) {
       console.log(error);
     }
   };
   const getReturnAssetData = () => {
-    axios.get(baseUrl + "assetreturn").then((res) => {
-      setReturnAssetData(res.data.singleAssetReturnRequest);
-    });
+    axios
+      .get(`${baseUrl}show_return_asset_to_reportL1/${userID}`)
+      .then((res) => {
+        setReturnAssetData(res.data.data);
+      });
   };
 
   useEffect(() => {
